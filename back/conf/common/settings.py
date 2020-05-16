@@ -1,4 +1,5 @@
 import os
+
 from django.utils.translation import ugettext_lazy as _
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -95,13 +96,4 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
-"""
-Email settings """
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'cybersturmer@ya.ru'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-
-EMAIL_PORT = 25
-EMAIL_SUBJECT_PREFIX = '[PmDragon] '
