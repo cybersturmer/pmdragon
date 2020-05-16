@@ -1,5 +1,5 @@
-# PmDragoN
-Project management software
+# PmDragon Agile
+Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## Backlog:
 1. As a user, i can register in service.
