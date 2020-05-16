@@ -1,4 +1,4 @@
-from configuration.common.settings import *
+from conf.common.settings import *
 
 DEBUG = False
 
@@ -20,7 +20,7 @@ DATABASES = {
     }
 }
 
-ROOT_URLCONF = 'configuration.production.urls'
+ROOT_URLCONF = 'conf.production.urls'
 
 CACHES = {
     'default': {
@@ -29,3 +29,14 @@ CACHES = {
         'TIMEOUT': os.getenv('DJANGO_CACHE_TIMEOUT')
     }
 }
+
+"""
+Email settings """
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'cybersturmer@ya.ru'
+EMAIL_HOST_PASSWORD = 'vxxptrrgjykdfrrr'
+
+EMAIL_PORT = 25
+EMAIL_SUBJECT_PREFIX = '[PmDragon] '

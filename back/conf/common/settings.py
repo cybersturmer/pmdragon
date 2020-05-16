@@ -62,7 +62,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGES = (
     ('en', _('English')),
     ('ru', _('Russian')),
@@ -83,10 +82,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
 
@@ -96,8 +91,17 @@ REST_FRAMEWORK = {
     ]
 }
 
-#
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
+"""
+Email settings """
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'cybersturmer@ya.ru'
+EMAIL_HOST_PASSWORD = 'vxxptrrgjykdfrrr'
+
+EMAIL_PORT = 25
+EMAIL_SUBJECT_PREFIX = '[PmDragon] '
