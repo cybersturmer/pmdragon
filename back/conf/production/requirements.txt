@@ -1,0 +1,5 @@
+-r ../common/requirements.txt
+psycopg2==2.8.5
+uvicorn==0.11.5
+python-memcached==1.59
+django-health-check==3.12.1
