@@ -1,3 +1,70 @@
+### Django ###
+*.log
 .idea
-/back/venv/
-/back/.idea
+/back/media/
+/back/venv
+
+### Python ###
+__pycache__/
+
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib64/
+parts/
+sdist/
+var/
+
+*.egg-info/
+.installed.cfg
+*.manifest
+*.spec
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+target/
+
+### Node ###
+node_modules
+.gitignore
+
+
+### Unit test / coverage reports ###
+htmlconv/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+### Translations ###
+*.pot
+
+### Sphinx ###
+docs/_build/
+
+### OS files ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+### Thumbs ###
+.-*
+
+### Externally mount files ###
+.Spotlight-v100
+.Trashes
+
+### AFP Share ###
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+
