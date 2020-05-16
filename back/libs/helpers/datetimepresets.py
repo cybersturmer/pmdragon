@@ -1,16 +1,20 @@
-from django.utils.timezone import now
-from datetime import timedelta, date, datetime
 import calendar
-from django.conf import settings
+from datetime import timedelta, date, datetime
+
 import pytz
+from django.conf import settings
+from django.utils import timezone
+from django.utils.timezone import now
 
 
 def day_later():
-    return datetime.now(pytz.UTC) + timedelta(hours=24)
+    return timezone.now() + timedelta(hours=24)
+
+# todo replace all functions to timezone aware datetime
 
 
 def today():
-    return datetime.combine(datetime.now(pytz.utc).date(), datetime.min.time())
+    return datetime.combine(timezone.now().date(), datetime.min.time())
 
 
 def date_after_year():
