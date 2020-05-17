@@ -2,7 +2,7 @@
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
-#### 17.05
+#### 17.05.2020
 - Added API methods to create request and serializers as well
 - Added Vue Js initialization
 - Updated Person Model based on Django User Model
