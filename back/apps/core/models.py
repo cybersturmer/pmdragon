@@ -1,8 +1,8 @@
 from django.conf import settings
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
+from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from libs.cryptography import hashing
 from libs.helpers.datetimepresets import day_later
@@ -85,7 +85,8 @@ class Person(models.Model):
     """
 
     username = models.CharField(max_length=20,
-                                verbose_name=_('Username'))
+                                verbose_name=_('Username'),
+                                default='dragon')
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 verbose_name=_('User of system'),
@@ -126,6 +127,8 @@ class Person(models.Model):
         verbose_name_plural = _('Persons')
 
     def __str__(self):
-        return f'{self.first_name or _("Unnamed")} {self.last_name}'
+        return f'{self.username} - {self.first_name or _("Unnamed")}'
 
     __repr__ = __str__
+
+

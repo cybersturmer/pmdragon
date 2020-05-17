@@ -47,6 +47,9 @@ coverage.xml
 ### Sphinx ###
 docs/_build/
 
+### Personal documentation ###
+_docs_
+
 ### OS files ###
 .DS_Store
 .AppleDouble

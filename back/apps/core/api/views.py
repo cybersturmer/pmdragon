@@ -1,7 +1,7 @@
 from smtplib import SMTPException
 
 from django.core.mail import send_mail
-from rest_framework import generics, viewsets
+from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from .serializers import *
@@ -10,6 +10,7 @@ from .serializers import *
 class PersonRegistrationRequestCreateView(generics.CreateAPIView):
     queryset = PersonRegistrationRequest.valid.all()
     serializer_class = PersonRegistrationRequestSerializer
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         instance: PersonRegistrationRequest = serializer.save()
@@ -33,12 +34,18 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView):
             instance.save()
 
 
-class PersonCreateView(generics.CreateAPIView):
+class PersonVerifyView(generics.CreateAPIView):
     queryset = Person.objects.all()
-    serializer_class = PersonSerializer
-    permission_classes = AllowAny
+    serializer_class = PersonVerifySerializer
+    permission_classes = [AllowAny]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
 
-class PersonViewSet(viewsets.ModelViewSet):
-    queryset = Person.objects.all()
-    serializer_class = PersonSerializer
+        context.update({
+            'request_id': self.kwargs['id'],
+            'key': self.kwargs['key'],
+        })
+
+        return context
+

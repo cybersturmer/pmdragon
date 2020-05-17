@@ -21,10 +21,11 @@ class DocsView(APIView):
     def get(request, *args, **kwargs):
         docs = {
             _('Person registration request create'):
-                request.build_absolute_uri('person-registration-requests'),
+                request.build_absolute_uri('registration-requests/create'),
 
-            _('Person list'):
-                request.build_absolute_uri('persons')
+            _('Person registration approve'):
+                request.build_absolute_uri('registration-requests/approve/12/1dc4039fefa37e387d9ca0b88681b7ba8ad8cbdce'
+                                           '297a8e33ed12b253cb5c6ae'),
         }
 
         return Response(docs)
@@ -32,12 +33,15 @@ class DocsView(APIView):
 
 urlpatterns = [
     path('', DocsView.as_view()),
-    path('person-registration-requests/',
+    path('registration-requests/create/',
          views.PersonRegistrationRequestCreateView.as_view(),
-         name='person-registration-requests')
+         name='registration-requests_create'),
+
+    path('registration-requests/approve/<int:id>/<key>/',
+         views.PersonVerifyView.as_view(),
+         name='registration-requests_approve'),
 ]
 
 router = routers.DefaultRouter()
-router.register('persons', views.PersonViewSet)
 
 urlpatterns += router.urls
