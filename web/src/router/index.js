@@ -9,6 +9,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      title: 'PmDragon | Welcome screen',
+    },
   },
   {
     path: '/about',
@@ -24,6 +27,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+  mode: 'history',
 });
 
 export default router;
