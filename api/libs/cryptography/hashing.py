@@ -1,6 +1,6 @@
-from django.conf import settings
 import hashlib
-import base64
+
+from django.conf import settings
 
 
 def get_hash(raw_string: str) -> str:

@@ -3,10 +3,11 @@
 
 from __future__ import annotations
 
-from copy import copy, deepcopy
-from datetime import datetime, timedelta
-from typing import List, Union, Tuple, NoReturn, Optional
+from copy import deepcopy
+from datetime import timedelta
 from operator import attrgetter
+from typing import List, Union, Tuple, NoReturn, Optional
+
 from analytics.time.range import BaseRange, DatetimeRange
 
 __author__ = 'Wladimir Stürmer'

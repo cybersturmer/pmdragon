@@ -8,7 +8,6 @@ from typing import Dict, Union, Tuple, List, Optional
 from analytics.time.range import DatetimeRange, DateRange
 from analytics.time.slices import DatetimeSlices, TimeSlices
 
-
 __author__ = 'Wladimir Stürmer'
 __license__ = "GPL"
 __version__ = '1.0.1'

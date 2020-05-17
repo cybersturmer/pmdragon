@@ -1,8 +1,8 @@
 from __future__ import annotations
+
 from datetime import datetime, date, time, timedelta
 from enum import Enum, auto
 from typing import Union
-
 
 __author__ = 'Wladimir Stürmer'
 __license__ = "GPL"
