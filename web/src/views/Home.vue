@@ -1,11 +1,16 @@
 <template>
   <div class="container">
     <div class="row justify-content-md-center">
-      <div class="col col-lg-6">
-        <WelcomeScreen msg="Welcome to PmDragon"/>
+      <div class="col-3">
+        <WelcomeScreen msg="PmDragon"/>
       </div>
-      <div class="col col-lg-6">
-        <RegistrationForm/>
+    </div>
+    <hr>
+    <div class="row justify-content-md-center">
+      <div class="col-3 card">
+        <div class="card-body bg-light p-3">
+          <RegistrationForm/>
+        </div>
       </div>
     </div>
   </div>
