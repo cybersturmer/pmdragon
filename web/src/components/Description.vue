@@ -1,10 +1,10 @@
 <template>
-    <h1>{{ msg }}</h1>
+    <p class="text-secondary">{{ msg }}</p>
 </template>
 
 <script>
 export default {
-  name: 'WelcomeScreen',
+  name: 'Description',
   props: {
     msg: String,
   },

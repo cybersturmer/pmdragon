@@ -1,14 +1,21 @@
 <template>
     <form method="post">
-        <div class="form-group">
-            <label for="prefix_url">Input workplace name</label>
-            <input id="prefix_url" type="text" placeholder="URL prefix" class="form-control">
+        <div class="input-group input-group-sm mb-3">
+            <label for="prefix_url"></label>
+            <input id="prefix_url" type="text"
+                   placeholder="yourname" class="form-control" required>
+            <div class="input-group-append">
+                <div class="input-group-text">pmdragon.org</div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="email">Input email</label>
-            <input id="email" type="email" placeholder="yourmail@mail.com" class="form-control">
+        <div class="input-group input-group-sm mb-3">
+            <label for="email"></label>
+                <input id="email" type="email"
+                       placeholder="yourmail@mail.com" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-outline-dark">Register</button>
+        <div class="input-group input-group-sm mb-1">
+            <button type="submit" class="btn btn-sm btn-dark w-100">Register</button>
+        </div>
     </form>
 </template>
 

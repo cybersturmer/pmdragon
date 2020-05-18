@@ -14,14 +14,28 @@ const routes = [
     },
   },
   {
+    path: '/auth',
+    name: 'Sign In',
+    component: () => import('../views/SignIn.vue'),
+    meta: {
+      title: 'PmDragon | Sign in',
+    },
+  },
+  {
     path: '/about',
     name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import('../views/About.vue'),
+    meta: {
+      title: 'PmDragon | About',
+    },
   },
   {
     path: '/news',
     name: 'What\'s new',
-    component: () => import(/* webpackChunkName: "about" */ '../views/News.vue'),
+    component: () => import('../views/News'),
+    meta: {
+      title: 'PmDragon | What\'s new',
+    },
   },
 ];
 
