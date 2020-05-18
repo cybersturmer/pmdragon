@@ -1,8 +1,9 @@
 <template>
-    <div class="card">
+    <div class="card border-dark">
         <div class="card-body">
-            <h5 class="card-title">{{ title }} - {{ date }}</h5>
+            <h5 class="card-title text-secondary">{{ title }}</h5>
             <p class="card-text">{{ text }}</p>
+            <p class="card-footer m-0 p-0 border-0 float-right">{{ date }}</p>
         </div>
     </div>
 </template>
