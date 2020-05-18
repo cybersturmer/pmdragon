@@ -31,6 +31,19 @@ CACHES = {
 }
 
 """
+REST FRAMEWORK THROTTLING """
+REST_FRAMEWORK.update({
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '5000/day',
+    }
+})
+
+"""
 Email settings use secure ssl connection """
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
