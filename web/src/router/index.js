@@ -37,6 +37,14 @@ const routes = [
       title: 'PmDragon | What\'s new',
     },
   },
+  {
+    path: '/verify',
+    name: 'Registration verification',
+    component: () => import('../views/Verify'),
+    meta: {
+      title: 'PmDragon | Verify registration',
+    },
+  },
 ];
 
 const router = new VueRouter({
