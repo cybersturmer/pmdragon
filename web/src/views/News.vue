@@ -1,13 +1,13 @@
 <template>
     <div class="container">
         <div class="row justify-content-md-center">
-            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-4">
+            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5">
                 <H1 msg="What's new"/>
                 <Description msg="What's new happened with our product"/>
             </div>
         </div>
-        <div class="row justify-content-md-center mb-2" v-for="item in news" :key="item">
-            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-4 small">
+        <div class="row justify-content-md-center mb-2" v-for="item in news" :key="item.id">
+            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5 small">
                 <WhatsNewElement :date="item.date"
                                  :title="item.title"
                                  :text="item.text"/>
@@ -30,11 +30,13 @@ export default {
     return {
       news: [
         {
+          id: 1,
           date: '19.05.2020',
           title: 'Something went right',
           text: 'When something went right, just close your eyes',
         },
         {
+          id: 2,
           date: '18.05.2020',
           title: 'Something went good',
           text: 'Imagine how great you can become',

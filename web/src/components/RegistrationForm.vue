@@ -6,40 +6,32 @@
             <p class="m-1"> Please check it and confirm registration.</p>
         </div>
         <form v-on:submit.prevent v-show="form_show">
-            <div class="input-group input-group-sm mb-2">
-                <label for="prefix_url"></label>
-                <input id="prefix_url" type="text" v-model="form_data.prefix_url"
-                       placeholder="yourname" class="form-control"
-                       minlength="3" maxlength="20" required>
-                <div class="input-group-append">
-                    <div class="input-group-text">pmdragon.org</div>
-                </div>
-                <div class="invalid-feedback d-inline-block font-weight-bold"
-                     v-show="form_errors.prefix_url">
-                    {{ form_errors.prefix_url }}
-                </div>
-            </div>
-            <div class="input-group input-group-sm mb-2">
-                <label for="email"></label>
-                    <input id="email" type="email" v-model="form_data.email"
-                           placeholder="yourmail@mail.com" class="form-control" required>
-                <div class="invalid-feedback d-inline-block font-weight-bold"
-                     v-show="form_errors.email">
-                    {{ form_errors.email }}
-                </div>
-            </div>
-            <div class="input-group input-group-sm mb-1">
-                <button type="submit" class="btn btn-sm btn-dark w-100" v-on:click="sendRequest()">
-                    Register
-                </button>
-            </div>
+            <PrefixUrlField group_class="input-group input-group-sm mb-2"
+                            v-model="form_data.prefix_url"
+                            :error="form_errors.prefix_url"
+                            append_text="pmdragon.org"/>
+            <EmailField group_class="input-group input-group-sm mb-2"
+                        v-model="form_data.email"
+                        :error="form_errors.email"/>
+            <SubmitButton group_class="input-group input-group-sm mb-1"
+                          button_class="btn btn-sm btn-dark w-100"
+                          text="Register" v-on:click="sendRequest()"/>
         </form>
     </div>
 </template>
 
 <script>
+import EmailField from './EmailField.vue';
+import SubmitButton from './SubmitButton.vue';
+import PrefixUrlField from './PrefixUrlField.vue';
+
 export default {
   name: 'RegistrationForm',
+  components: {
+    PrefixUrlField,
+    SubmitButton,
+    EmailField,
+  },
   data() {
     return {
       form_show: true,
