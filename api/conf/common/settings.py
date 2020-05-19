@@ -94,12 +94,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-"""
-Django rest framework cors headers """
-# Allowing to render all requests to api from any domain
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_URLS_REGEX = r'^/api/.*$'
-
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'

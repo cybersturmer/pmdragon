@@ -31,6 +31,13 @@ CACHES = {
 }
 
 """
+Django rest framework cors headers """
+# Allowing to render all requests to api from any domain
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'
+
+
+"""
 REST FRAMEWORK THROTTLING """
 REST_FRAMEWORK.update({
     'DEFAULT_THROTTLE_CLASSES': (
