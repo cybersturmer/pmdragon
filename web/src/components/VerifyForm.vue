@@ -1,13 +1,19 @@
 <template>
-    <form v-on:submit.prevent>
-        <PasswordField group_class="input-group input-group-sm mb-3"
-                       v-model="form_data.password"
-                       :error="form_errors.password"/>
-        <SubmitButton group_class="input-group input-group-sm mb-1"
-                      button_class="btn btn-sm btn-dark w-100"
-                      text="Verify"
-                      v-on:click="sendRequest()"/>
-    </form>
+    <div>
+        <div v-show="!form_show" class="text-dark">
+            <p class="m-1">Your account was verified</p>
+            <p class="m-1">Now you can sign in</p>
+        </div>
+        <form v-on:submit.prevent v-show="form_show">
+            <PasswordField group_class="input-group input-group-sm mb-3"
+                           v-model="form_data.password"
+                           :error="form_errors.password"/>
+            <SubmitButton group_class="input-group input-group-sm mb-1"
+                          button_class="btn btn-sm btn-dark w-100"
+                          text="Verify"
+                          v-on:click="sendRequest()"/>
+        </form>
+    </div>
 </template>
 
 <script>
@@ -22,6 +28,7 @@ export default {
   },
   data() {
     return {
+      form_show: true,
       form_data: {
         password: '',
         key: '',
@@ -36,8 +43,10 @@ export default {
   methods: {
     async sendRequest() {
       this.form_data.key = this.$route.query.key;
+      const domain = window.location.hostname;
+      const currentProtocol = window.location.protocol;
 
-      const url = 'http://0.0.0.0:8000/api/core/persons/';
+      const url = `${currentProtocol}//${domain}:8000/api/core/persons/`;
 
       const response = await fetch(url, {
         method: 'POST',
@@ -58,6 +67,7 @@ export default {
       }
 
       this.form_errors = { password: '' };
+      this.form_show = false;
 
       // Redirect ro auth
     },
