@@ -20,8 +20,7 @@ class PersonRegistrationRequest(models.Model):
     valid = PersonRegistrationRequestValidManager()
 
     url_validator = RegexValidator(r'^[a-z]{3,20}$',
-                                   _('String should contain from 3 to 20 small english letters '
-                                     'without special chars'))
+                                   _('From 3 to 20 english lowercase letters are allowed'))
 
     email = models.EmailField(verbose_name=_('Email'),
                               max_length=128)
