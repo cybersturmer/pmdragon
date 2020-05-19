@@ -43,7 +43,6 @@ class PersonVerifyView(generics.CreateAPIView):
         context = super().get_serializer_context()
 
         context.update({
-            'request_id': self.kwargs['id'],
             'key': self.kwargs['key'],
         })
 

@@ -24,7 +24,7 @@ class DocsView(APIView):
                 request.build_absolute_uri('registration-requests'),
 
             _('Person create'):
-                request.build_absolute_uri('persons/approve/12/1dc4039fefa37e387d9ca0b88681b7ba8ad8cbdce'
+                request.build_absolute_uri('persons/1dc4039fefa37e387d9ca0b88681b7ba8ad8cbdce'
                                            '297a8e33ed12b253cb5c6ae'),
         }
 
@@ -37,7 +37,7 @@ urlpatterns = [
          views.PersonRegistrationRequestCreateView.as_view(),
          name='registration-requests_create'),
 
-    path('persons/<int:id>/<key>/',
+    path('persons/<key>/',
          views.PersonVerifyView.as_view(),
          name='registration-requests_approve'),
 ]
