@@ -37,7 +37,7 @@ urlpatterns = [
          views.PersonRegistrationRequestCreateView.as_view(),
          name='registration-requests_create'),
 
-    path('persons/<key>/',
+    path('persons/',
          views.PersonVerifyView.as_view(),
          name='registration-requests_approve'),
 ]

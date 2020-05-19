@@ -20,21 +20,22 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PersonVerifySerializer(serializers.Serializer):
+    key = serializers.CharField(max_length=128, write_only=True)
     password = serializers.CharField(max_length=30, write_only=True)
 
     class Meta:
-        fields = ['password']
+        fields = ['key', 'password']
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'key': {'write_only': True}
         }
 
     def create(self, validated_data):
         password = validated_data['password']
-
-        request_key = self.context['key']
+        key = validated_data['key']
 
         try:
-            request = PersonRegistrationRequest.valid.filter(key__exact=request_key).get()
+            request = PersonRegistrationRequest.valid.filter(key__exact=key).get()
 
         except PersonRegistrationRequest.DoesNotExist as ne:
             raise serializers.ValidationError(_('Request for registration was expired or not correct'))
@@ -49,14 +50,10 @@ class PersonVerifySerializer(serializers.Serializer):
         user = User(username=f"{prefix}_dragon", email=email)
         user.set_password(password)
 
-        print(user.username, 'Username')
-
         try:
             user.save()
 
-        except IntegrityError as ie:
-            print(ie)
-
+        except IntegrityError:
             raise serializers.ValidationError(_('Someone already registered with this data'))
 
         person = Person(user=user)

@@ -38,13 +38,3 @@ class PersonVerifyView(generics.CreateAPIView):
     queryset = Person.objects.all()
     serializer_class = PersonVerifySerializer
     permission_classes = [AllowAny]
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-
-        context.update({
-            'key': self.kwargs['key'],
-        })
-
-        return context
-
