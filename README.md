@@ -2,7 +2,7 @@
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
-### 19.05.2020
+#### 19.05.2020
 - Web application was synced with Python API in Person Registration Requests
 
 #### 17.05.2020
