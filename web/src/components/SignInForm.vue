@@ -37,6 +37,39 @@ export default {
       },
     };
   },
+
+  methods: {
+    async sendRequest() {
+      const domain = window.location.hostname;
+      const currentProtocol = window.location.protocol;
+
+      const url = `${currentProtocol}//${domain}:8000/api/auth/token/`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.form_data),
+      });
+
+      const json = await response.json();
+      if (response.status !== 200) {
+        if (('email' in json) && (Array.isArray(json.email))) {
+          this.form_errors.email = json.email.join(', ');
+        }
+
+        if (('password' in json) && (Array.isArray(json.password))) {
+          this.form_errors.password = json.password.join(', ');
+        }
+
+        return;
+      }
+
+      this.form_errors = { username: '', email: '' };
+    },
+  },
 };
 </script>
 
