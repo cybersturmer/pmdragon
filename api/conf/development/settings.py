@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from conf.common.settings import *
 
 DEBUG = True
