@@ -2,6 +2,9 @@
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
+#### 20.05.2020
+- Added Json Web Tokens as default auth way.
+
 #### 19.05.2020
 - Web application was synced with Python API in Person Registration Requests
 
