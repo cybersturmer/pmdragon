@@ -7,6 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 from libs.cryptography import hashing
 from libs.helpers.datetimepresets import day_later
 
+url_validator = RegexValidator(r'^[a-z]{3,20}$',
+                               _('From 3 to 20 english lowercase letters are allowed'))
+
 
 class PersonRegistrationRequestValidManager(models.Manager):
     def get_queryset(self):
@@ -18,9 +21,6 @@ class PersonRegistrationRequestValidManager(models.Manager):
 class PersonRegistrationRequest(models.Model):
     objects = models.Manager()
     valid = PersonRegistrationRequestValidManager()
-
-    url_validator = RegexValidator(r'^[a-z]{3,20}$',
-                                   _('From 3 to 20 english lowercase letters are allowed'))
 
     email = models.EmailField(verbose_name=_('Email'),
                               max_length=128)
@@ -131,3 +131,14 @@ class Person(models.Model):
     __repr__ = __str__
 
 
+class Workspace(models.Model):
+    owner = models.ForeignKey(Person,
+                              verbose_name=_('Workspace owner'),
+                              on_delete=models.SET_NULL,
+                              null=True)
+
+    prefix_url = models.CharField(verbose_name=_('Prefix URL'),
+                                  help_text=_('String should contain from 3 to 20 small english letters '
+                                              'without special chars'),
+                                  validators=[url_validator],
+                                  max_length=20)

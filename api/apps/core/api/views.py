@@ -8,6 +8,10 @@ from .serializers import *
 
 
 class PersonRegistrationRequestCreateView(generics.CreateAPIView):
+    """
+    Create a user registration request by using email and URL prefix.
+    After it generate an email with verification token and send it to chosen email.
+    """
     queryset = PersonRegistrationRequest.valid.all()
     serializer_class = PersonRegistrationRequestSerializer
     permission_classes = [AllowAny]
@@ -35,6 +39,9 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView):
 
 
 class PersonVerifyView(generics.CreateAPIView):
+    """
+    Create a Person linked to User after confirmation email.
+    """
     queryset = Person.objects.all()
     serializer_class = PersonVerifySerializer
     permission_classes = [AllowAny]
