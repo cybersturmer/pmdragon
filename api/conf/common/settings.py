@@ -97,3 +97,10 @@ REST_FRAMEWORK = {
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+
+
+"""
+Custom EMAIL Settings 
+HOST_BY_DEFAULT just for email replacing """
+EMAIL_FROM_BY_DEFAULT = 'robot@pmdragon.com'
+HOST_BY_DEFAULT = 'http://192.168.1.142:8080'

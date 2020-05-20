@@ -1,9 +1,9 @@
 from smtplib import SMTPException
 
-from django.core.mail import send_mail
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
+from libs.email.compose import EmailComposer
 from .serializers import *
 
 
@@ -19,17 +19,14 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         instance: PersonRegistrationRequest = serializer.save()
 
-        # @todo make wrapper for mailings
         try:
-            send_mail(
-                'You registration',
-                f'Here is a message and a key {instance.key}',
-                'welcome@pmdragon.org',
-                [str(instance.email)],
-                fail_silently=False
+            EmailComposer().send_verification_email(
+                key=instance.key,
+                prefix_url=instance.prefix_url,
+                expired_at=instance.expired_at,
+                email=instance.email
             )
-
-        except SMTPException as smtp_error:
+        except SMTPException:
             instance.email_sent = False
             instance.save()
 
