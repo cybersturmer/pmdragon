@@ -3,7 +3,10 @@
         <label for="prefix_url"></label>
         <input id="prefix_url" type="text" @input="handleInput"
                placeholder="yourname" class="form-control"
-               v-model="value" minlength="3" maxlength="20" required>
+               v-model="value"
+               minlength="3" maxlength="20"
+               pattern="^[a-z]{3,20}$"
+               required>
         <div class="input-group-append">
             <div class="input-group-text">{{ append_text }}</div>
         </div>
