@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5">
-        <H1 msg="~[ pmdragon ]~"/>
+        <H1 msg="~| pmdragon |~"/>
         <Description msg="Agile tool designed for software teams"/>
       </div>
     </div>

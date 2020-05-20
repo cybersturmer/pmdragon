@@ -24,6 +24,7 @@ export default {
     EmailField,
     PasswordField,
   },
+
   data() {
     return {
       form_data: {

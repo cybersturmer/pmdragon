@@ -1,48 +1,47 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'home',
+    component: () => import('../views/Home.vue'),
     meta: {
-      title: 'PmDragon | Welcome screen',
+      title: 'Welcome screen | PmDragon',
     },
   },
   {
-    path: '/auth',
-    name: 'Sign In',
+    path: '/login',
+    name: 'login',
     component: () => import('../views/SignIn.vue'),
     meta: {
-      title: 'PmDragon | Sign in',
+      title: 'Sign In | PmDragon',
     },
   },
   {
     path: '/about',
-    name: 'About',
+    name: 'about',
     component: () => import('../views/About.vue'),
     meta: {
-      title: 'PmDragon | About',
+      title: 'About | PmDragon',
     },
   },
   {
     path: '/news',
-    name: 'What\'s new',
+    name: 'news',
     component: () => import('../views/News'),
     meta: {
-      title: 'PmDragon | What\'s new',
+      title: 'What\'s new | PmDragon',
     },
   },
   {
     path: '/verify',
-    name: 'Registration verification',
+    name: 'verify',
     component: () => import('../views/Verify'),
     meta: {
-      title: 'PmDragon | Verify registration',
+      title: 'Verify registration | PmDragon',
     },
   },
 ];

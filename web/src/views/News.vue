@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="row justify-content-md-center mb-2" v-for="item in news" :key="item.id">
-            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5 small">
+            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5 small shadow">
                 <WhatsNewElement :date="item.date"
                                  :title="item.title"
                                  :text="item.text"/>

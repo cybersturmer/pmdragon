@@ -2,13 +2,22 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/auth">Sign In</router-link> |
+      <router-link to="/login">Sign In</router-link> |
       <router-link to="/news">What's new</router-link>
     </div>
     <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+  watch: {
+    $route(to) {
+      document.title = to.meta.title || '~PMDragon~';
+    },
+  },
+};
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
