@@ -41,13 +41,12 @@ class PersonVerifySerializer(serializers.Serializer):
             raise serializers.ValidationError(_('Request for registration was expired or not correct'))
 
         email = request.email
-        prefix = request.prefix_url
 
         """
         Person foreign key user not visible for user.
         Used for SaaS service
         """
-        user = User(username=f"{prefix}_dragon", email=email)
+        user = User(username=email, email=email)
         user.set_password(password)
 
         try:

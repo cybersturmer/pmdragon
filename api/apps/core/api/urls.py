@@ -24,8 +24,7 @@ class DocsView(APIView):
                 request.build_absolute_uri('registration-requests'),
 
             _('Person create'):
-                request.build_absolute_uri('persons/1dc4039fefa37e387d9ca0b88681b7ba8ad8cbdce'
-                                           '297a8e33ed12b253cb5c6ae'),
+                request.build_absolute_uri('persons'),
         }
 
         return Response(docs)
