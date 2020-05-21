@@ -31,7 +31,7 @@ const routes = [
   {
     path: '/news',
     name: 'news',
-    component: () => import('../views/News'),
+    component: () => import('../views/News.vue'),
     meta: {
       title: 'What\'s new | PmDragon',
     },
@@ -39,7 +39,7 @@ const routes = [
   {
     path: '/verify',
     name: 'verify',
-    component: () => import('../views/Verify'),
+    component: () => import('../views/Verify.vue'),
     meta: {
       title: 'Verify registration | PmDragon',
     },
@@ -48,7 +48,6 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'history',
 });
 
 export default router;

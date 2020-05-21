@@ -11,6 +11,7 @@
 
 <script>
 export default {
+  name: 'Welcome',
   watch: {
     $route(to) {
       document.title = to.meta.title || '~PMDragon~';

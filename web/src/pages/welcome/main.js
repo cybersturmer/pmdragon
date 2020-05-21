@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import router from './router';
+import router from '@/router/welcome';
 import App from './App.vue';
 import 'jquery';
 import 'popper.js';
