@@ -126,19 +126,40 @@ class Person(models.Model):
         verbose_name_plural = _('Persons')
 
     def __str__(self):
-        return f'{self.username} - {self.first_name or _("Unnamed")}'
+        email = self.username
+        result_name = email
+
+        if self.first_name and self.last_name:
+            result_name = f'{self.first_name} {self.last_name}'
+
+        return result_name
 
     __repr__ = __str__
 
 
 class Workspace(models.Model):
-    owner = models.ForeignKey(Person,
-                              verbose_name=_('Workspace owner'),
-                              on_delete=models.SET_NULL,
-                              null=True)
-
+    """
+    Workspaces allow system to isolate teams between each other.
+    Managers or analytics can work separately from main team,
+    but also need a self scrum board.
+    """
     prefix_url = models.CharField(verbose_name=_('Prefix URL'),
                                   help_text=_('String should contain from 3 to 20 small english letters '
                                               'without special chars'),
                                   validators=[url_validator],
                                   max_length=20)
+
+    participants = models.ManyToManyField(Person,
+                                          verbose_name=_('Participants of workplace'),
+                                          related_name='workspaces')
+
+    class Meta:
+        db_table = 'core_workspace'
+        ordering = ['-updated_at']
+        verbose_name = _('Workspace')
+        verbose_name_plural = _('Workspaces')
+
+    def __str__(self):
+        return self.prefix_url
+
+    __repr__ = __str__
