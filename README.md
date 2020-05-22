@@ -15,6 +15,7 @@ Open sourced project management tool to track tasks, epics, bugs and manage it w
 - Updated Person Model based on Django User Model
 
 ## Backlog:
-1. As a user, i can register in service.
-1. As a product owner, i want to verify all registrations in service.
+1. As a user, i can see my Backlog of tasks.
+1. As a user, i can add task to my Backlog.
+1. As a user, i can prioritize my own backlog.
 1. As a user, i can invite my colleagues to register in service via link in email message.
