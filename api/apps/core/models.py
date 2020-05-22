@@ -13,8 +13,8 @@ url_validator = RegexValidator(r'^[a-z]{3,20}$',
 
 class PersonRegistrationRequestValidManager(models.Manager):
     def get_queryset(self):
-        return super(PersonRegistrationRequestValidManager, self).\
-            get_queryset().\
+        return super(PersonRegistrationRequestValidManager, self). \
+            get_queryset(). \
             filter(expired_at__gt=timezone.now())
 
 
@@ -25,7 +25,7 @@ class PersonRegistrationRequest(models.Model):
     email = models.EmailField(verbose_name=_('Email'),
                               max_length=128)
 
-    prefix_url = models.CharField(verbose_name=_('Prefix URL'),
+    prefix_url = models.SlugField(verbose_name=_('Prefix URL'),
                                   help_text=_('String should contain from 3 to 20 small english letters '
                                               'without special chars'),
                                   validators=[url_validator],
@@ -53,8 +53,8 @@ class PersonRegistrationRequest(models.Model):
             models.Index(fields=['key', '-expired_at'])
         )
 
-        verbose_name = _('Person Registrations Request')
-        verbose_name_plural = _('Person Registrations Requests')
+        verbose_name = _('Person Registration Request')
+        verbose_name_plural = _('Person Registration Requests')
 
     def __str__(self):
         return f'{self.email} - {self.prefix_url}'
@@ -66,7 +66,6 @@ class PersonRegistrationRequest(models.Model):
              force_update=False,
              using=None,
              update_fields=None):
-
         if self.pk is None:
             raw_string = ''.join([str(self.expired_at), self.email, self.prefix_url])
             self.key = hashing.get_hash(raw_string)
@@ -153,6 +152,9 @@ class Workspace(models.Model):
                                           verbose_name=_('Participants of workplace'),
                                           related_name='workspaces')
 
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
     class Meta:
         db_table = 'core_workspace'
         ordering = ['-updated_at']
@@ -163,3 +165,151 @@ class Workspace(models.Model):
         return self.prefix_url
 
     __repr__ = __str__
+
+
+class Project(models.Model):
+    """
+    Project is a easiest way to isolate Tasks
+    """
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE,
+                                  related_name='projects')
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255)
+
+    key = models.SlugField(verbose_name=_('Project key'),
+                           help_text=_('Short word (must not exceed 10 characters) to mark project'),
+                           max_length=10)
+
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
+    class Meta:
+        db_table = 'core_project'
+        ordering = ['-created_at']
+        verbose_name = _('Project')
+        verbose_name_plural = _('Projects')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+
+class IssueTypeCategory(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE,
+                                  related_name='issue_categories')
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255)
+
+    is_subtask = models.BooleanField(verbose_name=_('Is sub-task issue type?'),
+                                     default=False)
+
+    ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
+                                                default=1)
+
+    class Meta:
+        db_table = 'core_issue_category'
+        ordering = ['-ordering']
+        verbose_name = _('Issue Type Category')
+        verbose_name_plural = _('Issue Type Categories')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+
+class IssueStateCategory(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE)
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255)
+
+    ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
+                                                default=1)
+
+    class Meta:
+        db_table = 'core_issue_state'
+        ordering = ['-ordering']
+        verbose_name = _('Issue State Category')
+        verbose_name_plural = _('Issue State Categories')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+
+class Issue(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE)
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255)
+
+    project = models.ForeignKey(Project,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
+
+    type_category = models.ForeignKey(IssueTypeCategory,
+                                      verbose_name=_('Issue Type Category'),
+                                      on_delete=models.CASCADE)
+
+    state_category = models.ForeignKey(IssueStateCategory,
+                                       verbose_name=_('Issue State Category'),
+                                       null=True,
+                                       on_delete=models.SET_NULL)
+
+    created_by = models.ForeignKey(Person,
+                                   verbose_name=_('Created by'),
+                                   on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
+    ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
+                                                default=1)
+
+    class Meta:
+        db_table = 'core_issue'
+        ordering = ['-ordering']
+        verbose_name = _('Issue')
+        verbose_name_plural = _('Issues')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+
+class ProjectBacklog(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE)
+
+    project = models.OneToOneField(Project,
+                                   verbose_name=_('Project'),
+                                   on_delete=models.CASCADE)
+
+    issues = models.ManyToManyField(Issue,
+                                    verbose_name=_('Issues'))
+
+    class Meta:
+        db_table = 'core_project_backlog'
+        verbose_name = _('Project Backlog')
+        verbose_name_plural = _('Project Backlogs')
+
+    def __str__(self):
+        return f'{self.project.title} {_("Backlog")} | ({self.issues.count()}) {_("issues")}'
+
+    __repr__ = __str__
+
