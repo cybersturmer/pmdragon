@@ -150,14 +150,15 @@ class Workspace(models.Model):
 
     participants = models.ManyToManyField(Person,
                                           verbose_name=_('Participants of workplace'),
-                                          related_name='workspaces')
+                                          related_name='workspaces',
+                                          blank=True)
 
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)
 
     class Meta:
         db_table = 'core_workspace'
-        ordering = ['-updated_at']
+        ordering = ['-created_at']
         verbose_name = _('Workspace')
         verbose_name_plural = _('Workspaces')
 
@@ -266,6 +267,7 @@ class Issue(models.Model):
 
     state_category = models.ForeignKey(IssueStateCategory,
                                        verbose_name=_('Issue State Category'),
+                                       blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL)
 
@@ -309,7 +311,7 @@ class ProjectBacklog(models.Model):
         verbose_name_plural = _('Project Backlogs')
 
     def __str__(self):
-        return f'{self.project.title} {_("Backlog")} | ({self.issues.count()}) {_("issues")}'
+        return f'{self.workspace.prefix_url} - {self.project.title} {_("Backlog")} | ({self.issues.count()}) {_("issues")}'
 
     __repr__ = __str__
 

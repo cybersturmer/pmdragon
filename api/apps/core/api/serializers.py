@@ -7,12 +7,21 @@ from ..models import *
 
 
 class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
+    """
+    Common Serializer for Person Registration Request
+    For creating requests.
+    """
     class Meta:
         model = PersonRegistrationRequest
         fields = ['id', 'email', 'prefix_url']
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Common Serializer for getting user information
+    Gonna use it for getting all participants information
+    in chosen workspace.
+    """
     class Meta:
         model = User
         fields = ['password']
@@ -20,6 +29,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PersonVerifySerializer(serializers.Serializer):
+    """
+    Custom Serializer for verifying Person registration
+    For creating Person after confirmation of authenticity of email
+    """
     key = serializers.CharField(max_length=128, write_only=True)
     password = serializers.CharField(max_length=30, write_only=True)
 
@@ -62,3 +75,80 @@ class PersonVerifySerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    """
+    Common project serializer
+    For getting list of projects in workspace
+    """
+    class Meta:
+        model = Project
+        fields = ['title', 'key']
+
+
+class IssueTypeCategorySerializer(serializers.ModelSerializer):
+    """
+    Common issue category serializer
+    For getting all types of issues
+    """
+    class Meta:
+        model = IssueTypeCategory
+        fields = ['title', 'is_subtask', 'ordering']
+
+
+class IssueStateCategorySerializer(serializers.ModelSerializer):
+    """
+    Common issue category serializer
+    For getting all types of issue states
+    """
+    class Meta:
+        model = IssueStateCategory
+        fields = ['title', 'ordering']
+
+
+class IssueSerializer(models.Model):
+    """
+    Common issue serializer for getting all tasks
+    No idea how to use it in reality yet
+    """
+    class Meta:
+        model = Issue
+        fields = [
+            'title',
+            'project',
+            'type_category',
+            'state_category',
+            'created_by',
+            'created_at',
+            'ordering',
+        ]
+
+
+class ProjectBacklogIssuesSerializer(serializers.ModelSerializer):
+    """
+    Gathering all information about issues for a Backlog serializer
+    For getting issues information in Backlog Serializer
+    Not for using separately
+    """
+    class Meta:
+        model = Issue
+        fields = [
+            'type_category',
+            'state_category',
+            'created_by',
+            'created_at',
+            'ordering'
+        ]
+
+
+class ProjectBacklogSerializer(serializers.ModelSerializer):
+    """
+    Getting Backlog information with all issues inside of it
+    For getting backlog information including issues
+    """
+    issues = ProjectBacklogIssuesSerializer
+
+    class Meta:
+        model = ProjectBacklog
+        fields = ['issues']
