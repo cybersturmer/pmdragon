@@ -59,6 +59,8 @@ class WorkspaceModelViewSet(viewsets.ModelViewSet):
 
         try:
             workspace = Workspace.objects.get(prefix_url__exact=workspace_url)
+            if self.request.user.person not in workspace.participants.all():
+                raise Workspace.DoesNotExist
 
         except Workspace.DoesNotExist:
             raise NotAuthenticated(detail=self.PERMISSIONS_NOTIFICATION)
