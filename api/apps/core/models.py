@@ -32,6 +32,7 @@ class PersonRegistrationRequest(models.Model):
                                   max_length=20)
 
     key = models.CharField(verbose_name=_('Registration key'),
+                           db_index=True,
                            editable=False,
                            max_length=128)
 
@@ -42,6 +43,7 @@ class PersonRegistrationRequest(models.Model):
                                       auto_now_add=True)
 
     expired_at = models.DateTimeField(verbose_name=_('Expired at'),
+                                      db_index=True,
                                       default=day_later)
 
     class Meta:
@@ -144,6 +146,7 @@ class Workspace(models.Model):
     but also need a self scrum board.
     """
     prefix_url = models.CharField(verbose_name=_('Prefix URL'),
+                                  db_index=True,
                                   help_text=_('String should contain from 3 to 20 small english letters '
                                               'without special chars'),
                                   validators=[url_validator],
@@ -175,6 +178,7 @@ class Project(models.Model):
     """
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
+                                  db_index=True,
                                   on_delete=models.CASCADE,
                                   related_name='projects')
 
@@ -203,6 +207,7 @@ class Project(models.Model):
 class IssueTypeCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
+                                  db_index=True,
                                   on_delete=models.CASCADE,
                                   related_name='issue_categories')
 
@@ -230,6 +235,7 @@ class IssueTypeCategory(models.Model):
 class IssueStateCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
+                                  db_index=True,
                                   on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name=_('Title'),
@@ -253,21 +259,25 @@ class IssueStateCategory(models.Model):
 class Issue(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
+                                  db_index=True,
                                   on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
     project = models.ForeignKey(Project,
+                                db_index=True,
                                 verbose_name=_('Project'),
                                 on_delete=models.CASCADE)
 
     type_category = models.ForeignKey(IssueTypeCategory,
+                                      db_index=True,
                                       verbose_name=_('Issue Type Category'),
                                       on_delete=models.CASCADE)
 
     state_category = models.ForeignKey(IssueStateCategory,
                                        verbose_name=_('Issue State Category'),
+                                       db_index=True,
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL)
@@ -297,6 +307,7 @@ class Issue(models.Model):
 class ProjectBacklog(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
+                                  db_index=True,
                                   on_delete=models.CASCADE)
 
     project = models.OneToOneField(Project,
