@@ -9,6 +9,7 @@ Added API methods to work with
 - IssueStateCategories
 - Issues
 - ProjectBacklogs
+
 Provided isolation between workspaces on view level.
 
 #### 20.05.2020
