@@ -1,0 +1,10 @@
+__pycache__
+venv
+.git
+.idea
+*.egg-info
+*.egg
+*.swp
+.tox
+.coverage
+.gitignore
