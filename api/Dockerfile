@@ -18,5 +18,5 @@ pip install --upgrade pip && \\
 pip install -r ${CONTAINER_PATH}/conf/${ENVIRONMENT}/requirements.txt
 RUN echo "Installation was successfull."
 
-RUN echo "Copyingg application files..."
+RUN echo "Copying application files..."
 COPY ./ ${CONTAINER_PATH}
