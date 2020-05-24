@@ -77,37 +77,45 @@ class PersonVerifySerializer(serializers.Serializer):
         pass
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class WorkspaceModelSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        validated_data = super(WorkspaceModelSerializer, self).validate(attrs)
+        validated_data['workspace'] = self.context['workspace']
+
+        return validated_data
+
+
+class ProjectSerializer(WorkspaceModelSerializer):
     """
     Common project serializer
     For getting list of projects in workspace
     """
     class Meta:
         model = Project
-        fields = ['title', 'key']
+        fields = ['id', 'title', 'key']
 
 
-class IssueTypeCategorySerializer(serializers.ModelSerializer):
+class IssueTypeCategorySerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
     For getting all types of issues
     """
     class Meta:
         model = IssueTypeCategory
-        fields = ['title', 'is_subtask', 'ordering']
+        fields = ['id', 'title', 'is_subtask', 'ordering']
 
 
-class IssueStateCategorySerializer(serializers.ModelSerializer):
+class IssueStateCategorySerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
     For getting all types of issue states
     """
     class Meta:
         model = IssueStateCategory
-        fields = ['title', 'ordering']
+        fields = ['id', 'title', 'ordering']
 
 
-class IssueSerializer(models.Model):
+class IssueSerializer(WorkspaceModelSerializer):
     """
     Common issue serializer for getting all tasks
     No idea how to use it in reality yet
@@ -115,6 +123,7 @@ class IssueSerializer(models.Model):
     class Meta:
         model = Issue
         fields = [
+            'id',
             'title',
             'project',
             'type_category',
@@ -125,7 +134,7 @@ class IssueSerializer(models.Model):
         ]
 
 
-class ProjectBacklogIssuesSerializer(serializers.ModelSerializer):
+class ProjectBacklogIssuesSerializer(WorkspaceModelSerializer):
     """
     Gathering all information about issues for a Backlog serializer
     For getting issues information in Backlog Serializer
@@ -134,6 +143,9 @@ class ProjectBacklogIssuesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
         fields = [
+            'id',
+            'title',
+            'project',
             'type_category',
             'state_category',
             'created_by',
@@ -142,13 +154,16 @@ class ProjectBacklogIssuesSerializer(serializers.ModelSerializer):
         ]
 
 
-class ProjectBacklogSerializer(serializers.ModelSerializer):
+class ProjectBacklogSerializer(WorkspaceModelSerializer):
     """
     Getting Backlog information with all issues inside of it
     For getting backlog information including issues
     """
-    issues = ProjectBacklogIssuesSerializer
+    issues = ProjectBacklogIssuesSerializer(many=True)
 
     class Meta:
         model = ProjectBacklog
-        fields = ['issues']
+        fields = [
+            'id',
+            'issues'
+        ]

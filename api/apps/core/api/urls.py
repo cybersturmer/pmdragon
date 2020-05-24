@@ -25,13 +25,16 @@ class DocsView(APIView):
 
             _('Person create'):
                 request.build_absolute_uri('persons'),
+
+            _('Projects'):
+                request.build_absolute_uri('projects')
         }
 
         return Response(docs)
 
 
 urlpatterns = [
-    path('', DocsView.as_view()),
+    path('docs/', DocsView.as_view()),
     path('registration-requests/',
          views.PersonRegistrationRequestCreateView.as_view(),
          name='registration-requests_create'),
@@ -42,5 +45,25 @@ urlpatterns = [
 ]
 
 router = routers.DefaultRouter()
+
+router.register('projects',
+                views.ProjectViewSet,
+                basename='project')
+
+router.register('issue-type-categories',
+                views.IssueTypeCategoryViewSet,
+                basename='issue-type-category')
+
+router.register('issue-state-categories',
+                views.IssueStateCategoryViewSet,
+                basename='issue-state-category')
+
+router.register('issues',
+                views.IssueViewSet,
+                basename='issue')
+
+router.register('project-backlogs',
+                views.ProjectBacklogViewSet,
+                basename='project-backlog')
 
 urlpatterns += router.urls

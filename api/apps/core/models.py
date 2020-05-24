@@ -84,11 +84,12 @@ class Person(models.Model):
 
     username = models.CharField(max_length=20,
                                 verbose_name=_('Username'),
-                                default='dragon')
+                                default='dragon',)
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 verbose_name=_('User of system'),
-                                on_delete=models.CASCADE)
+                                on_delete=models.CASCADE,
+                                related_name='person')
 
     phone = models.CharField(max_length=128,
                              verbose_name=_('Phone number'),
