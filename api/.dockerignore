@@ -2,6 +2,12 @@ __pycache__
 venv
 .git
 .idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
 *.egg-info
 *.egg
 *.swp
