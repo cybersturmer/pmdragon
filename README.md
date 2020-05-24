@@ -2,6 +2,16 @@
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
+#### 24.05.2020
+Added API methods to work with
+- Projects
+- IssueTypeCategories
+- IssueStateCategories
+- Issues
+- ProjectBacklogs
+
+Provided isolation between workspaces on view level.
+
 #### 20.05.2020
 - Added Json Web Tokens as default auth way.
 
