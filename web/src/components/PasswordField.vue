@@ -3,7 +3,7 @@
         <label for="password"></label>
         <input id="password" type="password" @input="handleInput"
                placeholder="*****" class="form-control"
-               v-model="value" required>
+               v-model="value" :required="required" :autofocus="autofocus">
         <div class="invalid-feedback d-inline-block font-weight-bold"
              v-show="error">
             {{ error }}
@@ -17,6 +17,8 @@ export default {
   props: {
     group_class: String,
     error: String,
+    autofocus: Boolean,
+    required: Boolean,
   },
   data() {
     return {

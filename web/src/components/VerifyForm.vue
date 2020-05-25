@@ -7,7 +7,8 @@
         <form v-on:submit.prevent v-show="form_show">
             <PasswordField group_class="input-group input-group-sm mb-3"
                            v-model="form_data.password"
-                           :error="form_errors.password"/>
+                           :error="form_errors.password"
+                           autofocus required/>
             <SubmitButton group_class="input-group input-group-sm mb-1"
                           button_class="btn btn-sm btn-dark w-100"
                           text="Verify"

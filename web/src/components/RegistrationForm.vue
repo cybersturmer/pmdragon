@@ -9,10 +9,12 @@
             <PrefixUrlField group_class="input-group input-group-sm mb-2"
                             v-model="form_data.prefix_url"
                             :error="form_errors.prefix_url"
-                            append_text="pmdragon.org"/>
+                            append_text="pmdragon.org"
+                            required autofocus/>
             <EmailField group_class="input-group input-group-sm mb-2"
                         v-model="form_data.email"
-                        :error="form_errors.email"/>
+                        :error="form_errors.email"
+                        required/>
             <SubmitButton group_class="input-group input-group-sm mb-1"
                           button_class="btn btn-sm btn-dark w-100"
                           text="Register" v-on:click="sendRequest()"/>

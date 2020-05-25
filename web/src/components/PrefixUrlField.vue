@@ -6,7 +6,8 @@
                v-model="value"
                minlength="3" maxlength="20"
                pattern="^[a-z]{3,20}$"
-               required>
+               :required="required"
+               :autofocus="autofocus">
         <div class="input-group-append">
             <div class="input-group-text">{{ append_text }}</div>
         </div>
@@ -24,6 +25,8 @@ export default {
     group_class: String,
     error: String,
     append_text: String,
+    required: Boolean,
+    autofocus: Boolean,
   },
   data() {
     return {

@@ -2,10 +2,12 @@
     <form v-on:submit.prevent>
         <EmailField group_class="input-group input-group-sm mb-3"
                     v-model="form_data.email"
-                    :error="form_errors.email"/>
+                    :error="form_errors.email"
+                    autofocus required/>
         <PasswordField group_class="input-group input-group-sm mb-3"
                        v-model="form_data.password"
-                       :error="form_errors.password"/>
+                       :error="form_errors.password"
+                       required/>
         <SubmitButton group_class="input-group input-group-sm mb-1"
                       button_class="btn btn-sm btn-dark w-100"
                       text="Sign In"/>
