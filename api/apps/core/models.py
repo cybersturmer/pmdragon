@@ -147,6 +147,7 @@ class Workspace(models.Model):
     """
     prefix_url = models.CharField(verbose_name=_('Prefix URL'),
                                   db_index=True,
+                                  unique=True,
                                   help_text=_('String should contain from 3 to 20 small english letters '
                                               'without special chars'),
                                   validators=[url_validator],
@@ -195,6 +196,10 @@ class Project(models.Model):
     class Meta:
         db_table = 'core_project'
         ordering = ['-created_at']
+        unique_together = [
+            ['workspace', 'title'],
+            ['workspace', 'key']
+        ]
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
 
@@ -223,6 +228,9 @@ class IssueTypeCategory(models.Model):
     class Meta:
         db_table = 'core_issue_category'
         ordering = ['-ordering']
+        unique_together = [
+            ['workspace', 'title']
+        ]
         verbose_name = _('Issue Type Category')
         verbose_name_plural = _('Issue Type Categories')
 
@@ -247,6 +255,9 @@ class IssueStateCategory(models.Model):
     class Meta:
         db_table = 'core_issue_state'
         ordering = ['-ordering']
+        unique_together = [
+            ['workspace', 'title']
+        ]
         verbose_name = _('Issue State Category')
         verbose_name_plural = _('Issue State Categories')
 
@@ -295,6 +306,9 @@ class Issue(models.Model):
     class Meta:
         db_table = 'core_issue'
         ordering = ['-ordering']
+        unique_together = [
+            ['workspace', 'title', 'project']
+        ]
         verbose_name = _('Issue')
         verbose_name_plural = _('Issues')
 
@@ -320,6 +334,9 @@ class ProjectBacklog(models.Model):
     class Meta:
         db_table = 'core_project_backlog'
         verbose_name = _('Project Backlog')
+        unique_together = [
+            ['workspace', 'project']
+        ]
         verbose_name_plural = _('Project Backlogs')
 
     def __str__(self):
