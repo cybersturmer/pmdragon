@@ -2,10 +2,10 @@ const path = require('path');
 const os = require('os');
 
 const pages = {
-  welcome: {
-    entry: './src/pages/welcome/main.js',
+  index: {
+    entry: './src/pages/index/main.js',
     title: 'PmDragon | Welcome',
-    chunks: ['chunk-vendors', 'chunk-common', 'welcome'],
+    chunks: ['chunk-vendors', 'chunk-common', 'index'],
   },
   dashboard: {
     entry: './src/pages/dashboard/main.js',
