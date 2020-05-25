@@ -49,10 +49,7 @@ export default {
 
   methods: {
     async sendRequest() {
-      const domain = window.location.hostname;
-      const currentProtocol = window.location.protocol;
-
-      const url = `${currentProtocol}//${domain}:8000/api/core/registration-requests/`;
+      const url = '/api/core/registration-requests/';
 
       const response = await fetch(url, {
         method: 'POST',

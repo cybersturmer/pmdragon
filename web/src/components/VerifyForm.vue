@@ -43,10 +43,7 @@ export default {
   methods: {
     async sendRequest() {
       this.form_data.key = this.$route.query.key;
-      const domain = window.location.hostname;
-      const currentProtocol = window.location.protocol;
-
-      const url = `${currentProtocol}//${domain}:8000/api/core/persons/`;
+      const url = '/api/core/persons/';
 
       const response = await fetch(url, {
         method: 'POST',

@@ -41,10 +41,7 @@ export default {
 
   methods: {
     async sendRequest() {
-      const domain = window.location.hostname;
-      const currentProtocol = window.location.protocol;
-
-      const url = `${currentProtocol}//${domain}:8000/api/auth/token/`;
+      const url = '/api/auth/token/';
 
       const response = await fetch(url, {
         method: 'POST',
