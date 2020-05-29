@@ -10,6 +10,7 @@ const routes = [
     component: () => import('../views/Home.vue'),
     meta: {
       title: 'Welcome screen | PmDragon',
+      require_auth: false,
     },
   },
   {
@@ -18,6 +19,7 @@ const routes = [
     component: () => import('../views/SignIn.vue'),
     meta: {
       title: 'Sign In | PmDragon',
+      require_auth: false,
     },
   },
   {
@@ -26,6 +28,7 @@ const routes = [
     component: () => import('../views/About.vue'),
     meta: {
       title: 'About | PmDragon',
+      require_auth: false,
     },
   },
   {
@@ -34,6 +37,7 @@ const routes = [
     component: () => import('../views/News.vue'),
     meta: {
       title: 'What\'s new | PmDragon',
+      require_auth: false,
     },
   },
   {
@@ -42,6 +46,7 @@ const routes = [
     component: () => import('../views/Verify.vue'),
     meta: {
       title: 'Verify registration | PmDragon',
+      require_auth: false,
     },
   },
 ];
