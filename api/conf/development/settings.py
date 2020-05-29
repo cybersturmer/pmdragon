@@ -10,11 +10,14 @@ SECRET_KEY = 'w*ea%hd29u-&l&rol@5zo8a+@5o=@wb+i*r(@_+fnuc!*^9o0w'
 """
 JWT Tokens settings """
 REST_FRAMEWORK.update({
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 })
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=6),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
@@ -23,6 +26,8 @@ SIMPLE_JWT = {
     "SIGNING_KEY": SECRET_KEY,
     'ISSUER': 'PMDragon API',
 }
+
+REQUEST_LATENCY = timedelta(minutes=1)
 
 """
 Django rest framework cors headers """
