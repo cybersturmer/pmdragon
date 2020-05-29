@@ -6,17 +6,22 @@ LABEL maintainer="cybersturmer@ya.ru" \
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV ENVIRONMENT development
-ENV CONTAINER_PATH /srv/www/pmdragon
 
-RUN echo "Installing Python dependencies..."
-COPY ./conf/common/requirements.txt ${CONTAINER_PATH}/conf/common/requirements.txt
-COPY ./conf/${ENVIRONMENT}/requirements.txt ${CONTAINER_PATH}/conf/${ENVIRONMENT}/requirements.txt
+WORKDIR /srv/www/pmdragon
 
-RUN apt-get install apt && \\
-pip install --upgrade pip && \\
-pip install -r ${CONTAINER_PATH}/conf/${ENVIRONMENT}/requirements.txt
-RUN echo "Installation was successfull."
+RUN echo "Installing Python dependencies manager..."
+RUN pip install --upgrade pip && \\
+pip install pipenv
+
+RUN echo "Copying dependencies files..."
+COPY Pipfile ./
+COPY Pipfile.lock ./
+
+RUN echo "Installing dependencies..."
+RUN set -ex && pipenv install --deploy --system
 
 RUN echo "Copying application files..."
-COPY ./ ${CONTAINER_PATH}
+COPY . .
+
+EXPOSE 8000
+CMD ["uvicorn --host 0.0.0.0 --port 8000 conf.asgi.application"]
