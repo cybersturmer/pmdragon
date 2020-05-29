@@ -1,3 +1,4 @@
+from django import forms
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
@@ -333,14 +334,86 @@ class ProjectBacklog(models.Model):
 
     class Meta:
         db_table = 'core_project_backlog'
-        verbose_name = _('Project Backlog')
         unique_together = [
             ['workspace', 'project']
         ]
+        verbose_name = _('Project Backlog')
         verbose_name_plural = _('Project Backlogs')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.project.title} {_("Backlog")} | ({self.issues.count()}) {_("issues")}'
+        return f'{self.workspace.prefix_url} - {self.project.title} {_("Backlog")} ' \
+               f'| ({self.issues.count()}) {_("issues")}'
 
     __repr__ = __str__
 
+
+class SprintDuration(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  db_index=True,
+                                  on_delete=models.CASCADE)
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255,
+                             unique=True)
+
+    duration = models.DurationField(verbose_name=_('Duration'))
+
+    class Meta:
+        db_table = 'core_sprint_duration'
+        verbose_name = _('Sprint duration')
+        verbose_name_plural = _('Sprints duration')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+
+class Sprint(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  db_index=True,
+                                  on_delete=models.CASCADE)
+
+    project = models.ForeignKey(Project,
+                                verbose_name=_('Project'),
+                                db_index=True,
+                                on_delete=models.CASCADE)
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255,
+                             unique=True)
+
+    goal = models.TextField(verbose_name=_('Sprint Goal'))
+
+    duration = models.ForeignKey(SprintDuration,
+                                 verbose_name=_('Duration'),
+                                 on_delete=models.CASCADE)
+
+    issues = models.ManyToManyField(Issue,
+                                    verbose_name=_('Issues'))
+
+    started_at = models.DateTimeField(verbose_name=_('Start date'))
+
+    finished_at = models.DateTimeField(verbose_name=_('End date'))
+
+    class Meta:
+        db_table = 'core_sprint'
+        unique_together = [
+            ['workspace', 'project', 'started_at'],
+            ['workspace', 'project', 'finished_at'],
+        ]
+        verbose_name = _('Sprint')
+        verbose_name_plural = _('Sprints')
+
+    def __str__(self):
+        return self.title
+
+    __repr__ = __str__
+
+    def clean(self):
+        super(Sprint, self).clean()
+
+        if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
+            raise forms.ValidationError(_('Date of start should be earlier than date of end'))

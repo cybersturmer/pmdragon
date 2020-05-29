@@ -26,30 +26,13 @@ class WorkspaceAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
 
 
-@admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
-    model = Project
-
-
-@admin.register(IssueTypeCategory)
-class IssueTypeCategoryAdmin(admin.ModelAdmin):
-    model = IssueTypeCategory
-
-
-@admin.register(IssueStateCategory)
-class IssueStateCategoryAdmin(admin.ModelAdmin):
-    model = IssueStateCategory
-
-
-@admin.register(Issue)
-class Issue(admin.ModelAdmin):
-    model = Issue
-
-
-@admin.register(ProjectBacklog)
-class ProjectBacklog(admin.ModelAdmin):
-    model = ProjectBacklog
-
+admin.site.register(Project)
+admin.site.register(IssueTypeCategory)
+admin.site.register(IssueStateCategory)
+admin.site.register(Issue)
+admin.site.register(ProjectBacklog)
+admin.site.register(SprintDuration)
+admin.site.register(Sprint)
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
