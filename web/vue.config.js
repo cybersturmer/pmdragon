@@ -15,7 +15,6 @@ const pages = {
 };
 
 module.exports = {
-  outputDir: 'out',
   lintOnSave: false,
   productionSourceMap: false,
   publicPath: '',
