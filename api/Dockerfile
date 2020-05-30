@@ -7,15 +7,15 @@ LABEL maintainer="cybersturmer@ya.ru" \
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
+RUN set -ex && mkdir -p /srv/www/pmdragon
 WORKDIR /srv/www/pmdragon
 
 RUN echo "Installing Python dependencies manager..."
 RUN pip install --upgrade pip && \\
-pip install pipenv
+pip install 'pipenv==2018.11.26'
 
 RUN echo "Copying dependencies files..."
-COPY Pipfile ./
-COPY Pipfile.lock ./
+COPY Pipfile* ./
 
 RUN echo "Installing dependencies..."
 RUN set -ex && pipenv install --deploy --system
@@ -24,4 +24,4 @@ RUN echo "Copying application files..."
 COPY . .
 
 EXPOSE 8000
-CMD ["uvicorn --host 0.0.0.0 --port 8000 conf.asgi.application"]
+CMD ['sh -c "uvicorn --host 0.0.0.0 --port 8000 conf.asgi.application"']
