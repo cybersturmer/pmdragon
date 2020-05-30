@@ -22,6 +22,3 @@ RUN set -ex && pipenv install --deploy --system
 
 RUN echo "Copying application files..."
 COPY . .
-
-EXPOSE 8000
-CMD ['sh -c "uvicorn --host 0.0.0.0 --port 8000 conf.asgi.application"']
