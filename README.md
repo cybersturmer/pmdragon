@@ -23,9 +23,3 @@ Provided isolation between workspaces on view level.
 - Added API method to create person, after validation of given request_id and key
 - Added Vue Js initialization
 - Updated Person Model based on Django User Model
-
-## Backlog:
-1. As a user, i can see my Backlog of tasks.
-1. As a user, i can add task to my Backlog.
-1. As a user, i can prioritize my own backlog.
-1. As a user, i can invite my colleagues to register in service via link in email message.
