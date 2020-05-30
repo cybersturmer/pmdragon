@@ -1,0 +1,66 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build:
+      context: ./web/
+      dockerfile: Dockerfile
+    expose:
+      - 80
+    ports:
+      - 80:80
+    depends_on:
+      - api
+    volumes:
+      - static_volume:/srv/www/pmdragon/static
+      - media_volume:/srv/www/pmdragon/media
+  api:
+    restart: always
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    expose:
+      - 8000
+    ports:
+      - 8000:8000
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=pmdragon
+      - POSTGRES_USER=pmdragon
+      - POSTGRES_PASSWORD=wAzA9OZjZ1DIZbBaRI+bKg==
+    depends_on:
+      - postgres
+      - memcached
+    volumes:
+      - static_volume:/srv/www/pmdragon/static
+      - media_volume:/srv/www/pmdragon/media
+    command: bash -c "uvicorn --host 0.0.0.0 --port 8000 conf.asgi:application"
+  postgres:
+    image: postgres:12.2
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=pmdragon
+      - POSTGRES_USER=pmdragon
+      - POSTGRES_PASSWORD=wAzA9OZjZ1DIZbBaRI+bKg==
+      - PGDATA=/var/lib/postgresql/data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pgbackup:/backups
+  memcached:
+    image: memcached:latest
+    restart: always
+    ports:
+      - 11211:11211
+volumes:
+  pgdata:
+    driver: local
+  pgbackup:
+    driver: local
+  static_volume:
+    driver: local
+  media_volume:
+    driver: local
