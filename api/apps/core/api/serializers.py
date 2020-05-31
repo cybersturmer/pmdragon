@@ -18,20 +18,34 @@ class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerialize
         pass
 
     def validate(self, attrs):
-        data = super(TokenObtainPairExtendedSerializer, self).validate(attrs)
+        parent_data = super(TokenObtainPairExtendedSerializer, self).validate(attrs)
+
+        refresh_token = parent_data.pop('refresh')
+        access_token = parent_data.pop('access')
+
+        assert len(parent_data) == 0, \
+            _('Some parent data was missing')
 
         latency_reduced_timestamp = timezone.now() - settings.REQUEST_LATENCY
 
         access_token_expired_at = latency_reduced_timestamp + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         refresh_token_expired_at = latency_reduced_timestamp + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
 
-        data.update({
-            'email': self.user.username,
+        data = {
+            'username': self.user.username,
             'first_name': self.user.first_name,
             'last_name': self.user.last_name,
-            'access_expired_at': access_token_expired_at,
-            'refresh_expired_at': refresh_token_expired_at,
-        })
+            'tokens': {
+                'access': {
+                    'data': access_token,
+                    'expired_at': access_token_expired_at,
+                },
+                'refresh': {
+                    'data': refresh_token,
+                    'expired_at': refresh_token_expired_at,
+                }
+            },
+        }
 
         return data
 
