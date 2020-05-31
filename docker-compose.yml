@@ -1,3 +1,7 @@
+# Just for tests and development on localhost
+# Do not keep secrets in vcs.
+# Do not use real password or any kind of credentials
+
 version: '3'
 
 services:
@@ -35,7 +39,8 @@ services:
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
-    command: bash -c "uvicorn --host 0.0.0.0 --port 8000 conf.asgi:application"
+      - ./api:/srv/www/pmdragon
+    command: docker-entrypoint.sh
   postgres:
     image: postgres:12.2
     restart: always
@@ -49,7 +54,7 @@ services:
       - PGDATA=/var/lib/postgresql/data
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - pgbackup:/backups
+      - pgbackup:/var/lib/postgresql/backups
   memcached:
     image: memcached:latest
     restart: always
