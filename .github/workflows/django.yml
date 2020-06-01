@@ -30,4 +30,4 @@ jobs:
         pipenv install --deploy --system
     - name: Run Tests
       run: |
-        python api/manage.py test
+        python api/manage.py apps.core.api.tests
