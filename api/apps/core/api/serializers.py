@@ -1,13 +1,21 @@
-from django.contrib.auth.forms import SetPasswordForm
+from typing import Dict, Any
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import SetPasswordForm, PasswordResetForm
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.db import IntegrityError
 from django.forms import Form
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode as uid_decoder
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt import serializers as serializers_jwt
 
 from ..models import *
+
+UserModel = get_user_model()
 
 
 class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerializer):
@@ -110,18 +118,94 @@ class UserSetPasswordSerializer(serializers.Serializer):
         update_session_auth_hash(self.request, self.user)
 
 
-"""
-@todo
-Class Password Reset Serializer
-Look at: https://github.com/Tivix/django-rest-auth/blob/master/rest_auth/serializers.py
-"""
+class UserPasswordResetSerializer(serializers.Serializer):
+    """
+    Some serializer for request a password reset email
+    """
+    email = serializers.EmailField()
+
+    password_reset_form_class = PasswordResetForm
+    reset_form: [Form] = None
+
+    @staticmethod
+    def get_email_options():
+        """
+        Override this to change default email options
+        """
+        return {}
+
+    def validate_email(self, value):
+        self.reset_form = self.password_reset_form_class(data=self.initial_data)
+        if not self.reset_form.is_valid():
+            raise serializers.ValidationError(self.reset_form.errors)
+
+        return value
+
+    def save(self, **kwargs):
+        request = self.context.get('request')
+        opts = {
+            'use_https': request.is_secure(),
+            'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL'),
+            'request': request,
+        }
+
+        opts.update(self.get_email_options())
+        self.reset_form.save(**opts)
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
 
 
-"""
-@todo
-Class Password Reset Confirm Serializer
-Look at: https://github.com/Tivix/django-rest-auth/blob/master/rest_auth/serializers.py 
-"""
+class UserPasswordConfirmSerializer(serializers.Serializer):
+
+    user: object
+    _errors: Dict[Any, Any]
+    set_password_form: SetPasswordForm
+
+    new_password1 = serializers.CharField(max_length=128)
+    new_password2 = serializers.CharField(max_length=128)
+    uid = serializers.CharField()
+    token = serializers.CharField()
+
+    set_password_form_class = SetPasswordForm
+
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
+    def custom_validation(self, attrs):
+        pass
+
+    def validate(self, attrs):
+        self._errors = {}
+
+        try:
+
+            uid = force_text(uid_decoder(attrs['uid']))
+            self.user = UserModel._default_manager.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            raise ValidationError({'uid': ['Invalid value']})
+
+        self.custom_validation(attrs)
+        self.set_password_form = self.set_password_form_class(
+            user=self.user, data=attrs
+        )
+        if not self.set_password_form.is_valid():
+            raise serializers.ValidationError(self.set_password_form.errors)
+
+        if not default_token_generator.check_token(self.user, attrs['token']):
+            raise ValidationError({'token': ['Invalid value']})
+
+        return attrs
+
+    def save(self, **kwargs):
+        return self.set_password_form.save()
 
 
 class PersonVerifySerializer(serializers.Serializer):
