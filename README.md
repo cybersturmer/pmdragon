@@ -1,4 +1,4 @@
-<img src="docs/images/logo.png" width="107" height="75">
+<img src="docs/images/logo.png" width="161" height="113">
 
 # PmDragon Community Edition
 
