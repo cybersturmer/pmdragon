@@ -1,4 +1,4 @@
-# PmDragon Agile
+# PmDragon Community edition
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
