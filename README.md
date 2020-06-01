@@ -1,4 +1,7 @@
-# PmDragon Community edition
+<img src="docs/images/logo.png" width="107" height="75">
+
+# PmDragon Community Edition
+
 Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 ## What's new
