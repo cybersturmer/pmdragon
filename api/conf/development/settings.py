@@ -1,3 +1,4 @@
+import sys
 from datetime import timedelta
 
 from conf.common.settings import *
@@ -46,8 +47,16 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': '5432',
-    }
+    },
 }
+
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    DATABASES.update({
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_database.sqlite3'
+        }
+    })
 
 """
 Email settings use console backend to output email in console """
