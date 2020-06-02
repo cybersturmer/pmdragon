@@ -47,14 +47,11 @@ const mutations = {
 };
 
 const actions = {
-  INIT_TOKENS: async (context, payload) => {
-    
-  },
-  FETCH_TOKENS: async (context, payload) => {
-    const response = await fetch('/api/token/obtain/', {
+  async fetchTokens({ commit }, credentials) {
+    const response = await fetch('/api/auth/obtain/', {
       method: 'POST',
       headers,
-      body: JSON.stringify(payload),
+      body: JSON.stringify(credentials),
     });
 
     const json = await response.json();
@@ -62,15 +59,26 @@ const actions = {
       throw await response.json();
     }
 
-    context.commit('SET_ACCESS_TOKEN', json.access);
-    context.commit('SET_REFRESH_TOKEN', json.refresh);
+    commit('SET_ACCESS_TOKEN', json.access);
+    commit('SET_REFRESH_TOKEN', json.refresh);
+    commit('SET_USERNAME', json.username);
+    commit('SET_FIRST_NAME', json.first_name);
+    commit('SET_LAST_NAME', json.last_name);
   },
-  FETCH_ACCESS_TOKEN: async (context, payload) => {
-    const response = await fetch('/api/token/refresh/', {
+
+  async fetchAccessToken({ commit, thisState }) {
+    const response = await fetch('api/auth/refresh', {
       method: 'POST',
       headers,
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ access: thisState.refresh.data }),
     });
+
+    const json = await response.json();
+    if (response.status !== 200) {
+      throw await response.json();
+    }
+
+    commit('SET_ACCESS_TOKEN', json.access);
   },
 };
 
