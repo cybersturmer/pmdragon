@@ -6,10 +6,17 @@ from rest_framework.exceptions import NotAuthenticated
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from libs.email.compose import EmailComposer
 from .serializers import *
+
+
+class TokenRefreshExtendedView(TokenRefreshView):
+    """
+    Takes a refresh token to get an access token.
+    """
+    serializer_class = TokenRefreshExtendedSerializer
 
 
 class TokenObtainPairExtendedView(TokenObtainPairView):

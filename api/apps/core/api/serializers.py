@@ -18,6 +18,38 @@ from ..models import *
 UserModel = get_user_model()
 
 
+class TokenRefreshExtendedSerializer(serializers_jwt.TokenRefreshSerializer):
+    """
+    Overriding Json Web Token serializer to ensure extended data.
+    """
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+    def validate(self, attrs):
+        parent_data = super(TokenRefreshExtendedSerializer, self).validate(attrs)
+
+        access_token = parent_data.pop('access')
+
+        assert len(parent_data) == 0, \
+            _('Some parent data was missing')
+
+        latency_reduced_timestamp = timezone.now() - settings.REQUEST_LATENCY
+
+        access_token_expired_at = latency_reduced_timestamp + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
+
+        data = {
+            'access': {
+                'data': access_token,
+                'expired_at': access_token_expired_at,
+            }
+        }
+
+        return data
+
+
 class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerializer):
     def create(self, validated_data):
         pass
@@ -160,7 +192,6 @@ class UserPasswordResetSerializer(serializers.Serializer):
 
 
 class UserPasswordConfirmSerializer(serializers.Serializer):
-
     user: object
     _errors: Dict[Any, Any]
     set_password_form: SetPasswordForm
