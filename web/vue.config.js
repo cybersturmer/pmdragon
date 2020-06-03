@@ -20,6 +20,15 @@ module.exports = {
   publicPath: '',
   parallel: os.cpus().length > 1,
   pages,
+  devServer: {
+    disableHostCheck: true,
+    historyApiFallback: {
+      rewrites: [
+        { from: /\/index/, to: '/index.html' },
+        { from: /\/dashboard/, to: '/dashboard.html' },
+      ],
+    },
+  },
   configureWebpack: (config) => {
     Object.assign(config, {
       resolve: {

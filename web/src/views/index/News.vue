@@ -16,9 +16,9 @@
     </div>
 </template>
 <script>
-import H1 from '../components/H1.vue';
-import Description from '../components/Description.vue';
-import WhatsNewElement from '../components/WhatsNewElement.vue';
+import H1 from '@/components/index/H1.vue';
+import Description from '@/components/index/Description.vue';
+import WhatsNewElement from '@/components/index/WhatsNewElement.vue';
 
 export default {
   components: {

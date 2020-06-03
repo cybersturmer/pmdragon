@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import EmailField from './EmailField.vue';
-import SubmitButton from './SubmitButton.vue';
-import PrefixUrlField from './PrefixUrlField.vue';
+import EmailField from '@/components/common/EmailField.vue';
+import SubmitButton from '@/components/index/SubmitButton.vue';
+import PrefixUrlField from '@/components/index/PrefixUrlField.vue';
 
 export default {
   name: 'RegistrationForm',

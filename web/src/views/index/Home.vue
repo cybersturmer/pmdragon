@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import H1 from '../components/H1.vue';
-import RegistrationForm from '../components/RegistrationForm.vue';
-import Description from '../components/Description.vue';
+import H1 from '@/components/index/H1.vue';
+import RegistrationForm from '@/components/index/RegistrationForm.vue';
+import Description from '@/components/index/Description.vue';
 
 export default {
   name: 'Home',

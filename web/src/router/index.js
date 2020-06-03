@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home.vue'),
+    component: () => import('@/views/index/Home.vue'),
     meta: {
       title: 'Welcome screen | PmDragon',
       require_auth: false,
@@ -16,7 +16,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/SignIn.vue'),
+    component: () => import('@/views/index/SignIn.vue'),
     meta: {
       title: 'Sign In | PmDragon',
       require_auth: false,
@@ -25,7 +25,7 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('../views/About.vue'),
+    component: () => import('@/views/index/About.vue'),
     meta: {
       title: 'About | PmDragon',
       require_auth: false,
@@ -34,7 +34,7 @@ const routes = [
   {
     path: '/news',
     name: 'news',
-    component: () => import('../views/News.vue'),
+    component: () => import('@/views/index/News.vue'),
     meta: {
       title: 'What\'s new | PmDragon',
       require_auth: false,
@@ -43,10 +43,26 @@ const routes = [
   {
     path: '/verify',
     name: 'verify',
-    component: () => import('../views/Verify.vue'),
+    component: () => import('@/views/index/Verify.vue'),
     meta: {
       title: 'Verify registration | PmDragon',
       require_auth: false,
+    },
+  },
+  {
+    path: 'dashboard/backlog',
+    name: 'backlog',
+    meta: {
+      title: 'Backlog | PmDragon',
+      require_auth: true,
+    },
+  },
+  {
+    path: 'dashboard/board',
+    name: 'board',
+    meta: {
+      title: 'Board | PmDragon',
+      require_auth: true,
     },
   },
 ];

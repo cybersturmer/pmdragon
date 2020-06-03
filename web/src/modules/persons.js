@@ -21,8 +21,22 @@ const state = {
 };
 
 const getters = {
-  ACCESS_TOKEN: (thisState) => thisState.tokens.access,
-  REFRESH_TOKEN: (thisState) => thisState.tokens.refresh,
+  IS_LOGGED_IN(thisState) {
+    return thisState.getters.IS_ACCESS_TOKEN_VALID
+           && thisState.getters.IS_REFRESH_TOKEN_VALID;
+  },
+  IS_ACCESS_TOKEN_VALID(thisState) {
+    const now = Date.now();
+    return thisState.tokens.access.expired_at !== null
+           && now < Date.parse(thisState.tokens.access.expired_at);
+  },
+  IS_REFRESH_TOKEN_VALID(thisState) {
+    const now = Date.now();
+    return thisState.tokens.refresh.expired_at !== null
+           && now < Date.parse(thisState.tokens.refresh.expired_at);
+  },
+  ACCESS_TOKEN: (thisState) => thisState.tokens.access.data,
+  REFRESH_TOKEN: (thisState) => thisState.tokens.refresh.data,
   USERNAME: (thisState) => thisState.username,
   FIRST_NAME: (thisState) => thisState.first_name,
   LAST_NAME: (thisState) => thisState.last_name,
@@ -30,10 +44,12 @@ const getters = {
 
 const mutations = {
   SET_ACCESS_TOKEN: (thisState, payload) => {
-    thisState.tokens.access = payload;
+    thisState.tokens.access.data = payload.data;
+    thisState.tokens.access.expired_at = payload.expired_at;
   },
   SET_REFRESH_TOKEN: (thisState, payload) => {
-    thisState.tokens.refresh = payload;
+    thisState.tokens.refresh.data = payload.data;
+    thisState.tokens.refresh.expired_at = payload.expired_at;
   },
   SET_USERNAME: (thisState, payload) => {
     thisState.username = payload;
@@ -47,23 +63,45 @@ const mutations = {
 };
 
 const actions = {
-  async fetchTokens({ commit }, credentials) {
-    const response = await fetch('/api/auth/obtain/', {
+  fetchTokens2(context, credentials) {
+    const fetchPromise = fetch('http://pmdragon.org:8000/api/auth/obtain/', {
       method: 'POST',
       headers,
       body: JSON.stringify(credentials),
     });
 
-    const json = await response.json();
-    if (response.status !== 200) {
-      throw await response.json();
+
+    fetchPromise.then((response) => {
+      if (!response.ok) throw response.json();
+
+      return response.json();
+    })
+      .then((data) => {
+        // eslint-disable-next-line no-console
+        console.log(data);
+      });
+  },
+
+  async fetchTokens({ commit }, credentials) {
+    const response = await fetch('http://pmdragon.org:8000/api/auth/obtain/', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(credentials),
+    });
+
+    const responseClone = response.clone();
+    const responseCloneJson = responseClone.json();
+
+    if (!responseClone.ok) {
+      throw await responseCloneJson;
     }
 
-    commit('SET_ACCESS_TOKEN', json.access);
-    commit('SET_REFRESH_TOKEN', json.refresh);
-    commit('SET_USERNAME', json.username);
-    commit('SET_FIRST_NAME', json.first_name);
-    commit('SET_LAST_NAME', json.last_name);
+    commit('SET_ACCESS_TOKEN', responseCloneJson.access);
+    commit('SET_REFRESH_TOKEN', responseCloneJson.refresh);
+
+    commit('SET_USERNAME', responseCloneJson.username);
+    commit('SET_FIRST_NAME', responseCloneJson.first_name);
+    commit('SET_LAST_NAME', responseCloneJson.last_name);
   },
 
   async fetchAccessToken({ commit, thisState }) {

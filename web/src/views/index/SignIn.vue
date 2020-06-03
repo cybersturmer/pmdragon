@@ -2,15 +2,15 @@
     <div class="container">
         <div class="row justify-content-md-center">
             <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5">
-                <H1 msg="Verify"/>
-                <Description msg="Confirm your account and use powerful tool"/>
+                <H1 msg="Sign In"/>
+                <Description msg="Sign in with existing account"/>
             </div>
         </div>
         <div class="row justify-content-md-center">
             <div class="col-sm-10 col-md-10 col-lg-6 col-xl-5">
                 <div class="card border-dark p-1 rounded shadow">
-                    <div class="card-body">
-                        <VerifyForm/>
+                    <div class="card-body bg-light">
+                        <SignInForm/>
                     </div>
                 </div>
             </div>
@@ -19,15 +19,15 @@
 </template>
 
 <script>
-import H1 from '../components/H1.vue';
-import VerifyForm from '../components/VerifyForm.vue';
-import Description from '../components/Description.vue';
+import H1 from '@/components/index/H1.vue';
+import SignInForm from '@/components/index/SignInForm.vue';
+import Description from '@/components/index/Description.vue';
 
 export default {
-  name: 'Verify',
+  name: 'SignIn',
   components: {
     H1,
-    VerifyForm,
+    SignInForm,
     Description,
   },
 };

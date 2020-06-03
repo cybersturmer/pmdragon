@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import SubmitButton from './SubmitButton.vue';
-import PasswordField from './PasswordField.vue';
+import SubmitButton from '@/components/index/SubmitButton.vue';
+import PasswordField from '@/components/common/PasswordField.vue';
 
 export default {
   name: 'VerifyForm',
