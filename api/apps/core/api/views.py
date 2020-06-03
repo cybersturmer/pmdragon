@@ -21,11 +21,11 @@ class TokenRefreshExtendedView(TokenRefreshView):
 
 class TokenObtainPairExtendedView(TokenObtainPairView):
     """
-    Takes a set of user credentials and returns an access and refresh JSON web
+    Takes a set of user credentials and returns an access and refreshes JSON web
     token pair to prove the authentication of those credentials.
     Ext: Also returns user data such as
     [email, first name, last name, expired_at for tokens]
-     to reduce logic from frontend web.
+     to reduce logic from frontend web application.
     """
     serializer_class = TokenObtainPairExtendedSerializer
 
@@ -34,7 +34,7 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView,
                                           viewsets.ViewSetMixin):
     """
     Create a user registration request by using email and URL prefix.
-    After it generate an email with verification token and send it to chosen email.
+    After it generates an email with verification token and sends it to chosen email.
     """
     queryset = PersonRegistrationRequest.valid.all()
     serializer_class = PersonRegistrationRequestSerializer
