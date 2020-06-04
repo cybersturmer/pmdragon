@@ -2,27 +2,19 @@
 
 # PmDragon Community Edition
 
-Open sourced project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
+Open source project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
-## What's new
-#### 24.05.2020
-Added API methods to work with
-- Projects
-- IssueTypeCategories
-- IssueStateCategories
-- Issues
-- ProjectBacklogs
+High-performance VueJs user interface built in MPA application.
 
-Provided isolation between workspaces on view level.
+## Documentation
+Under construction.
 
-#### 20.05.2020
-- Added Json Web Tokens as default auth way.
+## Semver
+PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
 
-#### 19.05.2020
-- Web application was synced with Python API in Person Registration Requests
+## License
+PmDragon is an MIT-licensed open source project.
 
-#### 17.05.2020
-- Added API methods to create request on registration and serializers as well
-- Added API method to create person, after validation of given request_id and key
-- Added Vue Js initialization
-- Updated Person Model based on Django User Model
+Copyright ©2020-present Wladimir Stürmer
+
+[MIT License](https://en.wikipedia.org/wiki/MIT_License)
