@@ -1,4 +1,6 @@
 /* eslint-disable no-param-reassign */
+import FetchPresets from '@/libs/FetchPresets';
+
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -21,10 +23,6 @@ const state = {
 };
 
 const getters = {
-  IS_LOGGED_IN(thisState) {
-    return thisState.getters.IS_ACCESS_TOKEN_VALID
-           && thisState.getters.IS_REFRESH_TOKEN_VALID;
-  },
   IS_ACCESS_TOKEN_VALID(thisState) {
     const now = Date.now();
     return thisState.tokens.access.expired_at !== null
@@ -63,25 +61,6 @@ const mutations = {
 };
 
 const actions = {
-  fetchTokens2(context, credentials) {
-    const fetchPromise = fetch('http://pmdragon.org:8000/api/auth/obtain/', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(credentials),
-    });
-
-
-    fetchPromise.then((response) => {
-      if (!response.ok) throw response.json();
-
-      return response.json();
-    })
-      .then((data) => {
-        // eslint-disable-next-line no-console
-        console.log(data);
-      });
-  },
-
   async fetchTokens({ commit }, credentials) {
     const response = await fetch('http://pmdragon.org:8000/api/auth/obtain/', {
       method: 'POST',
@@ -89,19 +68,14 @@ const actions = {
       body: JSON.stringify(credentials),
     });
 
-    const responseClone = response.clone();
-    const responseCloneJson = responseClone.json();
+    const json = await FetchPresets.methods.handleResponse(response);
 
-    if (!responseClone.ok) {
-      throw await responseCloneJson;
-    }
+    commit('SET_ACCESS_TOKEN', json.tokens.access);
+    commit('SET_REFRESH_TOKEN', json.tokens.refresh);
 
-    commit('SET_ACCESS_TOKEN', responseCloneJson.access);
-    commit('SET_REFRESH_TOKEN', responseCloneJson.refresh);
-
-    commit('SET_USERNAME', responseCloneJson.username);
-    commit('SET_FIRST_NAME', responseCloneJson.first_name);
-    commit('SET_LAST_NAME', responseCloneJson.last_name);
+    commit('SET_USERNAME', json.username);
+    commit('SET_FIRST_NAME', json.first_name);
+    commit('SET_LAST_NAME', json.last_name);
   },
 
   async fetchAccessToken({ commit, thisState }) {

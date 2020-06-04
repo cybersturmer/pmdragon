@@ -1,10 +1,10 @@
 <template>
     <form v-on:submit.prevent>
-        <EmailField group_class="input-group input-group-sm mb-3"
+        <EmailField group_class="input-group input-group-sm mb-2"
                     v-model="form_data.username"
                     :error="form_errors.username"
                     autofocus required/>
-        <PasswordField group_class="input-group input-group-sm mb-3"
+        <PasswordField group_class="input-group input-group-sm mb-2"
                        v-model="form_data.password"
                        :error="form_errors.password"
                        required/>
@@ -19,6 +19,7 @@
 import EmailField from '@/components/common/EmailField.vue';
 import PasswordField from '@/components/common/PasswordField.vue';
 import SubmitButton from '@/components/index/SubmitButton.vue';
+import FormErrors from '@/libs/FormErrors';
 
 export default {
   name: 'SignInForm',
@@ -45,13 +46,14 @@ export default {
 
   methods: {
     logIn() {
-      try {
-        this.$store.dispatch('fetchTokens2', this.form_data);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(error);
-        this.form_errors = error.json();
-      }
+      this.$store.dispatch('fetchTokens', this.form_data)
+        .then((data) => {
+          // eslint-disable-next-line no-console
+          console.log(data);
+        })
+        .catch((error) => {
+          this.form_errors = FormErrors.methods.handleErrors(this.form_errors, error);
+        });
     },
   },
 };

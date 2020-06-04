@@ -50,7 +50,7 @@ const routes = [
     },
   },
   {
-    path: 'dashboard/backlog',
+    path: '/backlog',
     name: 'backlog',
     meta: {
       title: 'Backlog | PmDragon',
@@ -58,7 +58,7 @@ const routes = [
     },
   },
   {
-    path: 'dashboard/board',
+    path: '/board',
     name: 'board',
     meta: {
       title: 'Board | PmDragon',
