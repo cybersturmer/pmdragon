@@ -6,6 +6,16 @@ Open source project management tool to track tasks, epics, bugs and manage it wi
 
 High-performance VueJs user interface built in MPA application.
 
+## Starting
+In a directory of clone.
+
+`chmod +x compose_up.sh && ./compose_up.sh`
+
+## Stopping
+In a directory of clone.
+
+`chmod +x compose_down.sh && ./compose_down.sh`
+
 ## Documentation
 Under construction.
 
