@@ -5,11 +5,13 @@ const pages = {
   index: {
     entry: './src/pages/index/main.js',
     title: 'PmDragon | Welcome',
+    template: 'public/index.html',
     chunks: ['chunk-vendors', 'chunk-common', 'index'],
   },
   dashboard: {
     entry: './src/pages/dashboard/main.js',
     title: 'PmDragon | Dashboard',
+    template: 'public/dashboard.html',
     chunks: ['chunk-vendors', 'chunk-common', 'dashboard'],
   },
 };

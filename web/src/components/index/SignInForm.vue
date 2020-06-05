@@ -47,10 +47,7 @@ export default {
   methods: {
     logIn() {
       this.$store.dispatch('fetchTokens', this.form_data)
-        .then((data) => {
-          // eslint-disable-next-line no-console
-          console.log(data);
-        })
+        .then(() => this.$router.push({ path: 'backlog' }))
         .catch((error) => {
           this.form_errors = FormErrors.methods.handleErrors(this.form_errors, error);
         });

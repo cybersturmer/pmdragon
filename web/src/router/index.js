@@ -52,6 +52,7 @@ const routes = [
   {
     path: '/backlog',
     name: 'backlog',
+    component: () => import('@/views/dashboard/Backlog.vue'),
     meta: {
       title: 'Backlog | PmDragon',
       require_auth: true,
@@ -60,6 +61,7 @@ const routes = [
   {
     path: '/board',
     name: 'board',
+    component: () => import('@/views/dashboard/Board.vue'),
     meta: {
       title: 'Board | PmDragon',
       require_auth: true,

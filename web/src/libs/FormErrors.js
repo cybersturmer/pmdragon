@@ -3,7 +3,11 @@ export default {
     handleErrors(errorsState, errorsResult) {
       const result = {};
       Object.keys(errorsState).forEach((key) => {
-        if (key in errorsResult) result[key] = errorsResult[key].join(' ');
+        if (key in errorsResult) {
+          const isArray = Array.isArray(errorsResult[key]);
+          if (isArray) result[key] = errorsResult[key].join(' ');
+          else result[key] = errorsResult[key];
+        }
       });
 
       return result;
