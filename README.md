@@ -6,6 +6,11 @@ Open source project management tool to track tasks, epics, bugs and manage it wi
 
 High-performance VueJs user interface built in MPA application.
 
+## Notice
+Not ready for using.
+
+Under development.
+
 ## Starting
 In a directory of clone.
 
@@ -17,7 +22,7 @@ In a directory of clone.
 `docker-compose -f docker-compose.yml down`
 
 ## Documentation
-Under construction.
+Under development.
 
 ## Semver
 PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
