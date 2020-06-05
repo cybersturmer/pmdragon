@@ -67,6 +67,9 @@ docs/_build/
 ### Personal documentation ###
 _docs_
 
+### Personal scripts ###
+_scripts_
+
 ### OS files ###
 .DS_Store
 .AppleDouble

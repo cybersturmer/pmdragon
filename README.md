@@ -9,12 +9,12 @@ High-performance VueJs user interface built in MPA application.
 ## Starting
 In a directory of clone.
 
-`chmod +x compose_up.sh && ./compose_up.sh`
+`docker-compose -f docker-compose.yml up -d`
 
 ## Stopping
 In a directory of clone.
 
-`chmod +x compose_down.sh && ./compose_down.sh`
+`docker-compose -f docker-compose.yml down`
 
 ## Documentation
 Under construction.
