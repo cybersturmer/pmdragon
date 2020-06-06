@@ -14,7 +14,6 @@ export default {
   props: {
     id: Number,
     title: String,
-
   },
 };
 </script>
