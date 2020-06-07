@@ -7,7 +7,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/index/Home.vue'),
+    component: () => import('@/views/index/HomeView.vue'),
     meta: {
       title: 'Welcome screen | PmDragon',
       require_auth: false,
@@ -16,7 +16,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/index/SignIn.vue'),
+    component: () => import('@/views/index/LoginView.vue'),
     meta: {
       title: 'Sign In | PmDragon',
       require_auth: false,
@@ -25,7 +25,7 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/views/index/About.vue'),
+    component: () => import('@/views/index/AboutView.vue'),
     meta: {
       title: 'About | PmDragon',
       require_auth: false,
@@ -34,7 +34,7 @@ const routes = [
   {
     path: '/news',
     name: 'news',
-    component: () => import('@/views/index/News.vue'),
+    component: () => import('@/views/index/NewsView.vue'),
     meta: {
       title: 'What\'s new | PmDragon',
       require_auth: false,
@@ -43,7 +43,7 @@ const routes = [
   {
     path: '/verify',
     name: 'verify',
-    component: () => import('@/views/index/Verify.vue'),
+    component: () => import('@/views/index/VerifyView.vue'),
     meta: {
       title: 'Verify registration | PmDragon',
       require_auth: false,
@@ -52,18 +52,18 @@ const routes = [
   {
     path: '/dash/backlog',
     name: 'backlog',
-    component: () => import('@/views/dashboard/Backlog.vue'),
+    component: () => import('@/views/dashboard/BacklogView.vue'),
     meta: {
       title: 'Backlog | PmDragon',
       require_auth: true,
     },
   },
   {
-    path: '/dash/board',
-    name: 'board',
-    component: () => import('@/views/dashboard/Board.vue'),
+    path: '/dash/boards',
+    name: 'boards',
+    component: () => import('@/views/dashboard/BoardsView.vue'),
     meta: {
-      title: 'Board | PmDragon',
+      title: 'Boards | PmDragon',
       require_auth: true,
     },
   },
