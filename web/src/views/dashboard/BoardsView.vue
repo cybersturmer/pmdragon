@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'Board'
-  };
+export default {
+  name: 'BoardsView',
+};
 </script>
 
 <style scoped>
