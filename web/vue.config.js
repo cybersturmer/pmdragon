@@ -17,9 +17,9 @@ const pages = {
 };
 
 module.exports = {
+  publicPath: '/',
   lintOnSave: false,
   productionSourceMap: false,
-  publicPath: '',
   parallel: os.cpus().length > 1,
   pages,
   devServer: {
@@ -27,7 +27,7 @@ module.exports = {
     historyApiFallback: {
       rewrites: [
         { from: /\/index/, to: '/index.html' },
-        { from: /\/dashboard/, to: '/dashboard.html' },
+        { from: /\/dash/, to: '/dashboard.html' },
       ],
     },
   },

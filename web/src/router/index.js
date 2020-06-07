@@ -50,7 +50,7 @@ const routes = [
     },
   },
   {
-    path: '/backlog',
+    path: '/dash/backlog',
     name: 'backlog',
     component: () => import('@/views/dashboard/Backlog.vue'),
     meta: {
@@ -59,7 +59,7 @@ const routes = [
     },
   },
   {
-    path: '/board',
+    path: '/dash/board',
     name: 'board',
     component: () => import('@/views/dashboard/Board.vue'),
     meta: {
