@@ -1,8 +1,8 @@
 <template>
- <div class="card border-dark">
+ <div class="card border-dark bg-secondary text-light shadow mt-2">
    <div class="card-body">
      <p class="card-text">
-       {{ type }} {{ title }}
+       {{ id }} {{ title }}
      </p>
    </div>
  </div>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'IssueElement.vue',
+  name: 'BacklogElement',
   props: {
     id: Number,
     title: String,
