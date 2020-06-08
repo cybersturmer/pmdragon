@@ -21,6 +21,7 @@ services:
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
+      - nginx.conf:/etc/nginx/nginx.conf
   api:
     restart: always
     build:
