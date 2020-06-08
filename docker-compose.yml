@@ -12,8 +12,10 @@ services:
       dockerfile: Dockerfile
     expose:
       - 80
+      - 443
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - api
     volumes:

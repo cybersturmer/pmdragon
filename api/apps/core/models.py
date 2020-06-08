@@ -84,11 +84,6 @@ class Person(models.Model):
     Person should be connected to user.
     Person can be invited, but have to fill of this information by himself
     """
-
-    username = models.CharField(max_length=20,
-                                verbose_name=_('Username'),
-                                default='dragon',)
-
     user = models.OneToOneField(settings.AUTH_USER_MODEL,
                                 verbose_name=_('User of system'),
                                 on_delete=models.CASCADE,
@@ -101,6 +96,10 @@ class Person(models.Model):
 
     updated_at = models.DateTimeField(verbose_name=_('Updated at'),
                                       auto_now=True)
+
+    @property
+    def username(self):
+        return self.user.username
 
     @property
     def first_name(self):

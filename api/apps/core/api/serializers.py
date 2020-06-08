@@ -221,7 +221,7 @@ class UserPasswordConfirmSerializer(serializers.Serializer):
             self.user = UserModel._default_manager.get(pk=uid)
 
         except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
-            raise ValidationError({'uid': ['Invalid value']})
+            raise ValidationError({'uid': [_('Invalid value')]})
 
         self.custom_validation(attrs)
         self.set_password_form = self.set_password_form_class(
@@ -286,6 +286,35 @@ class PersonVerifySerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = [
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'is_active',
+            'created_at'
+        ]
+
+
+class WorkspaceSerializer(serializers.ModelSerializer):
+    participants = PersonSerializer(many=True)
+
+    """
+    For getting information about all persons participated in workspace.
+    We can get information just from the spaces we belong.
+    """
+    class Meta:
+        model = Workspace
+        fields = [
+            'id',
+            'prefix_url',
+            'participants'
+        ]
 
 
 class WorkspaceModelSerializer(serializers.ModelSerializer):

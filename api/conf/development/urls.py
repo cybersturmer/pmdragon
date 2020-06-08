@@ -10,7 +10,7 @@ from rest_framework.schemas import get_schema_view
 from apps.core.api.views import PersonRegistrationRequestCreateView, \
     PersonVerifyView, \
     PersonSetPasswordView, \
-    TokenRefreshExtendedView
+    TokenRefreshExtendedView, WorkspaceReadOnlyViewSet
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -54,6 +54,10 @@ urlpatterns = [
     path('api/auth/registrations/',
          PersonVerifyView.as_view(),
          name='request_update'),
+
+    path('api/auth/workspaces/',
+         WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
+         name='workspaces'),
 
     path('api/core/<slug:workspace>/', include('apps.core.api.urls', namespace='core_api'))
 ]

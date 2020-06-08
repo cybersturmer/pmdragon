@@ -69,6 +69,21 @@ class PersonVerifyView(generics.CreateAPIView, viewsets.ViewSetMixin):
     permission_classes = [AllowAny]
 
 
+class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Get all workspaces i participate in.
+    """
+    permission_classes = (IsAuthenticated, )
+    serializer_class = WorkspaceSerializer
+    queryset = Workspace.objects.all()
+
+    def get_queryset(self):
+        queryset = super(WorkspaceReadOnlyViewSet, self).get_queryset()
+        return queryset.filter(
+            participants__in=[self.request.user.person]
+        ).all()
+
+
 class WorkspaceReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Workspace is the way to isolate environments of different users
