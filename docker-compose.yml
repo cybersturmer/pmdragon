@@ -21,16 +21,13 @@ services:
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
-      - nginx.conf:/etc/nginx/nginx.conf
+      - ./web/nginx.conf:/etc/nginx/nginx.conf
+      - uvicorn_socket:/run/uvicorn
   api:
     restart: always
     build:
       context: ./api/
       dockerfile: Dockerfile
-    expose:
-      - 8000
-    ports:
-      - 8000:8000
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_DB=pmdragon
@@ -43,6 +40,7 @@ services:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
       - ./api:/srv/www/pmdragon
+      - uvicorn_socket:/run/uvicorn
     command: docker-entrypoint.sh
   postgres:
     image: postgres:12.2
@@ -64,6 +62,8 @@ services:
     ports:
       - 11211:11211
 volumes:
+  uvicorn_socket:
+    driver: local
   pgdata:
     driver: local
   pgbackup:
