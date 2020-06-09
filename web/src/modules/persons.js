@@ -62,7 +62,7 @@ const mutations = {
 
 const actions = {
   async fetchTokens({ commit }, credentials) {
-    const response = await fetch('http://pmdragon.org:8000/api/auth/obtain/', {
+    const response = await fetch('/api/auth/obtain/', {
       method: 'POST',
       headers,
       body: JSON.stringify(credentials),
@@ -79,7 +79,7 @@ const actions = {
   },
 
   async fetchAccessToken({ commit, thisState }) {
-    const response = await fetch('api/auth/refresh', {
+    const response = await fetch('/api/auth/refresh', {
       method: 'POST',
       headers,
       body: JSON.stringify({ access: thisState.refresh.data }),
