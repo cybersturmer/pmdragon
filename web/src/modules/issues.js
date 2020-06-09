@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import FetchPresets from '@/libs/FetchPresets';
 
 const headers = {
   Accept: 'application/json',
@@ -7,6 +6,10 @@ const headers = {
 };
 
 const state = {
+  current: {
+    workspace: null,
+    project: null,
+  },
   workspaces: [
     {
       prefix_url: null,
@@ -63,6 +66,30 @@ const state = {
       finished_at: null,
     },
   ],
+};
+
+const getters = {
+  WORKSPACES: (thisState) => thisState.workspaces,
+  BACKLOG: (thisState) => thisState.backlogs.filter(
+    (backlog) => backlog.project === thisState.current.project,
+  ),
+  PROJECT: (thisState) => thisState.projects.filter(
+    (project) => project.id === thisState.current.project,
+  ),
+};
+
+const mutations = {
+// Init Workspaces
+// Choose Workspace
+// Init Projects
+// Choose Project
+// Init Backlogs
+};
+
+const actions = {
+//  Get Workspaces
+// Get Projects
+// Get Backlogs
 };
 
 export default {
