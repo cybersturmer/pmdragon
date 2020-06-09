@@ -18,7 +18,7 @@ jobs:
       postgres:
         image: postgres:12.2
         env:
-          POSTGRES_HOST: postgres
+          POSTGRES_HOST: localgost
           POSTGRES_DB: pmdragon
           POSTGRES_USER: pmdragon
           POSTGRES_PASSWORD: wAzA9OZjZ1DIZbBaRI+bKg==
@@ -47,14 +47,14 @@ jobs:
         python api/manage.py makemigrations
         python api/manage.py migrate
       env:
-        POSTGRES_HOST: postgres
+        POSTGRES_HOST: localhost
         POSTGRES_DB: pmdragon
         POSTGRES_USER: pmdragon
         POSTGRES_PASSWORD: wAzA9OZjZ1DIZbBaRI+bKg==
     - name: Make tests
       run: python api/manage.py test
       env:
-          POSTGRES_HOST: postgres
+          POSTGRES_HOST: localhost
           POSTGRES_DB: pmdragon
           POSTGRES_USER: pmdragon
           POSTGRES_PASSWORD: wAzA9OZjZ1DIZbBaRI+bKg==
