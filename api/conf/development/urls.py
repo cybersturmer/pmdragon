@@ -29,9 +29,7 @@ schema_view = get_schema_view(version=1,
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    url('^schema.json$',
-        schema_view,
-        name='openapi-schema'),
+    path('schema/', schema_view, name='openapi-schema'),
 
     path('swagger/', SwaggerView.as_view()),
 
