@@ -53,7 +53,7 @@ jobs:
         POSTGRES_USER: pmdragon
         POSTGRES_PASSWORD: wAzA9OZjZ1DIZbBaRI+bKg==
     - name: Make tests
-      run: python api/manage.py test
+      run: python api/manage.py test apps.core.api.tests
       env:
           POSTGRES_HOST: localhost
           POSTGRES_DB: pmdragon
