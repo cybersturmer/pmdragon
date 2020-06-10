@@ -33,7 +33,9 @@ const getters = {
     return thisState.tokens.refresh.expired_at !== null
            && now < Date.parse(thisState.tokens.refresh.expired_at);
   },
-  ACCESS_TOKEN: (thisState) => thisState.tokens.access.data,
+  ACCESS_TOKEN(thisState) {
+    return thisState.tokens.access.data;
+  },
   REFRESH_TOKEN: (thisState) => thisState.tokens.refresh.data,
   USERNAME: (thisState) => thisState.username,
   FIRST_NAME: (thisState) => thisState.first_name,

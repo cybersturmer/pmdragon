@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 
+import FetchPresets from '@/libs/FetchPresets';
+
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -70,6 +72,10 @@ const state = {
 
 const getters = {
   WORKSPACES: (thisState) => thisState.workspaces,
+  WORKSPACE_PREFIX_URL: (thisState) => thisState.current.workspace,
+  WORKSPACE: (thisState) => thisState.workspaces.filter(
+    (workspace) => workspace.prefix_url === thisState.current.workspace,
+  ),
   BACKLOG: (thisState) => thisState.backlogs.filter(
     (backlog) => backlog.project === thisState.current.project,
   ),
@@ -79,14 +85,27 @@ const getters = {
 };
 
 const mutations = {
-// Init Workspaces
-// Choose Workspace
-// Init Projects
-// Choose Project
-// Init Backlogs
+  INIT_WORKSPACES: (thisState, payload) => {
+    thisState.workspaces = payload;
+  },
+  SET_CURRENT_WORKSPACE: (thisState, payload) => {
+    thisState.current.workspace = payload;
+  },
+  INIT_PROJECTS: (thisState, payload) => {
+    thisState.projects = payload;
+  },
+  SET_CURRENT_PROJECT: (thisState, payload) => {
+    thisState.current.project = payload;
+  },
+  INIT_BACKLOGS: (thisState, payload) => {
+    thisState.backlogs = payload;
+  },
 };
 
 const actions = {
+  async fetchBacklogs({ commit }) {
+    const response = await fetch('/')
+  },
 //  Get Workspaces
 // Get Projects
 // Get Backlogs
