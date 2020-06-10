@@ -1,11 +1,5 @@
 /* eslint-disable no-param-reassign */
-
-import FetchPresets from '@/libs/FetchPresets';
-
-const headers = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+import Headers from '@/helpers/Headers';
 
 const state = {
   current: {

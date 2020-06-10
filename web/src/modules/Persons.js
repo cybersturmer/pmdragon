@@ -1,10 +1,8 @@
 /* eslint-disable no-param-reassign */
 import FetchPresets from '@/libs/FetchPresets';
+import Headers from '@/helpers/Headers';
 
-const headers = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-};
+const headers = Headers.methods.guestHeaders();
 
 const state = {
   username: null,
@@ -63,7 +61,7 @@ const mutations = {
 };
 
 const actions = {
-  async fetchTokens({ commit }, credentials) {
+  async LOGIN({ commit }, credentials) {
     const response = await fetch('/api/auth/obtain/', {
       method: 'POST',
       headers,
@@ -80,7 +78,7 @@ const actions = {
     commit('SET_LAST_NAME', json.last_name);
   },
 
-  async fetchAccessToken({ commit, thisState }) {
+  async UPDATE_TOKEN({ commit, thisState }) {
     const response = await fetch('/api/auth/refresh', {
       method: 'POST',
       headers,
@@ -93,6 +91,22 @@ const actions = {
     }
 
     commit('SET_ACCESS_TOKEN', json.access);
+  },
+
+  LOGOUT({ commit }) {
+    commit('SET_ACCESS_TOKEN', {
+      data: null,
+      expired_at: null,
+    });
+
+    commit('SET_REFRESH_TOKEN', {
+      data: null,
+      expired_at: null,
+    });
+
+    commit('SET_USERNAME', null);
+    commit('SET_FIRST_NAME', null);
+    commit('SET_LAST_NAME', null);
   },
 };
 
