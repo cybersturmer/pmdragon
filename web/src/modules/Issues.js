@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
 import Headers from '@/helpers/Headers';
+import FetchPresets from '@/libs/FetchPresets';
 
 const state = {
   current: {
@@ -97,8 +99,17 @@ const mutations = {
 };
 
 const actions = {
-  async fetchBacklogs({ commit }) {
-    const response = await fetch('/')
+  async GET_BACKLOGS({ commit, getters, rootGetters }) {
+    const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
+    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/project-backlogs/`;
+
+    const response = await fetch(url, {
+      headers,
+    });
+
+    const json = await FetchPresets.methods.handleResponse(response);
+
+    commit('INIT_BACKLOGS', json);
   },
 //  Get Workspaces
 // Get Projects
