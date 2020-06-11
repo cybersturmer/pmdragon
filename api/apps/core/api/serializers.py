@@ -66,24 +66,13 @@ class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerialize
         assert len(parent_data) == 0, \
             _('Some parent data was missing')
 
-        latency_reduced_timestamp = timezone.now() - settings.REQUEST_LATENCY
-
-        access_token_expired_at = latency_reduced_timestamp + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
-        refresh_token_expired_at = latency_reduced_timestamp + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
-
         data = {
             'username': self.user.username,
             'first_name': self.user.first_name,
             'last_name': self.user.last_name,
             'tokens': {
-                'access': {
-                    'data': access_token,
-                    'expired_at': access_token_expired_at,
-                },
-                'refresh': {
-                    'data': refresh_token,
-                    'expired_at': refresh_token_expired_at,
-                }
+                'access': access_token,
+                'refresh': refresh_token,
             },
         }
 

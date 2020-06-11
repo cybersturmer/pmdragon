@@ -31,8 +31,6 @@ SIMPLE_JWT = {
     'ISSUER': 'PMDragon API',
 }
 
-REQUEST_LATENCY = timedelta(minutes=1)
-
 """
 Django rest framework cors headers """
 CORS_ORIGIN_ALLOW_ALL = True
