@@ -1,35 +1,67 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
-import FetchPresets from '@/libs/FetchPresets';
+import FetchPreset from '@/helpers/FetchPresets';
 import Headers from '@/helpers/Headers';
+import Tokens from '@/helpers/Tokens';
+import Assertion from '@/helpers/Assertions';
 
 const headers = Headers.methods.guestHeaders();
 
-const state = {
+const initState = {
+  user_id: null,
   username: null,
   first_name: null,
   last_name: null,
   tokens: {
     access: {
       data: null,
-      expired_at: null,
+      details: {
+        expired_at: null,
+        user_id: null,
+      },
     },
     refresh: {
       data: null,
-      expired_at: null,
+      details: {
+        expired_at: null,
+        user_id: null,
+      },
     },
   },
 };
 
+const initTokenDetails = {
+  exp: null,
+  iss: null,
+  jti: null,
+  token_type: null,
+  user_id: null,
+};
+
+const state = initState;
+
 const getters = {
+  IS_LOGGED_IN({ thisState, getters }) {
+    try {
+      Assertion.isTrue(thisState.user_id);
+      Assertion.isTrue(getters.IS_ACCESS_TOKEN_VALID);
+      Assertion.isTrue(getters.IS_REFRESH_TOKEN_VALID);
+      Assertion.isTrue(thisState.user_id);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
+  },
   IS_ACCESS_TOKEN_VALID(thisState) {
     const now = Date.now();
-    return thisState.tokens.access.expired_at !== null
-           && now < Date.parse(thisState.tokens.access.expired_at);
+    return thisState.tokens.access.details.expired_at !== null
+           && now < Date.parse(thisState.tokens.access.details.expired_at);
   },
   IS_REFRESH_TOKEN_VALID(thisState) {
     const now = Date.now();
-    return thisState.tokens.refresh.expired_at !== null
-           && now < Date.parse(thisState.tokens.refresh.expired_at);
+    return thisState.tokens.refresh.details.expired_at !== null
+           && now < Date.parse(thisState.tokens.refresh.details.expired_at);
   },
   ACCESS_TOKEN(thisState) {
     return thisState.tokens.access.data;
@@ -42,12 +74,36 @@ const getters = {
 
 const mutations = {
   SET_ACCESS_TOKEN: (thisState, payload) => {
+    let tokenDetails = initTokenDetails;
+
+    tokenDetails = Tokens.methods.getTokenDetails(payload);
+
+    Assertion.isTrue(tokenDetails.iss === 'PMDragon API');
+    Assertion.isTrue(tokenDetails.token_type === 'access');
+
+    const parsedTokenDetails = {
+      expired_at: new Date(tokenDetails.exp * 1000),
+      user_id: tokenDetails.user_id,
+    };
+
     thisState.tokens.access.data = payload.data;
-    thisState.tokens.access.expired_at = payload.expired_at;
+    thisState.tokens.access.details = parsedTokenDetails;
   },
   SET_REFRESH_TOKEN: (thisState, payload) => {
+    let tokenDetails = initTokenDetails;
+
+    tokenDetails = Tokens.methods.getTokenDetails(payload);
+
+    Assertion.isTrue(tokenDetails.iss === 'PMDragon API');
+    Assertion.isTrue(tokenDetails.token_type === 'refresh');
+
+    const parsedTokenDetails = {
+      expired_at: new Date(tokenDetails.exp * 1000),
+      user_id: tokenDetails.user_id,
+    };
+
     thisState.tokens.refresh.data = payload.data;
-    thisState.tokens.refresh.expired_at = payload.expired_at;
+    thisState.tokens.refresh.details = parsedTokenDetails;
   },
   SET_USERNAME: (thisState, payload) => {
     thisState.username = payload;
@@ -68,7 +124,7 @@ const actions = {
       body: JSON.stringify(credentials),
     });
 
-    const json = await FetchPresets.methods.handleResponse(response);
+    const json = await FetchPreset.handleResponse(response);
 
     commit('SET_ACCESS_TOKEN', json.tokens.access);
     commit('SET_REFRESH_TOKEN', json.tokens.refresh);
@@ -85,10 +141,7 @@ const actions = {
       body: JSON.stringify({ access: thisState.refresh.data }),
     });
 
-    const json = await response.json();
-    if (response.status !== 200) {
-      throw await response.json();
-    }
+    const json = await FetchPreset.handleResponse(response);
 
     commit('SET_ACCESS_TOKEN', json.access);
   },
@@ -96,12 +149,12 @@ const actions = {
   LOGOUT({ commit }) {
     commit('SET_ACCESS_TOKEN', {
       data: null,
-      expired_at: null,
+      details: null,
     });
 
     commit('SET_REFRESH_TOKEN', {
       data: null,
-      expired_at: null,
+      details: null,
     });
 
     commit('SET_USERNAME', null);
