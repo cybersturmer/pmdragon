@@ -22,6 +22,14 @@ export default {
     draggable,
     BacklogElement,
   },
+  methods: {
+    getBacklogs() {
+      this.$store.dispatch('LOGIN')
+        .then(() => {
+          this.$router.push({ name: 'backlog' });
+        });
+    },
+  },
   data() {
     return {
       backlog: [
