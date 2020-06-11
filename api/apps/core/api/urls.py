@@ -10,29 +10,30 @@ router.register('projects',
                 views.ProjectViewSet,
                 basename='project')
 
-router.register('issue-type-categories',
-                views.IssueTypeCategoryViewSet,
-                basename='issue-type-category')
-
-router.register('issue-state-categories',
-                views.IssueStateCategoryViewSet,
-                basename='issue-state-category')
-
 router.register('issues',
                 views.IssueViewSet,
                 basename='issue')
 
-router.register('project-backlogs',
+router.register('issue-types',
+                views.IssueTypeCategoryViewSet,
+                basename='issue-type-category')
+
+router.register('issue-states',
+                views.IssueStateCategoryViewSet,
+                basename='issue-state-category')
+
+router.register('backlogs',
                 views.ProjectBacklogViewSet,
-                basename='project-backlog')
+                basename='backlog')
+
+router.register('sprints',
+                views.SprintViewSet,
+                basename='sprint')
 
 router.register('sprint-durations',
                 views.SprintDurationViewSet,
                 basename='sprint-duration')
 
-router.register('sprints',
-                views.SprintViewSet,
-                basename='sprint')
 
 urlpatterns = router.urls
 
