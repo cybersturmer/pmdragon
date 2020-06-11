@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-shadow */
 import Headers from '@/helpers/Headers';
-import FetchPresets from '@/libs/FetchPresets';
+import FetchPresets from '@/helpers/FetchPresets';
 
 const state = {
   current: {
@@ -23,7 +23,7 @@ const state = {
       created_at: null,
     },
   ],
-  issue_type_categories: [
+  issue_types: [
     {
       id: null,
       title: null,
@@ -31,7 +31,7 @@ const state = {
       ordering: null,
     },
   ],
-  issue_state_categories: [
+  issue_states: [
     {
       id: null,
       title: null,
@@ -68,14 +68,16 @@ const state = {
 
 const getters = {
   WORKSPACES: (thisState) => thisState.workspaces,
+  ISSUE_TYPES: (thisState) => thisState.issue_types,
+  ISSUE_STATES: (thisState) => thisState.issue_states,
   WORKSPACE_PREFIX_URL: (thisState) => thisState.current.workspace,
   WORKSPACE: (thisState) => thisState.workspaces.filter(
     (workspace) => workspace.prefix_url === thisState.current.workspace,
   ),
-  BACKLOG: (thisState) => thisState.backlogs.filter(
+  CURRENT_BACKLOG: (thisState) => thisState.backlogs.filter(
     (backlog) => backlog.project === thisState.current.project,
   ),
-  PROJECT: (thisState) => thisState.projects.filter(
+  CURRENT_PROJECT: (thisState) => thisState.projects.filter(
     (project) => project.id === thisState.current.project,
   ),
 };
@@ -96,12 +98,30 @@ const mutations = {
   INIT_BACKLOGS: (thisState, payload) => {
     thisState.backlogs = payload;
   },
+  INIT_ISSUE_TYPES: (thisState, payload) => {
+    thisState.issue_types = payload;
+  },
+  INIT_ISSUE_STATES: (thisState, payload) => {
+    thisState.issue_states = payload;
+  },
 };
 
 const actions = {
+  async GET_WORKSPACES({ commit, rootGetters }) {
+    const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
+    const url = '/api/auth/workspaces/';
+
+    const response = await fetch(url, {
+      headers,
+    });
+
+    const json = await FetchPresets.methods.handleResponse(response);
+
+    commit('INIT_WORKSPACES', json);
+  },
   async GET_BACKLOGS({ commit, getters, rootGetters }) {
     const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
-    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/project-backlogs/`;
+    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/backlogs/`;
 
     const response = await fetch(url, {
       headers,
@@ -111,9 +131,42 @@ const actions = {
 
     commit('INIT_BACKLOGS', json);
   },
-//  Get Workspaces
-// Get Projects
-// Get Backlogs
+  async GET_PROJECTS({ commit, getters, rootGetters }) {
+    const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
+    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/projects/`;
+
+    const response = await fetch(url, {
+      headers,
+    });
+
+    const json = await FetchPresets.methods.handleResponse(response);
+
+    commit('INIT_PROJECTS', json);
+  },
+  async GET_ISSUE_TYPES({ commit, getters, rootGetters }) {
+    const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
+    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/issue-types/`;
+
+    const response = await fetch(url, {
+      headers,
+    });
+
+    const json = await FetchPresets.methods.handleResponse(response);
+
+    commit('INIT_ISSUE_TYPES', json);
+  },
+  async GET_ISSUE_STATES({ commit, getters, rootGetters }) {
+    const headers = Headers.methods.userHeaders(rootGetters.ACCESS_TOKEN);
+    const url = `/api/core/${getters.WORKSPACE_PREFIX_URL}/issue-states/`;
+
+    const response = await fetch(url, {
+      headers,
+    });
+
+    const json = await FetchPresets.methods.handleResponse(response);
+
+    commit('INIT_ISSUE_STATES', json);
+  },
 };
 
 export default {
