@@ -19,7 +19,7 @@
 import EmailField from '@/components/common/EmailField.vue';
 import PasswordField from '@/components/common/PasswordField.vue';
 import SubmitButton from '@/components/index/SubmitButton.vue';
-import FormErrors from '@/libs/FormErrors';
+import FormError from '@/helpers/FormErrors';
 
 export default {
   name: 'SignInForm',
@@ -46,10 +46,10 @@ export default {
 
   methods: {
     logIn() {
-      this.$store.dispatch('fetchTokens', this.form_data)
+      this.$store.dispatch('LOGIN', this.form_data)
         .then(() => this.$router.push({ path: 'backlog' }))
         .catch((error) => {
-          this.form_errors = FormErrors.methods.handleErrors(this.form_errors, error);
+          this.form_errors = FormError.handleErrors(this.form_errors, error);
         });
     },
   },
