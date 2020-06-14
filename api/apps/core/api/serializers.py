@@ -33,11 +33,13 @@ class TokenRefreshExtendedSerializer(serializers_jwt.TokenRefreshSerializer):
         parent_data = super(TokenRefreshExtendedSerializer, self).validate(attrs)
 
         access_token = parent_data.pop('access')
+        refresh_token = parent_data.pop('refresh')
 
         assert len(parent_data) == 0, \
             _('Some parent data was missing')
 
-        data = {'access': access_token}
+        data = {'access': access_token,
+                'refresh': refresh_token}
 
         return data
 
