@@ -184,13 +184,19 @@ class IssueViewSet(WorkspaceModelViewSet):
     serializer_class = IssueSerializer
 
 
-class ProjectBacklogViewSet(WorkspaceReadOnlyModelViewSet):
+class ProjectBacklogViewSet(WorkspaceReadOnlyModelViewSet,
+                            mixins.UpdateModelMixin):
     """
     Workspace based set.
     See class, that was extended.
     """
     queryset = ProjectBacklog.objects.all()
-    serializer_class = ProjectBacklogSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return ProjectBacklogReadOnlySerializer
+        else:
+            return ProjectBacklogWritableSerializer
 
 
 class SprintDurationViewSet(WorkspaceModelViewSet):

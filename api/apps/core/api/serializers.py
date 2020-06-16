@@ -393,18 +393,28 @@ class ProjectBacklogIssuesSerializer(WorkspaceModelSerializer):
         ]
 
 
-class ProjectBacklogSerializer(WorkspaceModelSerializer):
+class ProjectBacklogReadOnlySerializer(WorkspaceModelSerializer):
     """
     Getting Backlog information with all issues inside of it
     For getting backlog information including issues
     """
-
     class Meta:
         model = ProjectBacklog
         fields = [
             'id',
             'project_id',
             'issues',
+        ]
+        depth = 1
+
+
+class ProjectBacklogWritableSerializer(WorkspaceModelSerializer):
+    class Meta:
+        model = ProjectBacklog
+        fields = [
+            'id',
+            'project_id',
+            'issues'
         ]
 
 
