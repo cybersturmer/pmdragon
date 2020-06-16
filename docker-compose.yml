@@ -35,7 +35,6 @@ services:
       - POSTGRES_PASSWORD=wAzA9OZjZ1DIZbBaRI+bKg==
     depends_on:
       - postgres
-      - memcached
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
@@ -56,11 +55,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - pgbackup:/var/lib/postgresql/backups
-  memcached:
-    image: memcached:latest
-    restart: always
-    ports:
-      - 11211:11211
 volumes:
   uvicorn_socket:
     driver: local
