@@ -294,23 +294,6 @@ class PersonSerializer(serializers.ModelSerializer):
         ]
 
 
-class WorkspaceSerializer(serializers.ModelSerializer):
-    participants = PersonSerializer(many=True)
-
-    """
-    For getting information about all persons participated in workspace.
-    We can get information just from the spaces we belong.
-    """
-
-    class Meta:
-        model = Workspace
-        fields = [
-            'id',
-            'prefix_url',
-            'participants'
-        ]
-
-
 class WorkspaceModelSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         validated_data = super(WorkspaceModelSerializer, self).validate(attrs)
@@ -328,6 +311,25 @@ class ProjectSerializer(WorkspaceModelSerializer):
     class Meta:
         model = Project
         fields = ['id', 'title', 'key']
+
+
+class WorkspaceSerializer(serializers.ModelSerializer):
+    participants = PersonSerializer(many=True)
+
+    """
+    For getting information about all persons participated in workspace.
+    We can get information just from the spaces we belong.
+    """
+
+    class Meta:
+        model = Workspace
+        fields = [
+            'id',
+            'prefix_url',
+            'participants',
+            'projects'
+        ]
+        depth = 1
 
 
 class IssueTypeCategorySerializer(WorkspaceModelSerializer):
