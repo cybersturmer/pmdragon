@@ -313,7 +313,7 @@ class Issue(models.Model):
         verbose_name_plural = _('Issues')
 
     def __str__(self):
-        return self.title
+        return f'{self.workspace.prefix_url} - {self.project.title} - {self.title}'
 
     __repr__ = __str__
 
