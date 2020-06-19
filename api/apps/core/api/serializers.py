@@ -91,7 +91,12 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PersonRegistrationRequest
-        fields = ['id', 'email', 'prefix_url']
+        fields = ['id',
+                  'email',
+                  'prefix_url']
+        extra_kwargs = {
+            'id': {'read_only': True},
+        }
 
 
 class UserSetPasswordSerializer(serializers.Serializer):
@@ -292,25 +297,9 @@ class PersonSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at'
         ]
-
-
-class WorkspaceModelSerializer(serializers.ModelSerializer):
-    def validate(self, attrs):
-        validated_data = super(WorkspaceModelSerializer, self).validate(attrs)
-        validated_data['workspace'] = self.context['workspace']
-
-        return validated_data
-
-
-class ProjectSerializer(WorkspaceModelSerializer):
-    """
-    Common project serializer
-    For getting list of projects in workspace
-    """
-
-    class Meta:
-        model = Project
-        fields = ['id', 'title', 'key']
+        extra_kwargs = {
+            'created_at': {'read_only': True}
+        }
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
@@ -332,6 +321,36 @@ class WorkspaceSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class WorkspaceModelSerializer(serializers.ModelSerializer):
+    def validate_workspace(self, value):
+        """
+        Check that given workspace contains person sending request.
+        """
+        try:
+            Workspace.objects \
+                .filter(participants__in=[self.context['person']]) \
+                .get(prefix_url__exact=value)
+
+        except (KeyError, Workspace.DoesNotExist):
+            raise ValidationError('Incorrect workspace given for current user')
+
+        return value
+
+
+class ProjectSerializer(WorkspaceModelSerializer):
+    """
+    Common project serializer
+    For getting list of projects in workspace
+    """
+
+    class Meta:
+        model = Project
+        fields = ['id',
+                  'workspace',
+                  'title',
+                  'key']
+
+
 class IssueTypeCategorySerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
@@ -340,7 +359,11 @@ class IssueTypeCategorySerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = IssueTypeCategory
-        fields = ['id', 'title', 'is_subtask', 'ordering']
+        fields = ['id',
+                  'workspace',
+                  'title',
+                  'is_subtask',
+                  'ordering']
 
 
 class IssueStateCategorySerializer(WorkspaceModelSerializer):
@@ -351,7 +374,10 @@ class IssueStateCategorySerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = IssueStateCategory
-        fields = ['id', 'title', 'ordering']
+        fields = ['id',
+                  'workspace',
+                  'title',
+                  'ordering']
 
 
 class IssueSerializer(WorkspaceModelSerializer):
@@ -364,6 +390,7 @@ class IssueSerializer(WorkspaceModelSerializer):
         model = Issue
         fields = [
             'id',
+            'workspace',
             'title',
             'project',
             'type_category',
@@ -372,27 +399,18 @@ class IssueSerializer(WorkspaceModelSerializer):
             'created_at',
             'ordering',
         ]
+        extra_kwargs = {
+            'created_by': {'read_only': True},
+            'created_at': {'read_only': True},
+            'type_category': {'required': False},
+            'state_category': {'required': False},
+            'ordering': {'required': False}
+        }
 
-
-class ProjectBacklogIssuesSerializer(WorkspaceModelSerializer):
-    """
-    Gathering all information about issues for a Backlog serializer
-    For getting issues information in Backlog Serializer
-    Not for using separately
-    """
-
-    class Meta:
-        model = Issue
-        fields = [
-            'id',
-            'title',
-            'project',
-            'type_category',
-            'state_category',
-            'created_by',
-            'created_at',
-            'ordering'
-        ]
+    def validate(self, attrs):
+        data = super(IssueSerializer, self).validate(attrs)
+        data['created_by'] = self.context['person']
+        return data
 
 
 class ProjectBacklogReadOnlySerializer(WorkspaceModelSerializer):
@@ -400,10 +418,12 @@ class ProjectBacklogReadOnlySerializer(WorkspaceModelSerializer):
     Getting Backlog information with all issues inside of it
     For getting backlog information including issues
     """
+
     class Meta:
         model = ProjectBacklog
         fields = [
             'id',
+            'workspace',
             'project_id',
             'issues',
         ]
@@ -415,6 +435,7 @@ class ProjectBacklogWritableSerializer(WorkspaceModelSerializer):
         model = ProjectBacklog
         fields = [
             'id',
+            'workspace',
             'project_id',
             'issues'
         ]
@@ -429,6 +450,7 @@ class SprintDurationSerializer(WorkspaceModelSerializer):
         model = SprintDuration
         fields = [
             'id',
+            'workspace',
             'title',
             'duration',
         ]
@@ -443,6 +465,7 @@ class SprintSerializer(WorkspaceModelSerializer):
         model = Sprint
         fields = [
             'id',
+            'workspace',
             'project',
             'title',
             'goal',

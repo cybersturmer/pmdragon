@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Max
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -222,8 +223,13 @@ class IssueTypeCategory(models.Model):
     is_subtask = models.BooleanField(verbose_name=_('Is sub-task issue type?'),
                                      default=False)
 
+    is_default = models.BooleanField(verbose_name=_('Is type set by default?'),
+                                     default=False)
+
     ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
-                                                default=1)
+                                                blank=True,
+                                                null=True,
+                                                default=0)
 
     class Meta:
         db_table = 'core_issue_category'
@@ -239,6 +245,20 @@ class IssueTypeCategory(models.Model):
 
     __repr__ = __str__
 
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            try:
+                temp = IssueTypeCategory.objects \
+                    .filter(workspace=self.workspace) \
+                    .get(is_default=True)
+                if self != temp:
+                    temp.is_default = False
+                    temp.save()
+            except IssueTypeCategory.DoesNotExist:
+                pass
+
+        super(IssueTypeCategory, self).save(*args, **kwargs)
+
 
 class IssueStateCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
@@ -249,8 +269,13 @@ class IssueStateCategory(models.Model):
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
+    is_default = models.BooleanField(verbose_name=_('Is type set by default?'),
+                                     default=False)
+
     ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
-                                                default=1)
+                                                blank=True,
+                                                null=True,
+                                                default=0)
 
     class Meta:
         db_table = 'core_issue_state'
@@ -265,6 +290,20 @@ class IssueStateCategory(models.Model):
         return self.title
 
     __repr__ = __str__
+
+    def save(self, *args, **kwargs):
+        if self.is_default:
+            try:
+                temp = IssueStateCategory.objects \
+                    .filter(workspace=self.workspace) \
+                    .get(is_default=True)
+                if self != temp:
+                    temp.is_default = False
+                    temp.save()
+            except IssueStateCategory.DoesNotExist:
+                pass
+
+        super(IssueStateCategory, self).save(*args, **kwargs)
 
 
 class Issue(models.Model):
@@ -282,8 +321,10 @@ class Issue(models.Model):
                                 on_delete=models.CASCADE)
 
     type_category = models.ForeignKey(IssueTypeCategory,
-                                      db_index=True,
                                       verbose_name=_('Issue Type Category'),
+                                      db_index=True,
+                                      blank=True,
+                                      null=True,
                                       on_delete=models.CASCADE)
 
     state_category = models.ForeignKey(IssueStateCategory,
@@ -301,7 +342,9 @@ class Issue(models.Model):
                                       auto_now_add=True)
 
     ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
-                                                default=1)
+                                                blank=True,
+                                                null=True,
+                                                default=0)
 
     class Meta:
         db_table = 'core_issue'
@@ -316,6 +359,70 @@ class Issue(models.Model):
         return f'{self.workspace.prefix_url} - {self.project.title} - {self.title}'
 
     __repr__ = __str__
+
+    def save(self, *args, **kwargs):
+        just_created = False
+
+        if self.type_category is None or self.type_category == 0:
+            """
+            If default issue type was set for Workspace, we set it as a default
+            """
+            try:
+                self.type_category = IssueTypeCategory.objects \
+                    .filter(workspace=self.workspace,
+                            is_default=True).get()
+            except IssueTypeCategory.DoesNotExist:
+                pass
+
+        if self.state_category is None or self.type_category == 0:
+            """
+            If default issue state was set for Workspace, we set it as a default
+            """
+            try:
+                self.state_category = IssueStateCategory.objects \
+                    .filter(workspace=self.workspace,
+                            is_default=True).get()
+            except IssueStateCategory.DoesNotExist:
+                pass
+
+        if self.ordering is None or self.ordering == 0:
+            """
+            Set the biggest value for current workspace to order
+            """
+            try:
+                max_ordering = Issue.objects \
+                    .filter(workspace=self.workspace) \
+                    .aggregate(Max('ordering')) \
+                    .get('ordering__max')
+            except Issue.DoesNotExist:
+                pass
+
+            else:
+                self.ordering = max_ordering
+
+        if self.pk is None:
+            """
+            If we just created issue - we have to add it into 
+            Workspace - Project Backlog
+            Before object creation we put this flag.
+            """
+            just_created = True
+
+        super(Issue, self).save(*args, **kwargs)
+
+        if just_created:
+            """
+            If we created this issue in this session 
+            we have to put it to Workspace - Project Backlog
+            """
+            backlog = ProjectBacklog.objects \
+                .filter(workspace=self.workspace,
+                        project=self.project) \
+                .get()
+
+            assert isinstance(backlog, ProjectBacklog)
+
+            backlog.issues.add(self)
 
 
 class ProjectBacklog(models.Model):

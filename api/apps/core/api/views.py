@@ -2,7 +2,6 @@ from smtplib import SMTPException
 
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import generics, viewsets, mixins, status
-from rest_framework.exceptions import NotAuthenticated
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -73,7 +72,7 @@ class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Get all workspaces i participate in.
     """
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = WorkspaceSerializer
     queryset = Workspace.objects.all()
 
@@ -84,71 +83,36 @@ class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
         ).all()
 
 
-class WorkspaceReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    Workspace is the way to isolate environments of different users
-    between each other.
-    We extend this class to get view for auth user with checking of
-    participating in Workspace.
-    This Class is Read Only.
-    """
+class WorkspacesReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
     WORKSPACE_PERMISSIONS_NOTIFICATION = _('You do not have permissions for this workspace')
-    permission_classes = (IsAuthenticated, )
-
-    def is_participant(self, workspace: Workspace) -> bool:
-        return self.request.user.person in workspace.participants.all()
-
-    def get_workspace(self) -> Workspace:
-        workspace_url = self.kwargs.get('workspace')
-
-        if workspace_url is None:
-            raise NotAuthenticated(detail=self.WORKSPACE_PERMISSIONS_NOTIFICATION)
-
-        try:
-            workspace = Workspace.objects.get(prefix_url__exact=workspace_url)
-            if not self.is_participant(workspace):
-                raise Workspace.DoesNotExist
-
-        except Workspace.DoesNotExist:
-            raise NotAuthenticated(detail=self.WORKSPACE_PERMISSIONS_NOTIFICATION)
-
-        self.kwargs.update({'workspace': workspace})
-
-        return workspace
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({'workspace': self.kwargs.get('workspace')})
-
-        return context
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-
-        workspace = self.get_workspace()
-        queryset = queryset.filter(workspace_id=workspace.pk)
+        """
+        Getting all instances, that belong to this workspace. """
+        queryset = super(WorkspacesReadOnlyModelViewSet, self).get_queryset()
+        queryset = queryset. \
+            filter(workspace__participants__in=[self.request.user.person])
 
         return queryset
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({
+            'person': self.request.user.person
+        })
 
-class WorkspaceModelViewSet(WorkspaceReadOnlyModelViewSet,
-                            mixins.CreateModelMixin,
-                            mixins.UpdateModelMixin,
-                            mixins.DestroyModelMixin):
-    """
-    Workspace is the way to isolate environments of different users
-    between each other.
-    We extend this class to get view for auth user with checking of
-    participating in Workspace.
-    This class is editable. So currently to be be part of workspace
-     is enough to do whatever you want
-    """
-    def perform_create(self, serializer):
-        workspace: Workspace = self.get_workspace()
-        serializer.save(workspace=workspace)
+        return context
 
 
-class ProjectViewSet(WorkspaceModelViewSet):
+class WorkspacesModelViewSet(WorkspacesReadOnlyModelViewSet,
+                             mixins.CreateModelMixin,
+                             mixins.UpdateModelMixin,
+                             mixins.DestroyModelMixin):
+    pass
+
+
+class ProjectViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
@@ -157,7 +121,7 @@ class ProjectViewSet(WorkspaceModelViewSet):
     serializer_class = ProjectSerializer
 
 
-class IssueTypeCategoryViewSet(WorkspaceModelViewSet):
+class IssueTypeCategoryViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
@@ -166,7 +130,7 @@ class IssueTypeCategoryViewSet(WorkspaceModelViewSet):
     serializer_class = IssueTypeCategorySerializer
 
 
-class IssueStateCategoryViewSet(WorkspaceModelViewSet):
+class IssueStateCategoryViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
@@ -175,7 +139,7 @@ class IssueStateCategoryViewSet(WorkspaceModelViewSet):
     serializer_class = IssueStateCategorySerializer
 
 
-class IssueViewSet(WorkspaceModelViewSet):
+class IssueViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
@@ -183,8 +147,16 @@ class IssueViewSet(WorkspaceModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({
+            'person': self.request.user.person
+        })
 
-class ProjectBacklogViewSet(WorkspaceReadOnlyModelViewSet,
+        return context
+
+
+class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
                             mixins.UpdateModelMixin):
     """
     Workspace based set.
@@ -199,7 +171,7 @@ class ProjectBacklogViewSet(WorkspaceReadOnlyModelViewSet,
             return ProjectBacklogWritableSerializer
 
 
-class SprintDurationViewSet(WorkspaceModelViewSet):
+class SprintDurationViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
@@ -208,7 +180,7 @@ class SprintDurationViewSet(WorkspaceModelViewSet):
     serializer_class = SprintDurationSerializer
 
 
-class SprintViewSet(WorkspaceModelViewSet):
+class SprintViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.
     See class, that was extended.
