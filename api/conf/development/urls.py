@@ -57,7 +57,7 @@ urlpatterns = [
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
          name='workspaces'),
 
-    path('api/core/<slug:workspace>/', include('apps.core.api.urls', namespace='core_api'))
+    path('api/core/', include('apps.core.api.urls', namespace='core_api'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
