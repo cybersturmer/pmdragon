@@ -26,12 +26,28 @@
               {{ item.title }}
               <q-btn
                 v-show="show_edit_button === item.id"
-                @click="editIssueModal(item)"
                 dense
                 flat
                 icon-right="more_vert"
                 class="absolute-right"
-              />
+                style="margin-right: 10px">
+                <q-menu dark>
+                  <q-list dense style="min-width: 100px">
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="editIssueModal(item)">
+                      <q-item-section>Edit</q-item-section>
+                    </q-item>
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="removeIssueModal(item)">
+                      <q-item-section>Remove</q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </q-card-section>
           </q-card>
           </draggable>
@@ -160,6 +176,24 @@ export default {
               console.log(error)
             })
         })
+    },
+    removeIssueModal (item) {
+      this.$q.dialog({
+        dark: true,
+        title: 'Confirmation',
+        message: `Would you like to delete issue: ${item.title}`,
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$store.dispatch('issues/DELETE_ISSUE', item).catch((error) => {
+          this.$q.dialog({
+            title: 'Error - Cannot delete issue',
+            message: 'Please check your Internet connection'
+          })
+
+          console.log(error)
+        })
+      })
     }
   }
 }

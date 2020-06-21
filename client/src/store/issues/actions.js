@@ -41,3 +41,16 @@ export async function EDIT_ISSUE ({ commit }, payload) {
     throw new ErrorWrapper(error)
   }
 }
+
+export async function DELETE_ISSUE ({ commit }, payload) {
+  try {
+    const response = await new Api({ auth: true }).delete(
+      `/core/issues/${payload.id}`
+    )
+
+    HandleResponse.compare(204, response.status)
+    commit('DELETE_ISSUE', payload)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
