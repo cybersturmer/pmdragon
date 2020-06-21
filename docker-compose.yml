@@ -8,7 +8,7 @@ services:
   web:
     restart: always
     build:
-      context: ./web/
+      context: ./client/
       dockerfile: Dockerfile
     expose:
       - 80
@@ -21,7 +21,7 @@ services:
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
-      - ./web/nginx.conf:/etc/nginx/nginx.conf
+      - ./client/nginx.conf:/etc/nginx/nginx.conf
       - uvicorn_socket:/run/uvicorn
   api:
     restart: always
