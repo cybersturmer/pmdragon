@@ -1,0 +1,8 @@
+// app global css in SCSS form
+.q-item__section--avatar {
+  min-width: auto;
+}
+
+.q-item.q-router-link--active, .q-item--active {
+  color: #9c9c9c;
+}
