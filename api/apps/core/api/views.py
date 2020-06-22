@@ -171,6 +171,16 @@ class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
             return ProjectBacklogWritableSerializer
 
 
+class ProjectBacklogIssueOrder(viewsets.GenericViewSet,
+                               mixins.UpdateModelMixin):
+    """
+    This class help us to order issues inside of backlog
+    We need only possibility to update it, nothing more
+    """
+    queryset = ProjectBacklog.objects.all()
+    serializer_class = ProjectBacklogOrderWritableSerializer
+
+
 class SprintDurationViewSet(WorkspacesModelViewSet):
     """
     Workspace based set.

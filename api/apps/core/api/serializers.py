@@ -441,6 +441,48 @@ class ProjectBacklogWritableSerializer(WorkspaceModelSerializer):
         ]
 
 
+class IssueOrderSerializer(WorkspaceModelSerializer):
+    """
+    We use this serializer to set order for issues
+    So for it we need just id and ordering params
+    """
+
+    class Meta:
+        model = Issue
+        fields = [
+            'id',
+            'ordering'
+        ]
+        extra_kwargs = {
+            'id': {'read_only': False},
+        }
+
+
+class ProjectBacklogOrderWritableSerializer(serializers.Serializer):
+    """
+    We use this serializer to order issues inside of Backlog
+    """
+    issues = IssueOrderSerializer(many=True)
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        print(instance, 'INST')
+        print(validated_data, 'VALI')
+
+        for data in validated_data['issues']:
+            issue = Issue.objects.get(pk=data['id'])
+            issue.ordering = data['ordering']
+            issue.save()
+        return instance
+
+    class Meta:
+        fields = [
+            'issues'
+        ]
+
+
 class SprintDurationSerializer(WorkspaceModelSerializer):
     """
     Getting Sprint Duration Variant
