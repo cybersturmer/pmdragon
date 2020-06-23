@@ -6,13 +6,13 @@ app_name = 'core_api'
 
 router = routers.SimpleRouter()
 
-router.register('projects', views.ProjectViewSet, basename='project')
-router.register('issues', views.IssueViewSet, basename='issue')
-router.register('issue/types', views.IssueTypeCategoryViewSet, basename='issue-type')
-router.register('issue/states', views.IssueStateCategoryViewSet, basename='issue-state')
-router.register('backlogs', views.ProjectBacklogViewSet, basename='backlog')
-router.register('backlog/issues/order', views.ProjectBacklogIssueOrder, basename='backlog-issues-order')
-router.register('sprints', views.SprintViewSet, basename='sprint')
-router.register('sprint/durations', views.SprintDurationViewSet, basename='sprint-duration')
+router.register('projects', views.ProjectViewSet, basename='projects')
+router.register('issues', views.IssueViewSet, basename='issues')
+router.register('issue/types', views.IssueTypeCategoryViewSet, basename='issue-types')
+router.register('issue/states', views.IssueStateCategoryViewSet, basename='issue-states')
+router.register('backlogs', views.ProjectBacklogViewSet, basename='backlogs')
+router.register('issues/ordering', views.ProjectBacklogIssueOrder, basename='issues-ordering')
+router.register('sprints', views.SprintViewSet, basename='sprints')
+router.register('sprint/durations', views.SprintDurationViewSet, basename='sprint-durations')
 
 urlpatterns = router.urls

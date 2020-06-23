@@ -348,7 +348,7 @@ class Issue(models.Model):
 
     class Meta:
         db_table = 'core_issue'
-        ordering = ['-ordering']
+        ordering = ['ordering']
         unique_together = [
             ['workspace', 'title', 'project']
         ]
@@ -385,7 +385,7 @@ class Issue(models.Model):
             except IssueStateCategory.DoesNotExist:
                 pass
 
-        if self.ordering is None or self.ordering == 0:
+        if self.ordering is None:
             """
             Set the biggest value for current workspace to order
             """
