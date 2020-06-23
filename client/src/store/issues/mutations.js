@@ -1,13 +1,20 @@
 import { LocalStorage } from 'quasar'
 
-function findIssueIndexes (state, projectId, issueId) {
-  const backlogIndex = state.backlogs.findIndex((el, index, array) => {
+function findProjectBacklog (state, projectId) {
+  return state.backlogs.findIndex((el, index, array) => {
     return el.project_id === projectId
   })
+}
 
-  const issuesIndex = state.backlogs[backlogIndex].issues.findIndex((el, index, array) => {
+function findBacklogIssue (issues, issueId) {
+  return issues.findIndex((el, index, array) => {
     return el.id === issueId
   })
+}
+
+function findIssueIndexes (state, projectId, issueId) {
+  const backlogIndex = findProjectBacklog(state, projectId)
+  const issuesIndex = findBacklogIssue(state.backlogs[backlogIndex].issues, issueId)
 
   return {
     backlogIndex,
@@ -33,16 +40,16 @@ export function EDIT_ISSUE (state, payload) {
   /**
    * Payload should contain at least workspace, project, id, field
    * It helps us to put it in the right place */
+  const indexes = findIssueIndexes(state, payload.project, payload.id)
+  state.backlogs[indexes.backlogIndex].issues.splice(indexes.issuesIndex, 1, payload)
+  LocalStorage.set('issues.backlogs', state.backlogs)
+}
 
-  const backlogIndex = state.backlogs.findIndex(function (el, index, array) {
-    return el.project_id === payload.project
-  })
-
-  const issuesIndex = state.backlogs[backlogIndex].issues.findIndex(function (el, index, array) {
-    return el.id === payload.id
-  })
-
-  state.backlogs[backlogIndex].issues.splice(issuesIndex, 1, payload)
+export function ORDER_BACKLOG_ISSUES (state, payload) {
+  console.log(payload, 'mutations')
+  const project = payload[0].project
+  const backlogIndex = findProjectBacklog(state, project)
+  state.backlogs[backlogIndex].issues = payload
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 

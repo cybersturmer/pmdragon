@@ -12,44 +12,45 @@
       <div class="col" v-if="backlogIssues">
         <q-scroll-area style="height: calc(100% - 45px)">
           <draggable
-            :list="backlogIssues"
-            class="list-group"
-            ghost-class="ghost">
-          <q-card
-            v-for="item in backlogIssues"
-            v-bind:key="item.id"
-            @mouseover="showIssueMenu(item.id)"
-            dark
-            bordered
-            class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
-            <q-card-section>
-              {{ item.title }}
-              <q-btn
-                v-show="show_edit_button === item.id"
-                dense
-                flat
-                icon-right="more_vert"
-                class="absolute-right"
-                style="margin-right: 10px">
-                <q-menu dark>
-                  <q-list dense style="min-width: 100px">
-                    <q-item
-                      clickable
-                      v-close-popup
-                      @click="editIssueModal(item)">
-                      <q-item-section>Edit</q-item-section>
-                    </q-item>
-                    <q-item
-                      clickable
-                      v-close-popup
-                      @click="removeIssueModal(item)">
-                      <q-item-section>Remove</q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn>
-            </q-card-section>
-          </q-card>
+            v-model="backlogIssues"
+            group="issues">
+            <transition-group type="transition" :name="'flip-list'">
+              <q-card
+                v-for="item in backlogIssues"
+                :key="item.id"
+                @mouseover="showIssueMenu(item.id)"
+                dark
+                bordered
+                class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
+                <q-card-section>
+                  {{ item.title }}
+                  <q-btn
+                    v-show="show_edit_button === item.id"
+                    dense
+                    flat
+                    icon-right="more_vert"
+                    class="absolute-right"
+                    style="margin-right: 10px">
+                    <q-menu dark>
+                      <q-list dense style="min-width: 100px">
+                        <q-item
+                          clickable
+                          v-close-popup
+                          @click="editIssueModal(item)">
+                          <q-item-section>Edit</q-item-section>
+                        </q-item>
+                        <q-item
+                          clickable
+                          v-close-popup
+                          @click="removeIssueModal(item)">
+                          <q-item-section>Remove</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-btn>
+                </q-card-section>
+              </q-card>
+            </transition-group>
           </draggable>
         </q-scroll-area>
         <q-card dark
@@ -104,8 +105,21 @@ export default {
     }
   },
   computed: {
-    backlogIssues: function () {
-      return this.$store.getters['issues/BACKLOG_ISSUES']
+    backlogIssues: {
+      get: function () {
+        return this.$store.getters['issues/BACKLOG_ISSUES']
+      },
+      set: function (array) {
+        const payload = [...array]
+
+        payload.forEach((value, index) => {
+          const _issue = Object.assign({}, value)
+          _issue.ordering = index
+          payload[index] = _issue
+        })
+
+        this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', payload)
+      }
     },
     backlogIssuesLength: function () {
       return this.$store.getters['issues/BACKLOG_ISSUES_COUNT']
@@ -199,6 +213,10 @@ export default {
 }
 </script>
 <style lang="scss">
+  .flip-list-move {
+    transition: transform 0.3s;
+  }
+
   .my-card {
     margin-bottom: 0.75em;
   }

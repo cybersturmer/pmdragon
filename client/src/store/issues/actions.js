@@ -54,3 +54,35 @@ export async function DELETE_ISSUE ({ commit }, payload) {
     throw new ErrorWrapper(error)
   }
 }
+
+export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
+  const issuesPayload = []
+  const backlogId = rootGetters['issues/BACKLOG'].id
+
+  try {
+    payload.forEach((value) => {
+      issuesPayload.push({
+        id: value.id,
+        ordering: value.ordering
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+
+  const payloadApi = {
+    issues: issuesPayload
+  }
+
+  try {
+    const response = await new Api({ auth: true }).put(
+      `/core/issues/ordering/${backlogId}/`,
+      payloadApi
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('ORDER_BACKLOG_ISSUES', payload)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
