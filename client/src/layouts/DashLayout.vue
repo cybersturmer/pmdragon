@@ -148,7 +148,7 @@ export default {
 
       if (workspaceName && project) {
         const projectName = this.$store.getters['current/PROJECT_NAME']
-        return `${workspaceName} ${projectName}`
+        return `${workspaceName} - [ ${projectName} ]`
       }
 
       return '  PmDragon Community Edition'
