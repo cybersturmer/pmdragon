@@ -1,16 +1,15 @@
 <template>
   <q-page class="flex q-layout-padding">
-
     <div class="column full-width">
       <h5>Sprints</h5>
       <div class="col">
-        <q-scroll-area style="height: 90%">
+        <q-scroll-area style="height: 100%">
           <div class="text-subtitle1" style="margin-left: 1rem">No sprints found</div>
         </q-scroll-area>
       </div>
       <h5>Backlog (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)</h5>
       <div class="col" v-if="backlogIssues">
-        <q-scroll-area style="height: calc(100% - 45px)">
+        <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
             v-model="backlogIssues"
             group="issues">
@@ -55,6 +54,7 @@
         </q-scroll-area>
         <q-card dark
                 bordered
+                square
                 class="my-card bg-grey-8 text-white shadow-3 absolute-bottom card-no-padding"
         style="margin: 0.3em">
           <q-card-section>
@@ -199,14 +199,15 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$store.dispatch('issues/DELETE_ISSUE', item).catch((error) => {
-          this.$q.dialog({
-            title: 'Error - Cannot delete issue',
-            message: 'Please check your Internet connection'
-          })
+        this.$store.dispatch('issues/DELETE_ISSUE', item)
+          .catch((error) => {
+            this.$q.dialog({
+              title: 'Error - Cannot delete issue',
+              message: 'Please check your Internet connection'
+            })
 
-          console.log(error)
-        })
+            console.log(error)
+          })
       })
     }
   }
@@ -222,9 +223,9 @@ export default {
   }
 
   h5 {
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
     margin-top: 0.5rem;
-    margin-left: 0.5rem;
   }
 
   .card-no-padding {

@@ -43,6 +43,14 @@ const routes = [
         component: () => import('pages/dash/Workspaces.vue')
       },
       {
+        name: 'settings',
+        path: 'settings',
+        meta: {
+          title: 'Settings'
+        },
+        component: () => import('pages/dash/Settings.vue')
+      },
+      {
         name: 'backlog',
         path: 'backlog',
         meta: {

@@ -33,3 +33,7 @@ export function PROJECT_NAME (state, getters) {
     return null
   }
 }
+
+export function INTERFACE_THEME (state) {
+  return state.interface_theme
+}

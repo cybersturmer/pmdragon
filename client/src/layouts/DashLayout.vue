@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-9 text-white">
-    <q-header elevated class="bg-grey-10">
+    <q-header elevated class="bg-grey-9">
       <q-toolbar>
         <q-btn
           v-if="isWorkspaceSelected"
@@ -15,13 +15,21 @@
           {{ toolbarText }}
         </q-toolbar-title>
         <q-btn
+          flat
+          round
+          dense
+          icon="swap_horiz"
+          class="q-mr-xs"
+          @click="goToWorkspaces"
+        />
+        <q-btn
           v-if="isWorkspaceSelected"
           flat
           round
           dense
-          icon="sync_alt"
+          icon="settings"
           class="q-mr-xs"
-          @click="goToWorkspaces"
+          @click="goToSettings"
         />
         <q-btn
           flat
@@ -41,6 +49,7 @@
       :width="175"
       :breakpoint="600"
       content-class="bg-grey-8"
+      bordered
     >
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px;">
         <q-list dark>
@@ -127,6 +136,9 @@ export default {
       this.$store.dispatch('current/RESET_WORKSPACE')
       this.$store.dispatch('current/RESET_PROJECT')
       this.$router.push({ name: 'workspaces' })
+    },
+    goToSettings () {
+      this.$router.push({ name: 'settings' })
     }
   },
   computed: {
@@ -155,6 +167,14 @@ export default {
 </script>
 
 <style lang="scss">
+  .q-toolbar__title:first-child {
+    padding-left: 1em;
+  }
+
+  .q-drawer--left.q-drawer--bordered {
+    border-color: #0f0f0f;
+  }
+
   .text-h6 {
     font-size: 0.9rem;
   }
