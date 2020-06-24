@@ -46,7 +46,6 @@ export function EDIT_ISSUE (state, payload) {
 }
 
 export function ORDER_BACKLOG_ISSUES (state, payload) {
-  console.log(payload, 'mutations')
   const project = payload[0].project
   const backlogIndex = findProjectBacklog(state, project)
   state.backlogs[backlogIndex].issues = payload
