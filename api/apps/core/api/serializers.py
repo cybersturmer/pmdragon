@@ -468,9 +468,6 @@ class ProjectBacklogOrderWritableSerializer(serializers.Serializer):
         pass
 
     def update(self, instance, validated_data):
-        print(instance, 'INST')
-        print(validated_data, 'VALI')
-
         for data in validated_data['issues']:
             issue = Issue.objects.get(pk=data['id'])
             issue.ordering = data['ordering']
