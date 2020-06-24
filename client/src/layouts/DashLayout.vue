@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="bg-grey-9 text-white">
-    <q-header elevated class="bg-grey-9">
+    <q-header elevated class="bg-grey-8">
       <q-toolbar>
         <q-btn
           v-if="isWorkspaceSelected"
