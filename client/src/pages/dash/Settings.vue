@@ -3,9 +3,10 @@
     <div class="full-width">
       <q-card
         dark
+        bordered
         square>
         <q-tabs
-          class="bg-grey-9"
+          class="bg-grey-8"
           v-model="tab"
           dense
           align="justify"

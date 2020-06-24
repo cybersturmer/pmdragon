@@ -18,6 +18,7 @@
                 v-for="item in backlogIssues"
                 :key="item.id"
                 @mouseover="showIssueMenu(item.id)"
+                dense
                 dark
                 bordered
                 class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
