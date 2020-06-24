@@ -14,6 +14,19 @@ export async function INIT_BACKLOGS ({ rootGetters, commit }) {
   }
 }
 
+export async function INIT_SPRINT_DURATIONS ({ commit }) {
+  try {
+    const response = await new Api({ auth: true }).get(
+      '/core/sprint/durations/'
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('INIT_SPRINT_DURATIONS', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).post(

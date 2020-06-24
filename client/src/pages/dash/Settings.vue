@@ -14,29 +14,29 @@
           <q-tab name="interface" icon="fact_check" label="Interface"/>
           <q-tab name="issue_types" icon="view_agenda" label="Issue Types" />
           <q-tab name="issue_states" icon="view_column" label="Issue States" />
+          <q-tab name="sprint_duration" icon="history_toggle_off" label="Sprint Duration" />
           <q-tab name="server" icon="sync" label="Server" />
         </q-tabs>
         <q-separator />
         <q-tab-panels class="bg-grey-8" v-model="tab" animated>
           <q-tab-panel name="interface">
             <q-select
-              dark
-              filled
-              dense
-              square
-              options-dense
               v-model="interface_theme"
               :options="interface_data.interface_options"
-            />
-            <q-separator/>
-            <q-select
               dark
               dense
               square
+              outlined
               options-dense
+            />
+            <q-select
               v-model="language"
-              filled
               :options="interface_data.language_options"
+              dark
+              dense
+              square
+              outlined
+              options-dense
             />
 
           </q-tab-panel>
@@ -51,22 +51,58 @@
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </q-tab-panel>
 
+          <q-tab-panel name="sprint_duration">
+            <div
+              v-for="sprint_duration in sprint_durations"
+              :key="sprint_duration.id"
+              class="row">
+              <div class="col-8">
+                <q-input
+                  dark
+                  dense
+                  square
+                  outlined
+                  placeholder="Title (for example: 2 week sprint)"
+                  :value="sprint_duration.title"
+                >
+                  <template v-slot:append>
+                    <q-icon name="short_text"/>
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-4">
+                <q-input
+                  dark
+                  dense
+                  square
+                  outlined
+                  placeholder="Duration (for example: 14d)"
+                  :value="sprint_duration.duration"
+                >
+                  <template v-slot:append>
+                    <q-icon name="timelapse"/>
+                  </template>
+                </q-input>
+              </div>
+            </div>
+
+          </q-tab-panel>
+
           <q-tab-panel name="server">
             <q-input
               v-model="server_form_data.server"
               dark
               square
               dense
-              filled
+              outlined
               placeholder="Server for connection"
               />
-            <q-separator/>
             <q-input
               v-model="server_form_data.port"
               dark
               square
               dense
-              filled
+              outlined
               placeholder="Port for connection"
             />
           </q-tab-panel>
@@ -119,6 +155,17 @@ export default {
         this.$store.dispatch('current/SELECT_INTERFACE_THEME', payload)
       }
     },
+    sprint_durations: {
+      get: function () {
+        return this.$store.getters['issues/WORKSPACE_SPRINT_DURATION']
+      },
+      set: function (payload) {
+        this.$store.dispatch('issues/INIT_SPRINT_DURATIONS', payload)
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+    },
     language: {
       get: function () {
         return 'English'
@@ -127,6 +174,12 @@ export default {
         console.log(value)
       }
     }
+  },
+  mounted () {
+    this.$store.dispatch('issues/INIT_SPRINT_DURATIONS')
+      .catch((error) => {
+        console.log(error)
+      })
   }
 }
 </script>

@@ -2,6 +2,7 @@ import { LocalStorage } from 'quasar'
 
 export default function () {
   return {
-    backlogs: LocalStorage.getItem('issues.backlogs') || []
+    backlogs: LocalStorage.getItem('issues.backlogs') || [],
+    sprint_durations: LocalStorage.getItem('issue.sprint_duration') || []
   }
 }

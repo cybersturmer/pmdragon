@@ -27,6 +27,11 @@ export function INIT_BACKLOGS (state, payload) {
   LocalStorage.set('issues.backlogs', payload)
 }
 
+export function INIT_SPRINT_DURATIONS (state, payload) {
+  state.sprint_durations = payload
+  LocalStorage.set('issues.sprint_durations', payload)
+}
+
 export function ADD_ISSUE_TO_BACKLOG (state, payload) {
   state.backlogs
     .filter((backlog) => backlog.workspace.id === payload.workspace && backlog.project_id === payload.project)

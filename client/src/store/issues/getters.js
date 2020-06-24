@@ -2,6 +2,11 @@ export function BACKLOGS (state) {
   return state.backlogs
 }
 
+export function WORKSPACE_SPRINT_DURATION (state, getters, rootState, rootGetters) {
+  return state.sprint_durations
+    .filter((sprintDuration) => sprintDuration.workspace === rootGetters['current/WORKSPACE_ID'])
+}
+
 export function BACKLOG (state, getters, rootState, rootGetters) {
   try {
     return state.backlogs.filter((backlog) => backlog.project_id === rootGetters['current/PROJECT'])[0]
