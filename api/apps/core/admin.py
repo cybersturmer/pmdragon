@@ -72,6 +72,7 @@ class SprintAdmin(admin.ModelAdmin):
         'started_at',
         'finished_at'
     )
+    save_as = True
 
 
 admin.site.register(Project)
