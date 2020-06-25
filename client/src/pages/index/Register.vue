@@ -4,18 +4,35 @@
       <q-card-section>
         <div class="column">
           <div class="col">
-            <q-input filled v-model="prefix_url" label="URL of your team" />
+            <q-input
+              square
+              filled
+              v-model="prefix_url"
+              label="URL of your team"
+            />
           </div>
           <div class="col">
-            <q-input filled v-model="email" label="Your email" />
+            <q-input
+              square
+              filled
+              v-model="email"
+              label="Your email"
+            />
           </div>
         </div>
         </q-card-section>
         <q-separator />
         <q-card-section>
             <q-btn outline color="grey-8" text-color="black" label="Register"/>
-            <router-link :to="{ path: '/login' }">
-              <q-btn flat color="white" text-color="black" label="Already a member?" style="margin-left: 30px"/>
+            <router-link :to="{ path: '/login' }" class="float-right"  style="text-decoration: none">
+              <template>
+                <q-btn
+                  flat
+                  size="md"
+                  text-color="black"
+                  label="Already a member?"
+                  style="margin-left: 30px"/>
+              </template>
             </router-link>
         </q-card-section>
     </q-card>

@@ -4,12 +4,17 @@
           <q-card-section>
             <div class="column">
               <div class="col">
-                <q-input filled v-model="form_data.username" label="Email" />
+                <q-input
+                  square
+                  filled
+                  v-model="form_data.username"
+                  label="Email" />
               </div>
               <div class="col">
                 <q-input
-                  type="password"
+                  square
                   filled
+                  type="password"
                   v-model="form_data.password"
                   label="Password"
                   @keyup.enter="login"
@@ -26,14 +31,15 @@
               label="Sign In"
               @click="login"
             />
-            <router-link :to="{ path: '/' }">
+            <router-link :to="{ path: '/' }" class="float-right" style="text-decoration: none">
+              <template>
               <q-btn
                 flat
                 size='md'
-                color="white"
                 text-color="black"
                 label="Want to register?"
                 style="margin-left: 30px"/>
+              </template>
             </router-link>
           </q-card-section>
         </q-card>
