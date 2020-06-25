@@ -26,9 +26,31 @@ class WorkspaceAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
 
 
+@admin.register(IssueStateCategory)
+class IssueStateAdmin(admin.ModelAdmin):
+    model = IssueStateCategory
+    list_display = (
+        'workspace',
+        'title',
+        'is_default',
+        'ordering'
+    )
+    save_as = True
+
+
+@admin.register(IssueTypeCategory)
+class IssueTypeAdmin(admin.ModelAdmin):
+    model = IssueTypeCategory
+    list_display = (
+        'workspace',
+        'title',
+        'is_subtask',
+        'is_default',
+        'ordering'
+    )
+
+
 admin.site.register(Project)
-admin.site.register(IssueTypeCategory)
-admin.site.register(IssueStateCategory)
 admin.site.register(Issue)
 admin.site.register(ProjectBacklog)
 admin.site.register(SprintDuration)
