@@ -460,13 +460,15 @@ class SprintDuration(models.Model):
                                   on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name=_('Title'),
-                             max_length=255,
-                             unique=True)
+                             max_length=255)
 
     duration = models.DurationField(verbose_name=_('Duration'))
 
     class Meta:
         db_table = 'core_sprint_duration'
+        unique_together = [
+            ['workspace', 'title'],
+        ]
         verbose_name = _('Sprint duration')
         verbose_name_plural = _('Sprints duration')
 
