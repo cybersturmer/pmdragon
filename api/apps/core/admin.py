@@ -48,13 +48,34 @@ class IssueTypeAdmin(admin.ModelAdmin):
         'is_default',
         'ordering'
     )
+    save_as = True
+
+
+@admin.register(SprintDuration)
+class SprintDurationAdmin(admin.ModelAdmin):
+    model = SprintDuration
+    list_display = (
+        'workspace',
+        'title',
+        'duration'
+    )
+    save_as = True
+
+
+@admin.register(Sprint)
+class SprintAdmin(admin.ModelAdmin):
+    model = Sprint
+    list_display = (
+        'workspace',
+        'project',
+        'goal',
+        'started_at',
+        'finished_at'
+    )
 
 
 admin.site.register(Project)
 admin.site.register(Issue)
 admin.site.register(ProjectBacklog)
-admin.site.register(SprintDuration)
-admin.site.register(Sprint)
-
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
