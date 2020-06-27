@@ -14,6 +14,9 @@ url_validator = RegexValidator(r'^[a-z]{3,20}$',
 
 
 class PersonRegistrationRequestValidManager(models.Manager):
+    """
+    Get not expired Person registration requests manager
+    """
     def get_queryset(self):
         return super(PersonRegistrationRequestValidManager, self). \
             get_queryset(). \
@@ -65,19 +68,12 @@ class PersonRegistrationRequest(models.Model):
 
     __repr__ = __str__
 
-    def save(self,
-             force_insert=False,
-             force_update=False,
-             using=None,
-             update_fields=None):
+    def save(self, *args, **kwargs):
         if self.pk is None:
             raw_string = ''.join([str(self.expired_at), self.email, self.prefix_url])
             self.key = hashing.get_hash(raw_string)
 
-        super(PersonRegistrationRequest, self).save(force_insert,
-                                                    force_update,
-                                                    using,
-                                                    update_fields)
+        super(PersonRegistrationRequest, self).save(self, *args, **kwargs)
 
 
 class Person(models.Model):

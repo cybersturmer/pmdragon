@@ -6,11 +6,12 @@ from django.urls import path, include
 from rest_framework.permissions import AllowAny
 from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.core.api.views import PersonRegistrationRequestCreateView, \
     PersonVerifyView, \
     PersonSetPasswordView, \
-    TokenRefreshExtendedView, WorkspaceReadOnlyViewSet
+    WorkspaceReadOnlyViewSet
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -38,7 +39,7 @@ urlpatterns = [
          name='token_obtain_pair'),
 
     path('api/auth/refresh/',
-         TokenRefreshExtendedView.as_view(),
+         TokenRefreshView.as_view(),
          name='token_refresh'),
 
     path('api/auth/requests/',
