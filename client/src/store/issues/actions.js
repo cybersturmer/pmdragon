@@ -70,7 +70,6 @@ export async function DELETE_ISSUE ({ commit }, payload) {
 
 export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   const issuesPayload = []
-  const backlogId = rootGetters['issues/BACKLOG'].id
 
   try {
     payload.forEach((value) => {
@@ -83,14 +82,10 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
     console.log(error)
   }
 
-  const payloadApi = {
-    issues: issuesPayload
-  }
-
   try {
     const response = await new Api({ auth: true }).put(
-      `/core/issues/ordering/${backlogId}/`,
-      payloadApi
+      '/core/issue/ordering/',
+      issuesPayload
     )
 
     HandleResponse.compare(200, response.status)

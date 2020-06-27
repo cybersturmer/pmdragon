@@ -6,7 +6,7 @@
         bordered
         square>
         <q-tabs
-          class="bg-grey-8"
+          class="bg-secondary"
           v-model="tab"
           dense
           align="justify"
@@ -19,7 +19,7 @@
           <q-tab name="server" icon="sync" label="Server" />
         </q-tabs>
         <q-separator />
-        <q-tab-panels class="bg-grey-8" v-model="tab" animated>
+        <q-tab-panels class="bg-accent" v-model="tab" animated>
           <q-tab-panel name="interface">
             <q-select
               v-model="interface_theme"

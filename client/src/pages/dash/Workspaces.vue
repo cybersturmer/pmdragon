@@ -5,7 +5,7 @@
            style="margin-left: 1em; margin-bottom: 1em"
            v-for="workspace in workspaces"
            v-bind:key="workspace.id">
-        <q-card class="my-card bordered bg-grey-8 shadow">
+        <q-card class="my-card bordered bg-primary shadow">
           <q-card-section class="text-center">
             <div class="text-h6">{{ workspace.prefix_url }}</div>
             <div class="text-subtitle1">Participants</div>
