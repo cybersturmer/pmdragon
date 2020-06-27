@@ -18,33 +18,12 @@ from ..models import *
 UserModel = get_user_model()
 
 
-class TokenRefreshExtendedSerializer(serializers_jwt.TokenRefreshSerializer):
-    """
-    Overriding Json Web Token serializer to ensure extended data.
-    """
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-    def validate(self, attrs):
-        parent_data = super(TokenRefreshExtendedSerializer, self).validate(attrs)
-
-        access_token = parent_data.pop('access')
-        refresh_token = parent_data.pop('refresh')
-
-        assert len(parent_data) == 0, \
-            _('Some parent data was missing')
-
-        data = {'access': access_token,
-                'refresh': refresh_token}
-
-        return data
-
-
 class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerializer):
+    """
+    Extend parent class to add extra data to token.
+    Currently: username, first_name, last_name
+    """
+
     def create(self, validated_data):
         pass
 
@@ -85,21 +64,25 @@ class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerialize
 
 class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
     """
-    Common Serializer for Person Registration Request
-    For creating requests.
+    Common Serializer for Person Registration Request on Registration
     """
 
     class Meta:
         model = PersonRegistrationRequest
-        fields = ['id',
-                  'email',
-                  'prefix_url']
+        fields = (
+            'id',
+            'email',
+            'prefix_url'
+        )
         extra_kwargs = {
             'id': {'read_only': True},
         }
 
 
 class UserSetPasswordSerializer(serializers.Serializer):
+    """
+    Serializer to update password of user.
+    """
     old_password = serializers.CharField(max_length=128, write_only=True)
     new_password1 = serializers.CharField(max_length=128, write_only=True)
     new_password2 = serializers.CharField(max_length=128, write_only=True)
@@ -190,6 +173,10 @@ class UserPasswordResetSerializer(serializers.Serializer):
 
 
 class UserPasswordConfirmSerializer(serializers.Serializer):
+    """
+    User password Confirmation serializer.
+    We dont need it yet, but will need soon. Hopefully.
+    """
     user: object
     _errors: Dict[Any, Any]
     set_password_form: SetPasswordForm
@@ -246,7 +233,10 @@ class PersonVerifySerializer(serializers.Serializer):
     password = serializers.CharField(max_length=30, write_only=True)
 
     class Meta:
-        fields = ['key', 'password']
+        fields = (
+            'key',
+            'password'
+        )
         extra_kwargs = {
             'password': {'write_only': True},
             'key': {'write_only': True}
@@ -287,37 +277,42 @@ class PersonVerifySerializer(serializers.Serializer):
 
 
 class PersonSerializer(serializers.ModelSerializer):
+    """
+    Common Person Serializer.
+    We dont need it yet.
+    But maybe we will.
+    """
+
     class Meta:
         model = Person
-        fields = [
+        fields = (
             'id',
             'username',
             'first_name',
             'last_name',
             'is_active',
             'created_at'
-        ]
+        )
         extra_kwargs = {
             'created_at': {'read_only': True}
         }
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
-    participants = PersonSerializer(many=True)
-
     """
     For getting information about all persons participated in workspace.
     We can get information just from the spaces we belong.
     """
+    participants = PersonSerializer(many=True)
 
     class Meta:
         model = Workspace
-        fields = [
+        fields = (
             'id',
             'prefix_url',
             'participants',
             'projects'
-        ]
+        )
         depth = 1
 
 
@@ -345,13 +340,15 @@ class ProjectSerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = Project
-        fields = ['id',
-                  'workspace',
-                  'title',
-                  'key']
+        fields = (
+            'id',
+            'workspace',
+            'title',
+            'key'
+        )
 
 
-class IssueTypeCategorySerializer(WorkspaceModelSerializer):
+class IssueTypeSerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
     For getting all types of issues
@@ -359,14 +356,16 @@ class IssueTypeCategorySerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = IssueTypeCategory
-        fields = ['id',
-                  'workspace',
-                  'title',
-                  'is_subtask',
-                  'ordering']
+        fields = (
+            'id',
+            'workspace',
+            'title',
+            'is_subtask',
+            'ordering'
+        )
 
 
-class IssueStateCategorySerializer(WorkspaceModelSerializer):
+class IssueStateSerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
     For getting all types of issue states
@@ -374,10 +373,12 @@ class IssueStateCategorySerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = IssueStateCategory
-        fields = ['id',
-                  'workspace',
-                  'title',
-                  'ordering']
+        fields = (
+            'id',
+            'workspace',
+            'title',
+            'ordering'
+        )
 
 
 class IssueSerializer(WorkspaceModelSerializer):
@@ -388,7 +389,7 @@ class IssueSerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = Issue
-        fields = [
+        fields = (
             'id',
             'workspace',
             'title',
@@ -398,7 +399,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'created_by',
             'created_at',
             'ordering',
-        ]
+        )
         extra_kwargs = {
             'created_by': {'read_only': True},
             'created_at': {'read_only': True},
@@ -413,7 +414,7 @@ class IssueSerializer(WorkspaceModelSerializer):
         return data
 
 
-class ProjectBacklogReadOnlySerializer(WorkspaceModelSerializer):
+class BacklogReadOnlySerializer(WorkspaceModelSerializer):
     """
     Getting Backlog information with all issues inside of it
     For getting backlog information including issues
@@ -421,63 +422,24 @@ class ProjectBacklogReadOnlySerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = ProjectBacklog
-        fields = [
+        fields = (
             'id',
             'workspace',
             'project_id',
             'issues',
-        ]
+        )
         depth = 1
 
 
-class ProjectBacklogWritableSerializer(WorkspaceModelSerializer):
+class BacklogWritableSerializer(WorkspaceModelSerializer):
     class Meta:
         model = ProjectBacklog
-        fields = [
+        fields = (
             'id',
             'workspace',
             'project_id',
             'issues'
-        ]
-
-
-class IssueOrderSerializer(WorkspaceModelSerializer):
-    """
-    We use this serializer to set order for issues
-    So for it we need just id and ordering params
-    """
-
-    class Meta:
-        model = Issue
-        fields = [
-            'id',
-            'ordering'
-        ]
-        extra_kwargs = {
-            'id': {'read_only': False},
-        }
-
-
-class ProjectBacklogOrderWritableSerializer(serializers.Serializer):
-    """
-    We use this serializer to order issues inside of Backlog
-    """
-    issues = IssueOrderSerializer(many=True)
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        for data in validated_data['issues']:
-            issue = Issue.objects.get(pk=data['id'])
-            issue.ordering = data['ordering']
-            issue.save()
-        return instance
-
-    class Meta:
-        fields = [
-            'issues'
-        ]
+        )
 
 
 class SprintDurationSerializer(WorkspaceModelSerializer):
@@ -487,12 +449,12 @@ class SprintDurationSerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = SprintDuration
-        fields = [
+        fields = (
             'id',
             'workspace',
             'title',
             'duration',
-        ]
+        )
 
 
 class SprintSerializer(WorkspaceModelSerializer):
@@ -502,7 +464,7 @@ class SprintSerializer(WorkspaceModelSerializer):
 
     class Meta:
         model = Sprint
-        fields = [
+        fields = (
             'id',
             'workspace',
             'project',
@@ -512,4 +474,50 @@ class SprintSerializer(WorkspaceModelSerializer):
             'issues',
             'started_at',
             'finished_at'
-        ]
+        )
+
+
+class IssueListSerializer(serializers.ListSerializer):
+    def update(self, instance, validated_data):
+        issue_mapping = {issue.id: issue
+                         for issue
+                         in instance}
+
+        data_mapping = {issue['id']: issue
+                        for issue
+                        in validated_data}
+
+        result = []
+        for issue_id, data in data_mapping.items():
+            issue = issue_mapping.get(issue_id, None)
+
+            if issue is None:
+                continue
+
+            result.append(self.child.update(issue, validated_data))
+
+        return result
+
+
+class IssueChildOrderingSerializer(WorkspaceModelSerializer):
+    def update(self, instance, validated_data):
+
+        instance.ordering = [validated_datum['ordering']
+                             for validated_datum
+                             in validated_data
+                             if validated_datum['id'] == instance.id].pop()
+        instance.save()
+
+        return instance
+
+    class Meta:
+        model = Issue
+        fields = (
+            'id',
+            'ordering'
+        )
+        extra_kwargs = {
+            'id': {'read_only': False},
+        }
+        list_serializer_class = IssueListSerializer
+

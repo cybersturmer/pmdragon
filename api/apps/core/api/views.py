@@ -1,21 +1,15 @@
 from smtplib import SMTPException
 
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import generics, viewsets, mixins, status
-from rest_framework.generics import GenericAPIView
+from rest_framework import viewsets, generics, mixins, status
+from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from libs.email.compose import EmailComposer
+from .schemas import IssueListUpdateSchema
 from .serializers import *
-
-
-class TokenRefreshExtendedView(TokenRefreshView):
-    """
-    Takes a refresh token to get an access token.
-    """
-    serializer_class = TokenRefreshExtendedSerializer
 
 
 class TokenObtainPairExtendedView(TokenObtainPairView):
@@ -43,6 +37,7 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView,
         instance: PersonRegistrationRequest = serializer.save()
 
         try:
+            # @todo Better to do it asynchronously (Celery, RabbitMQ)?
             EmailComposer().send_verification_email(
                 key=instance.key,
                 prefix_url=instance.prefix_url,
@@ -58,10 +53,10 @@ class PersonRegistrationRequestCreateView(generics.CreateAPIView,
             instance.save()
 
 
-class PersonVerifyView(generics.CreateAPIView, viewsets.ViewSetMixin):
+class PersonVerifyView(generics.CreateAPIView,
+                       viewsets.ViewSetMixin):
     """
-    Create a Person linked to User after confirmation email.
-    One of the 2 way to create Person in system
+    Create a Person object linked to User after confirmation email.
     """
     queryset = Person.objects.all()
     serializer_class = PersonVerifySerializer
@@ -70,7 +65,8 @@ class PersonVerifyView(generics.CreateAPIView, viewsets.ViewSetMixin):
 
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    Get all workspaces i participate in.
+    Get all workspaces current Person participate in
+    We need it on frontend to understand list of workspaces to switch between
     """
     permission_classes = (IsAuthenticated,)
     serializer_class = WorkspaceSerializer
@@ -127,7 +123,7 @@ class IssueTypeCategoryViewSet(WorkspacesModelViewSet):
     See class, that was extended.
     """
     queryset = IssueTypeCategory.objects.all()
-    serializer_class = IssueTypeCategorySerializer
+    serializer_class = IssueTypeSerializer
 
 
 class IssueStateCategoryViewSet(WorkspacesModelViewSet):
@@ -136,7 +132,7 @@ class IssueStateCategoryViewSet(WorkspacesModelViewSet):
     See class, that was extended.
     """
     queryset = IssueStateCategory.objects.all()
-    serializer_class = IssueStateCategorySerializer
+    serializer_class = IssueStateSerializer
 
 
 class IssueViewSet(WorkspacesModelViewSet):
@@ -166,19 +162,9 @@ class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
-            return ProjectBacklogReadOnlySerializer
+            return BacklogReadOnlySerializer
         else:
-            return ProjectBacklogWritableSerializer
-
-
-class ProjectBacklogIssueOrder(viewsets.GenericViewSet,
-                               mixins.UpdateModelMixin):
-    """
-    This class help us to order issues inside of backlog
-    We need only possibility to update it, nothing more
-    """
-    queryset = ProjectBacklog.objects.all()
-    serializer_class = ProjectBacklogOrderWritableSerializer
+            return BacklogWritableSerializer
 
 
 class SprintDurationViewSet(WorkspacesModelViewSet):
@@ -214,6 +200,48 @@ class PersonSetPasswordView(GenericAPIView):
 
         return Response({'detail': _('New password has been saved.')},
                         status=status.HTTP_200_OK)
+
+
+class IssueListUpdateApiView(UpdateAPIView):
+    """
+    Bulk update issues ordering, doesn't matter is it a Backlog
+    or Sprint or Agile Board.
+    """
+    schema = IssueListUpdateSchema()
+    serializer_class = IssueChildOrderingSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        return super(IssueListUpdateApiView, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self, ids=None):
+        queryset = Issue.objects.filter(workspace__participants__in=[self.request.user.person])
+
+        if ids is None:
+            return queryset
+
+        return queryset.filter(id__in=ids)
+
+    def update(self, request, *args, **kwargs):
+        ids = validate_ids(data=request.data)
+        instances = self.get_queryset(ids=ids)
+        serializer = self.get_serializer(
+            instances, data=request.data, partial=False, many=True
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+
+def validate_ids(data, field='id', unique=True):
+    if isinstance(data, list):
+        id_list = [int(x[field]) for x in data]
+
+        if unique and len(id_list) != len(set(id_list)):
+            raise ValidationError(_('Multiple updates of single field found'))
+
+        return id_list
+    return [data]
 
 
 """
