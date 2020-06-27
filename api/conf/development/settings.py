@@ -8,9 +8,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 SECRET_KEY = 'w*ea%hd29u-&l&rol@5zo8a+@5o=@wb+i*r(@_+fnuc!*^9o0w'
 
-# SECURE_SSL_REDIRECT = True
-# CSRF_COOKIE_SECURE = True
-
 """
 JWT Tokens settings """
 REST_FRAMEWORK.update({
@@ -55,7 +52,7 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
     DATABASES.update({
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'test_database.sqlite3'
+            'NAME': 'database.sqlite3'
         }
     })
 
