@@ -11,7 +11,7 @@ module.exports = function (/* ctx */) {
   return {
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
     supportIE: false,
-
+    https: true,
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: false,
 

@@ -20,10 +20,10 @@ export function BACKLOG (state, getters, rootState, rootGetters) {
   }
 }
 
-export function SPRINT (state, getters, rootState, rootGetters) {
+export function PROJECT_SPRINTS (state, getters, rootState, rootGetters) {
   try {
     return state.sprints
-      .filter((sprint) => sprint.project.id === rootGetters['current/PROJECT'])[0]
+      .filter((sprint) => sprint.project.id === rootGetters['current/PROJECT'])
   } catch (error) {
     return null
   }

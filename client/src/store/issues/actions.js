@@ -108,6 +108,33 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   }
 }
 
+export async function ORDER_SPRINT_ISSUES ({ commit, rootGetters }, payload) {
+  const sprintPayload = []
+
+  try {
+    payload.forEach((value) => {
+      sprintPayload.push({
+        id: value.id,
+        ordering: value.ordering
+      })
+    })
+  } catch (error) {
+    console.log(error)
+  }
+
+  try {
+    const response = await new Api({ auth: true }).put(
+      '/core/issue/ordering/',
+      sprintPayload
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('ORDER_SPRINT_ISSUES', payload)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export function RESET ({ commit }) {
   commit('RESET')
 }

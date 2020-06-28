@@ -4,7 +4,24 @@
       <h5>Sprints</h5>
       <div class="col">
         <q-scroll-area style="height: 100%">
-          <div class="text-subtitle1" style="margin-left: 1rem">No sprints found</div>
+          <div
+            v-for="item in sprints"
+            :key="item.id">
+            <div class="h6">
+              {{ item.title }} - {{ item.goal }} - (&nbsp;{{ item.issues.length }} issues&nbsp;)
+            </div>
+            <q-card
+              v-for="issue in item.issues"
+              :key="issue.id"
+              dense
+              dark
+              bordered
+              class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
+              <q-card-section>
+                {{ issue.title }}
+              </q-card-section>
+            </q-card>
+          </div>
         </q-scroll-area>
       </div>
       <h5>Backlog (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)</h5>
@@ -120,6 +137,22 @@ export default {
         })
 
         this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', payload)
+      }
+    },
+    sprints: {
+      get: function () {
+        return this.$store.getters['issues/PROJECT_SPRINTS']
+      },
+      set: function (array) {
+        const payload = [...array]
+
+        payload.forEach((value, index) => {
+          const _issue = Object.assign({}, value)
+          _issue.ordering = index
+          payload[index] = _issue
+        })
+
+        this.$store.dispatch('issues/')
       }
     },
     backlogIssuesLength: function () {
