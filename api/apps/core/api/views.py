@@ -1,5 +1,6 @@
 from smtplib import SMTPException
 
+from django.contrib.auth.admin import sensitive_post_parameters_m
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import viewsets, generics, mixins, status
 from rest_framework.generics import GenericAPIView, UpdateAPIView
@@ -80,12 +81,17 @@ class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class WorkspacesReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Extendable class to have read only ViewSet of any instance, that have
+    workspace isolation.
+    """
     WORKSPACE_PERMISSIONS_NOTIFICATION = _('You do not have permissions for this workspace')
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """
-        Getting all instances, that belong to this workspace. """
+        Getting all instances, that belong to this workspace.
+        """
         queryset = super(WorkspacesReadOnlyModelViewSet, self).get_queryset()
         queryset = queryset. \
             filter(workspace__participants__in=[self.request.user.person])
@@ -93,6 +99,9 @@ class WorkspacesReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
     def get_serializer_context(self):
+        """
+        Put to serializer context information about current person
+        """
         context = super().get_serializer_context()
         context.update({
             'person': self.request.user.person
@@ -105,13 +114,16 @@ class WorkspacesModelViewSet(WorkspacesReadOnlyModelViewSet,
                              mixins.CreateModelMixin,
                              mixins.UpdateModelMixin,
                              mixins.DestroyModelMixin):
+    """
+    Extendable class to have writable ViewSet,
+    that have isolation by workspaces.
+    """
     pass
 
 
 class ProjectViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -119,8 +131,7 @@ class ProjectViewSet(WorkspacesModelViewSet):
 
 class IssueTypeCategoryViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = IssueTypeCategory.objects.all()
     serializer_class = IssueTypeSerializer
@@ -128,8 +139,7 @@ class IssueTypeCategoryViewSet(WorkspacesModelViewSet):
 
 class IssueStateCategoryViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = IssueStateCategory.objects.all()
     serializer_class = IssueStateSerializer
@@ -137,8 +147,7 @@ class IssueStateCategoryViewSet(WorkspacesModelViewSet):
 
 class IssueViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
@@ -155,8 +164,11 @@ class IssueViewSet(WorkspacesModelViewSet):
 class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
                             mixins.UpdateModelMixin):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, instance.
+    We override serializer getter for different kind of requests.
+    For list, retrieve we have to return full information about task inside of Backlog,
+    so have depth = 1.
+    For editing, deleting we need just base information.
     """
     queryset = ProjectBacklog.objects.all()
 
@@ -169,8 +181,7 @@ class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
 
 class SprintDurationViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = SprintDuration.objects.all()
     serializer_class = SprintDurationSerializer
@@ -178,8 +189,7 @@ class SprintDurationViewSet(WorkspacesModelViewSet):
 
 class SprintViewSet(WorkspacesModelViewSet):
     """
-    Workspace based set.
-    See class, that was extended.
+    View for getting, editing, deleting instance.
     """
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
@@ -244,23 +254,49 @@ def validate_ids(data, field='id', unique=True):
     return [data]
 
 
-"""
-@todo
-Class LogoutView
-Look at: 
-https://github.com/Tivix/django-rest-auth/blob/624ad01afbc86fa15b4e652406f3bdcd01f36e00/rest_auth/views.py#L109
-"""
+class PasswordResetView(generics.GenericAPIView):
+    """
+    Password reset e-mail link is confirmed, therefore
+    this resets the user's password.
+    Accepts the following POST parameters: token, uid,
+       new_password1, new_password2
+    Returns the success/fail message.
+    """
+    serializer_class = UserPasswordConfirmSerializer
+    permission_classes = (AllowAny,)
 
-"""
-@todo
-Class PasswordReset
-Look at:
-https://github.com/Tivix/django-rest-auth/blob/624ad01afbc86fa15b4e652406f3bdcd01f36e00/rest_auth/views.py#L195
-"""
+    @sensitive_post_parameters_m
+    def dispatch(self, request, *args, **kwargs):
+        return super(PasswordResetView, self).dispatch(*args, **kwargs)
 
-"""
-@todo
-Class PasswordResetConfirm
-Look at:
-https://github.com/Tivix/django-rest-auth/blob/624ad01afbc86fa15b4e652406f3bdcd01f36e00/rest_auth/views.py#L195
-"""
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            'detail': _('Password has been reset with the new password.')
+        })
+
+
+class PasswordResetConfirmView(generics.GenericAPIView):
+    """
+    Calls Django Auth SetPasswordForm save method.
+    Accepts the following POST parameters: new_password1, new_password2
+    Returns the success/fail message.
+    """
+    serializer_class = UserPasswordConfirmSerializer
+    permission_classes = (AllowAny, )
+
+    @sensitive_post_parameters_m
+    def dispatch(self, request, *args, **kwargs):
+        return super(PasswordResetConfirmView, self).dispatch(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({
+            'detail': _('New password has been saved.')
+        })
