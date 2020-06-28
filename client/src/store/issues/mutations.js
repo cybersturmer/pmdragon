@@ -27,6 +27,11 @@ export function INIT_BACKLOGS (state, payload) {
   LocalStorage.set('issues.backlogs', payload)
 }
 
+export function INIT_SPRINTS (state, payload) {
+  state.sprints = payload
+  LocalStorage.set('issues.sprints', payload)
+}
+
 export function INIT_SPRINT_DURATIONS (state, payload) {
   state.sprint_durations = payload
   LocalStorage.set('issues.sprint_durations', payload)
@@ -65,4 +70,6 @@ export function DELETE_ISSUE (state, payload) {
 
 export function RESET (state) {
   state.backlogs = []
+  state.sprints = []
+  state.sprint_durations = []
 }

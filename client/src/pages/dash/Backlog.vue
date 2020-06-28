@@ -139,6 +139,16 @@ export default {
 
         console.log(error)
       })
+
+    this.$store.dispatch('issues/INIT_SPRINTS')
+      .catch((error) => {
+        this.$q.dialog({
+          title: 'Error = Cannot get Sprints',
+          message: 'Please check your Internet connection'
+        })
+
+        console.log(error)
+      })
   },
   methods: {
     createIssue () {

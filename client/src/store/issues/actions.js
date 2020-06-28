@@ -14,6 +14,19 @@ export async function INIT_BACKLOGS ({ rootGetters, commit }) {
   }
 }
 
+export async function INIT_SPRINTS ({ rootGetters, commit }) {
+  try {
+    const response = await new Api({ auth: true }).get(
+      '/core/sprints/'
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('INIT_SPRINTS', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function INIT_SPRINT_DURATIONS ({ commit }) {
   try {
     const response = await new Api({ auth: true }).get(
@@ -93,4 +106,8 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   } catch (error) {
     throw new ErrorWrapper(error)
   }
+}
+
+export function RESET ({ commit }) {
+  commit('RESET')
 }
