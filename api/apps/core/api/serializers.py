@@ -470,7 +470,6 @@ class SprintSerializer(WorkspaceModelSerializer):
             'project',
             'title',
             'goal',
-            'duration',
             'issues',
             'started_at',
             'finished_at'
