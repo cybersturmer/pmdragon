@@ -491,10 +491,6 @@ class Sprint(models.Model):
 
     goal = models.TextField(verbose_name=_('Sprint Goal'))
 
-    duration = models.ForeignKey(SprintDuration,
-                                 verbose_name=_('Duration'),
-                                 on_delete=models.CASCADE)
-
     issues = models.ManyToManyField(Issue,
                                     verbose_name=_('Issues'))
 
