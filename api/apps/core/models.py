@@ -432,7 +432,8 @@ class ProjectBacklog(models.Model):
                                    on_delete=models.CASCADE)
 
     issues = models.ManyToManyField(Issue,
-                                    verbose_name=_('Issues'))
+                                    verbose_name=_('Issues'),
+                                    blank=True)
 
     class Meta:
         db_table = 'core_project_backlog'
@@ -492,7 +493,8 @@ class Sprint(models.Model):
     goal = models.TextField(verbose_name=_('Sprint Goal'))
 
     issues = models.ManyToManyField(Issue,
-                                    verbose_name=_('Issues'))
+                                    verbose_name=_('Issues'),
+                                    blank=True)
 
     started_at = models.DateTimeField(verbose_name=_('Start date'))
 
