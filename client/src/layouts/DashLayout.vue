@@ -123,6 +123,7 @@ export default {
       this.$store.dispatch('auth/LOGOUT')
         .then(() => {
           this.$store.dispatch('current/RESET_STATE')
+          this.$store.dispatch('issues/RESET')
           this.$router.push({ name: 'login' })
         })
         .catch((error) => {
