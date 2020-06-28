@@ -192,7 +192,12 @@ class SprintViewSet(WorkspacesModelViewSet):
     View for getting, editing, deleting instance.
     """
     queryset = Sprint.objects.all()
-    serializer_class = SprintSerializer
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return SprintReadOnlySerializer
+        else:
+            return SprintWritableSerializer
 
 
 class PersonSetPasswordView(GenericAPIView):

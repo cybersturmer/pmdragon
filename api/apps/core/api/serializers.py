@@ -457,7 +457,7 @@ class SprintDurationSerializer(WorkspaceModelSerializer):
         )
 
 
-class SprintSerializer(WorkspaceModelSerializer):
+class SprintWritableSerializer(WorkspaceModelSerializer):
     """
     Common sprint data
     """
@@ -474,6 +474,26 @@ class SprintSerializer(WorkspaceModelSerializer):
             'started_at',
             'finished_at'
         )
+
+
+class SprintReadOnlySerializer(WorkspaceModelSerializer):
+    """
+    Common sprint data
+    """
+
+    class Meta:
+        model = Sprint
+        fields = (
+            'id',
+            'workspace',
+            'project',
+            'title',
+            'goal',
+            'issues',
+            'started_at',
+            'finished_at'
+        )
+        depth = 1
 
 
 class IssueListSerializer(serializers.ListSerializer):
