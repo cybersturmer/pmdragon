@@ -29,6 +29,14 @@ export function PROJECT_SPRINTS (state, getters, rootState, rootGetters) {
   }
 }
 
+export function UNCOMPLETED_PROJECT_SPRINTS (state, getters) {
+  try {
+    return getters.PROJECT_SPRINTS.filter((sprint) => sprint.is_completed === false)
+  } catch (error) {
+    return null
+  }
+}
+
 export function BACKLOG_ISSUES (state, getters) {
   try {
     return getters.BACKLOG.issues

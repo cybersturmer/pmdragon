@@ -141,7 +141,7 @@ export default {
     },
     sprints: {
       get: function () {
-        return this.$store.getters['issues/PROJECT_SPRINTS']
+        return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
       },
       set: function (array) {
         const payload = [...array]
