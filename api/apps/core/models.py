@@ -496,6 +496,9 @@ class Sprint(models.Model):
                                     verbose_name=_('Issues'),
                                     blank=True)
 
+    is_completed = models.BooleanField(verbose_name=_('Is sprint completed'),
+                                       default=False)
+
     started_at = models.DateTimeField(verbose_name=_('Start date'))
 
     finished_at = models.DateTimeField(verbose_name=_('End date'))
