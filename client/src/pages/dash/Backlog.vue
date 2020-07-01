@@ -27,7 +27,7 @@
                     bordered
                     class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
                     <q-card-section>
-                      {{ issue.id }} {{ issue.title }}
+                      <span class="text-muted">#{{ issue.id }}</span> {{ issue.title }}
                     </q-card-section>
                   </q-card>
                 </transition-group>
