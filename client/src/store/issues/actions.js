@@ -54,6 +54,14 @@ export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
   }
 }
 
+export async function ADD_ISSUE_TO_SPRINT ({ commit }, payload) {
+  // const issuesIds = payload.map((issue) => issue.id)
+  //
+  // const sprintPayload = {
+  //   issues: payload.issues
+  // }
+}
+
 export async function EDIT_ISSUE ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).put(
@@ -108,11 +116,11 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   }
 }
 
-export async function ORDER_SPRINT_ISSUES ({ commit, rootGetters }, payload) {
+export async function ORDER_SPRINT_ISSUES ({ commit }, payload) {
   const sprintPayload = []
 
   try {
-    payload.forEach((value) => {
+    payload.issues.forEach((value) => {
       sprintPayload.push({
         id: value.id,
         ordering: value.ordering

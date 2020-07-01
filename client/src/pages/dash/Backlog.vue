@@ -4,24 +4,35 @@
       <h5>Sprints</h5>
       <div class="col">
         <q-scroll-area style="height: 100%">
-          <div
-            v-for="item in sprints"
-            :key="item.id">
-            <div class="h6">
-              {{ item.title }} - {{ item.goal }} - (&nbsp;{{ item.issues.length }} issues&nbsp;)
+            <div
+              v-for="sprint in sprints"
+              :key="sprint.id"
+              class="q-ma-xs">
+              <div class="h6 text-amber" style="margin-top: 1rem">
+                {{ sprint.title }} - {{ sprint.goal }} - (&nbsp;{{ sprint.issues.length }} issues&nbsp;)
+              </div>
+              <draggable
+                :value="sprint.issues"
+                group="issues"
+                class="q-card--bordered q-pa-sm"
+                style="border: 1px dashed #606060;"
+                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
+              >
+                <transition-group type="transition" :name="'flip-list'">
+                  <q-card
+                    v-for="issue in sprint.issues"
+                    :key="issue.id"
+                    dense
+                    dark
+                    bordered
+                    class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
+                    <q-card-section>
+                      {{ issue.id }} {{ issue.title }}
+                    </q-card-section>
+                  </q-card>
+                </transition-group>
+              </draggable>
             </div>
-            <q-card
-              v-for="issue in item.issues"
-              :key="issue.id"
-              dense
-              dark
-              bordered
-              class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
-              <q-card-section>
-                {{ issue.title }}
-              </q-card-section>
-            </q-card>
-          </div>
         </q-scroll-area>
       </div>
       <h5>Backlog (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)</h5>
@@ -29,7 +40,9 @@
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
             v-model="backlogIssues"
-            group="issues">
+            @change="handleDraggableChanges($event, drag_types.BACKLOG, 0)"
+            group="issues"
+          >
             <transition-group type="transition" :name="'flip-list'">
               <q-card
                 v-for="item in backlogIssues"
@@ -119,6 +132,10 @@ export default {
         type_category: null,
         state_category: null,
         ordering: null
+      },
+      drag_types: {
+        SPRINT: 1,
+        BACKLOG: 0
       }
     }
   },
@@ -139,21 +156,8 @@ export default {
         this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', payload)
       }
     },
-    sprints: {
-      get: function () {
-        return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
-      },
-      set: function (array) {
-        const payload = [...array]
-
-        payload.forEach((value, index) => {
-          const _issue = Object.assign({}, value)
-          _issue.ordering = index
-          payload[index] = _issue
-        })
-
-        this.$store.dispatch('issues/')
-      }
+    sprints: function () {
+      return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
     },
     backlogIssuesLength: function () {
       return this.$store.getters['issues/BACKLOG_ISSUES_COUNT']
@@ -253,11 +257,81 @@ export default {
             console.log(error)
           })
       })
+    },
+    handleDraggableChanges (event, dragType, dragId) {
+      switch (true) {
+        case ('moved' in event):
+          if (dragType === this.drag_types.SPRINT) {
+            /** Handling moving inside of sprint **/
+            const sprint = Object.assign({},
+              this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+
+            const sprintIssues = [...sprint.issues]
+
+            sprintIssues
+              .splice(event.moved.newIndex, 0,
+                sprintIssues
+                  .splice(event.moved.oldIndex, 1)[0])
+
+            sprintIssues.forEach((value, index) => {
+              const _issue = Object.assign({}, value)
+              _issue.ordering = index
+              sprintIssues[index] = _issue
+            })
+
+            sprint.issues = sprintIssues
+
+            this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', sprint)
+          } else if (dragType === this.drag_types.BACKLOG) {
+            /** Handling moving inside of backlog **/
+            const backlogIssues = [...this.$store.getters['issues/BACKLOG_ISSUES']]
+
+            backlogIssues.forEach((value, index) => {
+              const _issue = Object.assign({}, value)
+              _issue.ordering = index
+              backlogIssues[index] = _issue
+            })
+
+            this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', backlogIssues)
+          }
+          break
+        case ('added' in event):
+          if (dragType === this.drag_types.SPRINT) {
+            /** Handling added element inside of sprint **/
+            const sprint = Object.assign({},
+              this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+
+            const sprintIssues = [...sprint.issues]
+
+            sprintIssues.splice(event.added.newIndex, 0)
+
+            this.$store.dispatch('issues')
+          } else if (dragType === this.drag_types.BACKLOG) {
+            /** Handling added element inside of backlog **/
+
+          }
+          break
+        case ('removed' in event):
+          console.log('REMOVED')
+          break
+      }
+
+      // If we added an issue, so add it here
+      // If we deleted issue, so delete it here
+      // If we just move issue - so just move it by ordering
+      console.log(event)
+      console.log(dragType)
+      console.log(dragId)
+      // this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', payload)
     }
   }
 }
 </script>
 <style lang="scss">
+  .q-card__section--vert {
+    padding: 13px;
+  }
+
   .flip-list-move {
     transition: transform 0.3s;
   }

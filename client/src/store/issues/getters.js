@@ -37,6 +37,14 @@ export function UNCOMPLETED_PROJECT_SPRINTS (state, getters) {
   }
 }
 
+export function SPRINT_BY_ID (state) {
+  return sprintId => state.sprints.filter((sprint) => sprint.id === sprintId).pop()
+}
+
+export function SPRINT_BY_ID_ISSUES (state) {
+  return sprintId => state.sprints.filter((sprint) => sprint.id === sprintId).pop().issues
+}
+
 export function BACKLOG_ISSUES (state, getters) {
   try {
     return getters.BACKLOG.issues

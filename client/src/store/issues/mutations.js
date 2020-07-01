@@ -22,6 +22,12 @@ function findIssueIndexes (state, projectId, issueId) {
   }
 }
 
+function findSprintIndexById (state, sprintId) {
+  return state.sprints.findIndex((el, index, array) => {
+    return el.id === sprintId
+  })
+}
+
 export function INIT_BACKLOGS (state, payload) {
   state.backlogs = payload
   LocalStorage.set('issues.backlogs', payload)
@@ -60,6 +66,12 @@ export function ORDER_BACKLOG_ISSUES (state, payload) {
   const backlogIndex = findProjectBacklog(state, project)
   state.backlogs[backlogIndex].issues = payload
   LocalStorage.set('issues.backlogs', state.backlogs)
+}
+
+export function ORDER_SPRINT_ISSUES (state, payload) {
+  const sprintIndex = findSprintIndexById(state, payload.id)
+  state.sprints.splice(sprintIndex, 1, payload)
+  LocalStorage.set('issues.sprints', state.sprints)
 }
 
 export function DELETE_ISSUE (state, payload) {
