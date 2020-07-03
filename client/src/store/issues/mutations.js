@@ -68,7 +68,7 @@ export function ORDER_BACKLOG_ISSUES (state, payload) {
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
-export function ORDER_SPRINT_ISSUES (state, payload) {
+export function UPDATE_SPRINT (state, payload) {
   const sprintIndex = findSprintIndexById(state, payload.id)
   state.sprints.splice(sprintIndex, 1, payload)
   LocalStorage.set('issues.sprints', state.sprints)

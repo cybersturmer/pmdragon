@@ -258,71 +258,93 @@ export default {
           })
       })
     },
+    handleSprintMoving (event, dragId) {
+      /** Handling moving inside of sprint **/
+      const sprint = Object.assign({},
+        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+
+      const sprintIssues = [...sprint.issues]
+
+      sprintIssues
+        .splice(event.moved.newIndex, 0,
+          sprintIssues
+            .splice(event.moved.oldIndex, 1)[0])
+
+      sprintIssues.forEach((value, index) => {
+        const _issue = Object.assign({}, value)
+        _issue.ordering = index
+        sprintIssues[index] = _issue
+      })
+
+      sprint.issues = sprintIssues
+
+      this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', sprint)
+    },
+    handleBacklogMoving (event, dragId) {
+      /** Handling moving inside of backlog **/
+      const backlogIssues = [...this.$store.getters['issues/BACKLOG_ISSUES']]
+
+      backlogIssues.forEach((value, index) => {
+        const _issue = Object.assign({}, value)
+        _issue.ordering = index
+        backlogIssues[index] = _issue
+      })
+
+      this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', backlogIssues)
+    },
+    handleSprintAdding (event, dragId) {
+      /** Handling adding inside of Sprint **/
+      const sprint = Object.assign({},
+        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+
+      const sprintIssues = [...sprint.issues]
+
+      sprintIssues
+        .splice(event.added.newIndex, 0, event.added.element)
+
+      sprint.issues = sprintIssues
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
+    },
+    handleSprintRemoving (event, dragId) {
+      /** Handling removing from Sprint **/
+      const sprint = Object.assign({},
+        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+
+      const sprintIssues = [...sprint.issues]
+      sprintIssues
+        .splice(event.removed.oldIndex, 1)
+
+      sprint.issues = sprintIssues
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
+    },
     handleDraggableChanges (event, dragType, dragId) {
+      const isSprintMoved = ('moved' in event) && (dragType === this.drag_types.SPRINT)
+      const isBacklogMoved = ('moved' in event) && (dragType === this.drag_types.BACKLOG)
+
+      const isSprintAdded = ('added' in event) && (dragType === this.drag_types.SPRINT)
+
+      const isSprintRemoved = ('removed' in event) && (dragType === this.drag_types.SPRINT)
+      // const isBacklogAdded = ('added' in event) && (dragType === this.drag_types.BACKLOG)
+      //
+
+      // const isBacklogRemoved = ('removed' in event) && (dragType === this.drag_types.BACKLOG)
+
       switch (true) {
-        case ('moved' in event):
-          if (dragType === this.drag_types.SPRINT) {
-            /** Handling moving inside of sprint **/
-            const sprint = Object.assign({},
-              this.$store.getters['issues/SPRINT_BY_ID'](dragId))
-
-            const sprintIssues = [...sprint.issues]
-
-            sprintIssues
-              .splice(event.moved.newIndex, 0,
-                sprintIssues
-                  .splice(event.moved.oldIndex, 1)[0])
-
-            sprintIssues.forEach((value, index) => {
-              const _issue = Object.assign({}, value)
-              _issue.ordering = index
-              sprintIssues[index] = _issue
-            })
-
-            sprint.issues = sprintIssues
-
-            this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', sprint)
-          } else if (dragType === this.drag_types.BACKLOG) {
-            /** Handling moving inside of backlog **/
-            const backlogIssues = [...this.$store.getters['issues/BACKLOG_ISSUES']]
-
-            backlogIssues.forEach((value, index) => {
-              const _issue = Object.assign({}, value)
-              _issue.ordering = index
-              backlogIssues[index] = _issue
-            })
-
-            this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', backlogIssues)
-          }
+        case isSprintMoved:
+          this.handleSprintMoving(event, dragId)
           break
-        case ('added' in event):
-          if (dragType === this.drag_types.SPRINT) {
-            /** Handling added element inside of sprint **/
-            const sprint = Object.assign({},
-              this.$store.getters['issues/SPRINT_BY_ID'](dragId))
-
-            const sprintIssues = [...sprint.issues]
-
-            sprintIssues.splice(event.added.newIndex, 0)
-
-            this.$store.dispatch('issues')
-          } else if (dragType === this.drag_types.BACKLOG) {
-            /** Handling added element inside of backlog **/
-
-          }
+        case isBacklogMoved:
+          this.handleBacklogMoving(event, dragId)
           break
-        case ('removed' in event):
-          console.log('REMOVED')
+        case isSprintAdded:
+          this.handleSprintAdding(event, dragId)
+          break
+        case isSprintRemoved:
+          this.handleSprintRemoving(event, dragId)
           break
       }
-
-      // If we added an issue, so add it here
-      // If we deleted issue, so delete it here
-      // If we just move issue - so just move it by ordering
-      console.log(event)
-      console.log(dragType)
-      console.log(dragId)
-      // this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', payload)
     }
   }
 }
