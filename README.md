@@ -2,6 +2,8 @@
 
 # PmDragon Community Edition
 
+![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg)
+
 Open source project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
 High-performance VueJs user interface built in MPA application.
