@@ -16,9 +16,8 @@
                 group="issues"
                 class="q-card--bordered q-pa-sm"
                 style="border: 1px dashed #606060; min-height: 50px;"
-                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
-              >
-                <transition-group type="transition" :name="'flip-list'">
+                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)">
+                <transition-group type="transition" :name="'flip-list'" tag="div">
                   <q-card
                     v-for="issue in sprint.issues"
                     :key="issue.id"
@@ -39,11 +38,11 @@
       <div class="col" v-if="backlogIssues">
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
-            v-model="backlogIssues"
+            :value="backlogIssues"
             @change="handleDraggableChanges($event, drag_types.BACKLOG, 0)"
-            group="issues"
-          >
-            <transition-group type="transition" :name="'flip-list'">
+            style="border: 1px dashed #606060; padding: 10px"
+            group="issues">
+            <transition-group type="transition" :name="'flip-list'" tag="div">
               <q-card
                 v-for="item in backlogIssues"
                 :key="item.id"
@@ -387,7 +386,7 @@ export default {
     transition: transform 0.3s;
   }
 
-  .my-card {
+  .my-card:not(:last-child) {
     margin-bottom: 0.75em;
   }
 
