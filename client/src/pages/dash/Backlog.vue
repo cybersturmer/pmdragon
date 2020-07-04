@@ -306,6 +306,19 @@ export default {
 
       this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
     },
+    handleBacklogAdding (event, dragId) {
+      /** Handling adding to Backlog **/
+      const backlog = Object.assign({}, this.$store.getters['issues/BACKLOG'])
+
+      const backlogIssues = [...backlog.issues]
+
+      backlogIssues
+        .splice(event.added.newIndex, 0, event.added.element)
+
+      backlog.issues = backlogIssues
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', backlog)
+    },
     handleSprintRemoving (event, dragId) {
       /** Handling removing from Sprint **/
       const sprint = Object.assign({},
@@ -319,17 +332,27 @@ export default {
 
       this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
     },
+    handleBacklogRemoving (event, dragId) {
+      /** Handling removing from Backlog **/
+      const backlog = Object.assign({}, this.$store.getters['issues/BACKLOG'])
+
+      const backlogIssues = [...backlog.issues]
+
+      backlogIssues.splice(event.removed.oldIndex, 1)
+
+      backlog.issues = backlogIssues
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', backlog)
+    },
     handleDraggableChanges (event, dragType, dragId) {
       const isSprintMoved = ('moved' in event) && (dragType === this.drag_types.SPRINT)
       const isBacklogMoved = ('moved' in event) && (dragType === this.drag_types.BACKLOG)
 
       const isSprintAdded = ('added' in event) && (dragType === this.drag_types.SPRINT)
+      const isBacklogAdded = ('added' in event) && (dragType === this.drag_types.BACKLOG)
 
       const isSprintRemoved = ('removed' in event) && (dragType === this.drag_types.SPRINT)
-      // const isBacklogAdded = ('added' in event) && (dragType === this.drag_types.BACKLOG)
-      //
-
-      // const isBacklogRemoved = ('removed' in event) && (dragType === this.drag_types.BACKLOG)
+      const isBacklogRemoved = ('removed' in event) && (dragType === this.drag_types.BACKLOG)
 
       switch (true) {
         case isSprintMoved:
@@ -341,8 +364,14 @@ export default {
         case isSprintAdded:
           this.handleSprintAdding(event, dragId)
           break
+        case isBacklogAdded:
+          this.handleBacklogAdding(event, dragId)
+          break
         case isSprintRemoved:
           this.handleSprintRemoving(event, dragId)
+          break
+        case isBacklogRemoved:
+          this.handleBacklogRemoving(event, dragId)
           break
       }
     }

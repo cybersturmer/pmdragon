@@ -66,6 +66,32 @@ export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, payload) {
   }
 }
 
+export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, payload) {
+  const backlogId = payload.id
+  const backlogIssues = payload.issues
+  const backlogIssuesPayload = []
+
+  backlogIssues.forEach((value, index) => {
+    backlogIssuesPayload.push(value.id)
+  })
+
+  const sendPayload = {
+    issues: backlogIssuesPayload
+  }
+
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/backlogs/${backlogId}/`,
+      sendPayload
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_BACKLOG', payload)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).post(

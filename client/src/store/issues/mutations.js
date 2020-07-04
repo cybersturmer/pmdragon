@@ -1,6 +1,6 @@
 import { LocalStorage } from 'quasar'
 
-function findProjectBacklog (state, projectId) {
+function findBacklogByProjectId (state, projectId) {
   return state.backlogs.findIndex((el, index, array) => {
     return el.project_id === projectId
   })
@@ -13,7 +13,7 @@ function findBacklogIssue (issues, issueId) {
 }
 
 function findIssueIndexes (state, projectId, issueId) {
-  const backlogIndex = findProjectBacklog(state, projectId)
+  const backlogIndex = findBacklogByProjectId(state, projectId)
   const issuesIndex = findBacklogIssue(state.backlogs[backlogIndex].issues, issueId)
 
   return {
@@ -63,7 +63,7 @@ export function EDIT_ISSUE (state, payload) {
 
 export function ORDER_BACKLOG_ISSUES (state, payload) {
   const project = payload[0].project
-  const backlogIndex = findProjectBacklog(state, project)
+  const backlogIndex = findBacklogByProjectId(state, project)
   state.backlogs[backlogIndex].issues = payload
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
@@ -72,6 +72,12 @@ export function UPDATE_SPRINT (state, payload) {
   const sprintIndex = findSprintIndexById(state, payload.id)
   state.sprints.splice(sprintIndex, 1, payload)
   LocalStorage.set('issues.sprints', state.sprints)
+}
+
+export function UPDATE_BACKLOG (state, payload) {
+  const backlogIndex = findBacklogByProjectId(state, payload.id)
+  state.backlogs.splice(backlogIndex, 1, payload)
+  LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
 export function DELETE_ISSUE (state, payload) {
