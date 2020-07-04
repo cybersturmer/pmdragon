@@ -15,7 +15,7 @@
                 :value="sprint.issues"
                 group="issues"
                 class="q-card--bordered q-pa-sm"
-                style="border: 1px dashed #606060;"
+                style="border: 1px dashed #606060; min-height: 50px;"
                 @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
               >
                 <transition-group type="transition" :name="'flip-list'">
@@ -53,7 +53,7 @@
                 bordered
                 class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
                 <q-card-section>
-                  {{ item.title }}
+                  #{{ item.id }} {{ item.title }}
                   <q-btn
                     v-show="show_edit_button === item.id"
                     dense
