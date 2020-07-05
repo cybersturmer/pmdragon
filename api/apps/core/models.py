@@ -213,6 +213,11 @@ class IssueTypeCategory(models.Model):
                                   on_delete=models.CASCADE,
                                   related_name='issue_categories')
 
+    project = models.ForeignKey(Project,
+                                db_index=True,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
+
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
@@ -261,6 +266,11 @@ class IssueStateCategory(models.Model):
                                   verbose_name=_('Workspace'),
                                   db_index=True,
                                   on_delete=models.CASCADE)
+
+    project = models.ForeignKey(Project,
+                                db_index=True,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
