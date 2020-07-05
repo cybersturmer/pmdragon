@@ -19,16 +19,21 @@ UserModel = get_user_model()
 
 
 def order_issues(validated_data):
-    if 'issues' in validated_data.keys():
-        ordered_issues = validated_data['issues']
+    """
+    validated_data should contain issues key.
+    """
+    if 'issues' not in validated_data:
+        return validated_data
 
-        for index, issue in enumerate(ordered_issues):
-            issue.ordering = index
-            issue.save()
+    ordered_issues = validated_data['issues']
 
-            ordered_issues[index] = issue
+    for index, issue in enumerate(ordered_issues):
+        issue.ordering = index
+        issue.save()
 
-        validated_data['issues'] = ordered_issues
+        ordered_issues[index] = issue
+
+    validated_data['issues'] = ordered_issues
 
     return validated_data
 
