@@ -18,6 +18,21 @@ from ..models import *
 UserModel = get_user_model()
 
 
+def order_issues(validated_data):
+    if 'issues' in validated_data.keys():
+        ordered_issues = validated_data['issues']
+
+        for index, issue in enumerate(ordered_issues):
+            issue.ordering = index
+            issue.save()
+
+            ordered_issues[index] = issue
+
+        validated_data['issues'] = ordered_issues
+
+    return validated_data
+
+
 class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerializer):
     """
     Extend parent class to add extra data to token.
@@ -443,6 +458,11 @@ class BacklogWritableSerializer(WorkspaceModelSerializer):
             'issues'
         )
 
+    def update(self, instance, validated_data):
+        validated_data = order_issues(validated_data)
+        return super(BacklogWritableSerializer, self) \
+            .update(instance, validated_data)
+
 
 class SprintDurationSerializer(WorkspaceModelSerializer):
     """
@@ -477,6 +497,11 @@ class SprintWritableSerializer(WorkspaceModelSerializer):
             'started_at',
             'finished_at'
         )
+
+    def update(self, instance, validated_data):
+        validated_data = order_issues(validated_data)
+        return super(SprintWritableSerializer, self) \
+            .update(instance, validated_data)
 
 
 class SprintReadOnlySerializer(WorkspaceModelSerializer):
@@ -524,7 +549,6 @@ class IssueListSerializer(serializers.ListSerializer):
 
 class IssueChildOrderingSerializer(WorkspaceModelSerializer):
     def update(self, instance, validated_data):
-
         instance.ordering = [validated_datum['ordering']
                              for validated_datum
                              in validated_data
@@ -543,4 +567,3 @@ class IssueChildOrderingSerializer(WorkspaceModelSerializer):
             'id': {'read_only': False},
         }
         list_serializer_class = IssueListSerializer
-
