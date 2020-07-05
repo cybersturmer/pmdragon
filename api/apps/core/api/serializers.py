@@ -359,6 +359,7 @@ class IssueTypeSerializer(WorkspaceModelSerializer):
         fields = (
             'id',
             'workspace',
+            'project',
             'title',
             'is_subtask',
             'ordering'
@@ -376,6 +377,7 @@ class IssueStateSerializer(WorkspaceModelSerializer):
         fields = (
             'id',
             'workspace',
+            'project',
             'title',
             'ordering'
         )
