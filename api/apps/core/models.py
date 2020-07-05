@@ -459,6 +459,17 @@ class ProjectBacklog(models.Model):
 
     __repr__ = __str__
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        for index, issue in enumerate(self.issues):
+            issue.ordering = index
+            issue.save()
+
+        return super(ProjectBacklog, self).save(force_insert=force_insert,
+                                                force_update=force_update,
+                                                using=using,
+                                                update_fields=update_fields)
+
 
 class SprintDuration(models.Model):
     workspace = models.ForeignKey(Workspace,
@@ -532,3 +543,15 @@ class Sprint(models.Model):
 
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
             raise forms.ValidationError(_('Date of start should be earlier than date of end'))
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        for index, issue in enumerate(self.issues):
+            issue.ordering = index
+            issue.save()
+
+        return super(Sprint, self).save(force_insert=force_insert,
+                                        force_update=force_update,
+                                        using=using,
+                                        update_fields=update_fields)
