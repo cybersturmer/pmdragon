@@ -498,6 +498,7 @@ class SprintWritableSerializer(WorkspaceModelSerializer):
             'title',
             'goal',
             'issues',
+            'is_started',
             'is_completed',
             'started_at',
             'finished_at'
@@ -523,6 +524,7 @@ class SprintReadOnlySerializer(WorkspaceModelSerializer):
             'title',
             'goal',
             'issues',
+            'is_started',
             'is_completed',
             'started_at',
             'finished_at'

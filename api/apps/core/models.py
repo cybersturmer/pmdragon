@@ -506,6 +506,9 @@ class Sprint(models.Model):
                                     verbose_name=_('Issues'),
                                     blank=True)
 
+    is_started = models.BooleanField(verbose_name=_('Is sprint started'),
+                                     default=False)
+
     is_completed = models.BooleanField(verbose_name=_('Is sprint completed'),
                                        default=False)
 
