@@ -9,15 +9,19 @@
           {{ issue_state.title | capitalize }}
         </div>
         <div class="bg-secondary full-height">
-          <q-scroll-area class="full-height">
-            <draggable>
-<!--              <q-card-->
-<!--                v-for="issue in "-->
-<!--                dense-->
-<!--                dark-->
-<!--                bordered-->
-<!--                class="my-card bg-grey-8">-->
-<!--              </q-card>-->
+          <q-scroll-area class="full-height" style="height: calc(100% + 300px)">
+            <draggable
+              style="border: 1px dashed #606060; padding: 10px; min-height: 200px"
+              group="issues">
+              <q-card
+                v-for="issue in issues_by_state(issue_state.id)"
+                :key="issue.id"
+                dense
+                dark
+                bordered
+                class="my-card bg-grey-8 q-ma-sm q-pa-sm">
+                {{ issue.title }}
+              </q-card>
             </draggable>
           </q-scroll-area>
         </div>
@@ -40,6 +44,15 @@ export default {
     },
     issue_types: function () {
       return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
+    },
+    issues: function () {
+      return this.$store.getters['issues/SPRINTS_BY_CURRENT_PROJECT']
+    }
+  },
+  methods: {
+    issues_by_state: function (stateId) {
+      return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'].issues
+        .filter((issue) => issue.state_category === stateId)
     }
   },
   filters: {

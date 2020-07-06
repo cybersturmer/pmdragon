@@ -16,9 +16,14 @@ export function ISSUE_TYPES_BY_CURRENT_PROJECT (state, getters, rootState, rootG
     .filter((issueType) => issueType.project === rootGetters['current/PROJECT'])
 }
 
-export function ISSUES_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
-  // @todo implement filtering by started project
-  return state.sprints.filter()
+export function SPRINTS_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+  return state.sprints
+    .filter((sprint) => sprint.project.id === rootGetters['current/PROJECT'])
+}
+
+export function SPRINT_STARTED_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+  return getters.SPRINTS_BY_CURRENT_PROJECT
+    .filter((sprint) => sprint.is_started === true).pop()
 }
 
 export function WORKSPACE_SPRINT_DURATION (state, getters, rootState, rootGetters) {
