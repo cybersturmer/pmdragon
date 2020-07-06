@@ -6,6 +6,21 @@ export function SPRINTS (state) {
   return state.sprints
 }
 
+export function ISSUE_STATES_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+  return state.issue_states
+    .filter((issueState) => issueState.project === rootGetters['current/PROJECT'])
+}
+
+export function ISSUE_TYPES_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+  return state.issue_types
+    .filter((issueType) => issueType.project === rootGetters['current/PROJECT'])
+}
+
+export function ISSUES_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+  // @todo implement filtering by started project
+  return state.sprints.filter()
+}
+
 export function WORKSPACE_SPRINT_DURATION (state, getters, rootState, rootGetters) {
   return state.sprint_durations
     .filter((sprintDuration) => sprintDuration.workspace === rootGetters['current/WORKSPACE_ID'])

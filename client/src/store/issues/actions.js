@@ -40,6 +40,32 @@ export async function INIT_SPRINT_DURATIONS ({ commit }) {
   }
 }
 
+export async function INIT_ISSUE_STATES ({ commit }) {
+  try {
+    const response = await new Api({ auth: true }).get(
+      '/core/issue/states/'
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_ISSUE_STATES', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function INIT_ISSUE_TYPES ({ commit }) {
+  try {
+    const response = await new Api({ auth: true }).get(
+      '/core/issue/types/'
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_ISSUE_TYPES', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, payload) {
   const sprintId = payload.id
   const sprintIssues = payload.issues

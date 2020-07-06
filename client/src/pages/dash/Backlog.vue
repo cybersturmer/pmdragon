@@ -15,7 +15,7 @@
                 :value="sprint.issues"
                 group="issues"
                 class="q-card--bordered q-pa-sm"
-                style="border: 1px dashed #606060; min-height: 50px;"
+                style="border: 1px dashed #606060; min-height: 67px;"
                 @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)">
                 <transition-group type="transition" :name="'flip-list'" tag="div">
                   <q-card
@@ -40,7 +40,7 @@
           <draggable
             :value="backlogIssues"
             @change="handleDraggableChanges($event, drag_types.BACKLOG, 0)"
-            style="border: 1px dashed #606060; padding: 10px"
+            style="border: 1px dashed #606060; padding: 10px; min-height: 67px;"
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
               <q-card

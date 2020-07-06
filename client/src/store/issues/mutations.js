@@ -80,6 +80,16 @@ export function UPDATE_BACKLOG (state, payload) {
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
+export function UPDATE_ISSUE_TYPES (state, payload) {
+  state.types = payload
+  LocalStorage.set('issues.issue_types', payload)
+}
+
+export function UPDATE_ISSUE_STATES (state, payload) {
+  state.states = payload
+  LocalStorage.set('issues.issue_states', payload)
+}
+
 export function DELETE_ISSUE (state, payload) {
   const indexes = findIssueIndexes(state, payload.project, payload.id)
   state.backlogs[indexes.backlogIndex].issues.splice(indexes.issuesIndex, 1)
@@ -89,5 +99,7 @@ export function DELETE_ISSUE (state, payload) {
 export function RESET (state) {
   state.backlogs = []
   state.sprints = []
+  state.issue_states = []
+  state.issue_types = []
   state.sprint_durations = []
 }
