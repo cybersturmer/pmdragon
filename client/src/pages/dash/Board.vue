@@ -11,12 +11,12 @@
         <div class="bg-secondary full-height">
           <q-scroll-area class="full-height">
             <draggable>
-              <q-card
-                v-for="issue in "
-                dense
-                dark
-                bordered
-                class="my-card bg-grey-8">
+<!--              <q-card-->
+<!--                v-for="issue in "-->
+<!--                dense-->
+<!--                dark-->
+<!--                bordered-->
+<!--                class="my-card bg-grey-8">-->
               </q-card>
             </draggable>
           </q-scroll-area>
