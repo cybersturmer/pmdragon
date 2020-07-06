@@ -17,7 +17,7 @@
 <!--                dark-->
 <!--                bordered-->
 <!--                class="my-card bg-grey-8">-->
-              </q-card>
+<!--              </q-card>-->
             </draggable>
           </q-scroll-area>
         </div>
