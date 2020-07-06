@@ -9,7 +9,7 @@
           {{ issue_state.title | capitalize }}
         </div>
         <div class="bg-secondary full-height">
-          <q-scroll-area class="full-height" style="height: calc(100% + 300px)">
+          <q-scroll-area class="full-height">
             <draggable
               style="border: 1px dashed #606060; padding: 10px; min-height: 200px"
               group="issues">
