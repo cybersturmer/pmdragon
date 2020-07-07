@@ -234,7 +234,7 @@ class IssueTypeCategory(models.Model):
 
     class Meta:
         db_table = 'core_issue_category'
-        ordering = ['-ordering']
+        ordering = ['ordering']
         unique_together = [
             ['workspace', 'title']
         ]
@@ -285,7 +285,7 @@ class IssueStateCategory(models.Model):
 
     class Meta:
         db_table = 'core_issue_state'
-        ordering = ['-ordering']
+        ordering = ['ordering']
         unique_together = [
             ['workspace', 'title']
         ]
