@@ -21,7 +21,7 @@ export function SPRINTS_BY_CURRENT_PROJECT (state, getters, rootState, rootGette
     .filter((sprint) => sprint.project.id === rootGetters['current/PROJECT'])
 }
 
-export function SPRINT_STARTED_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
+export function SPRINT_STARTED_BY_CURRENT_PROJECT (state, getters) {
   return getters.SPRINTS_BY_CURRENT_PROJECT
     .filter((sprint) => sprint.is_started === true).pop()
 }

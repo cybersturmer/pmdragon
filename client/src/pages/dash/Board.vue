@@ -11,6 +11,8 @@
         <div class="bg-secondary full-height">
           <q-scroll-area class="full-height">
             <draggable
+              :value="issues_by_state(issue_state.id)"
+              @change="handleIssueStateChanging($event, issue_state.id)"
               style="border: 1px dashed #606060; padding: 10px; min-height: 200px"
               group="issues">
               <q-card
@@ -53,6 +55,49 @@ export default {
     issues_by_state: function (stateId) {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'].issues
         .filter((issue) => issue.state_category === stateId)
+    },
+    handleIssueAdded: function (event, issueStateId) {
+      /** Handling added in Issues State **/
+      const payload = event.added.element
+      payload.state_category = issueStateId
+
+      const sprint = Object.assign({},
+        this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'])
+
+      const sprintIssues = [...sprint.issues]
+
+      sprintIssues.splice(event.added.newIndex, 0, event.added.element)
+      sprint.issues = sprintIssues
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT')
+    },
+    handleIssueRemoved: function (event, issueStateId) {
+      /** Handling removed in Issues State **/
+      const payload = event.removed.element
+      payload.state_category = issueStateId
+
+      const sprint = Object.assign({},
+        this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'])
+
+      const sprintIssues = [...sprint.issues]
+      sprintIssues.splice(event.removed.oldIndex, 1)
+
+      sprint.issues = sprintIssues
+    },
+    handleIssueStateChanging: function (event, issueStateId) {
+      /** Handling moving inside of states **/
+      const isAdded = ('added' in event)
+      const isRemoved = ('removed' in event)
+
+      switch (true) {
+        case isAdded:
+          break
+        case isRemoved:
+          break
+      }
+
+      console.log(event, 'EVENT')
+      console.log(issueStateId, 'issueStateId')
     }
   },
   filters: {
@@ -65,6 +110,7 @@ export default {
   mounted () {
     this.$store.dispatch('issues/INIT_ISSUE_TYPES')
     this.$store.dispatch('issues/INIT_ISSUE_STATES')
+    this.$store.dispatch('issues/INIT_SPRINTS')
   }
 }
 </script>
