@@ -436,23 +436,6 @@ class IssueSerializer(WorkspaceModelSerializer):
         return data
 
 
-class BacklogReadOnlySerializer(WorkspaceModelSerializer):
-    """
-    Getting Backlog information with all issues inside of it
-    For getting backlog information including issues
-    """
-
-    class Meta:
-        model = ProjectBacklog
-        fields = (
-            'id',
-            'workspace',
-            'project_id',
-            'issues',
-        )
-        depth = 1
-
-
 class BacklogWritableSerializer(WorkspaceModelSerializer):
     class Meta:
         model = ProjectBacklog
@@ -508,28 +491,6 @@ class SprintWritableSerializer(WorkspaceModelSerializer):
         validated_data = order_issues(validated_data)
         return super(SprintWritableSerializer, self) \
             .update(instance, validated_data)
-
-
-class SprintReadOnlySerializer(WorkspaceModelSerializer):
-    """
-    Common sprint data
-    """
-
-    class Meta:
-        model = Sprint
-        fields = (
-            'id',
-            'workspace',
-            'project',
-            'title',
-            'goal',
-            'issues',
-            'is_started',
-            'is_completed',
-            'started_at',
-            'finished_at'
-        )
-        depth = 1
 
 
 class IssueListSerializer(serializers.ListSerializer):

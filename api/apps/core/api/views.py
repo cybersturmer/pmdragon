@@ -165,18 +165,9 @@ class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
                             mixins.UpdateModelMixin):
     """
     View for getting, editing, instance.
-    We override serializer getter for different kind of requests.
-    For list, retrieve we have to return full information about task inside of Backlog,
-    so have depth = 1.
-    For editing, deleting we need just base information.
     """
     queryset = ProjectBacklog.objects.all()
-
-    def get_serializer_class(self):
-        if self.action in ['list', 'retrieve']:
-            return BacklogReadOnlySerializer
-        else:
-            return BacklogWritableSerializer
+    serializer_class = BacklogWritableSerializer
 
 
 class SprintDurationViewSet(WorkspacesModelViewSet):
@@ -192,12 +183,7 @@ class SprintViewSet(WorkspacesModelViewSet):
     View for getting, editing, deleting instance.
     """
     queryset = Sprint.objects.all()
-
-    def get_serializer_class(self):
-        if self.action in ['list', 'retrieve']:
-            return SprintReadOnlySerializer
-        else:
-            return SprintWritableSerializer
+    serializer_class = SprintWritableSerializer
 
 
 class PersonSetPasswordView(GenericAPIView):
