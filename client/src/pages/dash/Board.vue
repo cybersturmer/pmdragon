@@ -53,36 +53,12 @@ export default {
   },
   methods: {
     issues_by_state: function (stateId) {
-      return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'].issues
+      return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES']
         .filter((issue) => issue.state_category === stateId)
     },
     handleIssueAdded: function (event, issueStateId) {
       /** Handling added in Issues State **/
-      const payload = event.added.element
-      payload.state_category = issueStateId
-
-      const sprint = Object.assign({},
-        this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'])
-
-      const sprintIssues = [...sprint.issues]
-
-      sprintIssues.splice(event.added.newIndex, 0, event.added.element)
-      sprint.issues = sprintIssues
-
-      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT')
-    },
-    handleIssueRemoved: function (event, issueStateId) {
-      /** Handling removed in Issues State **/
-      const payload = event.removed.element
-      payload.state_category = issueStateId
-
-      const sprint = Object.assign({},
-        this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT'])
-
-      const sprintIssues = [...sprint.issues]
-      sprintIssues.splice(event.removed.oldIndex, 1)
-
-      sprint.issues = sprintIssues
+      this.$store.dispatch('issues/UPDATE_ISSUE_STATE', event.added.element)
     },
     handleIssueStateChanging: function (event, issueStateId) {
       /** Handling moving inside of states **/
@@ -91,9 +67,12 @@ export default {
 
       switch (true) {
         case isAdded:
+          this.handleIssueAdded(event, issueStateId)
           break
         case isRemoved:
           break
+        default:
+          throw new Error('This error should not occurred')
       }
 
       console.log(event, 'EVENT')
@@ -111,6 +90,7 @@ export default {
     this.$store.dispatch('issues/INIT_ISSUE_TYPES')
     this.$store.dispatch('issues/INIT_ISSUE_STATES')
     this.$store.dispatch('issues/INIT_SPRINTS')
+    this.$store.dispatch('issues/INIT_ISSUES')
   }
 }
 </script>

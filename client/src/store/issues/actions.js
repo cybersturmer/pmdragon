@@ -27,6 +27,19 @@ export async function INIT_SPRINTS ({ rootGetters, commit }) {
   }
 }
 
+export async function INIT_ISSUES ({ commit }) {
+  try {
+    const response = await new Api({ auth: true }).get(
+      '/core/issues/'
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('INIT_ISSUES', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function INIT_SPRINT_DURATIONS ({ commit }) {
   try {
     const response = await new Api({ auth: true }).get(
@@ -66,53 +79,51 @@ export async function INIT_ISSUE_TYPES ({ commit }) {
   }
 }
 
-export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, payload) {
-  const sprintId = payload.id
-  const sprintIssues = payload.issues
-  const sprintIssuesPayload = []
-
-  sprintIssues.forEach((value, index) => {
-    sprintIssuesPayload.push(value.id)
-  })
-
-  const sendPayload = {
-    issues: sprintIssuesPayload
-  }
-
+export async function UPDATE_ISSUE_STATE ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).patch(
-      `/core/sprints/${sprintId}/`,
-      sendPayload
+      `/core/issues/${payload.id}/`,
+      { state_category: payload.state_category }
     )
 
     HandleResponse.compare(200, response.status)
-    commit('UPDATE_SPRINT', payload)
+    commit('UPDATE_ISSUE_STATE', payload)
   } catch (error) {
     throw new ErrorWrapper(error)
   }
 }
 
-export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, payload) {
-  const backlogId = payload.id
-  const backlogIssues = payload.issues
-  const backlogIssuesPayload = []
-
-  backlogIssues.forEach((value, index) => {
-    backlogIssuesPayload.push(value.id)
-  })
-
+export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, composite) {
   const sendPayload = {
-    issues: backlogIssuesPayload
+    issues: composite.issues
   }
 
   try {
     const response = await new Api({ auth: true }).patch(
-      `/core/backlogs/${backlogId}/`,
+      `/core/sprints/${composite.id}/`,
       sendPayload
     )
 
     HandleResponse.compare(200, response.status)
-    commit('UPDATE_BACKLOG', payload)
+    commit('UPDATE_SPRINT_ISSUES', composite)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, composite) {
+  const sendPayload = {
+    issues: composite.issues
+  }
+
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/backlogs/${composite.id}/`,
+      sendPayload
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_BACKLOG_ISSUES', composite)
   } catch (error) {
     throw new ErrorWrapper(error)
   }
@@ -186,28 +197,15 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   }
 }
 
-export async function ORDER_SPRINT_ISSUES ({ commit }, payload) {
-  const sprintPayload = []
-
-  try {
-    payload.issues.forEach((value) => {
-      sprintPayload.push({
-        id: value.id,
-        ordering: value.ordering
-      })
-    })
-  } catch (error) {
-    console.log(error)
-  }
-
+export async function UPDATE_ISSUES_ORDERING ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).put(
       '/core/issue/ordering/',
-      sprintPayload
+      payload
     )
 
     HandleResponse.compare(200, response.status)
-    commit('UPDATE_SPRINT', payload)
+    commit('UPDATE_ISSUES_ORDERING', payload)
   } catch (error) {
     throw new ErrorWrapper(error)
   }

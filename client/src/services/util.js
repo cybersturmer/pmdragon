@@ -61,3 +61,7 @@ export class HandleResponse {
     }
   }
 }
+
+export function unWatch (value) {
+  return JSON.parse(JSON.stringify(value))
+}

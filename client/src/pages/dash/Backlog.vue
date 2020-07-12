@@ -12,14 +12,14 @@
                 {{ sprint.title }} - {{ sprint.goal }} - (&nbsp;{{ sprint.issues.length }} issues&nbsp;)
               </div>
               <draggable
-                :value="sprint.issues"
+                :value="getSprintIssues(sprint.id)"
                 group="issues"
                 class="q-card--bordered q-pa-sm"
                 style="border: 1px dashed #606060; min-height: 67px;"
                 @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)">
                 <transition-group type="transition" :name="'flip-list'" tag="div">
                   <q-card
-                    v-for="issue in sprint.issues"
+                    v-for="issue in getSprintIssues(sprint.id)"
                     :key="issue.id"
                     dense
                     dark
@@ -39,7 +39,7 @@
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
             :value="backlogIssues"
-            @change="handleDraggableChanges($event, drag_types.BACKLOG, 0)"
+            @change="handleDraggableChanges($event, drag_types.BACKLOG, backlog.id)"
             style="border: 1px dashed #606060; padding: 10px; min-height: 67px;"
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
@@ -115,6 +115,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { unWatch } from 'src/services/util'
 
 export default {
   name: 'BacklogView',
@@ -139,27 +140,17 @@ export default {
     }
   },
   computed: {
-    backlogIssues: {
-      get: function () {
-        return this.$store.getters['issues/BACKLOG_ISSUES']
-      },
-      set: function (array) {
-        const payload = [...array]
-
-        payload.forEach((value, index) => {
-          const _issue = Object.assign({}, value)
-          _issue.ordering = index
-          payload[index] = _issue
-        })
-
-        this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', payload)
-      }
+    backlog: function () {
+      return this.$store.getters['issues/BACKLOG']
     },
-    sprints: function () {
-      return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
+    backlogIssues: function () {
+      return this.$store.getters['issues/BACKLOG_ISSUES']
     },
     backlogIssuesLength: function () {
       return this.$store.getters['issues/BACKLOG_ISSUES_COUNT']
+    },
+    sprints: function () {
+      return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
     },
     isAddButtonEnabled: function () {
       return Boolean(this.form_data.title)
@@ -257,91 +248,152 @@ export default {
           })
       })
     },
-    handleSprintMoving (event, dragId) {
+    getSprintIssues (sprintId) {
+      return this.$store.getters['issues/SPRINT_BY_ID_ISSUES'](sprintId)
+    },
+    handleMoving (issuesList, event) {
+      /** Handle moving - doesnt matter is it sprint or backlog **/
+
+      const immutableList = unWatch(issuesList)
+
+      immutableList
+        .splice(event.moved.newIndex, 0, immutableList
+          .splice(event.moved.oldIndex, 1)[0])
+
+      const ordering = []
+      immutableList.forEach((issueId, index) => {
+        ordering.push(
+          {
+            id: issueId,
+            ordering: index
+          }
+        )
+      })
+
+      return { list: immutableList, ordering }
+    },
+    handleSprintMoving (event, sprintId) {
       /** Handling moving inside of sprint **/
-      const sprint = Object.assign({},
-        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+      const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
-      const sprintIssues = [...sprint.issues]
+      const handled = this.handleMoving(currentSprintIssues, event)
 
-      sprintIssues
-        .splice(event.moved.newIndex, 0,
-          sprintIssues
-            .splice(event.moved.oldIndex, 1)[0])
-
-      sprintIssues.forEach((value, index) => {
-        const _issue = Object.assign({}, value)
-        _issue.ordering = index
-        sprintIssues[index] = _issue
-      })
-
-      sprint.issues = sprintIssues
-
-      this.$store.dispatch('issues/ORDER_SPRINT_ISSUES', sprint)
+      this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        .then(() => {
+          this.$store.commit('issues/UPDATE_SPRINT_ISSUES', {
+            id: sprintId,
+            issues: handled.list
+          })
+        })
     },
-    handleBacklogMoving (event, dragId) {
+    handleBacklogMoving (event, backlogId) {
       /** Handling moving inside of backlog **/
-      const backlogIssues = [...this.$store.getters['issues/BACKLOG_ISSUES']]
+      const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      backlogIssues.forEach((value, index) => {
-        const _issue = Object.assign({}, value)
-        _issue.ordering = index
-        backlogIssues[index] = _issue
+      const handled = this.handleMoving(currentBacklogIssues, event)
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        .then(() => {
+          this.$store.commit('issues/UPDATE_BACKLOG_ISSUES', {
+            id: backlogId,
+            issues: handled.list
+          })
+        })
+    },
+    handleAdding (issuesList, event) {
+      const immutableList = unWatch(issuesList)
+
+      immutableList
+        .splice(event.added.newIndex, 0, event.added.element.id)
+
+      const ordering = []
+      immutableList.forEach((issueId, index) => {
+        ordering.push(
+          {
+            id: issueId,
+            ordering: index
+          }
+        )
       })
 
-      this.$store.dispatch('issues/ORDER_BACKLOG_ISSUES', backlogIssues)
+      return { list: immutableList, ordering }
     },
-    handleSprintAdding (event, dragId) {
+    handleSprintAdding (event, sprintId) {
       /** Handling adding inside of Sprint **/
-      const sprint = Object.assign({},
-        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+      const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
-      const sprintIssues = [...sprint.issues]
+      const handled = this.handleAdding(currentSprintIssues, event)
+      const compositeSprintIdsList = {
+        id: sprintId,
+        issues: handled.list
+      }
 
-      sprintIssues
-        .splice(event.added.newIndex, 0, event.added.element)
-
-      sprint.issues = sprintIssues
-
-      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', compositeSprintIdsList)
+        .then(() => {
+          this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        })
     },
-    handleBacklogAdding (event, dragId) {
+    handleBacklogAdding (event, backlogId) {
       /** Handling adding to Backlog **/
-      const backlog = Object.assign({}, this.$store.getters['issues/BACKLOG'])
+      const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      const backlogIssues = [...backlog.issues]
-
-      backlogIssues
-        .splice(event.added.newIndex, 0, event.added.element)
-
-      backlog.issues = backlogIssues
-
-      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', backlog)
+      const handled = this.handleAdding(currentBacklogIssues, event)
+      const compositeBacklogIdsList = {
+        id: backlogId,
+        issues: handled.list
+      }
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', compositeBacklogIdsList)
+        .then(() => {
+          this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        })
     },
-    handleSprintRemoving (event, dragId) {
-      /** Handling removing from Sprint **/
-      const sprint = Object.assign({},
-        this.$store.getters['issues/SPRINT_BY_ID'](dragId))
+    handleRemoving (issuesList, event) {
+      const immutableList = unWatch(issuesList)
 
-      const sprintIssues = [...sprint.issues]
-      sprintIssues
+      immutableList
         .splice(event.removed.oldIndex, 1)
 
-      sprint.issues = sprintIssues
+      const ordering = []
+      immutableList.forEach((issueId, index) => {
+        ordering.push(
+          {
+            id: issueId,
+            ordering: index
+          }
+        )
+      })
 
-      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', sprint)
+      return { list: immutableList, ordering }
     },
-    handleBacklogRemoving (event, dragId) {
+    handleSprintRemoving (event, sprintId) {
+      /** Handling removing from Sprint **/
+      const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId)
+
+      const handled = this.handleRemoving(currentSprintIssues, event)
+      const compositeSprintIds = {
+        id: sprintId,
+        issues: handled.list
+      }
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_SPRINT', compositeSprintIds)
+        .then(() => {
+          this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        })
+    },
+    handleBacklogRemoving (event, backlogId) {
       /** Handling removing from Backlog **/
-      const backlog = Object.assign({}, this.$store.getters['issues/BACKLOG'])
+      const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      const backlogIssues = [...backlog.issues]
+      const handled = this.handleRemoving(currentBacklogIssues, event)
+      const compositeBacklogIds = {
+        id: backlogId,
+        issues: handled.list
+      }
 
-      backlogIssues.splice(event.removed.oldIndex, 1)
-
-      backlog.issues = backlogIssues
-
-      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', backlog)
+      this.$store.dispatch('issues/UPDATE_ISSUES_IN_BACKLOG', compositeBacklogIds)
+        .then(() => {
+          this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+        })
     },
     handleDraggableChanges (event, dragType, dragId) {
       const isSprintMoved = ('moved' in event) && (dragType === this.drag_types.SPRINT)
@@ -372,6 +424,8 @@ export default {
         case isBacklogRemoved:
           this.handleBacklogRemoving(event, dragId)
           break
+        default:
+          throw new Error('This error should not occurred')
       }
     }
   }

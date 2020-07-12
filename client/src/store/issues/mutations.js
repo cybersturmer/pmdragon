@@ -28,6 +28,12 @@ function findSprintIndexById (state, sprintId) {
   })
 }
 
+function findBacklogIndexById (state, backlogId) {
+  return state.backlogs.findIndex((el, index, array) => {
+    return el.id === backlogId
+  })
+}
+
 export function INIT_BACKLOGS (state, payload) {
   state.backlogs = payload
   LocalStorage.set('issues.backlogs', payload)
@@ -36,6 +42,11 @@ export function INIT_BACKLOGS (state, payload) {
 export function INIT_SPRINTS (state, payload) {
   state.sprints = payload
   LocalStorage.set('issues.sprints', payload)
+}
+
+export function INIT_ISSUES (state, payload) {
+  state.issues = payload
+  LocalStorage.set('issues.issues', payload)
 }
 
 export function INIT_SPRINT_DURATIONS (state, payload) {
@@ -65,6 +76,39 @@ export function ORDER_BACKLOG_ISSUES (state, payload) {
   const project = payload[0].project
   const backlogIndex = findBacklogByProjectId(state, project)
   state.backlogs[backlogIndex].issues = payload
+  LocalStorage.set('issues.backlogs', state.backlogs)
+}
+
+export function UPDATE_ISSUE_STATE (state, payload) {
+  /** Payload content issue object **/
+  const issue = state.issues.filter((issue) => issue.id === payload.id).pop()
+  issue.state_category = payload.state_category
+
+  LocalStorage.set('issues.issues', state.issues)
+}
+
+export function UPDATE_ISSUES_ORDERING (state, payload) {
+  payload.forEach((issuePayload) => {
+    const issue = state.issues.filter((issue) => issue.id === issuePayload.id).pop()
+    issue.ordering = issuePayload.ordering
+  })
+
+  LocalStorage.set('issues.issues', state.issues)
+}
+
+export function UPDATE_SPRINT_ISSUES (state, composite) {
+  /** Just update issues inside sprintfind
+   *  We use composite data for mutation **/
+  const sprintIndex = findSprintIndexById(state, composite.id)
+  state.sprints[sprintIndex].issues = composite.issues
+  LocalStorage.set('issues.sprints', state.sprints)
+}
+
+export function UPDATE_BACKLOG_ISSUES (state, composite) {
+  /** Just update issues inside of Backlog
+   * We use composite data for mutation **/
+  const backlogIndex = findBacklogIndexById(state, composite.id)
+  state.backlogs[backlogIndex].issues = composite.issues
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
