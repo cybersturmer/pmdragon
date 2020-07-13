@@ -34,6 +34,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { unWatch } from 'src/services/util'
 
 export default {
   name: 'BoardView',
@@ -58,7 +59,10 @@ export default {
     },
     handleIssueAdded: function (event, issueStateId) {
       /** Handling added in Issues State **/
-      this.$store.dispatch('issues/UPDATE_ISSUE_STATE', event.added.element)
+      const updatedElement = unWatch(event.added.element)
+      updatedElement.state_category = issueStateId
+
+      this.$store.dispatch('issues/UPDATE_ISSUE_STATE', updatedElement)
     },
     handleIssueStateChanging: function (event, issueStateId) {
       /** Handling moving inside of states **/
