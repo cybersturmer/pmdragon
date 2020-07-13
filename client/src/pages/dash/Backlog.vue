@@ -176,6 +176,16 @@ export default {
 
         console.log(error)
       })
+
+    this.$store.dispatch('issues/INIT_ISSUES')
+      .catch((error) => {
+        this.$q.dialog({
+          title: 'Error = Cannot get Issues',
+          message: 'Please check your Internet connection'
+        })
+
+        console.log(error)
+      })
   },
   methods: {
     createIssue () {
@@ -303,8 +313,7 @@ export default {
     handleAdding (issuesList, event) {
       const immutableList = unWatch(issuesList)
 
-      immutableList
-        .splice(event.added.newIndex, 0, event.added.element.id)
+      immutableList.splice(event.added.newIndex, 0, event.added.element.id)
 
       const ordering = []
       immutableList.forEach((issueId, index) => {
@@ -348,13 +357,12 @@ export default {
         })
     },
     handleRemoving (issuesList, event) {
-      const immutableList = unWatch(issuesList)
+      const list = unWatch(issuesList)
 
-      immutableList
-        .splice(event.removed.oldIndex, 1)
+      list.splice(event.removed.oldIndex, 1)
 
       const ordering = []
-      immutableList.forEach((issueId, index) => {
+      list.forEach((issueId, index) => {
         ordering.push(
           {
             id: issueId,
@@ -363,11 +371,11 @@ export default {
         )
       })
 
-      return { list: immutableList, ordering }
+      return { list, ordering }
     },
     handleSprintRemoving (event, sprintId) {
       /** Handling removing from Sprint **/
-      const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId)
+      const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
       const handled = this.handleRemoving(currentSprintIssues, event)
       const compositeSprintIds = {
