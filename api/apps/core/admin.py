@@ -68,6 +68,7 @@ class SprintAdmin(admin.ModelAdmin):
     list_display = (
         'workspace',
         'project',
+        'title',
         'goal',
         'started_at',
         'finished_at'
