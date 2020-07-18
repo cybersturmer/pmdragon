@@ -206,6 +206,11 @@ class Project(models.Model):
     __repr__ = __str__
 
 
+def is_project_in_workspace(workspace: Workspace, project: Project):
+    if workspace != project.workspace:
+        raise forms.ValidationError(_('Project should belong to given Workspace'))
+
+
 class IssueTypeCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
@@ -245,6 +250,10 @@ class IssueTypeCategory(models.Model):
         return f'{self.workspace.prefix_url} - {self.title}'
 
     __repr__ = __str__
+
+    def clean(self):
+        super(IssueTypeCategory, self).clean()
+        is_project_in_workspace(self.workspace, self.project)
 
     def save(self, *args, **kwargs):
         if self.is_default:
@@ -296,6 +305,10 @@ class IssueStateCategory(models.Model):
         return f'{self.workspace.prefix_url} - {self.title}'
 
     __repr__ = __str__
+
+    def clean(self):
+        super(IssueStateCategory, self).clean()
+        is_project_in_workspace(self.workspace, self.project)
 
     def save(self, *args, **kwargs):
         if self.is_default:
@@ -365,6 +378,10 @@ class Issue(models.Model):
         return f'{self.workspace.prefix_url} - {self.project.title} - {self.title}'
 
     __repr__ = __str__
+
+    def clean(self):
+        super(Issue, self).clean()
+        is_project_in_workspace(self.workspace, self.project)
 
     def save(self, *args, **kwargs):
         just_created = False
@@ -459,6 +476,10 @@ class ProjectBacklog(models.Model):
 
     __repr__ = __str__
 
+    def clean(self):
+        super(ProjectBacklog, self).clean()
+        is_project_in_workspace(self.workspace, self.project)
+
 
 class SprintDuration(models.Model):
     workspace = models.ForeignKey(Workspace,
@@ -498,9 +519,12 @@ class Sprint(models.Model):
 
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255,
-                             unique=True)
+                             blank=True,
+                             default=_("New Sprint"))
 
-    goal = models.TextField(verbose_name=_('Sprint Goal'))
+    goal = models.TextField(verbose_name=_('Sprint Goal'),
+                            max_length=255,
+                            blank=True)
 
     issues = models.ManyToManyField(Issue,
                                     verbose_name=_('Issues'),
@@ -512,9 +536,13 @@ class Sprint(models.Model):
     is_completed = models.BooleanField(verbose_name=_('Is sprint completed'),
                                        default=False)
 
-    started_at = models.DateTimeField(verbose_name=_('Start date'))
+    started_at = models.DateTimeField(verbose_name=_('Start date'),
+                                      null=True,
+                                      default=None)
 
-    finished_at = models.DateTimeField(verbose_name=_('End date'))
+    finished_at = models.DateTimeField(verbose_name=_('End date'),
+                                       null=True,
+                                       default=None)
 
     class Meta:
         db_table = 'core_sprint'
@@ -533,5 +561,32 @@ class Sprint(models.Model):
     def clean(self):
         super(Sprint, self).clean()
 
+        is_project_in_workspace(self.workspace, self.project)
+
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
             raise forms.ValidationError(_('Date of start should be earlier than date of end'))
+
+        if self.is_started:
+            try:
+                """
+                Checking if we have another one started sprint
+                """
+                temp = Sprint.objects \
+                    .filter(workspace=self.workspace,
+                            project=self.project,
+                            is_started=True) \
+                    .get()
+
+                if self != temp:
+                    raise forms.ValidationError(_('Another sprint was already started. '
+                                                  'Complete it before start the new one'))
+
+            except IssueTypeCategory.DoesNotExist:
+                pass
+
+            if None in [self.started_at, self.finished_at]:
+                """
+                Started sprint should contain information about start and finish dates
+                Its not necessary for draft of sprint (Not started yet)
+                """
+                raise forms.ValidationError(_('Start date and End date are required for started sprint'))
