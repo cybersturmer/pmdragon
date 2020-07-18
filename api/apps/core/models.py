@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, F
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -549,6 +549,9 @@ class Sprint(models.Model):
         unique_together = [
             ['workspace', 'project', 'started_at'],
             ['workspace', 'project', 'finished_at'],
+        ]
+        ordering = [
+            F('finished_at').desc(nulls_last=True)
         ]
         verbose_name = _('Sprint')
         verbose_name_plural = _('Sprints')
