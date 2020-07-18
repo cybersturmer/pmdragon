@@ -9,22 +9,31 @@
           {{ issue_state.title | capitalize }}
         </div>
         <div class="bg-secondary full-height">
-          <q-scroll-area class="full-height">
-            <draggable
+          <q-scroll-area class="full-height overflow-hidden">
+              <draggable
               :value="issues_by_state(issue_state.id)"
               @change="handleIssueStateChanging($event, issue_state.id)"
-              style="border: 1px dashed #606060; padding: 10px; min-height: 200px"
-              group="issues">
-              <q-card
-                v-for="issue in issues_by_state(issue_state.id)"
-                :key="issue.id"
-                dense
-                dark
-                bordered
-                class="my-card bg-grey-8 q-ma-sm q-pa-sm">
-                {{ issue.title }}
-              </q-card>
-            </draggable>
+              class="q-card--bordered q-pa-sm"
+              style="border: 1px solid #606060; min-height: 200px"
+              group="issues"
+              >
+                <transition-group
+                  type="transition"
+                  :name="'flip-list'"
+                  tag="div">
+                  <q-card
+                    v-for="issue in issues_by_state(issue_state.id)"
+                    :key="issue.id"
+                    dense
+                    dark
+                    bordered
+                    class="my-card bg-grey-8 q-ma-sm overflow-hidden">
+                    <q-card-section>
+                      <span class="text-muted">{{ issue.title }}</span>
+                    </q-card-section>
+                  </q-card>
+                </transition-group>
+              </draggable>
           </q-scroll-area>
         </div>
       </div>
@@ -98,3 +107,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .flip-list-move {
+    transition: transform 0.3s;
+  }
+</style>

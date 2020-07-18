@@ -12,7 +12,7 @@ function findBacklogIssue (issues, issueId) {
   })
 }
 
-function findIssueIndexes (state, projectId, issueId) {
+function findIssueIndexesInBacklog (state, projectId, issueId) {
   const backlogIndex = findBacklogByProjectId(state, projectId)
   const issuesIndex = findBacklogIssue(state.backlogs[backlogIndex].issues, issueId)
 
@@ -63,13 +63,22 @@ export function ADD_ISSUE_TO_BACKLOG (state, payload) {
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
+export function ADD_SPRINT_TO_PROJECT (state, payload) {
+  state.sprints.push(payload)
+
+  LocalStorage.set('issues.sprints', state.sprints)
+}
+
 export function EDIT_ISSUE (state, payload) {
   /**
    * Payload should contain at least workspace, project, id, field
    * It helps us to put it in the right place */
-  const indexes = findIssueIndexes(state, payload.project, payload.id)
-  state.backlogs[indexes.backlogIndex].issues.splice(indexes.issuesIndex, 1, payload)
-  LocalStorage.set('issues.backlogs', state.backlogs)
+  const issueIndex = state.issues.findIndex((el, index, array) => {
+    return el.id === payload.id
+  })
+
+  state.issues.splice(issueIndex, 1, payload)
+  LocalStorage.set('issues.issues', state.backlogs)
 }
 
 export function ORDER_BACKLOG_ISSUES (state, payload) {
@@ -135,7 +144,7 @@ export function UPDATE_ISSUE_STATES (state, payload) {
 }
 
 export function DELETE_ISSUE (state, payload) {
-  const indexes = findIssueIndexes(state, payload.project, payload.id)
+  const indexes = findIssueIndexesInBacklog(state, payload.project, payload.id)
   state.backlogs[indexes.backlogIndex].issues.splice(indexes.issuesIndex, 1)
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
