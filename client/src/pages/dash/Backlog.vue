@@ -1,32 +1,90 @@
 <template>
   <q-page class="flex q-layout-padding">
     <div class="column full-width">
-      <h5>Sprints</h5>
+      <div class="row q-pa-sm">
+        <div class="col">
+          <h5 style="text-transform: uppercase">
+            Sprints
+          </h5>
+        </div>
+        <div class="col">
+          <q-btn
+            dark
+            dense
+            round
+            icon="add"
+            class="float-right"
+            @click="createSprint"
+          />
+        </div>
+      </div>
       <div class="col">
-        <q-scroll-area style="height: 100%">
+        <q-scroll-area
+          dark
+          style="height: 100%; padding: 1.25rem; border: 1px solid #606060;">
             <div
-              v-for="sprint in sprints"
-              :key="sprint.id"
-              class="q-ma-xs">
-              <div class="h6 text-amber" style="margin-top: 1rem">
-                {{ sprint.title }} - {{ sprint.goal }} - (&nbsp;{{ sprint.issues.length }} issues&nbsp;)
+              v-for="(sprint, index) in sprints"
+              :key="sprint.id">
+              <div class="row q-pa-sm">
+                <div class="col">
+                  <div class="h6 text-amber">
+                    {{ sprint.title }} - {{ sprint.goal }} - (&nbsp;{{ sprint.issues.length }} issues&nbsp;)
+                  </div>
+                </div>
+                <div class="col text-right">
+                  <q-btn
+                    v-if="index === 0"
+                    dark
+                    round
+                    dense
+                    color="accent"
+                    size="sm"
+                    icon="play_arrow"
+                  />
+                </div>
               </div>
               <draggable
                 :value="getSprintIssues(sprint.id)"
-                group="issues"
+                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
                 class="q-card--bordered q-pa-sm"
                 style="border: 1px dashed #606060; min-height: 67px;"
-                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)">
+                group="issues"
+              >
                 <transition-group type="transition" :name="'flip-list'" tag="div">
                   <q-card
                     v-for="issue in getSprintIssues(sprint.id)"
                     :key="issue.id"
+                    @mouseover="showIssueMenu(issue.id)"
                     dense
                     dark
                     bordered
                     class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
                     <q-card-section>
                       <span class="text-muted">#{{ issue.id }}</span> {{ issue.title }}
+                      <q-btn
+                        v-show="show_edit_button === issue.id"
+                        dense
+                        flat
+                        icon-right="more_vert"
+                        class="absolute-right"
+                        style="margin-right: 10px">
+                        <q-menu dark>
+                          <q-list dense style="min-width: 100px">
+                            <q-item
+                              clickable
+                              v-close-popup
+                              @click="editIssueModal(issue)">
+                              <q-item-section>Edit</q-item-section>
+                            </q-item>
+                            <q-item
+                              clickable
+                              v-close-popup
+                              @click="removeIssueModal(issue)">
+                              <q-item-section>Remove</q-item-section>
+                            </q-item>
+                          </q-list>
+                        </q-menu>
+                      </q-btn>
                     </q-card-section>
                   </q-card>
                 </transition-group>
@@ -34,7 +92,10 @@
             </div>
         </q-scroll-area>
       </div>
-      <h5>Backlog (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)</h5>
+      <h5 style="text-transform: uppercase">Backlog
+        <span style="font-size: 0.75em; text-transform: none">
+          (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)
+        </span></h5>
       <div class="col" v-if="backlogIssues">
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
@@ -44,17 +105,17 @@
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
               <q-card
-                v-for="item in backlogIssues"
-                :key="item.id"
-                @mouseover="showIssueMenu(item.id)"
+                v-for="issue in backlogIssues"
+                :key="issue.id"
+                @mouseover="showIssueMenu(issue.id)"
                 dense
                 dark
                 bordered
                 class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
                 <q-card-section>
-                  #{{ item.id }} {{ item.title }}
+                  #{{ issue.id }} {{ issue.title }}
                   <q-btn
-                    v-show="show_edit_button === item.id"
+                    v-show="show_edit_button === issue.id"
                     dense
                     flat
                     icon-right="more_vert"
@@ -65,13 +126,13 @@
                         <q-item
                           clickable
                           v-close-popup
-                          @click="editIssueModal(item)">
+                          @click="editIssueModal(issue)">
                           <q-item-section>Edit</q-item-section>
                         </q-item>
                         <q-item
                           clickable
                           v-close-popup
-                          @click="removeIssueModal(item)">
+                          @click="removeIssueModal(issue)">
                           <q-item-section>Remove</q-item-section>
                         </q-item>
                       </q-list>
@@ -98,7 +159,7 @@
               placeholder="Add Issue">
               <template v-slot:append>
                 <q-btn @click="createIssue"
-                       :disable="!isAddButtonEnabled"
+                       :disable="!isCreateIssueButtonEnabled"
                        dense
                        rounded
                        flat
@@ -152,7 +213,7 @@ export default {
     sprints: function () {
       return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
     },
-    isAddButtonEnabled: function () {
+    isCreateIssueButtonEnabled: function () {
       return Boolean(this.form_data.title)
     }
   },
@@ -189,6 +250,7 @@ export default {
   },
   methods: {
     createIssue () {
+      /** Create Issue, assigned to Backlog by frontend **/
       if (!this.form_data.title) return false
 
       this.form_data.workspace = this.$store.getters['current/WORKSPACE_ID']
@@ -435,6 +497,18 @@ export default {
         default:
           throw new Error('This error should not occurred')
       }
+    },
+    createSprint () {
+      /** Create quite empty sprint **/
+      const workspace = this.$store.getters['current/WORKSPACE_ID']
+      const project = this.$store.getters['current/PROJECT']
+
+      const payload = {
+        workspace,
+        project
+      }
+
+      this.$store.dispatch('issues/ADD_SPRINT_TO_PROJECT', payload)
     }
   }
 }
@@ -454,8 +528,8 @@ export default {
 
   h5 {
     font-size: 1.25rem;
-    margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
+    margin-bottom: 0;
+    margin-top: 0;
   }
 
   .card-no-padding {
