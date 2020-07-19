@@ -260,8 +260,11 @@ class IssueTypeCategory(models.Model):
         if self.is_default:
             try:
                 temp = IssueTypeCategory.objects \
-                    .filter(workspace=self.workspace) \
-                    .get(is_default=True)
+                    .filter(workspace=self.workspace,
+                            project=self.project,
+                            is_default=True) \
+                    .get()
+
                 if self != temp:
                     temp.is_default = False
                     temp.save()
@@ -315,8 +318,10 @@ class IssueStateCategory(models.Model):
         if self.is_default:
             try:
                 temp = IssueStateCategory.objects \
-                    .filter(workspace=self.workspace) \
-                    .get(is_default=True)
+                    .filter(workspace=self.workspace,
+                            project=self.project,
+                            is_default=True) \
+                    .get()
                 if self != temp:
                     temp.is_default = False
                     temp.save()
