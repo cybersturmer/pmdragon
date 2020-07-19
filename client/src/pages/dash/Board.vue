@@ -21,17 +21,12 @@
                   type="transition"
                   :name="'flip-list'"
                   tag="div">
-                  <q-card
-                    v-for="issue in issues_by_state(issue_state.id)"
-                    :key="issue.id"
-                    dense
-                    dark
-                    bordered
-                    class="my-card bg-grey-8 q-ma-sm overflow-hidden">
-                    <q-card-section>
-                      <span class="text-muted">{{ issue.title }}</span>
-                    </q-card-section>
-                  </q-card>
+                  <IssueBoard
+                  v-for="issue in issues_by_state(issue_state.id)"
+                  :key="issue.id"
+                  :id="issue.id"
+                  :title="issue.title"
+                  />
                 </transition-group>
               </draggable>
           </q-scroll-area>
@@ -44,10 +39,12 @@
 <script>
 import draggable from 'vuedraggable'
 import { unWatch } from 'src/services/util'
+import IssueBoard from 'src/components/IssueBoard.vue'
 
 export default {
   name: 'BoardView',
   components: {
+    IssueBoard,
     draggable
   },
   computed: {
