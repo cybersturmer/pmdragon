@@ -31,6 +31,7 @@ class IssueStateAdmin(admin.ModelAdmin):
     model = IssueStateCategory
     list_display = (
         'workspace',
+        'project',
         'title',
         'is_default',
         'ordering'
@@ -43,6 +44,7 @@ class IssueTypeAdmin(admin.ModelAdmin):
     model = IssueTypeCategory
     list_display = (
         'workspace',
+        'project',
         'title',
         'is_subtask',
         'is_default',
