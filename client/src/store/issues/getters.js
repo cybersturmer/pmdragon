@@ -94,9 +94,17 @@ export function BACKLOG (state, getters, rootState, rootGetters) {
 }
 
 export function BACKLOG_ISSUES (state, getters) {
-  return getters.ISSUES_BY_IDS(getters.BACKLOG.issues)
+  try {
+    return getters.ISSUES_BY_IDS(getters.BACKLOG.issues)
+  } catch (error) {
+    return []
+  }
 }
 
 export function BACKLOG_ISSUES_COUNT (state, getters, rootState, rootGetters) {
-  return getters.BACKLOG.issues.length
+  try {
+    return getters.BACKLOG.issues.length
+  } catch (error) {
+    return 0
+  }
 }
