@@ -13,6 +13,8 @@
             dense
             round
             icon="add"
+            size="md"
+            color="accent"
             class="float-right"
             @click="createSprint"
           />
@@ -48,98 +50,49 @@
                 @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
                 class="q-card--bordered q-pa-sm"
                 style="border: 1px dashed #606060; min-height: 67px;"
-                group="issues"
-              >
+                group="issues">
                 <transition-group type="transition" :name="'flip-list'" tag="div">
-                  <q-card
+                  <IssueBacklog
                     v-for="issue in getSprintIssues(sprint.id)"
                     :key="issue.id"
-                    @mouseover="showIssueMenu(issue.id)"
-                    dense
-                    dark
-                    bordered
-                    class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
-                    <q-card-section>
-                      <span class="text-muted">#{{ issue.id }}</span> {{ issue.title }}
-                      <q-btn
-                        v-show="show_edit_button === issue.id"
-                        dense
-                        flat
-                        icon-right="more_vert"
-                        class="absolute-right"
-                        style="margin-right: 10px">
-                        <q-menu dark>
-                          <q-list dense style="min-width: 100px">
-                            <q-item
-                              clickable
-                              v-close-popup
-                              @click="editIssueModal(issue)">
-                              <q-item-section>Edit</q-item-section>
-                            </q-item>
-                            <q-item
-                              clickable
-                              v-close-popup
-                              @click="removeIssueModal(issue)">
-                              <q-item-section>Remove</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </q-menu>
-                      </q-btn>
-                    </q-card-section>
-                  </q-card>
+                    :id="issue.id"
+                    :title="issue.title"
+                    :is_edit_button_visible="isIssueMenuVisible(issue.id)"
+                    v-on:edit="editIssueModal(issue)"
+                    v-on:remove="removeIssueModal(issue)"
+                  />
                 </transition-group>
               </draggable>
             </div>
         </q-scroll-area>
       </div>
-      <h5 style="text-transform: uppercase">Backlog
-        <span style="font-size: 0.75em; text-transform: none">
-          (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)
-        </span></h5>
+      <div class="row q-pa-sm">
+        <div class="col">
+          <h5 style="text-transform: uppercase">
+            Backlog
+            <span style="font-size: 0.75em; text-transform: none">
+            (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)
+            </span>
+          </h5>
+        </div>
+      </div>
       <div class="col" v-if="backlogIssues">
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
             :value="backlogIssues"
             @change="handleDraggableChanges($event, drag_types.BACKLOG, backlog.id)"
-            style="border: 1px dashed #606060; padding: 10px; min-height: 67px;"
+            style="border: 1px solid #606060; padding: 10px; min-height: 67px;"
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
-              <q-card
+              <IssueBacklog
                 v-for="issue in backlogIssues"
                 :key="issue.id"
-                @mouseover="showIssueMenu(issue.id)"
-                dense
-                dark
-                bordered
-                class="my-card bg-grey-8 text-white shadow-3 overflow-hidden no-padding">
-                <q-card-section>
-                  #{{ issue.id }} {{ issue.title }}
-                  <q-btn
-                    v-show="show_edit_button === issue.id"
-                    dense
-                    flat
-                    icon-right="more_vert"
-                    class="absolute-right"
-                    style="margin-right: 10px">
-                    <q-menu dark>
-                      <q-list dense style="min-width: 100px">
-                        <q-item
-                          clickable
-                          v-close-popup
-                          @click="editIssueModal(issue)">
-                          <q-item-section>Edit</q-item-section>
-                        </q-item>
-                        <q-item
-                          clickable
-                          v-close-popup
-                          @click="removeIssueModal(issue)">
-                          <q-item-section>Remove</q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
-                  </q-btn>
-                </q-card-section>
-              </q-card>
+                :id="issue.id"
+                :title="issue.title"
+                :is_edit_button_visible="isIssueMenuVisible(issue.id)"
+                v-on:edit="editIssueModal(issue)"
+                v-on:remove="removeIssueModal(issue)"
+              />
             </transition-group>
           </draggable>
         </q-scroll-area>
@@ -147,7 +100,8 @@
                 bordered
                 square
                 class="my-card bg-grey-8 text-white shadow-3 absolute-bottom card-no-padding"
-        style="margin: 0.3em">
+                style="margin: 0.3em"
+        >
           <q-card-section>
             <q-input
               v-model="form_data.title"
@@ -177,15 +131,16 @@
 <script>
 import draggable from 'vuedraggable'
 import { unWatch } from 'src/services/util'
+import IssueBacklog from 'src/components/IssueBacklog.vue'
 
 export default {
   name: 'BacklogView',
   components: {
-    draggable
+    draggable,
+    IssueBacklog
   },
   data () {
     return {
-      show_edit_button: Number,
       form_data: {
         workspace: null,
         title: null,
@@ -267,6 +222,9 @@ export default {
 
           console.log(error)
         })
+    },
+    isIssueMenuVisible (id) {
+      return this.show_edit_button === id
     },
     showIssueMenu (id) {
       this.show_edit_button = id
