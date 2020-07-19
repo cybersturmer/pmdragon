@@ -17,6 +17,7 @@ class PersonRegistrationRequestValidManager(models.Manager):
     """
     Get not expired Person registration requests manager
     """
+
     def get_queryset(self):
         return super(PersonRegistrationRequestValidManager, self). \
             get_queryset(). \
@@ -568,6 +569,21 @@ class Sprint(models.Model):
 
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
             raise forms.ValidationError(_('Date of start should be earlier than date of end'))
+
+        """
+        Define default state for issue in current workspace and project """
+        default_issue_state = IssueStateCategory \
+            .objects \
+            .filter(workspace=self.workspace,
+                    project=self.project,
+                    is_default=True)
+
+        """
+        Iterate over all issues to replace None data to default one """
+        for _issue in self.issues.all():
+            if _issue.state_category is None:
+                _issue.state_category = default_issue_state
+                _issue.save()
 
         if self.is_started:
             try:
