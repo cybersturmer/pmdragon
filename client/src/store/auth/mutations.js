@@ -21,7 +21,7 @@ function _parseTokenDetails (token) {
 
 export function SET_ACCESS_TOKEN (state, payload) {
   const tokenDetails = _parseTokenDetails(payload)
-  const expiredAt = new Date(tokenDetails.exp * 1000)
+  const expiredAt = new Date((tokenDetails.exp - 60) * 1000)
 
   const access = {
     data: payload,
@@ -37,7 +37,7 @@ export function SET_ACCESS_TOKEN (state, payload) {
 
 export function SET_REFRESH_TOKEN (state, payload) {
   const tokenDetails = _parseTokenDetails(payload)
-  const expiredAt = new Date(tokenDetails.exp * 1000)
+  const expiredAt = new Date((tokenDetails.exp - 60) * 1000)
 
   const refresh = {
     data: payload,
