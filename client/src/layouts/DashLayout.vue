@@ -105,17 +105,7 @@ export default {
 
   data () {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Backlog',
-          icon: 'rule'
-        },
-        {
-          title: 'Board',
-          icon: 'dashboard'
-        }
-      ]
+      leftDrawerOpen: false
     }
   },
   methods: {
