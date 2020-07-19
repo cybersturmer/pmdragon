@@ -9,30 +9,32 @@
   >
     <q-card-section>
       # {{ id }} {{ title }}
-      <q-btn
-        v-show="is_edit_button_visible"
-        dense
-        flat
-        icon-right="more_vert"
-        class="absolute-right"
-        style="margin-right: 10px">
-        <q-menu dark>
-          <q-list dense style="min-width: 100px">
-            <q-item
-              clickable
-              v-close-popup
-              @click="editIssueModal">
-              <q-item-section>Edit</q-item-section>
-            </q-item>
-            <q-item
-              clickable
-              v-close-popup
-              @click="removeIssueModal">
-              <q-item-section>Remove</q-item-section>
-            </q-item>
-          </q-list>
-        </q-menu>
-      </q-btn>
+      <transition name="fade">
+        <q-btn
+          v-show="is_edit_button_visible"
+          dense
+          flat
+          icon-right="more_vert"
+          class="absolute-right"
+          style="margin-right: 10px">
+          <q-menu dark>
+            <q-list dense style="min-width: 100px">
+              <q-item
+                clickable
+                v-close-popup
+                @click="editIssueModal">
+                <q-item-section>Edit</q-item-section>
+              </q-item>
+              <q-item
+                clickable
+                v-close-popup
+                @click="removeIssueModal">
+                <q-item-section>Remove</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+      </transition>
     </q-card-section>
   </q-card>
 </template>
@@ -65,3 +67,11 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .25s;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+</style>
