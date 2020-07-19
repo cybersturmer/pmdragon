@@ -63,12 +63,6 @@ export function ADD_ISSUE_TO_BACKLOG (state, payload) {
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
-export function ADD_SPRINT_TO_PROJECT (state, payload) {
-  state.sprints.push(payload)
-
-  LocalStorage.set('issues.sprints', state.sprints)
-}
-
 export function EDIT_ISSUE (state, payload) {
   /**
    * Payload should contain at least workspace, project, id, field
@@ -105,8 +99,14 @@ export function UPDATE_ISSUES_ORDERING (state, payload) {
   LocalStorage.set('issues.issues', state.issues)
 }
 
+export function ADD_SPRINT_TO_PROJECT (state, payload) {
+  state.sprints.push(payload)
+
+  LocalStorage.set('issues.sprints', state.sprints)
+}
+
 export function UPDATE_SPRINT_ISSUES (state, composite) {
-  /** Just update issues inside sprintfind
+  /** Just update issues inside sprint
    *  We use composite data for mutation **/
   const sprintIndex = findSprintIndexById(state, composite.id)
   state.sprints[sprintIndex].issues = composite.issues
@@ -144,9 +144,23 @@ export function UPDATE_ISSUE_STATES (state, payload) {
 }
 
 export function DELETE_ISSUE (state, payload) {
+  const issueIndex = state.issues.findIndex((el, index, array) => {
+    return el.id === payload.id
+  })
+
+  state.issues.splice(issueIndex, 1)
+  LocalStorage.set('issues.issues', state.backlogs)
+}
+
+export function UNBIND_ISSUE_FROM_BACKLOG (state, payload) {
   const indexes = findIssueIndexesInBacklog(state, payload.project, payload.id)
   state.backlogs[indexes.backlogIndex].issues.splice(indexes.issuesIndex, 1)
   LocalStorage.set('issues.backlogs', state.backlogs)
+}
+
+export function UNBIND_ISSUE_FROM_SPRINT (state, payload) {
+  const indexes = state.sprints.filter((sprint) => payload.id in sprint.issues)
+  console.log(indexes, 'INDEXES')
 }
 
 export function RESET (state) {
