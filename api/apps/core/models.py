@@ -1,5 +1,5 @@
-from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Max, F
@@ -209,7 +209,7 @@ class Project(models.Model):
 
 def is_project_in_workspace(workspace: Workspace, project: Project):
     if workspace != project.workspace:
-        raise forms.ValidationError(_('Project should belong to given Workspace'))
+        raise ValidationError(_('Project should belong to given Workspace'))
 
 
 class IssueTypeCategory(models.Model):
@@ -562,28 +562,38 @@ class Sprint(models.Model):
 
     __repr__ = __str__
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+
+        """
+        Define default state for issue in current workspace and project """
+        try:
+            default_issue_state = IssueStateCategory \
+                .objects \
+                .filter(workspace=self.workspace,
+                        project=self.project,
+                        is_default=True).get()
+
+            """
+            Iterate over all issues to replace None data to default one """
+            for _issue in self.issues.all():
+                if _issue.state_category is None:
+                    _issue.state_category = default_issue_state
+                    _issue.save()
+
+        except IssueStateCategory.DoesNotExist:
+            pass
+
+        super(Sprint, self).save(force_insert, force_update, using,
+                                 update_fields)
+
     def clean(self):
         super(Sprint, self).clean()
 
         is_project_in_workspace(self.workspace, self.project)
 
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
-            raise forms.ValidationError(_('Date of start should be earlier than date of end'))
-
-        """
-        Define default state for issue in current workspace and project """
-        default_issue_state = IssueStateCategory \
-            .objects \
-            .filter(workspace=self.workspace,
-                    project=self.project,
-                    is_default=True)
-
-        """
-        Iterate over all issues to replace None data to default one """
-        for _issue in self.issues.all():
-            if _issue.state_category is None:
-                _issue.state_category = default_issue_state
-                _issue.save()
+            raise ValidationError(_('Date of start should be earlier than date of end'))
 
         if self.is_started:
             try:
@@ -597,8 +607,8 @@ class Sprint(models.Model):
                     .get()
 
                 if self != temp:
-                    raise forms.ValidationError(_('Another sprint was already started. '
-                                                  'Complete it before start the new one'))
+                    raise ValidationError(_('Another sprint was already started. '
+                                            'Complete it before start the new one'))
 
             except IssueTypeCategory.DoesNotExist:
                 pass
@@ -608,4 +618,4 @@ class Sprint(models.Model):
                 Started sprint should contain information about start and finish dates
                 Its not necessary for draft of sprint (Not started yet)
                 """
-                raise forms.ValidationError(_('Start date and End date are required for started sprint'))
+                raise ValidationError(_('Start date and End date are required for started sprint'))
