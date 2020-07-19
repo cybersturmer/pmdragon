@@ -6,15 +6,16 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "==3.0.7"
+django = "==3.0.8"
 djangorestframework = "==3.11.0"
 djangorestframework-simplejwt = "==4.4.0"
 django-cors-headers = "==3.3.0"
 pyyaml = "==5.3.1"
 uritemplate = "==3.0.1"
-pillow = "==7.1.2"
+pillow = "==7.2.0"
 uvicorn = "==0.11.5"
 psycopg2 = "==2.8.5"
+certifi = "==2020.6.20"
 
 [requires]
 python_version = "3.8"
