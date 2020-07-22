@@ -491,21 +491,21 @@ class ProjectBacklog(models.Model):
 
         for _issue in self.issues.all():
             backlogs_with_current_issue = ProjectBacklog \
-                .objects \
-                .filter(issues__in=[_issue]) \
+                .objects\
+                .filter(issues__in=[_issue])\
+                .exclude(pk=self.pk)\
                 .all()
 
-            for backlog in backlogs_with_current_issue:
-                if self != backlog:
-                    backlog.issues.remove(_issue)
+            for _backlog in backlogs_with_current_issue:
+                _backlog.issues.remove(_issue)
 
             sprint_with_current_issue = Sprint \
                 .objects \
                 .filter(issues__in=[_issue]) \
                 .all()
 
-            for sprint in sprint_with_current_issue:
-                sprint.issues.remove(_issue)
+            for _sprint in sprint_with_current_issue:
+                _sprint.issues.remove(_issue)
 
         super(ProjectBacklog, self).save(force_insert,
                                          force_update,
@@ -612,11 +612,11 @@ class Sprint(models.Model):
                 sprints_with_current_issue = Sprint\
                     .objects\
                     .filter(issues__in=[_issue])\
+                    .exclude(pk=self.pk)\
                     .all()
 
                 for _sprint in sprints_with_current_issue:
-                    if _sprint != self:
-                        _sprint.issues.remove(_issue)
+                    _sprint.issues.remove(_issue)
 
                 backlogs_with_current_issue = ProjectBacklog\
                     .objects\
