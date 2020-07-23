@@ -486,32 +486,6 @@ class ProjectBacklog(models.Model):
         super(ProjectBacklog, self).clean()
         is_project_in_workspace(self.workspace, self.project)
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-
-        for _issue in self.issues.all():
-            backlogs_with_current_issue = ProjectBacklog \
-                .objects\
-                .filter(issues__in=[_issue])\
-                .exclude(pk=self.pk)\
-                .all()
-
-            for _backlog in backlogs_with_current_issue:
-                _backlog.issues.remove(_issue)
-
-            sprint_with_current_issue = Sprint \
-                .objects \
-                .filter(issues__in=[_issue]) \
-                .all()
-
-            for _sprint in sprint_with_current_issue:
-                _sprint.issues.remove(_issue)
-
-        super(ProjectBacklog, self).save(force_insert,
-                                         force_update,
-                                         using,
-                                         update_fields)
-
 
 class SprintDuration(models.Model):
     workspace = models.ForeignKey(Workspace,
@@ -606,26 +580,6 @@ class Sprint(models.Model):
                         is_default=True).get()
 
             for _issue in self.issues.all():
-                """
-                Its incorrect to have the same issue in others Backlogs
-                or Sprints, so we have to delete all of them first """
-                sprints_with_current_issue = Sprint\
-                    .objects\
-                    .filter(issues__in=[_issue])\
-                    .exclude(pk=self.pk)\
-                    .all()
-
-                for _sprint in sprints_with_current_issue:
-                    _sprint.issues.remove(_issue)
-
-                backlogs_with_current_issue = ProjectBacklog\
-                    .objects\
-                    .filter(issues__in=[_issue])\
-                    .all()
-
-                for _backlog in backlogs_with_current_issue:
-                    _backlog.issues.remove(_issue)
-
                 """
                 Iterate over all issues to replace None data to default one """
                 if _issue.state_category is None:
