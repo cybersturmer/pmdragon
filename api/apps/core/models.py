@@ -615,7 +615,7 @@ class Sprint(models.Model):
                     raise ValidationError(_('Another sprint was already started. '
                                             'Complete it before start the new one'))
 
-            except IssueTypeCategory.DoesNotExist:
+            except Sprint.DoesNotExist:
                 pass
 
             if None in [self.started_at, self.finished_at]:
