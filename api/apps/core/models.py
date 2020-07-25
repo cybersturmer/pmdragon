@@ -570,9 +570,12 @@ class Sprint(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
 
-        """
-        Define default state for issue in current workspace and project """
+        super(Sprint, self).save(force_insert, force_update, using,
+                                 update_fields)
+
         try:
+            """
+            Define default state for issue in current workspace and project """
             default_issue_state = IssueStateCategory \
                 .objects \
                 .filter(workspace=self.workspace,
@@ -588,9 +591,6 @@ class Sprint(models.Model):
 
         except IssueStateCategory.DoesNotExist:
             pass
-
-        super(Sprint, self).save(force_insert, force_update, using,
-                                 update_fields)
 
     def clean(self):
         super(Sprint, self).clean()
