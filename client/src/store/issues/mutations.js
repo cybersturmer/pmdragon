@@ -113,6 +113,21 @@ export function UPDATE_SPRINT_ISSUES (state, composite) {
   LocalStorage.set('issues.sprints', state.sprints)
 }
 
+export function START_SPRINT (state, sprintId) {
+  /** Start sprint without checking - was it started before or no **/
+  const sprintIndex = findSprintIndexById(state, sprintId)
+  state.sprints[sprintIndex].is_started = true
+  LocalStorage.set('issues.sprints', state.sprints)
+}
+
+export function COMPLETE_SPRINT (state, sprintId) {
+  /** Compete sprint without checking - was it started
+   * or completed before **/
+  const sprintIndex = findSprintIndexById(sprintId)
+  state.sprints[sprintIndex].is_completed = true
+  LocalStorage.set('issues.sprints', state.sprints)
+}
+
 export function UPDATE_BACKLOG_ISSUES (state, composite) {
   /** Just update issues inside of Backlog
    * We use composite data for mutation **/

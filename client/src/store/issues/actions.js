@@ -146,12 +146,40 @@ export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
 export async function ADD_SPRINT_TO_PROJECT ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).post(
-      'core/sprints/',
+      '/core/sprints/',
       payload
     )
 
     HandleResponse.compare(201, response.status)
     commit('ADD_SPRINT_TO_PROJECT', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function START_SPRINT ({ commit }, sprintId) {
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/sprints/${sprintId}/`,
+      { is_started: true }
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('START_SPRINT', sprintId)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function COMPLETE_SPRINT ({ commit }, sprintId) {
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/sprints/${sprintId}/`,
+      { is_completed: true }
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('COMPLETE_SPRINT', sprintId)
   } catch (error) {
     throw new ErrorWrapper(error)
   }
