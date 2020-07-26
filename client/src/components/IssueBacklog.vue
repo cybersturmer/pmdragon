@@ -14,7 +14,7 @@
           v-show="is_edit_button_visible"
           dense
           flat
-          icon-right="more_vert"
+          icon-right="more_horiz"
           class="absolute-right"
           style="margin-right: 10px">
           <q-menu dark>
