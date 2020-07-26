@@ -1,7 +1,6 @@
 <template>
   <q-page class="flex q-layout-padding">
     <div class="full-width row items-stretch">
-
       <div
         v-for="issue_state in issue_states"
         :key="issue_state.id"
@@ -28,7 +27,7 @@
                 tag="div"
                 class="fit full-height q-pa-sm overflow-hidden-y"
                 style="min-height: calc(100vh - 160px);
-                       border: 1px dashed #2b2b2b">
+                       border: 1px dashed var(--q-color-primary)">
 
                 <IssueBoard
                   v-for="issue in issuesByState(issue_state.id)"
