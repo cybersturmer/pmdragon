@@ -27,7 +27,7 @@
                 tag="div"
                 class="fit full-height q-pa-sm overflow-hidden-y"
                 style="min-height: calc(100vh - 160px);
-                       border: 1px dashed var(--q-color-primary)">
+                       border: 1px dashed var(--q-color-accent)">
 
                 <IssueBoard
                   v-for="issue in issuesByState(issue_state.id)"
