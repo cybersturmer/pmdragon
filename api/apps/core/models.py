@@ -408,9 +408,13 @@ class Issue(models.Model):
             If default issue state was set for Workspace, we set it as a default
             """
             try:
-                self.state_category = IssueStateCategory.objects \
+                default_state = IssueStateCategory.objects \
                     .filter(workspace=self.workspace,
+                            project=self.project,
                             is_default=True).get()
+
+                self.state_category = default_state
+
             except IssueStateCategory.DoesNotExist:
                 pass
 
