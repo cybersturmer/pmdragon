@@ -122,7 +122,8 @@ export function START_SPRINT (state, sprintId) {
 
 export function COMPLETE_SPRINT (state, sprintId) {
   /** Compete sprint without checking - was it started
-   * or completed before **/
+   * or completed before
+   * **/
   const sprintIndex = findSprintIndexById(sprintId)
   state.sprints[sprintIndex].is_completed = true
   LocalStorage.set('issues.sprints', state.sprints)
