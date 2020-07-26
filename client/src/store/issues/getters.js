@@ -38,7 +38,11 @@ export function SPRINT_STARTED_BY_CURRENT_PROJECT (state, getters) {
 }
 
 export function SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES (state, getters) {
-  return getters.ISSUES_BY_IDS(getters.SPRINT_STARTED_BY_CURRENT_PROJECT.issues)
+  try {
+    return getters.ISSUES_BY_IDS(getters.SPRINT_STARTED_BY_CURRENT_PROJECT.issues)
+  } catch (error) {
+    return []
+  }
 }
 
 export function PROJECT_SPRINTS (state, getters, rootState, rootGetters) {
