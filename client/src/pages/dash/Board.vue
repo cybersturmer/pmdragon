@@ -1,35 +1,47 @@
 <template>
   <q-page class="flex q-layout-padding">
-    <div class="row items-stretch full-width">
+    <div class="full-width row items-stretch">
+
       <div
         v-for="issue_state in issue_states"
         :key="issue_state.id"
         class="col bg-primary full-height q-ma-sm text-center overflow-hidden">
+
         <div class="q-pa-sm">
           {{ issue_state.title | capitalize }}
         </div>
-        <div class="bg-secondary full-height">
-          <q-scroll-area class="full-height overflow-hidden">
-              <draggable
-              :value="issues_by_state(issue_state.id)"
+
+        <!--  Block of main state info  -->
+        <div class="full-height bg-secondary"
+             style="border-left: 1px solid #606060;
+              border-right: 1px solid #606060">
+
+          <q-scroll-area class="fit">
+
+            <draggable
+              :value="issuesByState(issue_state.id)"
               @change="handleIssueStateChanging($event, issue_state.id)"
-              class="q-card--bordered q-pa-sm"
-              style="border: 1px solid #606060; min-height: 200px"
-              group="issues"
-              >
-                <transition-group
-                  type="transition"
-                  :name="'flip-list'"
-                  tag="div">
-                  <IssueBoard
-                  v-for="issue in issues_by_state(issue_state.id)"
+              class="q-pa-sm full-height overflow-hidden"
+              group="issues">
+
+              <transition-group
+                type="transition"
+                :name="'flip-list'"
+                tag="div"
+                class="fit">
+
+                <IssueBoard
+                  v-for="issue in issuesByState(issue_state.id)"
                   :key="issue.id"
                   :id="issue.id"
-                  :title="issue.title"
-                  />
-                </transition-group>
-              </draggable>
+                  :title="issue.title"/>
+
+              </transition-group>
+
+            </draggable>
+
           </q-scroll-area>
+
         </div>
       </div>
     </div>
@@ -59,7 +71,7 @@ export default {
     }
   },
   methods: {
-    issues_by_state: function (stateId) {
+    issuesByState: function (stateId) {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES']
         .filter((issue) => issue.state_category === stateId)
     },
@@ -70,10 +82,39 @@ export default {
 
       this.$store.dispatch('issues/UPDATE_ISSUE_STATE', updatedElement)
     },
+    handleCommonMoved: function (issuesList, event) {
+      /** Handle moving - common function **/
+
+      const immutableList = unWatch(issuesList)
+
+      immutableList
+        .splice(event.moved.newIndex, 0, immutableList
+          .splice(event.moved.oldIndex, 1)[0])
+
+      const ordering = []
+      immutableList.forEach((issue, index) => {
+        ordering.push(
+          {
+            id: issue.id,
+            ordering: index
+          }
+        )
+      })
+
+      return { list: immutableList, ordering }
+    },
+    handleStateMoved (event, stateId) {
+      /** Handling moving inside of state **/
+      const issuesList = this.issuesByState(stateId)
+      const handled = this.handleCommonMoved(issuesList, event)
+
+      this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
+    },
     handleIssueStateChanging: function (event, issueStateId) {
       /** Handling moving inside of states **/
       const isAdded = ('added' in event)
       const isRemoved = ('removed' in event)
+      const isMoved = ('moved' in event)
 
       switch (true) {
         case isAdded:
@@ -81,12 +122,12 @@ export default {
           break
         case isRemoved:
           break
+        case isMoved:
+          this.handleStateMoved(event, issueStateId)
+          break
         default:
           throw new Error('This error should not occurred')
       }
-
-      console.log(event, 'EVENT')
-      console.log(issueStateId, 'issueStateId')
     }
   },
   filters: {
