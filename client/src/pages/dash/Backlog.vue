@@ -51,6 +51,14 @@
                     label="Complete sprint"
                     @click="completeSprint(sprint.id)"
                   />
+                  &nbsp;
+                  <q-btn
+                    dark
+                    outline
+                    size="sm"
+                    color="accent"
+                    icon="more_horiz"
+                  />
                 </div>
               </div>
               <draggable
