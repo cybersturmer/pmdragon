@@ -66,7 +66,7 @@ export default {
     }
   }
 }
-</script>
+</script>xha
 <style lang="scss">
   .fade-enter-active, .fade-leave-active {
     transition: opacity .25s;

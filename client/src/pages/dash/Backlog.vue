@@ -2,19 +2,18 @@
   <q-page class="flex q-layout-padding">
     <div class="column full-width">
       <div class="row q-pa-sm">
-        <div class="col">
+        <div class="col-8">
           <h5 style="text-transform: uppercase">
             Sprints
           </h5>
         </div>
-        <div class="col">
+        <div class="col-4">
           <q-btn
             dark
-            dense
-            round
-            icon="add"
+            outline
             size="md"
             color="accent"
+            label="Create Sprint"
             class="float-right"
             @click="createSprint"
           />
@@ -28,38 +27,46 @@
               v-for="(sprint, index) in sprints"
               :key="sprint.id">
               <div class="row q-pa-sm">
-                <div class="col">
+                <div class="col-8">
                   <div class="h6 text-amber">
                     {{ sprint.title }} - {{ sprint.goal }} - (&nbsp;{{ sprint.issues.length }} issues&nbsp;)
                   </div>
                 </div>
-                <div class="col text-right">
+                <div class="col-4 text-right">
                   <q-btn
-                    v-if="index === 0"
+                    v-if="index === 0 && sprint.is_started === false"
                     dark
-                    round
-                    dense
+                    outline
                     color="accent"
                     size="sm"
-                    icon="play_arrow"
+                    label="Start sprint"
+                    @click="startSprint(sprint.id)"
+                  />
+                  <q-btn
+                    v-if="index === 0 && sprint.is_started === true"
+                    dark
+                    outline
+                    color="accent"
+                    size="sm"
+                    label="Complete sprint"
+                    @click="completeSprint(sprint.id)"
                   />
                 </div>
               </div>
               <draggable
-                :value="getSprintIssues(sprint.id)"
-                @change="handleDraggableChanges($event, drag_types.SPRINT, sprint.id)"
+                :value="sprintIssues(sprint.id)"
+                @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
                 class="q-card--bordered q-pa-sm"
                 style="border: 1px dashed #606060; min-height: 67px;"
                 group="issues">
                 <transition-group type="transition" :name="'flip-list'" tag="div">
                   <IssueBacklog
-                    v-for="issue in getSprintIssues(sprint.id)"
+                    v-for="issue in sprintIssues(sprint.id)"
                     :key="issue.id"
                     :id="issue.id"
                     :title="issue.title"
-                    :is_edit_button_visible="isIssueMenuVisible(issue.id)"
-                    v-on:edit="editIssueModal(issue)"
-                    v-on:remove="removeIssueModal(issue)"
+                    v-on:edit="editIssueDialog(issue)"
+                    v-on:remove="removeIssueDialog(issue)"
                   />
                 </transition-group>
               </draggable>
@@ -80,7 +87,7 @@
         <q-scroll-area style="height: calc(100% - 35px)">
           <draggable
             :value="backlogIssues"
-            @change="handleDraggableChanges($event, drag_types.BACKLOG, backlog.id)"
+            @change="handleDraggableEvent($event, drag_types.BACKLOG, backlog.id)"
             style="border: 1px solid #606060; padding: 10px; min-height: 67px;"
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
@@ -89,9 +96,8 @@
                 :key="issue.id"
                 :id="issue.id"
                 :title="issue.title"
-                :is_edit_button_visible="isIssueMenuVisible(issue.id)"
-                v-on:edit="editIssueModal(issue)"
-                v-on:remove="removeIssueModal(issue)"
+                v-on:edit="editIssueDialog(issue)"
+                v-on:remove="removeIssueDialog(issue)"
               />
             </transition-group>
           </draggable>
@@ -157,15 +163,19 @@ export default {
   },
   computed: {
     backlog: function () {
+      /** Getting current backlog by chosen workspace and project **/
       return this.$store.getters['issues/BACKLOG']
     },
     backlogIssues: function () {
+      /** Getting current backlog issues **/
       return this.$store.getters['issues/BACKLOG_ISSUES']
     },
     backlogIssuesLength: function () {
+      /** Getting issues count **/
       return this.$store.getters['issues/BACKLOG_ISSUES_COUNT']
     },
     sprints: function () {
+      /** Getting all sprints **/
       return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
     },
     isCreateIssueButtonEnabled: function () {
@@ -226,10 +236,7 @@ export default {
     isIssueMenuVisible (id) {
       return this.show_edit_button === id
     },
-    showIssueMenu (id) {
-      this.show_edit_button = id
-    },
-    editIssueModal (item) {
+    editIssueDialog (item) {
       this.$q.dialog({
         dark: true,
         title: 'Issue information',
@@ -259,7 +266,7 @@ export default {
             })
         })
     },
-    removeIssueModal (item) {
+    removeIssueDialog (item) {
       this.$q.dialog({
         dark: true,
         title: 'Confirmation',
@@ -278,10 +285,10 @@ export default {
           })
       })
     },
-    getSprintIssues (sprintId) {
+    sprintIssues (sprintId) {
       return this.$store.getters['issues/SPRINT_BY_ID_ISSUES'](sprintId)
     },
-    handleMoving (issuesList, event) {
+    handleCommonMoved (issuesList, event) {
       /** Handle moving - doesnt matter is it sprint or backlog **/
 
       const immutableList = unWatch(issuesList)
@@ -302,11 +309,11 @@ export default {
 
       return { list: immutableList, ordering }
     },
-    handleSprintMoving (event, sprintId) {
+    handleSprintIssueMoved (event, sprintId) {
       /** Handling moving inside of sprint **/
       const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
-      const handled = this.handleMoving(currentSprintIssues, event)
+      const handled = this.handleCommonMoved(currentSprintIssues, event)
 
       this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         .then(() => {
@@ -316,11 +323,11 @@ export default {
           })
         })
     },
-    handleBacklogMoving (event, backlogId) {
+    handleBacklogIssueMoved (event, backlogId) {
       /** Handling moving inside of backlog **/
       const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      const handled = this.handleMoving(currentBacklogIssues, event)
+      const handled = this.handleCommonMoved(currentBacklogIssues, event)
 
       this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         .then(() => {
@@ -330,7 +337,7 @@ export default {
           })
         })
     },
-    handleAdding (issuesList, event) {
+    handleCommonAdded (issuesList, event) {
       const immutableList = unWatch(issuesList)
 
       immutableList.splice(event.added.newIndex, 0, event.added.element.id)
@@ -347,11 +354,11 @@ export default {
 
       return { list: immutableList, ordering }
     },
-    handleSprintAdding (event, sprintId) {
+    handleSprintIssueAdded (event, sprintId) {
       /** Handling adding inside of Sprint **/
       const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
-      const handled = this.handleAdding(currentSprintIssues, event)
+      const handled = this.handleCommonAdded(currentSprintIssues, event)
       const compositeSprintIdsList = {
         id: sprintId,
         issues: handled.list
@@ -362,11 +369,11 @@ export default {
           this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         })
     },
-    handleBacklogAdding (event, backlogId) {
+    handleBacklogIssueAdded (event, backlogId) {
       /** Handling adding to Backlog **/
       const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      const handled = this.handleAdding(currentBacklogIssues, event)
+      const handled = this.handleCommonAdded(currentBacklogIssues, event)
       const compositeBacklogIdsList = {
         id: backlogId,
         issues: handled.list
@@ -376,7 +383,7 @@ export default {
           this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         })
     },
-    handleRemoving (issuesList, event) {
+    handleCommonRemoved (issuesList, event) {
       const list = unWatch(issuesList)
 
       list.splice(event.removed.oldIndex, 1)
@@ -393,11 +400,11 @@ export default {
 
       return { list, ordering }
     },
-    handleSprintRemoving (event, sprintId) {
+    handleSprintIssueRemoved (event, sprintId) {
       /** Handling removing from Sprint **/
       const currentSprintIssues = this.$store.getters['issues/SPRINT_BY_ID'](sprintId).issues
 
-      const handled = this.handleRemoving(currentSprintIssues, event)
+      const handled = this.handleCommonRemoved(currentSprintIssues, event)
       const compositeSprintIds = {
         id: sprintId,
         issues: handled.list
@@ -408,11 +415,11 @@ export default {
           this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         })
     },
-    handleBacklogRemoving (event, backlogId) {
+    handleBacklogIssueRemoved (event, backlogId) {
       /** Handling removing from Backlog **/
       const currentBacklogIssues = this.$store.getters['issues/BACKLOG'].issues
 
-      const handled = this.handleRemoving(currentBacklogIssues, event)
+      const handled = this.handleCommonRemoved(currentBacklogIssues, event)
       const compositeBacklogIds = {
         id: backlogId,
         issues: handled.list
@@ -423,7 +430,7 @@ export default {
           this.$store.dispatch('issues/UPDATE_ISSUES_ORDERING', handled.ordering)
         })
     },
-    handleDraggableChanges (event, dragType, dragId) {
+    handleDraggableEvent (event, dragType, dragId) {
       const isSprintMoved = ('moved' in event) && (dragType === this.drag_types.SPRINT)
       const isBacklogMoved = ('moved' in event) && (dragType === this.drag_types.BACKLOG)
 
@@ -435,22 +442,22 @@ export default {
 
       switch (true) {
         case isSprintMoved:
-          this.handleSprintMoving(event, dragId)
+          this.handleSprintIssueMoved(event, dragId)
           break
         case isBacklogMoved:
-          this.handleBacklogMoving(event, dragId)
+          this.handleBacklogIssueMoved(event, dragId)
           break
         case isSprintAdded:
-          this.handleSprintAdding(event, dragId)
+          this.handleSprintIssueAdded(event, dragId)
           break
         case isBacklogAdded:
-          this.handleBacklogAdding(event, dragId)
+          this.handleBacklogIssueAdded(event, dragId)
           break
         case isSprintRemoved:
-          this.handleSprintRemoving(event, dragId)
+          this.handleSprintIssueRemoved(event, dragId)
           break
         case isBacklogRemoved:
-          this.handleBacklogRemoving(event, dragId)
+          this.handleBacklogIssueRemoved(event, dragId)
           break
         default:
           throw new Error('This error should not occurred')
@@ -467,6 +474,20 @@ export default {
       }
 
       this.$store.dispatch('issues/ADD_SPRINT_TO_PROJECT', payload)
+    },
+    startSprint (sprintId) {
+      /** Start not empty sprint **/
+      this.$store.dispatch('issues/START_SPRINT', sprintId)
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    completeSprint (sprintId) {
+      /** Complete started sprint **/
+      this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }

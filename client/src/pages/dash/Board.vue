@@ -12,23 +12,23 @@
         </div>
 
         <!--  Block of main state info  -->
-        <div class="full-height bg-secondary"
-             style="border-left: 1px solid #606060;
-              border-right: 1px solid #606060">
+        <div class="bg-secondary full-height">
 
-          <q-scroll-area class="fit">
+          <q-scroll-area class="fit full-height">
 
             <draggable
               :value="issuesByState(issue_state.id)"
               @change="handleIssueStateChanging($event, issue_state.id)"
-              class="q-pa-sm full-height overflow-hidden"
+              class="full-height overflow-hidden-y"
               group="issues">
 
               <transition-group
                 type="transition"
                 :name="'flip-list'"
                 tag="div"
-                class="fit">
+                class="fit full-height q-pa-sm overflow-hidden-y"
+                style="min-height: calc(100vh - 160px);
+                       border: 1px dashed #2b2b2b">
 
                 <IssueBoard
                   v-for="issue in issuesByState(issue_state.id)"
