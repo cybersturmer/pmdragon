@@ -17,19 +17,20 @@
           icon-right="more_horiz"
           class="absolute-right"
           style="margin-right: 10px">
-          <q-menu dark>
-            <q-list dense style="min-width: 100px">
+          <q-menu content-class="bg-accent text-white" fit anchor="top left" self="top right" auto-close>
+            <q-list dense style="min-width: 150px">
               <q-item
                 clickable
                 v-close-popup
                 @click="editIssueModal">
-                <q-item-section>Edit</q-item-section>
+                <q-item-section>Edit Issue</q-item-section>
               </q-item>
+              <q-separator />
               <q-item
                 clickable
                 v-close-popup
                 @click="removeIssueModal">
-                <q-item-section>Remove</q-item-section>
+                <q-item-section>Remove Issue</q-item-section>
               </q-item>
             </q-list>
           </q-menu>
