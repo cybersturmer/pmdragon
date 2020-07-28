@@ -33,23 +33,10 @@
                   </div>
                 </div>
                 <div class="col-4 text-right">
-                  <q-btn
-                    v-if="index === 0 && sprint.is_started === false"
-                    dark
-                    outline
-                    color="accent"
-                    size="sm"
-                    label="Start sprint"
-                    @click="startSprint(sprint.id)"
-                  />
-                  <q-btn
-                    v-if="index === 0 && sprint.is_started === true"
-                    dark
-                    outline
-                    color="accent"
-                    size="sm"
-                    label="Complete sprint"
-                    @click="completeSprint(sprint.id)"
+                  <StartCompleteSprintButton
+                    v-if="index === 0"
+                    :sprint_id="sprint.id"
+                    :is_started="sprint.is_started"
                   />
                   &nbsp;
                   <q-btn
@@ -146,10 +133,12 @@
 import draggable from 'vuedraggable'
 import { unWatch } from 'src/services/util'
 import IssueBacklog from 'src/components/IssueBacklog.vue'
+import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
 
 export default {
   name: 'BacklogView',
   components: {
+    StartCompleteSprintButton,
     draggable,
     IssueBacklog
   },
