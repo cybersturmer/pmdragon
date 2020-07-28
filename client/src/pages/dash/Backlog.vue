@@ -38,14 +38,8 @@
                     :sprint_id="sprint.id"
                     :is_started="sprint.is_started"
                   />
-                  &nbsp;
-                  <q-btn
-                    dark
-                    outline
-                    size="sm"
-                    color="accent"
-                    icon="more_horiz"
-                  />
+                  <SprintMorePopupMenu
+                    :sprint_id="sprint.id"/>
                 </div>
               </div>
               <draggable
@@ -134,10 +128,12 @@ import draggable from 'vuedraggable'
 import { unWatch } from 'src/services/util'
 import IssueBacklog from 'src/components/IssueBacklog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
+import SprintMorePopupMenu from 'src/components/SprintMorePopupMenu.vue'
 
 export default {
   name: 'BacklogView',
   components: {
+    SprintMorePopupMenu,
     StartCompleteSprintButton,
     draggable,
     IssueBacklog
