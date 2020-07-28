@@ -78,9 +78,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .q-btn {
-    text-transform: none;
-  }
-</style>

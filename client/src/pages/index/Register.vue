@@ -50,8 +50,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-  .q-btn {
-    text-transform: none;
-  }
-</style>
