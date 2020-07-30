@@ -625,6 +625,21 @@ class Sprint(models.Model):
             if None in [self.started_at, self.finished_at]:
                 """
                 Started sprint should contain information about start and finish dates
-                Its not necessary for draft of sprint (Not started yet)
-                """
+                Its not necessary for draft of sprint (Not started yet) """
                 raise ValidationError(_('Start date and End date are required for started sprint'))
+
+    def delete(self, using=None, keep_parents=False):
+        """
+        After deleting sprint we have to send it to backlog
+        in same workspace and project. """
+
+        backlog = ProjectBacklog\
+            .objects\
+            .filter(workspace=self.workspace,
+                    project=self.project)\
+            .get()
+
+        for _issue in self.issues.all():
+            backlog.issues.add(_issue)
+
+        super(Sprint, self).delete(using, keep_parents)
