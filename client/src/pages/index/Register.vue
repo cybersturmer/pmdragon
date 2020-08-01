@@ -30,8 +30,7 @@
                   flat
                   size="md"
                   text-color="black"
-                  label="Already a member?"
-                  style="margin-left: 30px"/>
+                  label="Already a member?"/>
               </template>
             </router-link>
         </q-card-section>
