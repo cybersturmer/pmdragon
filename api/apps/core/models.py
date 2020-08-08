@@ -202,7 +202,7 @@ class Project(models.Model):
         verbose_name_plural = _('Projects')
 
     def __str__(self):
-        return f'[{self.workspace.prefix_url} - {self.title}]'
+        return f'[ {self.workspace.prefix_url} - {self.title} ]'
 
     __repr__ = __str__
 
