@@ -387,7 +387,42 @@ class Issue(models.Model):
 
     def clean(self):
         super(Issue, self).clean()
-        is_project_in_workspace(self.workspace, self.project)
+
+        """
+        We have to check that we use the state category and type category
+        from issue project.
+        Also Type category and state category can to be None,
+        so we can skip it in this case.
+        """
+        try:
+            is_project_correct = bool(self.workspace is None) ^ bool(self.workspace is self.project.workspace)
+        except Workspace.DoesNotExist:
+            is_project_correct = True
+
+        try:
+            is_type_category_correct = bool(self.type_category is None) ^\
+                                       bool(self.workspace is None) ^\
+                                       bool(self.workspace is self.type_category.workspace)
+        except (Workspace.DoesNotExist, IssueTypeCategory.DoesNotExist):
+            is_type_category_correct = True
+
+        try:
+            is_state_category_correct = bool(self.state_category is None) ^\
+                                        bool(self.workspace is None) ^\
+                                        bool(self.workspace is self.state_category.workspace)
+        except (Workspace.DoesNotExist, IssueStateCategory.DoesNotExist):
+            is_state_category_correct = True
+
+        workspace_checklist = [
+            is_project_correct,
+            is_type_category_correct,
+            is_state_category_correct,
+        ]
+
+        if False in workspace_checklist:
+            raise ValidationError(_('Issue project, '
+                                    'type category, '
+                                    'state category should belong to the same workspace'))
 
     def save(self, *args, **kwargs):
         just_created = False
@@ -611,11 +646,11 @@ class Sprint(models.Model):
                 """
                 started_sprints_amount = \
                     Sprint.objects \
-                    .filter(workspace=self.workspace,
-                            project=self.project,
-                            is_started=True) \
-                    .exclude(pk=self.pk) \
-                    .count()
+                        .filter(workspace=self.workspace,
+                                project=self.project,
+                                is_started=True) \
+                        .exclude(pk=self.pk) \
+                        .count()
 
                 if started_sprints_amount > 0:
                     raise ValidationError(_('Another sprint was already started. '
@@ -635,10 +670,10 @@ class Sprint(models.Model):
         After deleting sprint we have to send it to backlog
         in same workspace and project. """
 
-        backlog = ProjectBacklog\
-            .objects\
+        backlog = ProjectBacklog \
+            .objects \
             .filter(workspace=self.workspace,
-                    project=self.project)\
+                    project=self.project) \
             .get()
 
         for _issue in self.issues.all():
