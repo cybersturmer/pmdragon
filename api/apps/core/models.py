@@ -609,13 +609,15 @@ class Sprint(models.Model):
                 """
                 Checking if we have another one started sprint
                 """
-                temp = Sprint.objects \
+                started_sprints_amount = \
+                    Sprint.objects \
                     .filter(workspace=self.workspace,
                             project=self.project,
                             is_started=True) \
-                    .get()
+                    .exclude(pk=self.pk) \
+                    .count()
 
-                if self != temp:
+                if started_sprints_amount > 0:
                     raise ValidationError(_('Another sprint was already started. '
                                             'Complete it before start the new one'))
 
