@@ -202,7 +202,7 @@ class Project(models.Model):
         verbose_name_plural = _('Projects')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.title}'
+        return f'[{self.workspace.prefix_url} - {self.title}]'
 
     __repr__ = __str__
 
@@ -248,7 +248,7 @@ class IssueTypeCategory(models.Model):
         verbose_name_plural = _('Issue Type Categories')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.title}'
+        return f'{self.project} - {self.title}'
 
     __repr__ = __str__
 
@@ -306,7 +306,7 @@ class IssueStateCategory(models.Model):
         verbose_name_plural = _('Issue State Categories')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.title}'
+        return f'{self.project} - {self.title}'
 
     __repr__ = __str__
 
