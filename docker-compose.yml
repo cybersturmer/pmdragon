@@ -8,8 +8,8 @@ services:
   web:
     restart: always
     build:
-      context: ./client/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./client/Dockerfile
     expose:
       - 80
       - 443

@@ -1,14 +1,19 @@
 FROM node:latest as build-stage
+LABEL maintainer="cybersturmer@ya.ru" \
+      application="PMDRAGON_FRONT" \
+      deployment="STATIC" \
+      version="2.0"
+
 WORKDIR /app
-COPY package*.json ./
+COPY ./client/package*.json ./
 RUN npm install -g @quasar/cli
 RUN npm install
-COPY . .
+COPY ./client .
 RUN quasar build
 
 FROM nginx:stable as production-stage
-COPY ./static /srv/www/pmdragon/static
-COPY ./ssl /srv/www/pmdragon/ssl
+COPY ./api/static /srv/www/pmdragon/static
+COPY ./client/ssl /srv/www/pmdragon/ssl
 COPY --from=build-stage /app/dist/spa /srv/www/pmdragon/web
 
 CMD ["nginx", "-g", "daemon off;"]
