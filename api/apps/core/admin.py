@@ -94,7 +94,7 @@ class IssueAdmin(admin.ModelAdmin):
         'workspace',
     )
     search_fields = (
-        'title'
+        'title',
     )
     
     def save_model(self, request, obj, form, change):
