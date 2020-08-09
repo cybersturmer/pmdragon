@@ -390,33 +390,27 @@ class Issue(models.Model):
         Also Type category and state category can to be None,
         so we can skip it in this case.
         """
-        try:
-            is_project_correct = bool(self.workspace is self.project.workspace)
-        except Workspace.DoesNotExist:
-            is_project_correct = True
 
         try:
             is_type_category_correct = bool(self.type_category is None) ^ \
-                                       bool(self.workspace is self.type_category.workspace)
-        except (Workspace.DoesNotExist, IssueTypeCategory.DoesNotExist):
+                                       bool(self.project is self.type_category.project)
+        except (Project.DoesNotExist, IssueTypeCategory.DoesNotExist):
             is_type_category_correct = True
 
         try:
             is_state_category_correct = bool(self.state_category is None) ^ \
-                                        bool(self.workspace is self.state_category.workspace)
-        except (Workspace.DoesNotExist, IssueStateCategory.DoesNotExist):
+                                        bool(self.project is self.state_category.project)
+        except (Project.DoesNotExist, IssueStateCategory.DoesNotExist):
             is_state_category_correct = True
 
         workspace_checklist = [
-            is_project_correct,
             is_type_category_correct,
             is_state_category_correct,
         ]
 
         if False in workspace_checklist:
-            raise ValidationError(_('Issue project, '
-                                    'type category, '
-                                    'state category should belong to the same workspace'))
+            raise ValidationError(_('Issue type category, '
+                                    'state category should belong to the same project'))
 
     def save(self, *args, **kwargs):
         just_created = False
