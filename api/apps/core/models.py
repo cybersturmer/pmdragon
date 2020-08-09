@@ -237,7 +237,7 @@ class IssueTypeCategory(models.Model):
         db_table = 'core_issue_category'
         ordering = ['ordering']
         unique_together = [
-            ['workspace', 'title']
+            ['project', 'title']
         ]
         verbose_name = _('Issue Type Category')
         verbose_name_plural = _('Issue Type Categories')
@@ -295,7 +295,7 @@ class IssueStateCategory(models.Model):
         db_table = 'core_issue_state'
         ordering = ['ordering']
         unique_together = [
-            ['workspace', 'project', 'title']
+            ['project', 'title']
         ]
         verbose_name = _('Issue State Category')
         verbose_name_plural = _('Issue State Categories')
