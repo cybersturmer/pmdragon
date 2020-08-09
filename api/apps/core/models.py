@@ -248,7 +248,11 @@ class IssueTypeCategory(models.Model):
     __repr__ = __str__
 
     def clean(self):
-        self.workspace = self.project.workspace
+        try:
+            self.workspace = self.project.workspace
+        except Project.DoesNotExist:
+            pass
+
         super(IssueTypeCategory, self).clean()
 
     def save(self, *args, **kwargs):
@@ -306,7 +310,11 @@ class IssueStateCategory(models.Model):
     __repr__ = __str__
 
     def clean(self):
-        self.workspace = self.project.workspace
+        try:
+            self.workspace = self.project.workspace
+        except Project.DoesNotExist:
+            pass
+
         super(IssueStateCategory, self).clean()
 
     def save(self, *args, **kwargs):
@@ -381,7 +389,11 @@ class Issue(models.Model):
     __repr__ = __str__
 
     def clean(self):
-        self.workspace = self.project.workspace
+        try:
+            self.workspace = self.project.workspace
+        except Project.DoesNotExist:
+            pass
+
         super(Issue, self).clean()
 
         """
@@ -392,14 +404,14 @@ class Issue(models.Model):
         """
 
         try:
-            is_type_category_correct = bool(self.type_category is None) ^ \
-                                       bool(self.project is self.type_category.project)
+            is_type_category_correct = bool(self.type_category is None) or \
+                                       bool(self.project == self.type_category.project)
         except (Project.DoesNotExist, IssueTypeCategory.DoesNotExist):
             is_type_category_correct = True
 
         try:
-            is_state_category_correct = bool(self.state_category is None) ^ \
-                                        bool(self.project is self.state_category.project)
+            is_state_category_correct = bool(self.state_category is None) or \
+                                        bool(self.project == self.state_category.project)
         except (Project.DoesNotExist, IssueStateCategory.DoesNotExist):
             is_state_category_correct = True
 
@@ -407,6 +419,8 @@ class Issue(models.Model):
             is_type_category_correct,
             is_state_category_correct,
         ]
+
+        print(workspace_checklist)
 
         if False in workspace_checklist:
             raise ValidationError(_('Issue type category, '
@@ -510,7 +524,11 @@ class ProjectBacklog(models.Model):
     __repr__ = __str__
 
     def clean(self):
-        self.workspace = self.project.workspace
+        try:
+            self.workspace = self.project.workspace
+        except Project.DoesNotExist:
+            pass
+
         super(ProjectBacklog, self).clean()
 
 
@@ -620,7 +638,12 @@ class Sprint(models.Model):
             pass
 
     def clean(self):
-        self.workspace = self.project.workspace
+
+        try:
+            self.workspace = self.project.workspace
+        except Project.DoesNotExist:
+            pass
+
         super(Sprint, self).clean()
 
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
