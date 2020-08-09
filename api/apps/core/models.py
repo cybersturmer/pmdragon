@@ -207,11 +207,6 @@ class Project(models.Model):
     __repr__ = __str__
 
 
-def is_project_in_workspace(workspace: Workspace, project: Project):
-    if workspace != project.workspace:
-        raise ValidationError(_('Project should belong to given Workspace'))
-
-
 class IssueTypeCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
@@ -253,8 +248,8 @@ class IssueTypeCategory(models.Model):
     __repr__ = __str__
 
     def clean(self):
+        self.workspace = self.project.workspace
         super(IssueTypeCategory, self).clean()
-        is_project_in_workspace(self.workspace, self.project)
 
     def save(self, *args, **kwargs):
         if self.is_default:
@@ -311,8 +306,8 @@ class IssueStateCategory(models.Model):
     __repr__ = __str__
 
     def clean(self):
+        self.workspace = self.project.workspace
         super(IssueStateCategory, self).clean()
-        is_project_in_workspace(self.workspace, self.project)
 
     def save(self, *args, **kwargs):
         if self.is_default:
@@ -386,6 +381,7 @@ class Issue(models.Model):
     __repr__ = __str__
 
     def clean(self):
+        self.workspace = self.project.workspace
         super(Issue, self).clean()
 
         """
@@ -395,20 +391,18 @@ class Issue(models.Model):
         so we can skip it in this case.
         """
         try:
-            is_project_correct = bool(self.workspace is None) ^ bool(self.workspace is self.project.workspace)
+            is_project_correct = bool(self.workspace is self.project.workspace)
         except Workspace.DoesNotExist:
             is_project_correct = True
 
         try:
-            is_type_category_correct = bool(self.type_category is None) ^\
-                                       bool(self.workspace is None) ^\
+            is_type_category_correct = bool(self.type_category is None) ^ \
                                        bool(self.workspace is self.type_category.workspace)
         except (Workspace.DoesNotExist, IssueTypeCategory.DoesNotExist):
             is_type_category_correct = True
 
         try:
-            is_state_category_correct = bool(self.state_category is None) ^\
-                                        bool(self.workspace is None) ^\
+            is_state_category_correct = bool(self.state_category is None) ^ \
                                         bool(self.workspace is self.state_category.workspace)
         except (Workspace.DoesNotExist, IssueStateCategory.DoesNotExist):
             is_state_category_correct = True
@@ -522,8 +516,8 @@ class ProjectBacklog(models.Model):
     __repr__ = __str__
 
     def clean(self):
+        self.workspace = self.project.workspace
         super(ProjectBacklog, self).clean()
-        is_project_in_workspace(self.workspace, self.project)
 
 
 class SprintDuration(models.Model):
@@ -632,9 +626,8 @@ class Sprint(models.Model):
             pass
 
     def clean(self):
+        self.workspace = self.project.workspace
         super(Sprint, self).clean()
-
-        is_project_in_workspace(self.workspace, self.project)
 
         if None not in [self.started_at, self.finished_at] and self.started_at >= self.finished_at:
             raise ValidationError(_('Date of start should be earlier than date of end'))
