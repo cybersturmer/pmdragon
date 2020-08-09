@@ -420,8 +420,6 @@ class Issue(models.Model):
             is_state_category_correct,
         ]
 
-        print(workspace_checklist)
-
         if False in workspace_checklist:
             raise ValidationError(_('Issue type category, '
                                     'state category should belong to the same project'))
@@ -602,7 +600,7 @@ class Sprint(models.Model):
             ['workspace', 'project', 'finished_at'],
         ]
         ordering = [
-            F('finished_at').desc(nulls_last=True)
+            F('finished_at').asc(nulls_last=True)
         ]
         verbose_name = _('Sprint')
         verbose_name_plural = _('Sprints')
