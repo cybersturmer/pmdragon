@@ -625,12 +625,24 @@ class Sprint(models.Model):
                         project=self.project,
                         is_default=True).get()
 
+            project_backlog = ProjectBacklog.objects.filter(workspace=self.workspace,
+                                                            project=self.project).get()
+
+            project_backlog.issues.all()
+
             for _issue in self.issues.all():
                 """
                 Iterate over all issues to replace None data to default one """
                 if _issue.state_category is None:
                     _issue.state_category = default_issue_state
-                    _issue.save()
+
+                """
+                Iterate over all issues to remove issues belong to Sprint 
+                from ProjectBacklog """
+                if _issue in project_backlog.issues.all():
+                    project_backlog.issues.remove(_issue)
+
+                _issue.save()
 
         except IssueStateCategory.DoesNotExist:
             pass
@@ -653,12 +665,11 @@ class Sprint(models.Model):
                 Checking if we have another one started sprint
                 """
                 started_sprints_amount = \
-                    Sprint.objects \
-                        .filter(workspace=self.workspace,
-                                project=self.project,
-                                is_started=True) \
-                        .exclude(pk=self.pk) \
-                        .count()
+                    Sprint.objects.filter(workspace=self.workspace,
+                                          project=self.project,
+                                          is_started=True)\
+                                  .exclude(pk=self.pk) \
+                                  .count()
 
                 if started_sprints_amount > 0:
                     raise ValidationError(_('Another sprint was already started. '
