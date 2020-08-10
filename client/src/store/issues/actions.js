@@ -137,7 +137,9 @@ export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
     )
 
     HandleResponse.compare(201, response.status)
+
     commit('ADD_ISSUE_TO_BACKLOG', response.data)
+    commit('ADD_ISSUE_TO_ISSUES', response.data)
   } catch (error) {
     throw new ErrorWrapper(error)
   }

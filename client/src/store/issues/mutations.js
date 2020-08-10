@@ -56,11 +56,17 @@ export function INIT_SPRINT_DURATIONS (state, payload) {
 
 export function ADD_ISSUE_TO_BACKLOG (state, payload) {
   state.backlogs
-    .filter((backlog) => backlog.workspace.id === payload.workspace && backlog.project_id === payload.project)
-    .pop().issues
-    .push(payload)
+    .filter((backlog) => backlog.project_id === payload.project)
+    .pop()
+    .issues
+    .push(payload.id)
 
   LocalStorage.set('issues.backlogs', state.backlogs)
+}
+
+export function ADD_ISSUE_TO_ISSUES (state, payload) {
+  state.issues.push(payload)
+  LocalStorage.set('issues.issues', state.issues)
 }
 
 export function EDIT_ISSUE (state, payload) {
