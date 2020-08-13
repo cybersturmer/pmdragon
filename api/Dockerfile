@@ -15,7 +15,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 
 RUN set -ex; \
     pip install --upgrade pip; \
-    pip install 'pipenv==2018.11.26'; \
+    pip install pipenv; \
     pipenv install --deploy --system; \
     ln -s usr/local/bin/docker-entrypoint.sh; \
     chmod +x /usr/local/bin/docker-entrypoint.sh
