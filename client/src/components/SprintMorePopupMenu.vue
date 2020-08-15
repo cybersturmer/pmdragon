@@ -38,6 +38,7 @@ export default {
   methods: {
     editSprintModal () {
       console.log('editSprintModal')
+      this.$emit('edit', this.sprint_id)
     },
     removeSprintModal () {
       console.log('removeSprintModal')

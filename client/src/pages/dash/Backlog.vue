@@ -3,9 +3,7 @@
     <div class="column full-width">
       <div class="row q-pa-sm">
         <div class="col-8">
-          <h5 style="text-transform: uppercase">
-            Sprints
-          </h5>
+          <BlockHeader title="Sprints"/>
         </div>
         <div class="col-4">
           <q-btn
@@ -39,7 +37,9 @@
                     :is_started="sprint.is_started"
                   />
                   <SprintMorePopupMenu
-                    :sprint_id="sprint.id"/>
+                    :sprint_id="sprint.id"
+                    v-on:edit="editSprintDialog(sprint)"
+                  />
                 </div>
               </div>
               <draggable
@@ -64,12 +64,7 @@
       </div>
       <div class="row q-pa-sm">
         <div class="col">
-          <h5 style="text-transform: uppercase">
-            Backlog
-            <span style="font-size: 0.75em; text-transform: none">
-            (&nbsp;{{ backlogIssuesLength }} issues&nbsp;)
-            </span>
-          </h5>
+          <BlockHeaderInfo title="Backlog" :info="backlogIssuesLength"/>
         </div>
       </div>
       <div class="col" v-if="backlogIssues">
@@ -119,7 +114,12 @@
         </q-card>
       </div>
     </div>
-
+  <SprintEditDialog
+    :show="true"
+    :id="1"
+    title="Hello"
+    goal="Goal"
+  />
   </q-page>
 </template>
 
@@ -129,10 +129,16 @@ import { unWatch } from 'src/services/util'
 import IssueBacklog from 'src/components/IssueBacklog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
 import SprintMorePopupMenu from 'src/components/SprintMorePopupMenu.vue'
+import BlockHeader from 'src/components/BlockHeader.vue'
+import BlockHeaderInfo from 'components/BlockHeaderInfo.vue'
+import SprintEditDialog from 'components/SprintEditDialog.vue'
 
 export default {
   name: 'BacklogView',
   components: {
+    SprintEditDialog,
+    BlockHeader,
+    BlockHeaderInfo,
     SprintMorePopupMenu,
     StartCompleteSprintButton,
     draggable,
@@ -165,7 +171,7 @@ export default {
     },
     backlogIssuesLength: function () {
       /** Getting issues count **/
-      return this.$store.getters['issues/BACKLOG_ISSUES_COUNT']
+      return this.$store.getters['issues/BACKLOG_ISSUES_COUNT'] + ' issues'
     },
     sprints: function () {
       /** Getting all sprints **/
@@ -228,6 +234,16 @@ export default {
     },
     isIssueMenuVisible (id) {
       return this.show_edit_button === id
+    },
+    editSprintDialog (item) {
+      this.$q.dialog({
+        component: SprintEditDialog,
+        id: item.id,
+        title: item.title,
+        goal: item.goal,
+        started_at: item.started_at,
+        finished_at: item.finished_at
+      })
     },
     editIssueDialog (item) {
       this.$q.dialog({
