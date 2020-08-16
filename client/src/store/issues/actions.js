@@ -187,6 +187,27 @@ export async function COMPLETE_SPRINT ({ commit }, sprintId) {
   }
 }
 
+export async function EDIT_SPRINT ({ commit }, payload) {
+  const sendPayload = {
+    title: payload.title,
+    goal: payload.goal,
+    started_at: payload.started_at,
+    finished_at: payload.finished_at
+  }
+
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/sprints/${payload.id}`,
+      sendPayload
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_SPRINT', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function EDIT_ISSUE ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).put(

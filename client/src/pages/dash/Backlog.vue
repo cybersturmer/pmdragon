@@ -237,6 +237,7 @@ export default {
     },
     editSprintDialog (item) {
       this.$q.dialog({
+        dark: true,
         component: SprintEditDialog,
         id: item.id,
         title: item.title,
@@ -244,6 +245,9 @@ export default {
         started_at: item.started_at,
         finished_at: item.finished_at
       })
+        .onOk((data) => {
+
+        })
     },
     editIssueDialog (item) {
       this.$q.dialog({

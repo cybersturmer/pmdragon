@@ -144,6 +144,9 @@ export function UPDATE_BACKLOG_ISSUES (state, composite) {
 }
 
 export function UPDATE_SPRINT (state, payload) {
+  /**
+   * We use this mutation for update issues inside of sprint
+   * We can update base sprint information also **/
   const sprintIndex = findSprintIndexById(state, payload.id)
   state.sprints.splice(sprintIndex, 1, payload)
   LocalStorage.set('issues.sprints', state.sprints)

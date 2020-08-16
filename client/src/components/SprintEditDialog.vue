@@ -1,13 +1,15 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
-      <q-input :value="title"/>
-      <q-input :value="goal"/>
-      <DateTimeField :datetime="started_at"/>
-      <DateTimeField :datetime="finished_at"/>
+      <q-card-section>
+        <q-input :value="title"/>
+        <q-input :value="goal"/>
+        <DateTimeField :datetime="started_at"/>
+        <DateTimeField :datetime="finished_at"/>
+      </q-card-section>
       <q-card-actions align="right">
-        <q-btn color="primary" label="OK" @click="onOKClick" />
-        <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+        <q-btn color="primary" label="UPDATE" @click="onOKClick" />
+        <q-btn color="primary" label="CANCEL" @click="onCancelClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -45,37 +47,32 @@ export default {
     }
   },
   methods: {
-    // following method is REQUIRED
-    // (don't change its name --> "show")
     show () {
       this.$refs.dialog.show()
     },
 
-    // following method is REQUIRED
-    // (don't change its name --> "hide")
     hide () {
       this.$refs.dialog.hide()
     },
 
     onDialogHide () {
-      // required to be emitted
-      // when QDialog emits "hide" event
       this.$emit('hide')
     },
 
     onOKClick () {
-      // on OK, it is REQUIRED to
-      // emit "ok" event (with optional payload)
-      // before hiding the QDialog
-      this.$emit('ok')
-      // or with payload: this.$emit('ok', { ... })
+      const payload = {
+        id: this.id,
+        title: this.title,
+        goal: this.goal,
+        started_at: this.started_at,
+        finished_at: this.finished_at
+      }
 
-      // then hiding dialog
+      this.$emit('ok', payload)
       this.hide()
     },
 
     onCancelClick () {
-      // we just need to hide dialog
       this.hide()
     }
   }
