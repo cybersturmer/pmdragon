@@ -246,7 +246,7 @@ export default {
         finished_at: item.finished_at
       })
         .onOk((data) => {
-
+          console.log(data)
         })
     },
     editIssueDialog (item) {

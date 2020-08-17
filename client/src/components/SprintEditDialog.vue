@@ -2,10 +2,10 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card class="q-dialog-plugin">
       <q-card-section>
-        <q-input :value="title"/>
-        <q-input :value="goal"/>
-        <DateTimeField :datetime="started_at"/>
-        <DateTimeField :datetime="finished_at"/>
+        <q-input v-model="form.title"/>
+        <q-input v-model="form.goal"/>
+        <DateTimeField v-model="form.started_at" :datetime="started_at"/>
+        <DateTimeField v-model="form.finished_at" :datetime="finished_at"/>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" label="UPDATE" @click="onOKClick" />
@@ -43,7 +43,13 @@ export default {
   },
   data () {
     return {
-
+      form: {
+        id: this.id,
+        title: this.title,
+        goal: this.goal,
+        started_at: this.started_at,
+        finished_at: this.finished_at
+      }
     }
   },
   methods: {
@@ -61,11 +67,11 @@ export default {
 
     onOKClick () {
       const payload = {
-        id: this.id,
-        title: this.title,
-        goal: this.goal,
-        started_at: this.started_at,
-        finished_at: this.finished_at
+        id: this.form.id,
+        title: this.form.title,
+        goal: this.form.goal,
+        started_at: this.form.started_at,
+        finished_at: this.form.finished_at
       }
 
       this.$emit('ok', payload)
