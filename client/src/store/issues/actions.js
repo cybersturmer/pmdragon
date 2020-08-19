@@ -197,7 +197,7 @@ export async function EDIT_SPRINT ({ commit }, payload) {
 
   try {
     const response = await new Api({ auth: true }).patch(
-      `/core/sprints/${payload.id}`,
+      `/core/sprints/${payload.id}/`,
       sendPayload
     )
 
