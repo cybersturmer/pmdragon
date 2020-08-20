@@ -1,11 +1,11 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin">
+    <q-card dark class="q-dialog-plugin bg-secondary">
       <q-card-section>
-        <q-input v-model="form.title"/>
-        <q-input v-model="form.goal"/>
-        <DateTimeField v-model="form.started_at" :datetime="started_at"/>
-        <DateTimeField v-model="form.finished_at" :datetime="finished_at"/>
+        <q-input dark v-model="form.title"/>
+        <q-input dark v-model="form.goal"/>
+        <DateTimeField :is_dark="true" v-model="form.started_at" :datetime="started_at"/>
+        <DateTimeField :is_dark="true" v-model="form.finished_at" :datetime="finished_at"/>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" label="UPDATE" @click="onOKClick" />
