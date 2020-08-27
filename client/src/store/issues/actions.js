@@ -208,6 +208,19 @@ export async function EDIT_SPRINT ({ commit }, payload) {
   }
 }
 
+export async function DELETE_SPRINT ({ commit }, sprintId) {
+  try {
+    const response = await new Api({ auth: true }).delete(
+      `/core/sprints/${sprintId}`
+    )
+
+    HandleResponse.compare(204, response.status)
+    commit('DELETE_SPRINT', sprintId)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
 export async function EDIT_ISSUE ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).put(

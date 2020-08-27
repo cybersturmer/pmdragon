@@ -39,6 +39,7 @@
                   <SprintMorePopupMenu
                     :sprint_id="sprint.id"
                     v-on:edit="editSprintDialog(sprint)"
+                    v-on:remove="removeSprintDialog(sprint)"
                   />
                 </div>
               </div>
@@ -248,6 +249,25 @@ export default {
         .onOk((data) => {
           this.$store.dispatch('issues/EDIT_SPRINT', data)
         })
+    },
+    removeSprintDialog (item) {
+      this.$q.dialog({
+        dark: true,
+        title: 'Confirmation',
+        message: `Would you like to delete sprint: ${item.title}`,
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$store.dispatch('issues/DELETE_SPRINT', item.id)
+          .catch((error) => {
+            this.$q.dialog({
+              title: 'Error - Cannot delete sprint',
+              message: 'Please check your Internet connection'
+            })
+
+            console.log(error)
+          })
+      })
     },
     editIssueDialog (item) {
       this.$q.dialog({

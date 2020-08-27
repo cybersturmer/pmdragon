@@ -42,6 +42,7 @@ export default {
     },
     removeSprintModal () {
       console.log('removeSprintModal')
+      this.$emit('remove', this.sprint_id)
     }
   }
 }
