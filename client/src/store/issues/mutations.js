@@ -138,8 +138,6 @@ export function COMPLETE_SPRINT (state, sprintId) {
 export function DELETE_SPRINT (state, sprintId) {
   /** Remove sprint from the list of sprints **/
 
-  console.log('Given sprint id', sprintId)
-
   const sprintIndex = findSprintIndexById(state, sprintId)
   state.sprints.splice(sprintIndex, 1)
 

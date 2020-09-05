@@ -4,8 +4,8 @@
       <q-card-section>
         <q-input dark v-model="form.title"/>
         <q-input dark v-model="form.goal"/>
-        <DateTimeField :is_dark="true" v-model="form.started_at" :datetime="started_at"/>
-        <DateTimeField :is_dark="true" v-model="form.finished_at" :datetime="finished_at"/>
+        <DateTimeField v-model="form.started_at"/>
+        <DateTimeField v-model="form.finished_at"/>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" label="UPDATE" @click="onOKClick" />
@@ -17,6 +17,8 @@
 
 <script>
 import DateTimeField from 'components/DateTimeField.vue'
+import { date } from 'quasar'
+import { DATETIME } from 'src/services/masks'
 
 export default {
   name: 'SprintEditDialog',
@@ -47,8 +49,8 @@ export default {
         id: this.id,
         title: this.title,
         goal: this.goal,
-        started_at: this.started_at,
-        finished_at: this.finished_at
+        started_at: date.formatDate(this.started_at, DATETIME),
+        finished_at: date.formatDate(this.finished_at, DATETIME)
       }
     }
   },
@@ -70,8 +72,8 @@ export default {
         id: this.form.id,
         title: this.form.title,
         goal: this.form.goal,
-        started_at: this.form.started_at,
-        finished_at: this.form.finished_at
+        started_at: date.formatDate(this.form.started_at),
+        finished_at: date.formatDate(this.form.finished_at)
       }
 
       this.$emit('ok', payload)

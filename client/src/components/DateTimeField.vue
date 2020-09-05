@@ -1,9 +1,13 @@
 <template>
-  <q-input :dark="is_dark" filled v-model="form.datetime">
+  <q-input dark filled :value="rawDatetime" @input="handleInput">
     <template v-slot:prepend>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
-          <q-date v-model="form.datetime" mask="YYYY-MM-DD HH:mm" />
+          <q-date
+            dark
+            :value="rawDatetime"
+            @input="handleInput($event)"
+            :mask="mask" />
         </q-popup-proxy>
       </q-icon>
     </template>
@@ -11,7 +15,13 @@
     <template v-slot:append>
       <q-icon name="access_time" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
-          <q-time v-model="form.datetime" mask="YYYY-MM-DD HH:mm" format24h />
+          <q-time
+            dark
+            :value="rawDatetime"
+            @input="handleInput($event)"
+            :mask="mask"
+            :minute-options="minute_options"
+            format24h />
         </q-popup-proxy>
       </q-icon>
     </template>
@@ -19,23 +29,29 @@
 </template>
 
 <script>
+import { DATETIME } from 'src/services/masks'
+
 export default {
   name: 'DateTimeField',
   props: {
-    datetime: {
-      type: String,
-      required: true
-    },
-    is_dark: {
-      type: Boolean,
-      required: false
-    }
+    value: String
   },
   data () {
     return {
-      form: {
-        datetime: this.datetime
-      }
+      mask: DATETIME,
+      minute_options: [0, 15, 30, 45],
+      rawDatetime: this.value
+    }
+  },
+  computed: {
+    datetime: function () {
+      return this.rawDatetime
+    }
+  },
+  methods: {
+    handleInput (value) {
+      this.rawDatetime = value
+      this.$emit('input', value)
     }
   }
 }
