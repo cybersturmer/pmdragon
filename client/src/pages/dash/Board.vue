@@ -1,12 +1,15 @@
 <template>
   <q-page class="flex q-layout-padding">
     <div class="full-width row items-stretch">
+      <!-- Here we gonna put information about sprint and view controls -->
       <div
         v-for="issue_state in issue_states"
         :key="issue_state.id"
         class="col bg-primary full-height q-ma-sm text-center overflow-hidden">
+        <!-- Column for head of column and state column -->
 
         <div class="q-pa-sm">
+          <!-- Printable HEAD of column -->
           {{ issue_state.title | capitalize }}
         </div>
 
