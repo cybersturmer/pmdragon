@@ -40,7 +40,7 @@ jobs:
       run: |
         cd ./api/
         python -m pip install --upgrade pip
-        pip install 'pipenv==2018.11.26'
+        pip install pipenv
         set -ex
         pipenv install --deploy --system
     - name: Make migrations
