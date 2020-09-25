@@ -3,7 +3,10 @@
     <div class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
       <!-- Sprint name -->
-      <!-- How many days till the end and dates on hover -->
+      {{ sprint.title }}
+      <!-- Days tilss the end of sprint remaining and dates on hover -->
+      {{ days_remaining }}
+      
       <!-- Sprint complete button -->
       <!-- Edit sprint button -->
       <div
@@ -56,8 +59,10 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { date } from 'quasar'
 import { unWatch } from 'src/services/util'
 import IssueBoard from 'src/components/IssueBoard.vue'
+import { SPRINT_REMAINING_UNIT } from 'src/services/masks'
 
 export default {
   name: 'BoardView',
@@ -74,6 +79,17 @@ export default {
     },
     issues: function () {
       return this.$store.getters['issues/SPRINTS_BY_CURRENT_PROJECT']
+    },
+    sprint: function () {
+      return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT']
+    },
+    days_remaining: function () {
+      const started_at = self.sprint.started_at
+      const finished_at = self.sprint.finished_at
+      
+      const diff = date.getDateDiff(started_at, finished_at, SPRINT_REMAINING_UNIT)
+
+      return diff
     }
   },
   methods: {
