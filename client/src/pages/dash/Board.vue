@@ -2,6 +2,10 @@
   <q-page class="flex q-layout-padding">
     <div class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
+      <!-- Sprint name -->
+      <!-- How many days till the end and dates on hover -->
+      <!-- Sprint complete button -->
+      <!-- Edit sprint button -->
       <div
         v-for="issue_state in issue_states"
         :key="issue_state.id"
