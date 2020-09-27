@@ -2,13 +2,24 @@
   <q-page class="flex q-layout-padding">
     <div class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
-      <!-- Sprint name -->
-      {{ sprint.title }}
-      <!-- Days tilss the end of sprint remaining and dates on hover -->
-      {{ days_remaining }}
-      
-      <!-- Sprint complete button -->
-      <!-- Edit sprint button -->
+
+      <div class="full-width row q-pa-sm items-center">
+        <div class="text-h5 col-auto q-mr-md">
+          <!-- Sprint name -->
+          {{ sprint.title }}
+        </div>
+        <div class="text-h6 col-auto">
+          <!-- Days till the end of sprint remaining and dates on hover -->
+          <q-icon name="av_timer"></q-icon>
+          <span>&nbsp;{{ days_remaining }} days remaining</span>
+        </div>
+        <div class="col-auto">
+          <q-btn size="sm"></q-btn>
+        </div>
+        <!-- Sprint complete button -->
+        <!-- Edit sprint button -->
+      </div>
+
       <div
         v-for="issue_state in issue_states"
         :key="issue_state.id"
@@ -84,12 +95,10 @@ export default {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT']
     },
     days_remaining: function () {
-      const started_at = self.sprint.started_at
-      const finished_at = self.sprint.finished_at
-      
-      const diff = date.getDateDiff(started_at, finished_at, SPRINT_REMAINING_UNIT)
+      const startedAt = this.sprint.started_at
+      const finishedAt = this.sprint.finished_at
 
-      return diff
+      return date.getDateDiff(startedAt, finishedAt, SPRINT_REMAINING_UNIT)
     }
   },
   methods: {
