@@ -17,9 +17,10 @@
           />
         </div>
       </div>
-      <div class="col">
+      <div class="col bg-primary">
         <q-scroll-area
           dark
+          class="rounded-borders"
           style="height: 100%; padding: 1.25rem; border: 1px solid #606060;">
             <div
               v-for="(sprint, index) in sprints"
@@ -68,12 +69,12 @@
           <BlockHeaderInfo title="Backlog" :info="backlogIssuesLength"/>
         </div>
       </div>
-      <div class="col" v-if="backlogIssues">
-        <q-scroll-area style="height: calc(100% - 35px)">
+      <div class="col bg-primary" v-if="backlogIssues">
+        <q-scroll-area class="rounded-borders" style="height: calc(100% - 35px); border: 1px solid #606060;">
           <draggable
             :value="backlogIssues"
             @change="handleDraggableEvent($event, drag_types.BACKLOG, backlog.id)"
-            style="border: 1px solid #606060; padding: 10px; min-height: 67px;"
+            style="padding: 10px; min-height: 67px;"
             group="issues">
             <transition-group type="transition" :name="'flip-list'" tag="div">
               <IssueBacklog
