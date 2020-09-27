@@ -3,18 +3,57 @@
     <div class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
 
-      <div class="full-width row q-pa-sm items-center">
-        <div class="text-h5 col-auto q-mr-md">
-          <!-- Sprint name -->
-          {{ sprint.title }}
+      <div class="full-width row q-pa-sm">
+        <div class="col-6">
+          <span class="text-h5 q-mr-md">
+            <!-- Sprint name -->
+            {{ sprint.title }}
+          </span>
+          <span class="text-h5  text-subtitle1 text-accent q-mr-md">
+            <!-- Sprint goal -->
+            ( {{ sprint.goal }} )
+          </span>
+
         </div>
-        <div class="text-h6 col-auto">
-          <!-- Days till the end of sprint remaining and dates on hover -->
-          <q-icon name="av_timer"></q-icon>
-          <span>&nbsp;{{ days_remaining }} days remaining</span>
+        <div class="col-4">
+            <span class="text-h5 float-right">
+            <!-- Days till the end of sprint remaining and dates on hover -->
+            <q-icon name="access_time"></q-icon>
+            <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
+          </span>
         </div>
-        <div class="col-auto">
-          <q-btn size="sm"></q-btn>
+        <div class="col-2">
+          <q-btn
+            dark
+            outline
+            size="md"
+            color="accent"
+            icon-right="more_horiz"
+            class="float-right q-ml-md">
+            <q-menu content-class="bg-accent text-white" fit anchor="top left" self="top right" auto-close>
+              <q-list dense style="min-width: 150px">
+                <q-item
+                  clickable
+                  v-close-popup>
+                  <q-item-section>Edit Issue</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item
+                  clickable
+                  v-close-popup>
+                  <q-item-section>Remove Issue</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+          <q-btn
+            dark
+            outline
+            size="md"
+            color="accent"
+            label="Complete sprint"
+            class="float-right"
+          />
         </div>
         <!-- Sprint complete button -->
         <!-- Edit sprint button -->
@@ -73,7 +112,7 @@ import draggable from 'vuedraggable'
 import { date } from 'quasar'
 import { unWatch } from 'src/services/util'
 import IssueBoard from 'src/components/IssueBoard.vue'
-import { SPRINT_REMAINING_UNIT } from 'src/services/masks'
+import { DATE_MASK, SPRINT_REMAINING_UNIT } from 'src/services/masks'
 
 export default {
   name: 'BoardView',
@@ -99,6 +138,14 @@ export default {
       const finishedAt = this.sprint.finished_at
 
       return date.getDateDiff(startedAt, finishedAt, SPRINT_REMAINING_UNIT)
+    },
+    days_remaining_text: function () {
+      return this.days_remaining > 0 ? this.days_remaining + ' days remaining' : '0 days remaining'
+    },
+    sprint_range: function () {
+      const startedAt = date.formatDate(this.sprint.started_at, DATE_MASK)
+      const finishedAt = date.formatDate(this.sprint.finished_at, DATE_MASK)
+      return `${startedAt} - ${finishedAt}`
     }
   },
   methods: {
