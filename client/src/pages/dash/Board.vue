@@ -109,6 +109,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { updateSprintMixin } from 'src/pages/mixins/update_sprint'
 import { date } from 'quasar'
 import { unWatch } from 'src/services/util'
 import IssueBoard from 'src/components/IssueBoard.vue'
@@ -120,6 +121,7 @@ export default {
     IssueBoard,
     draggable
   },
+  mixins: [updateSprintMixin],
   computed: {
     issue_states: function () {
       return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
