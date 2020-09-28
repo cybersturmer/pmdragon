@@ -116,12 +116,6 @@
         </q-card>
       </div>
     </div>
-  <SprintEditDialog
-    :show="true"
-    :id="1"
-    title="Hello"
-    goal="Goal"
-  />
   </q-page>
 </template>
 
@@ -139,6 +133,7 @@ import SprintEditDialog from 'components/SprintEditDialog.vue'
 export default {
   name: 'BacklogView',
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     SprintEditDialog,
     BlockHeader,
     BlockHeaderInfo,
