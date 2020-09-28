@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { DATETIME } from 'src/services/masks'
+import { DATETIME_MASK } from 'src/services/masks'
 
 export default {
   name: 'DateTimeField',
@@ -38,7 +38,7 @@ export default {
   },
   data () {
     return {
-      mask: DATETIME,
+      mask: DATETIME_MASK,
       minute_options: [0, 15, 30, 45],
       rawDatetime: this.value
     }

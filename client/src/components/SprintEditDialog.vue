@@ -18,7 +18,7 @@
 <script>
 import DateTimeField from 'components/DateTimeField.vue'
 import { date } from 'quasar'
-import { DATETIME } from 'src/services/masks'
+import { DATETIME_MASK } from 'src/services/masks'
 
 export default {
   name: 'SprintEditDialog',
@@ -49,8 +49,8 @@ export default {
         id: this.id,
         title: this.title,
         goal: this.goal,
-        started_at: date.formatDate(this.started_at, DATETIME),
-        finished_at: date.formatDate(this.finished_at, DATETIME)
+        started_at: date.formatDate(this.started_at, DATETIME_MASK),
+        finished_at: date.formatDate(this.finished_at, DATETIME_MASK)
       }
     }
   },
