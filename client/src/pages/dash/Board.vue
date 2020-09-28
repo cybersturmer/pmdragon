@@ -15,44 +15,23 @@
           </span>
 
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <span class="text-h5 float-right">
             <!-- Days till the end of sprint remaining and dates on hover -->
             <q-icon name="access_time"></q-icon>
             <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
           </span>
         </div>
-        <div class="col-2">
+        <div class="col-3 text-right">
+          <StartCompleteSprintButton size="md" :sprint_id="sprint.id" :is_started="sprint.is_started"/>
           <q-btn
             dark
             outline
             size="md"
             color="accent"
-            icon-right="more_horiz"
-            class="float-right q-ml-md">
-            <q-menu content-class="bg-accent text-white" fit anchor="top left" self="top right" auto-close>
-              <q-list dense style="min-width: 150px">
-                <q-item
-                  clickable
-                  v-close-popup>
-                  <q-item-section>Edit Issue</q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item
-                  clickable
-                  v-close-popup>
-                  <q-item-section>Remove Issue</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-          <q-btn
-            dark
-            outline
-            size="md"
-            color="accent"
-            label="Complete sprint"
-            class="float-right"
+            icon-right="edit"
+            class="float-right q-ml-md"
+            @click="editSprintDialog(sprint)"
           />
         </div>
         <!-- Sprint complete button -->
@@ -114,10 +93,15 @@ import { date } from 'quasar'
 import { unWatch } from 'src/services/util'
 import IssueBoard from 'src/components/IssueBoard.vue'
 import { DATE_MASK, SPRINT_REMAINING_UNIT } from 'src/services/masks'
+import SprintEditDialog from 'src/components/SprintEditDialog.vue'
+import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
 
 export default {
   name: 'BoardView',
   components: {
+    StartCompleteSprintButton,
+    // eslint-disable-next-line vue/no-unused-components
+    SprintEditDialog,
     IssueBoard,
     draggable
   },
@@ -136,10 +120,10 @@ export default {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT']
     },
     days_remaining: function () {
-      const startedAt = this.sprint.started_at
+      const today = new Date()
       const finishedAt = this.sprint.finished_at
 
-      return date.getDateDiff(startedAt, finishedAt, SPRINT_REMAINING_UNIT)
+      return date.getDateDiff(finishedAt, today, SPRINT_REMAINING_UNIT)
     },
     days_remaining_text: function () {
       return this.days_remaining > 0 ? this.days_remaining + ' days remaining' : '0 days remaining'
@@ -208,6 +192,20 @@ export default {
         default:
           throw new Error('This error should not occurred')
       }
+    },
+    editSprintDialog (item) {
+      this.$q.dialog({
+        dark: true,
+        component: SprintEditDialog,
+        id: item.id,
+        title: item.title,
+        goal: item.goal,
+        started_at: item.started_at,
+        finished_at: item.finished_at
+      })
+        .onOk((data) => {
+          this.$store.dispatch('issues/EDIT_SPRINT', data)
+        })
     }
   },
   filters: {
