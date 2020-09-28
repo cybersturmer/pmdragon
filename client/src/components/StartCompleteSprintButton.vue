@@ -3,7 +3,7 @@
     dark
     outline
     color="accent"
-    size="sm"
+    :size="size"
     :label="label"
     @click="recognizeAction">
   </q-btn>
@@ -20,6 +20,10 @@ export default {
     is_started: {
       type: Boolean,
       required: true
+    },
+    size: {
+      type: String,
+      default: 'sm'
     }
   },
   computed: {
