@@ -127,6 +127,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import { updateSprintMixin } from 'src/pages/mixins/update_sprint'
 import { unWatch } from 'src/services/util'
 import IssueBacklog from 'src/components/IssueBacklog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
@@ -146,6 +147,7 @@ export default {
     draggable,
     IssueBacklog
   },
+  mixins: [updateSprintMixin],
   data () {
     return {
       form_data: {
@@ -508,20 +510,6 @@ export default {
       }
 
       this.$store.dispatch('issues/ADD_SPRINT_TO_PROJECT', payload)
-    },
-    startSprint (sprintId) {
-      /** Start not empty sprint **/
-      this.$store.dispatch('issues/START_SPRINT', sprintId)
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    completeSprint (sprintId) {
-      /** Complete started sprint **/
-      this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
-        .catch((error) => {
-          console.log(error)
-        })
     }
   }
 }
