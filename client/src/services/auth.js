@@ -7,6 +7,10 @@ import { HandleResponse, ErrorWrapper, ResponseWrapper } from 'src/services/util
 // Inspired by https://github.com/zmts/beauty-vuejs-boilerplate/blob/master/src/services/auth.service.js
 export class AuthService {
   static async login (credentials) {
+    /**
+     * Login by sending login and password
+     * @param credentials Object { username: '', password: ''}
+     */
     try {
       const response = await axios.post(
         `${API_URL}/auth/obtain/`,
@@ -25,6 +29,7 @@ export class AuthService {
   }
 
   static async refresh () {
+    /** Refresh access amd refresh token by sending refresh token */
     try {
       const response = await axios.post(
         `${API_URL}/auth/refresh/`,
@@ -46,23 +51,35 @@ export class AuthService {
   }
 
   static async logout () {
+    /** Logout by removing auth data on the page 
+     * @returns {null} 
+     * */
     _resetAuthData()
   }
 
-  /**
-   * Better not to work with Vuex getters (about access token) directly,
-   * but first step was so
-   * @returns {string}
-   */
-  static getBearer () {
-    return `Bearer ${$store.getters['auth/ACCESS_TOKEN']}`
+  static getAccessToken() {
+    return $store.getters['auth/ACCESS_TOKEN']
   }
 
-  static isAccessTokenExpired () {
+  /**
+   * Get Header Text for using in axios
+   * @returns {string} 
+   **/
+  static getBearer () {
+    return `Bearer ${this.getAccessToken()}`
+  }
+
+  static isAcceKessTokenExpired () {
+    /**
+     * @returns {boolean|*}
+     */
     return !$store.getters['auth/IS_ACCESS_TOKEN_VALID']
   }
 
   static isRefreshTokenExpired () {
+    /**
+     * @returns {boolean|*}
+     */
     return !$store.getters['auth/IS_REFRESH_TOKEN_VALID']
   }
 
