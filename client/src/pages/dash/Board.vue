@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex q-layout-padding">
+  <q-page class="flex q-layout-padding overflow-hidden">
     <div class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
 
@@ -15,14 +15,12 @@
           </span>
 
         </div>
-        <div class="col-3">
-            <span class="text-h5 float-right">
+        <div class="col-6 text-right">
+          <span class="text-h5 q-mr-md">
             <!-- Days till the end of sprint remaining and dates on hover -->
             <q-icon name="access_time"></q-icon>
             <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
           </span>
-        </div>
-        <div class="col-3 text-right">
           <StartCompleteSprintButton size="md" :sprint_id="sprint.id" :is_started="sprint.is_started"/>
           <q-btn
             dark
@@ -38,48 +36,47 @@
         <!-- Edit sprint button -->
       </div>
 
-      <div
-        v-for="issue_state in issue_states"
-        :key="issue_state.id"
-        class="col bg-primary full-height q-ma-sm text-center overflow-hidden">
-        <!-- Column for head of column and state column -->
+      <div class="row full-height full-width">
+        <!-- Container for issue status columns -->
+        <div
+          v-for="issue_state in issue_states"
+          :key="issue_state.id"
+          class="col bg-primary q-ma-sm">
+          <!-- Column for head of column and state column -->
 
-        <div class="q-pa-sm">
-          <!-- Printable HEAD of column -->
-          {{ issue_state.title | capitalize }}
-        </div>
+          <div class="q-pa-sm text-center" style="border: 1px solid #343434">
+            <!-- Printable HEAD of column -->
+            {{ issue_state.title | capitalize }}
+          </div>
 
-        <!--  Block of main state info  -->
-        <div class="bg-secondary full-height">
+          <!--  Block of main state info  -->
+          <div class="bg-secondary full-height">
 
-          <q-scroll-area class="fit full-height">
+            <q-scroll-area class="fit">
 
-            <draggable
-              :value="issuesByState(issue_state.id)"
-              @change="handleIssueStateChanging($event, issue_state.id)"
-              class="full-height overflow-hidden-y"
-              group="issues">
+              <draggable
+                :value="issuesByState(issue_state.id)"
+                @change="handleIssueStateChanging($event, issue_state.id)"
+                class="full-height overflow-hidden-y"
+                group="issues">
 
-              <transition-group
-                type="transition"
-                :name="'flip-list'"
-                tag="div"
-                class="fit full-height q-pa-sm overflow-hidden-y"
-                style="min-height: calc(100vh - 160px);
+                <transition-group
+                  type="transition"
+                  :name="'flip-list'"
+                  tag="div"
+                  class="fit full-height q-pa-sm overflow-hidden-y"
+                  style="min-height: calc(100vh - 190px);
                        border: 1px dashed var(--q-color-accent)">
 
-                <IssueBoard
-                  v-for="issue in issuesByState(issue_state.id)"
-                  :key="issue.id"
-                  :id="issue.id"
-                  :title="issue.title"/>
-
-              </transition-group>
-
-            </draggable>
-
-          </q-scroll-area>
-
+                  <IssueBoard
+                    v-for="issue in issuesByState(issue_state.id)"
+                    :key="issue.id"
+                    :id="issue.id"
+                    :title="issue.title"/>
+                </transition-group>
+              </draggable>
+            </q-scroll-area>
+          </div>
         </div>
       </div>
     </div>
