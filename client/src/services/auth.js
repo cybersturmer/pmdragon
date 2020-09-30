@@ -1,4 +1,4 @@
-import { API_URL } from 'src/.env'
+import { DEBUG, PROD_ENV, DEBUG_ENV } from 'src/.env'
 import axios from 'axios'
 import $store from 'src/store'
 import $router from 'src/router'
@@ -12,8 +12,10 @@ export class AuthService {
      * @param credentials Object { username: '', password: ''}
      */
     try {
+      const url = (DEBUG ? DEBUG_ENV.url : PROD_ENV.url) + '/auth/obtain/'
+
       const response = await axios.post(
-        `${API_URL}/auth/obtain/`,
+        url,
         credentials
       )
       HandleResponse.compare(200, response.status)
@@ -31,8 +33,10 @@ export class AuthService {
   static async refresh () {
     /** Refresh access amd refresh token by sending refresh token */
     try {
+      const url = (DEBUG ? DEBUG_ENV.url : PROD_ENV.url) + '/auth/refresh/'
+
       const response = await axios.post(
-        `${API_URL}/auth/refresh/`,
+        url,
         { refresh: $store.getters['auth/REFRESH_TOKEN'] }
       )
 
@@ -51,25 +55,25 @@ export class AuthService {
   }
 
   static async logout () {
-    /** Logout by removing auth data on the page 
-     * @returns {null} 
+    /** Logout by removing auth data on the page
+     * @returns {null}
      * */
     _resetAuthData()
   }
 
-  static getAccessToken() {
+  static getAccessToken () {
     return $store.getters['auth/ACCESS_TOKEN']
   }
 
   /**
    * Get Header Text for using in axios
-   * @returns {string} 
+   * @returns {string}
    **/
   static getBearer () {
     return `Bearer ${this.getAccessToken()}`
   }
 
-  static isAcceKessTokenExpired () {
+  static isAccessTokenExpired () {
     /**
      * @returns {boolean|*}
      */
