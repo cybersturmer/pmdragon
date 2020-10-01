@@ -10,7 +10,7 @@ High-performance VueJs user interface built in MPA application.
 
 ## Screenshot demo
 *Worspaces page*
-<img sr="docs/images/workspaces.png">
+<img src="docs/images/workspaces.png">
 
 *Backlog page*
 <img src="docs/images/backlog.png">
