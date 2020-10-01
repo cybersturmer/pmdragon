@@ -1,2 +1,11 @@
-export const API_PORT = 443
-export const API_URL = `https://localhost:${API_PORT}/api`
+export const DEBUG = true
+
+export const DEBUG_ENV = {
+  port: 443,
+  url: `https://localhost:443/api`
+}
+
+export const PROD_ENV = {
+  port: 8000,
+  url: `http://localhost:8000/api`
+}
