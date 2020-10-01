@@ -44,23 +44,28 @@
                   />
                 </div>
               </div>
-              <draggable
-                :value="sprintIssues(sprint.id)"
-                @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
-                class="q-card--bordered q-pa-sm"
-                style="border: 1px dashed #606060; min-height: 67px;"
-                group="issues">
-                <transition-group type="transition" :name="'flip-list'" tag="div">
-                  <IssueBacklog
-                    v-for="issue in sprintIssues(sprint.id)"
-                    :key="issue.id"
-                    :id="issue.id"
-                    :title="issue.title"
-                    v-on:edit="editIssueDialog(issue)"
-                    v-on:remove="removeIssueDialog(issue)"
-                  />
-                </transition-group>
-              </draggable>
+              <div class="q-card--bordered q-pa-sm"
+                   style="border: 1px dashed #606060; min-height: 67px;">
+                <div v-if="!areSprintIssues(sprint.id)"
+                     class="text-center text-accent q-pa-md">
+                  Plan sprint by dropping issues here.
+                </div>
+                <draggable
+                  :value="sprintIssues(sprint.id)"
+                  @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
+                  group="issues">
+                  <transition-group type="transition" :name="'flip-list'" tag="div">
+                    <IssueBacklog
+                      v-for="issue in sprintIssues(sprint.id)"
+                      :key="issue.id"
+                      :id="issue.id"
+                      :title="issue.title"
+                      v-on:edit="editIssueDialog(issue)"
+                      v-on:remove="removeIssueDialog(issue)"
+                    />
+                  </transition-group>
+                </draggable>
+              </div>
             </div>
         </q-scroll-area>
       </div>
@@ -318,6 +323,9 @@ export default {
     },
     sprintIssues (sprintId) {
       return this.$store.getters['issues/SPRINT_BY_ID_ISSUES'](sprintId)
+    },
+    areSprintIssues (sprintId) {
+      return this.sprintIssues(sprintId).length > 0
     },
     handleCommonMoved (issuesList, event) {
       /** Handle moving - doesnt matter is it sprint or backlog **/
