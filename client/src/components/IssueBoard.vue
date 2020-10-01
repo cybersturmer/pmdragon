@@ -3,7 +3,7 @@
     dense
     dark
     bordered
-    class="my-card bg-grey-8 q-ma-sm overflow-hidden">
+    class="my-card bg-grey-8 q-ma-sm overflow-hidden text-center">
     <q-card-section>
       <span class="text-muted">{{ title }}</span>
     </q-card-section>
