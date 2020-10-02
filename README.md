@@ -22,27 +22,33 @@ High-performance VueJs user interface built in MPA application.
 <img src="docs/images/settings.png">
 
 ## Notice
+
 Not ready for using.
 
 Under development.
 
 ## Starting
+
 In a directory of clone.
 
 `docker-compose -f docker-compose.yml up -d`
 
 ## Stopping
+
 In a directory of clone.
 
 `docker-compose -f docker-compose.yml down`
 
 ## Documentation
+
 Under development.
 
 ## Semver
+
 PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
 
 ## License
+
 PmDragon is an MIT-licensed open source project.
 
 Copyright ©2020-present Wladimir Stürmer
