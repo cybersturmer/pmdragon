@@ -67,6 +67,8 @@ class SprintAdmin(admin.ModelAdmin):
     model = Sprint
     list_display = (
         'project',
+        'is_started',
+        'is_completed',
         'title',
         'goal',
         'started_at',
