@@ -45,7 +45,11 @@ export default {
           label: 'Complete',
           color: 'accent'
         },
-        cancel: true
+        cancel: {
+          flat: true,
+          label: 'Cancel',
+          color: 'primary'
+        }
       })
         .onOk(() => {
           this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
