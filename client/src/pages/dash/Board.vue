@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex q-layout-padding overflow-hidden">
-    <div class="full-width row items-stretch">
+    <div v-if="sprint" class="full-width row items-stretch">
       <!-- Here we gonna put information about sprint and view controls -->
 
       <div class="full-width row q-pa-sm">
@@ -80,6 +80,13 @@
         </div>
       </div>
     </div>
+    <div v-if="!sprint" class="full-width q-pa-md text-center">
+      <div class="text-h5"><q-icon name="history"/>&nbsp;You have not started a sprint.</div>
+      <span class="text-subtitle1">Go to
+        <router-link :to="{ path: 'backlog' }" class="text-accent">
+          Backlog page
+        </router-link> and start a sprint to continue...</span>
+    </div>
   </q-page>
 </template>
 
@@ -114,7 +121,7 @@ export default {
       return this.$store.getters['issues/SPRINTS_BY_CURRENT_PROJECT']
     },
     sprint: function () {
-      return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT']
+      return this.$store.getters['issues/CURRENT_SPRINT']
     },
     days_remaining: function () {
       const today = new Date()

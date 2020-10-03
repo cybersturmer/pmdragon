@@ -32,14 +32,25 @@ export function SPRINTS_BY_CURRENT_PROJECT (state, getters, rootState, rootGette
     .filter((sprint) => sprint.project === rootGetters['current/PROJECT'])
 }
 
-export function SPRINT_STARTED_BY_CURRENT_PROJECT (state, getters) {
-  return getters.SPRINTS_BY_CURRENT_PROJECT
-    .filter((sprint) => sprint.is_started === true).pop()
+export function CURRENT_SPRINT (state, getters, rootState, rootGetters) {
+  /** Get current sprint
+   * For current project
+   * Started
+   * Not completed **/
+  try {
+    return state.sprints
+      .filter((sprint) => sprint.project === rootGetters['current/PROJECT'] &&
+        sprint.is_started === true &&
+        sprint.is_completed === false)
+      .pop()
+  } catch (error) {
+    return false
+  }
 }
 
 export function SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES (state, getters) {
   try {
-    return getters.ISSUES_BY_IDS(getters.SPRINT_STARTED_BY_CURRENT_PROJECT.issues)
+    return getters.ISSUES_BY_IDS(getters.CURRENT_SPRINT.issues)
   } catch (error) {
     return []
   }
@@ -105,7 +116,7 @@ export function BACKLOG_ISSUES (state, getters) {
   }
 }
 
-export function BACKLOG_ISSUES_COUNT (state, getters, rootState, rootGetters) {
+export function BACKLOG_ISSUES_COUNT (state, getters) {
   try {
     return getters.BACKLOG.issues.length
   } catch (error) {
