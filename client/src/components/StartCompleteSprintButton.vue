@@ -13,12 +13,8 @@
 export default {
   name: 'StartCompleteSprintButton',
   props: {
-    sprint_id: {
-      type: Number,
-      required: true
-    },
-    is_started: {
-      type: Boolean,
+    sprint: {
+      type: Object,
       required: true
     },
     size: {
@@ -28,7 +24,7 @@ export default {
   },
   computed: {
     label: function () {
-      return this.is_started ? 'Complete sprint' : 'Start sprint'
+      return this.sprint.is_started ? 'Complete sprint' : 'Start sprint'
     }
   },
   methods: {
@@ -41,13 +37,25 @@ export default {
     },
     completeSprint (sprintId) {
       /** Complete started sprint **/
-      this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
-        .catch((error) => {
-          console.log(error)
+      this.$q.dialog({
+        dark: true,
+        title: 'Complete sprint?',
+        message: 'Would you like to complete Sprint',
+        ok: {
+          label: 'Complete',
+          color: 'accent'
+        },
+        cancel: true
+      })
+        .onOk(() => {
+          this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
+            .catch((error) => {
+              console.log(error)
+            })
         })
     },
     recognizeAction () {
-      this.is_started ? this.completeSprint(this.sprint_id) : this.startSprint(this.sprint_id)
+      this.sprint.is_started ? this.completeSprint(this.sprint.id) : this.startSprint(this.sprint.id)
     }
   }
 }

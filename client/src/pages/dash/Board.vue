@@ -21,7 +21,7 @@
             <q-icon name="access_time"></q-icon>
             <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
           </span>
-          <StartCompleteSprintButton size="md" :sprint_id="sprint.id" :is_started="sprint.is_started"/>
+          <StartCompleteSprintButton size="md" :sprint="sprint"/>
           <q-btn
             dark
             outline

@@ -34,8 +34,7 @@
                 <div class="col-4 text-right">
                   <StartCompleteSprintButton
                     v-if="index === 0"
-                    :sprint_id="sprint.id"
-                    :is_started="sprint.is_started"
+                    :sprint="sprint"
                   />
                   <SprintMorePopupMenu
                     :sprint_id="sprint.id"
