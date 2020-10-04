@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="col" v-if="backlogIssues">
-        <q-scroll-area class="rounded-borders bg-primary"
+        <q-scroll-area class="rounded-borders bg-primary q-pa-sm"
                        style="height: calc(100% - 35px); border: 1px solid #606060;">
           <draggable
             :value="backlogIssues"
