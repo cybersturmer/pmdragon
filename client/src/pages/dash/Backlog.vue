@@ -51,10 +51,10 @@
                 </div>
                 <draggable
                   :value="sprintIssues(sprint.id)"
+                  v-bind="dragOptions"
                   @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
                   @start="dragging = true"
-                  @end="dragging = true"
-                  group="issues">
+                  @end="dragging = true">
                   <transition-group type="transition" name="flip-list" tag="div">
                     <IssueBacklog
                       v-for="issue in sprintIssues(sprint.id)"
@@ -80,10 +80,10 @@
                        style="height: calc(100% - 35px); border: 1px solid #606060;">
           <draggable
             :value="backlogIssues"
+            v-bind="dragOptions"
             @change="handleDraggableEvent($event, drag_types.BACKLOG, backlog.id)"
-            style="padding: 10px; min-height: 67px;"
-            group="issues">
-            <transition-group type="transition" :name="'flip-list'" tag="div">
+            style="padding: 10px; min-height: 67px;">
+            <transition-group type="transition" name="flip-list" tag="div">
               <IssueBacklog
                 v-for="issue in backlogIssues"
                 :key="issue.id"
@@ -168,6 +168,14 @@ export default {
     }
   },
   computed: {
+    dragOptions () {
+      return {
+        animation: 200,
+        group: 'issues',
+        disabled: false,
+        ghostClass: 'ghost'
+      }
+    },
     backlog: function () {
       /** Getting current backlog by chosen workspace and project **/
       return this.$store.getters['issues/BACKLOG']
