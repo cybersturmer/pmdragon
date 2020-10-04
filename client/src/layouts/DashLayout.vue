@@ -35,6 +35,14 @@
           flat
           round
           dense
+          icon="account_circle"
+          class="q-mr-xs"
+        />
+        <!-- @todo MAKE IT WORK -->
+        <q-btn
+          flat
+          round
+          dense
           icon="exit_to_app"
           class="q-mr-xs"
           @click="logout"
