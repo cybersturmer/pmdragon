@@ -30,10 +30,22 @@ export default {
   methods: {
     startSprint (sprintId) {
       /** Start not empty sprint **/
-      this.$store.dispatch('issues/START_SPRINT', sprintId)
-        .catch((error) => {
-          console.log(error)
+      if (!this.sprint.started_at || !this.sprint.finished_at) {
+        this.$q.dialog({
+          dark: true,
+          title: 'Unable to start sprint',
+          message: 'Cant start sprint without start and end date. Set started at and finished at dates first.',
+          ok: {
+            label: 'OK',
+            color: 'accent'
+          }
         })
+      } else {
+        this.$store.dispatch('issues/START_SPRINT', sprintId)
+          .catch((error) => {
+            console.log(error)
+          })
+      }
     },
     completeSprint (sprintId) {
       /** Complete started sprint **/
