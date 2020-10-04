@@ -73,8 +73,9 @@
           <BlockHeaderInfo title="Backlog" :info="backlogIssuesLength"/>
         </div>
       </div>
-      <div class="col bg-primary" v-if="backlogIssues">
-        <q-scroll-area class="rounded-borders" style="height: calc(100% - 35px); border: 1px solid #606060;">
+      <div class="col" v-if="backlogIssues">
+        <q-scroll-area class="rounded-borders bg-primary"
+                       style="height: calc(100% - 35px); border: 1px solid #606060;">
           <draggable
             :value="backlogIssues"
             @change="handleDraggableEvent($event, drag_types.BACKLOG, backlog.id)"
