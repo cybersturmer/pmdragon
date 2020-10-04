@@ -46,14 +46,16 @@
               <div class="q-card--bordered q-pa-sm"
                    style="border: 1px dashed #606060; min-height: 67px;">
                 <div v-if="!areSprintIssues(sprint.id)"
-                     class="text-center text-accent q-pa-md">
+                     class="text-center text-accent q-pt-md">
                   Plan sprint by dropping issues here.
                 </div>
                 <draggable
                   :value="sprintIssues(sprint.id)"
                   @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
+                  @start="dragging = true"
+                  @end="dragging = true"
                   group="issues">
-                  <transition-group type="transition" :name="'flip-list'" tag="div">
+                  <transition-group type="transition" name="flip-list" tag="div">
                     <IssueBacklog
                       v-for="issue in sprintIssues(sprint.id)"
                       :key="issue.id"
@@ -161,7 +163,8 @@ export default {
       drag_types: {
         SPRINT: 1,
         BACKLOG: 0
-      }
+      },
+      dragging: false
     }
   },
   computed: {
@@ -524,6 +527,15 @@ export default {
 
   .flip-list-move {
     transition: transform 0.3s;
+  }
+
+  .no-move {
+    transition: transform 0s;
+  }
+
+  .ghost {
+    opacity: 0.5;
+    background: rgba(255, 255, 255, 0.6);
   }
 
   .my-card:not(:last-child) {
