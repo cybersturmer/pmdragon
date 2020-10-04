@@ -56,9 +56,9 @@
 
               <draggable
                 :value="issuesByState(issue_state.id)"
+                v-bind="dragOptions"
                 @change="handleIssueStateChanging($event, issue_state.id)"
-                class="full-height overflow-hidden-y"
-                group="issues">
+                class="full-height overflow-hidden-y">
 
                 <transition-group
                   type="transition"
@@ -111,6 +111,14 @@ export default {
   },
   mixins: [updateSprintMixin],
   computed: {
+    dragOptions () {
+      return {
+        animation: 200,
+        group: 'issues',
+        disabled: false,
+        ghostClass: 'ghost'
+      }
+    },
     issue_states: function () {
       return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
     },
@@ -230,5 +238,14 @@ export default {
 <style lang="scss">
   .flip-list-move {
     transition: transform 0.3s;
+  }
+
+  .no-move {
+    transition: transform 0s;
+  }
+
+  .ghost {
+    opacity: 0.5;
+    background: rgba(255, 255, 255, 0.6);
   }
 </style>
