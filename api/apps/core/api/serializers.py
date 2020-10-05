@@ -314,7 +314,9 @@ class PersonSerializer(serializers.ModelSerializer):
             'created_at'
         )
         extra_kwargs = {
-            'created_at': {'read_only': True}
+            'id': {'read_only': True},
+            'created_at': {'read_only': True},
+            'is_active': {'read_only': True}
         }
 
 
