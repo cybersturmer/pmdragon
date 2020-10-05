@@ -11,7 +11,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from apps.core.api.views import PersonRegistrationRequestCreateView, \
     PersonVerifyView, \
     PersonSetPasswordView, \
-    WorkspaceReadOnlyViewSet
+    WorkspaceReadOnlyViewSet, \
+    PersonUpdateView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -57,6 +58,10 @@ urlpatterns = [
     path('api/auth/workspaces/',
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
          name='workspaces'),
+
+    path('api/auth/person/<int:pk>/',
+         PersonUpdateView.as_view(),
+         name='persons'),
 
     path('api/core/', include('apps.core.api.urls', namespace='core_api'))
 ]

@@ -203,6 +203,20 @@ class PersonSetPasswordView(GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
+class PersonUpdateView(generics.UpdateAPIView,
+                       viewsets.ViewSetMixin):
+
+    queryset = User.objects.all()
+    serializer_class = PersonSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def update(self, request, *args, **kwargs):
+        # @todo Add Person data change processing.
+        print(request.user.person)
+        print(request.data)
+        return super(PersonUpdateView, self).update(request, *args, **kwargs)
+
+
 class IssueListUpdateApiView(UpdateAPIView):
     """
     Bulk update issues ordering, doesn't matter is it a Backlog
