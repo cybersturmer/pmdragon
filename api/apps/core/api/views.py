@@ -212,6 +212,7 @@ class PersonUpdateView(generics.UpdateAPIView,
     
     def update(self, request, *args, **kwargs):
         # @todo Add Person data change processing.
+        # @todo Person can edit just yourself
         print(request.user.person)
         print(request.data)
         return super(PersonUpdateView, self).update(request, *args, **kwargs)
