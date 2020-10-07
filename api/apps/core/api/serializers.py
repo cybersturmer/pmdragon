@@ -296,6 +296,20 @@ class PersonVerifySerializer(serializers.Serializer):
         pass
 
 
+class PersonUpdateSerializer(serializers.ModelSerializer):
+    """
+    We need this serializer for update base information
+    about person
+    """
+    class Meta:
+        model = Person
+        fields = (
+            'username',
+            'first_name',
+            'last_name'
+        )
+
+
 class PersonSerializer(serializers.ModelSerializer):
     """
     Common Person Serializer.
