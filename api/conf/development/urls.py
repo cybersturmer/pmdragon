@@ -12,7 +12,7 @@ from apps.core.api.views import PersonRegistrationRequestCreateView, \
     PersonVerifyView, \
     PersonSetPasswordView, \
     WorkspaceReadOnlyViewSet, \
-    PersonUpdateView
+    UserUpdateView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -59,8 +59,8 @@ urlpatterns = [
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
          name='workspaces'),
 
-    path('api/auth/person/<int:pk>/',
-         PersonUpdateView.as_view(),
+    path('api/auth/person/',
+         UserUpdateView.as_view(),
          name='persons'),
 
     path('api/core/', include('apps.core.api.urls', namespace='core_api'))

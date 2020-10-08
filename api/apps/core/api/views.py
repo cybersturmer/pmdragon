@@ -203,24 +203,35 @@ class PersonSetPasswordView(GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class PersonUpdateView(generics.UpdateAPIView,
-                       viewsets.ViewSetMixin):
+class UserUpdateView(generics.UpdateAPIView,
+                     viewsets.ViewSetMixin):
 
     queryset = User.objects.all()
-    serializer_class = PersonUpdateSerializer
+    serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        object_ = queryset.get(pk=self.request.user.id)
+        self.check_object_permissions(self.request, object_)
+
+        return object_
     
     def update(self, request, *args, **kwargs):
         user = request.user
 
-        # @todo we have to check it through serializer
-        # @todo Security PROBLEMS
-        for key, value in request.data.items():
-            setattr(user, key, value)
+        serializer = self.get_serializer(
+            user,
+            data=request.data,
+            partial=True
+        )
 
-        user.save()
+        if not serializer.is_valid():
+            return Response(serializer.errors)
 
-        return super(PersonUpdateView, self).update(request, *args, **kwargs)
+        self.perform_update(serializer)
+
+        return super(UserUpdateView, self).update(request, *args, **kwargs)
 
 
 class IssueListUpdateApiView(UpdateAPIView):
