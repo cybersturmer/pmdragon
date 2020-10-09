@@ -61,6 +61,11 @@ export function SET_LAST_NAME (state, payload) {
   LocalStorage.set('auth.last_name', payload)
 }
 
+export function SET_USERNAME (state, payload) {
+  state.username = payload
+  LocalStorage.set('auth.username', payload)
+}
+
 export function LOGOUT (state) {
   state.user_id = null
   state.first_name = null
