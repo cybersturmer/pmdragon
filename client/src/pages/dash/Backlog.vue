@@ -562,8 +562,4 @@ export default {
     }
   }
 
-  .text-amber {
-    color: #8b8b8b!important;
-  }
-
 </style>
