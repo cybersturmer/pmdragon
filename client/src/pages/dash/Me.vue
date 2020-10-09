@@ -2,8 +2,10 @@
   <q-page class="flex q-layout-padding">
     <div class="column full-width">
       <div class="row">
-        <q-card dark bordered class="bg-grey-9 my-card">
-          <q-card-section>
+        <!-- Main user Data card -->
+        <!-- @todo Better to move it to separate component -->
+        <q-card dark bordered class="bg-grey-9 q-ma-sm">
+          <q-card-section class="me_card">
             <div class="text-h6 text-center">Main user Data</div>
             <q-input
               dark
@@ -45,6 +47,53 @@
             </q-btn>
           </q-card-actions>
         </q-card>
+
+        <!-- Password card -->
+        <!-- @todo Better to move it to separate component -->
+        <q-card dark bordered class="bg-grey-9 q-ma-sm">
+          <q-card-section class="me_card">
+            <div class="text-h6 text-center">Password</div>
+            <q-input
+              dark
+              dense
+              square
+              outlined
+              type="password"
+              label="Old password"
+              v-model="password_form_data.oldPassword"
+              class="q-mb-sm"
+              standout="text-white bg-primary"
+            />
+            <q-input
+              dark
+              dense
+              square
+              outlined
+              type="password"
+              label="Password"
+              v-model="password_form_data.newPassword1"
+              class="q-mb-sm"
+              standout="text-white bg-primary"
+            />
+            <q-input
+              dark
+              dense
+              square
+              outlined
+              type="password"
+              label="Password confirmation"
+              v-model="password_form_data.newPassword2"
+              class="q-mb-sm"
+              standout="text-white bg-primary"
+            />
+          </q-card-section>
+
+          <q-card-actions vertical>
+            <q-btn flat @click="savePassword">
+              Update
+            </q-btn>
+          </q-card-actions>
+        </q-card>
       </div>
     </div>
   </q-page>
@@ -59,6 +108,11 @@ export default {
         firstName: this.$store.getters['auth/FIRST_NAME'],
         lastName: this.$store.getters['auth/LAST_NAME'],
         userName: this.$store.getters['auth/USERNAME']
+      },
+      password_form_data: {
+        oldPassword: '',
+        newPassword1: '',
+        newPassword2: ''
       }
     }
   },
@@ -70,12 +124,23 @@ export default {
         username: this.user_form_data.userName
       }
 
-      this.$store.dispatch('auth/USER_UPDATE', payload)
+      this.$store.dispatch('auth/UPDATE_USER_DATA', payload)
+    },
+    savePassword () {
+      const payload = {
+        old_password: this.password_form_data.oldPassword,
+        new_password1: this.password_form_data.newPassword1,
+        new_password2: this.password_form_data.newPassword2
+      }
+
+      this.$store.dispatch('auth/UPDATE_USER_PASSWORD', payload)
     }
   }
 }
 </script>
 
 <style scoped>
-
+ .me_card {
+   height: 200px;
+ }
 </style>

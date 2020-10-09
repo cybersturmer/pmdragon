@@ -14,7 +14,7 @@ export async function LOGOUT ({ dispatch }) {
   await AuthService.logout()
 }
 
-export async function USER_UPDATE ({ commit }, payload) {
+export async function UPDATE_USER_DATA ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true })
       .put('/auth/me/', payload)
@@ -24,6 +24,17 @@ export async function USER_UPDATE ({ commit }, payload) {
     commit('SET_FIRST_NAME', response.data.first_name)
     commit('SET_LAST_NAME', response.data.last_name)
     commit('SET_USERNAME', response.data.username)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function UPDATE_USER_PASSWORD ({ commit }, payload) {
+  try {
+    const response = await new Api({ auth: true })
+      .post('/auth/password/', payload)
+
+    HandleResponse.compare(200, response.status)
   } catch (error) {
     throw new ErrorWrapper(error)
   }
