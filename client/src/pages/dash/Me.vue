@@ -77,7 +77,5 @@ export default {
 </script>
 
 <style scoped>
-  .focused_input {
-    background-color: red;
-  }
+
 </style>
