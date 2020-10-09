@@ -30,6 +30,10 @@ export function LAST_NAME (state) {
   return state.last_name
 }
 
+export function USERNAME (state) {
+  return state.username
+}
+
 export function USER_ID (state) {
   return state.user_id
 }
