@@ -63,6 +63,10 @@ urlpatterns = [
          UserUpdateView.as_view(),
          name='me'),
 
+    path('api/auth/password/',
+         PersonSetPasswordView.as_view(),
+         name='password'),
+
     path('api/core/', include('apps.core.api.urls', namespace='core_api'))
 ]
 
