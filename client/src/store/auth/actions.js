@@ -5,7 +5,6 @@ export async function LOGIN ({ commit }, credentials) {
 }
 
 export async function REFRESH ({ commit }, refreshToken) {
-  alert('REFRESH WAS CALLED')
   return await AuthService.refresh(refreshToken)
 }
 
