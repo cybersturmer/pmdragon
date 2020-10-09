@@ -10,26 +10,32 @@
               dense
               square
               outlined
+              type="text"
               v-model="user_form_data.firstName"
               label="First name"
               class="q-mb-sm"
+              standout="text-white bg-primary"
             />
             <q-input
               dark
               dense
               square
               outlined
+              type="text"
               v-model="user_form_data.lastName"
               label="Last name"
               class="q-mb-sm"
+              standout="text-white bg-primary"
             />
             <q-input
               dark
               dense
               square
               outlined
+              type="text"
               v-model="user_form_data.userName"
               label="Username"
+              standout="text-white bg-primary"
             />
           </q-card-section>
 
@@ -71,5 +77,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .focused_input {
+    background-color: red;
+  }
 </style>
