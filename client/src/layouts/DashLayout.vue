@@ -37,6 +37,7 @@
           dense
           icon="account_circle"
           class="q-mr-xs"
+          @click="goToAccount"
         />
         <!-- @todo MAKE IT WORK -->
         <q-btn
@@ -90,7 +91,7 @@
             <img src="/statics/avatar.96.gif">
           </q-avatar>
           <div class="text-h6">{{ firstName }} {{ lastName }}</div>
-          <div>@sturmer</div>
+          <div><q-badge outline color="amber" :label="`@${username}`" /></div>
         </div>
       </q-card>
     </q-drawer>
@@ -131,6 +132,9 @@ export default {
           })
         })
     },
+    goToAccount () {
+      this.$router.push({ name: 'me' })
+    },
     goToWorkspaces () {
       this.$store.dispatch('current/RESET_WORKSPACE')
       this.$store.dispatch('current/RESET_PROJECT')
@@ -157,6 +161,9 @@ export default {
     },
     lastName: function () {
       return this.$store.getters['auth/LAST_NAME']
+    },
+    username: function () {
+      return this.$store.getters['auth/USERNAME']
     },
     isWorkspaceSelected: function () {
       return this.$store.getters['current/WORKSPACE']
