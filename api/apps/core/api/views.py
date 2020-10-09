@@ -227,7 +227,8 @@ class UserUpdateView(generics.UpdateAPIView,
         )
 
         if not serializer.is_valid():
-            return Response(serializer.errors)
+            return Response(data=serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
         self.perform_update(serializer)
 
