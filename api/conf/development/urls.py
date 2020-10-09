@@ -59,9 +59,9 @@ urlpatterns = [
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
          name='workspaces'),
 
-    path('api/auth/person/',
+    path('api/auth/me/',
          UserUpdateView.as_view(),
-         name='persons'),
+         name='me'),
 
     path('api/core/', include('apps.core.api.urls', namespace='core_api'))
 ]
