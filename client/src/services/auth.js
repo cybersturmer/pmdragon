@@ -118,12 +118,13 @@ function _setAuthData (access, refresh) {
 /**
  * Set User Data (to Vuex store).
  * @param data Is response of API (/api/auth/obtain),
- * at least first_name and last name should exists
+ * at least first_name, last name and username should exists
  * @private
  */
 function _setUserData (data) {
   $store.commit('auth/SET_FIRST_NAME', data.first_name)
   $store.commit('auth/SET_LAST_NAME', data.last_name)
+  $store.commit('auth/SET_USERNAME', data.username)
 }
 
 /**
