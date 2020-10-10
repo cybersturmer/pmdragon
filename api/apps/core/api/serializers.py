@@ -103,6 +103,7 @@ class UserSetPasswordSerializer(serializers.Serializer):
     """
     Serializer to update password of user.
     """
+
     old_password = serializers.CharField(max_length=128, write_only=True)
     new_password1 = serializers.CharField(max_length=128, write_only=True)
     new_password2 = serializers.CharField(max_length=128, write_only=True)
@@ -142,6 +143,14 @@ class UserSetPasswordSerializer(serializers.Serializer):
 
         if not self.set_password_form.is_valid():
             serializers.ValidationError(self.set_password_form.errors)
+
+        new_password1 = attrs['new_password1']
+        new_password2 = attrs['new_password2']
+
+        if new_password1 != new_password2:
+            serializers.ValidationError({
+                'new_password2': "Password confirmation doesn't match password"
+            })
 
         return attrs
 
