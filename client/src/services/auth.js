@@ -125,6 +125,7 @@ function _setUserData (data) {
   $store.commit('auth/SET_FIRST_NAME', data.first_name)
   $store.commit('auth/SET_LAST_NAME', data.last_name)
   $store.commit('auth/SET_USERNAME', data.username)
+  $store.commit('auth/SET_AVATAR', data.avatar)
 }
 
 /**

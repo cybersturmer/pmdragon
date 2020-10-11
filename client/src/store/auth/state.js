@@ -6,6 +6,7 @@ export default function () {
     username: LocalStorage.getItem('auth.username') || null,
     first_name: LocalStorage.getItem('auth.first_name') || null,
     last_name: LocalStorage.getItem('auth.last_name') || null,
+    avatar: LocalStorage.getItem('auth.avatar') || null,
     tokens: {
       access: LocalStorage.getItem('auth.tokens.access') || {
         data: null,

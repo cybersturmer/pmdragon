@@ -34,6 +34,10 @@ export function USERNAME (state) {
   return state.username
 }
 
+export function AVATAR (state) {
+  return state.avatar
+}
+
 export function USER_ID (state) {
   return state.user_id
 }
