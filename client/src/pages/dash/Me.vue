@@ -94,6 +94,37 @@
             </q-btn>
           </q-card-actions>
         </q-card>
+
+        <!-- Avatar card -->
+        <!-- @todo Better to move it to separate component -->
+        <q-card dark bordered class="bg-grey-9 q-ma-sm">
+          <q-card-section class="me_card">
+            <div class="text-h6 text-center">Profile picture</div>
+            <q-img
+              :src="avatar_url"
+              spinner-color="white"
+            />
+            <q-file
+              dark
+              filled
+              dense
+              v-model="avatar_form_data.file"
+              label="Pick file"
+              counter
+              :counter-label="aboutAvatarFilesToUpload"
+            >
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
+          </q-card-section>
+
+          <q-card-actions vertical>
+            <q-btn flat @click="savePassword">
+              Update
+            </q-btn>
+          </q-card-actions>
+        </q-card>
       </div>
     </div>
   </q-page>
@@ -113,6 +144,9 @@ export default {
         oldPassword: '',
         newPassword1: '',
         newPassword2: ''
+      },
+      avatar_form_data: {
+        file: null
       }
     }
   },
@@ -134,6 +168,14 @@ export default {
       }
 
       this.$store.dispatch('auth/UPDATE_USER_PASSWORD', payload)
+    },
+    aboutAvatarFilesToUpload ({ totalSize }) {
+      return totalSize
+    }
+  },
+  computed: {
+    avatar_url: function () {
+      return this.$store.getters['auth/AVATAR']
     }
   }
 }
@@ -142,5 +184,7 @@ export default {
 <style scoped>
  .me_card {
    height: 200px;
+   width: 213px;
+   overflow: hidden;
  }
 </style>
