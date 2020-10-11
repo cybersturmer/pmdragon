@@ -73,6 +73,10 @@ class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerialize
 
         try:
             avatar_url = request.build_absolute_uri(self.user.person.avatar.url)
+
+            # @todo make it smarter
+            avatar_url = avatar_url.replace('http://', 'https://')
+
         except ValueError:
             avatar_url = None
 
