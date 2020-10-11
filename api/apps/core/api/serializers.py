@@ -69,11 +69,18 @@ class TokenObtainPairExtendedSerializer(serializers_jwt.TokenObtainPairSerialize
         assert len(parent_data) == 0, \
             _('Some parent data was missing')
 
+        request = self.context.get('request')
+
+        try:
+            avatar_url = request.build_absolute_uri(self.user.person.avatar.url)
+        except ValueError:
+            avatar_url = None
+
         data = {
             'username': self.user.username,
             'first_name': self.user.first_name,
             'last_name': self.user.last_name,
-            'avatar': self.user.person.avatar,
+            'avatar': avatar_url,
             'tokens': {
                 'access': access_token,
                 'refresh': refresh_token,
