@@ -30,7 +30,7 @@ def image_upload_location(instance, filename) -> str:
     name, extension = os.path.splitext(filename)
     uniq_name = uuid.uuid4().hex
 
-    path = f'person_{instance.user.id}/images/{direction}_{uniq_name}_{extension}'
+    path = f'person_{instance.user.id}/images/{direction}_{uniq_name}{extension}'
 
     return path
 
