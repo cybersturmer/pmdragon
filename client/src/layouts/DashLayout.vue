@@ -88,7 +88,7 @@
       <q-card square flat class="absolute-top bg-grey-8" style="height: 150px;">
         <div class="absolute-bottom text-center bg-grey-8" style="margin-bottom: 1em;">
           <q-avatar size="65px" class="q-mb-sm" style="filter: grayscale(100%)">
-            <img src="/statics/avatar.96.gif">
+            <img :src="avatar_url">
           </q-avatar>
           <div class="text-h6">{{ firstName }} {{ lastName }}</div>
           <div><q-badge outline color="amber" :label="`@${username}`" /></div>
@@ -164,6 +164,9 @@ export default {
     },
     username: function () {
       return this.$store.getters['auth/USERNAME']
+    },
+    avatar_url: function () {
+      return this.$store.getters['auth/AVATAR']
     },
     isWorkspaceSelected: function () {
       return this.$store.getters['current/WORKSPACE']

@@ -100,15 +100,12 @@
         <q-card dark bordered class="bg-grey-9 q-ma-sm">
           <q-card-section class="me_card">
             <div class="text-h6 text-center">Profile picture</div>
-            <q-img
-              :src="avatar_url"
-              spinner-color="white"
-            />
             <q-file
               dark
               filled
               dense
               v-model="avatar_form_data.file"
+              standout="text-white bg-primary"
               label="Pick file"
               counter
               :counter-label="aboutAvatarFilesToUpload"
@@ -185,6 +182,5 @@ export default {
  .me_card {
    height: 200px;
    width: 213px;
-   overflow: hidden;
  }
 </style>
