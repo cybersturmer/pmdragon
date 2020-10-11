@@ -12,7 +12,8 @@ from apps.core.api.views import PersonRegistrationRequestCreateView, \
     PersonVerifyView, \
     PersonSetPasswordView, \
     WorkspaceReadOnlyViewSet, \
-    UserUpdateView
+    UserUpdateView, \
+    PersonAvatarUpload
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -26,7 +27,7 @@ schema_view = get_schema_view(version=1,
                               title=API_TITLE,
                               description=API_DESCRIPTION,
                               renderer_classes=[JSONOpenAPIRenderer],
-                              permission_classes=(AllowAny, ))
+                              permission_classes=(AllowAny,))
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -66,6 +67,10 @@ urlpatterns = [
     path('api/auth/password/',
          PersonSetPasswordView.as_view(),
          name='password'),
+
+    path('api/auth/avatar/',
+         PersonAvatarUpload.as_view(),
+         name='avatar'),
 
     path('api/core/', include('apps.core.api.urls', namespace='core_api'))
 ]
