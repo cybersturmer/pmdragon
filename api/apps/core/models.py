@@ -1,3 +1,7 @@
+import os
+import uuid
+from enum import Enum
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -11,6 +15,24 @@ from libs.helpers.datetimepresets import day_later
 
 url_validator = RegexValidator(r'^[a-z]{3,20}$',
                                _('From 3 to 20 english lowercase letters are allowed'))
+
+
+class UploadPersonsDirections(Enum):
+    AVATAR = 'avatar'
+
+
+def image_upload_location(instance, filename) -> str:
+
+    direction = {
+        isinstance(instance, Person): UploadPersonsDirections.AVATAR.value
+    }[True]
+
+    name, extension = os.path.splitext(filename)
+    uniq_name = uuid.uuid4().hex
+
+    path = f'person_{instance.user.id}/images/{direction}_{uniq_name}_{extension}'
+
+    return path
 
 
 class PersonRegistrationRequestValidManager(models.Manager):
@@ -94,6 +116,11 @@ class Person(models.Model):
 
     updated_at = models.DateTimeField(verbose_name=_('Updated at'),
                                       auto_now=True)
+
+    avatar = models.ImageField(
+        upload_to=image_upload_location,
+        null=True
+    )
 
     @property
     def username(self):
@@ -667,9 +694,9 @@ class Sprint(models.Model):
                 started_sprints_amount = \
                     Sprint.objects.filter(workspace=self.workspace,
                                           project=self.project,
-                                          is_started=True)\
-                                  .exclude(pk=self.pk) \
-                                  .count()
+                                          is_started=True) \
+                        .exclude(pk=self.pk) \
+                        .count()
 
                 if started_sprints_amount > 0:
                     raise ValidationError(_('Another sprint was already started. '

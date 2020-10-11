@@ -7,6 +7,10 @@ from .models import *
 
 class PersonInlineAdmin(admin.StackedInline):
     model = Person
+    fields = (
+        'phone',
+        'avatar'
+    )
     can_delete = False
 
 
