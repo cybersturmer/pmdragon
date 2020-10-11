@@ -2,8 +2,9 @@ from smtplib import SMTPException
 
 from django.contrib.auth.admin import sensitive_post_parameters_m
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import viewsets, generics, mixins, status
+from rest_framework import viewsets, generics, mixins, status, views
 from rest_framework.generics import GenericAPIView, UpdateAPIView
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -201,6 +202,20 @@ class PersonSetPasswordView(GenericAPIView):
 
         return Response({'detail': _('New password has been saved.')},
                         status=status.HTTP_200_OK)
+
+
+class PersonAvatarUpload(views.APIView):
+    """
+    Person update picture method
+    """
+    parser_classes = [FileUploadParser]
+
+    def put(self, request, filename, format=None):
+        file_obj = request.data['file']
+
+        print(file_obj)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserUpdateView(generics.UpdateAPIView,
