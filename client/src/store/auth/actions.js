@@ -39,3 +39,23 @@ export async function UPDATE_USER_PASSWORD ({ commit }, payload) {
     throw new ErrorWrapper(error)
   }
 }
+
+export async function UPDATE_PERSON_AVATAR ({ commit }, file) {
+  console.log(file)
+  const formData = new FormData()
+  formData.append('image', file)
+
+  try {
+    // @todo change filename to something really uniq
+    const response = await new Api({ auth: true })
+      .put(`/auth/avatar/${file.name}/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+    HandleResponse.compare(204, response.status)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}

@@ -117,7 +117,7 @@
           </q-card-section>
 
           <q-card-actions vertical>
-            <q-btn flat @click="savePassword">
+            <q-btn flat @click="saveAvatar">
               Update
             </q-btn>
           </q-card-actions>
@@ -165,6 +165,9 @@ export default {
       }
 
       this.$store.dispatch('auth/UPDATE_USER_PASSWORD', payload)
+    },
+    saveAvatar () {
+      this.$store.dispatch('auth/UPDATE_PERSON_AVATAR', this.avatar_form_data.file)
     },
     aboutAvatarFilesToUpload ({ totalSize }) {
       return totalSize
