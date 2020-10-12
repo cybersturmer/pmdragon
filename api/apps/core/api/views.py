@@ -210,10 +210,11 @@ class PersonAvatarUpload(views.APIView):
     """
     parser_classes = [FileUploadParser]
 
-    def put(self, request, filename, format=None):
+    def put(self, request, filename):
         file_obj = request.data['file']
 
         print(file_obj)
+        print(filename)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
