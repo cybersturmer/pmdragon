@@ -17,8 +17,6 @@ export class Api {
     if (this.isAuth) {
       this.instance.interceptors.request.use(
         (request) => {
-          console.log('Interceptor')
-          console.log(request)
           request.headers.authorization = AuthService.getBearer()
 
           if (!AuthService.authNeedUpdate()) return request
@@ -31,20 +29,32 @@ export class Api {
             .catch(error => Promise.reject(error))
         },
         (error) => {
-          console.log('API code')
-          console.log(error)
           if (error.response.status !== 401) return Promise.reject(error)
 
           /** We dont have valid refresh token, so force user to login page **/
           if (!AuthService.isRefreshToken()) $router.push({ name: 'login' })
 
-          console.log('Refresh token is valid, we gonna refresh it')
           AuthService.refresh()
             .then(() => {
               error.headers.authorization = AuthService.getBearer()
               return error
             })
         })
+
+      this.instance.interceptors.response.use(function (response) {
+        return response
+      }, function (error) {
+        if (error.response && error.response.status === 401) {
+          const config = error.response.config
+
+          AuthService.refresh()
+            .then(() => {
+              config.headers.authorization = AuthService.getBearer()
+              return axios(config)
+            })
+        }
+        return Promise.reject(error)
+      })
     }
 
     return this.instance
