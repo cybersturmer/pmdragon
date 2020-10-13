@@ -35,7 +35,7 @@ export function USERNAME (state) {
 }
 
 export function AVATAR (state) {
-  return state.avatar
+  return state.avatar ? state.avatar : null
 }
 
 export function USER_ID (state) {
