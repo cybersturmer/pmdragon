@@ -99,28 +99,19 @@
         <!-- @todo Better to move it to separate component -->
         <q-card dark bordered class="bg-grey-9 q-ma-sm">
           <q-card-section class="me_card">
-            <div class="text-h6 text-center">Profile picture</div>
-            <q-file
+            <q-uploader
               dark
-              filled
-              dense
-              v-model="avatar_form_data.file"
-              standout="text-white bg-primary"
-              label="Pick file"
-              counter
-              :counter-label="aboutAvatarFilesToUpload"
-            >
-              <template v-slot:prepend>
-                <q-icon name="attach_file" />
-              </template>
-            </q-file>
+              color="primary"
+              square
+              flat
+              no-thumbnails
+              label="Avatar picture"
+              :factory="uploadFileAvatar"
+              auto-upload
+              hide-upload-btn
+              style="max-width: 180px"
+            />
           </q-card-section>
-
-          <q-card-actions vertical>
-            <q-btn flat @click="saveAvatar">
-              Update
-            </q-btn>
-          </q-card-actions>
         </q-card>
       </div>
     </div>
@@ -128,6 +119,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'AccountView',
   data () {
@@ -166,11 +158,10 @@ export default {
 
       this.$store.dispatch('auth/UPDATE_USER_PASSWORD', payload)
     },
-    saveAvatar () {
-      this.$store.dispatch('auth/UPDATE_PERSON_AVATAR', this.avatar_form_data.file)
-    },
-    aboutAvatarFilesToUpload ({ totalSize }) {
-      return totalSize
+    uploadFileAvatar (files) {
+      files.forEach(file => {
+        return this.$store.dispatch('auth/UPDATE_PERSON_AVATAR', file)
+      })
     }
   },
   computed: {
@@ -181,9 +172,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
  .me_card {
    height: 200px;
    width: 213px;
  }
+
+  .q-uploader__list {
+    font-size: 0.5em;
+  }
+
+  .q-uploader__subtitle {
+   font-size: 10px;
+  }
+
+ .q-uploader__title {
+   font-size: 12px!important;
+ }
+
 </style>
