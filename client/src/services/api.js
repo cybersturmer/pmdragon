@@ -6,8 +6,9 @@ import $router from 'src/router'
 export class Api {
   constructor (options) {
     this.isAuth = options && options.auth ? options.auth : false
+    this.baseURL = DEBUG ? DEBUG_ENV.url : PROD_ENV.url
     this.instance = axios.create({
-      baseURL: DEBUG ? DEBUG_ENV.url : PROD_ENV.url
+      baseURL: this.baseURL
     })
 
     return this.init()
