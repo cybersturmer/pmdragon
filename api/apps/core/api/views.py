@@ -210,7 +210,13 @@ class PersonAvatarUpload(views.APIView):
     """
     parser_classes = [FileUploadParser]
 
-    def put(self, request, filename):
+    def get_parser_context(self, http_request):
+        context = super(PersonAvatarUpload, self).get_parser_context(http_request)
+        context['kwargs']['filename'] = 'avatar'
+
+        return context
+
+    def put(self, request, filename='avatar'):
         file_obj = request.data['file']
 
         print(file_obj)

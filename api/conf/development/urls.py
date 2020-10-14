@@ -68,7 +68,7 @@ urlpatterns = [
          PersonSetPasswordView.as_view(),
          name='password'),
 
-    path('api/auth/avatar/<filename>/',
+    path('api/auth/avatar/',
          PersonAvatarUpload.as_view(),
          name='avatar'),
 
