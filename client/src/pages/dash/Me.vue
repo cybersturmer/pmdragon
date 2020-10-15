@@ -197,6 +197,7 @@ export default {
  .q-uploader__file--img {
    min-width: initial;
    background-size: contain;
+   background-repeat: space;
    height: 155px;
  }
 

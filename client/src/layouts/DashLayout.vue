@@ -32,6 +32,7 @@
           @click="goToSettings"
         />
         <q-btn
+          v-if="isWorkspaceSelected"
           flat
           round
           dense
