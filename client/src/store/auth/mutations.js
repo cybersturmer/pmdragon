@@ -67,10 +67,15 @@ export function SET_USERNAME (state, payload) {
 }
 
 export function SET_AVATAR (state, payload) {
-  if (payload === null) return false
+  if (payload == null) return false
 
   state.avatar = payload
   LocalStorage.set('auth.avatar', payload)
+}
+
+export function RESET_AVATAR (state) {
+  state.avatar = null
+  LocalStorage.remove('auth.avatar')
 }
 
 export function LOGOUT (state) {

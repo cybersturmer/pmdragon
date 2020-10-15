@@ -14,6 +14,10 @@ export class Api {
     return this.init()
   }
 
+  getJwtToken () {
+    return AuthService.getBearer()
+  }
+
   init () {
     if (this.isAuth) {
       this.instance.interceptors.request.use(

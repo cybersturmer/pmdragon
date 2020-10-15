@@ -83,7 +83,6 @@
               type="password"
               label="Password confirmation"
               v-model="password_form_data.newPassword2"
-              class="q-mb-sm"
               standout="text-white bg-primary"
             />
           </q-card-section>
@@ -99,16 +98,17 @@
         <!-- @todo Better to move it to separate component -->
         <q-card dark bordered class="bg-grey-9 q-ma-sm">
           <q-card-section class="me_card">
+            <div class="text-h6 text-center">Avatar picture</div>
             <q-uploader
               dark
-              color="primary"
               square
               flat
-              no-thumbnails
-              label="Avatar picture"
+              :accept="avatarAllowMimes"
+              max-files="1"
               :factory="uploadFileAvatar"
               auto-upload
               hide-upload-btn
+              @removed="onRemoved"
               style="max-width: 180px"
             />
           </q-card-section>
@@ -119,6 +119,7 @@
 </template>
 
 <script>
+import { AVATAR_ALLOW_MIMES } from 'src/services/allow'
 
 export default {
   name: 'AccountView',
@@ -133,9 +134,6 @@ export default {
         oldPassword: '',
         newPassword1: '',
         newPassword2: ''
-      },
-      avatar_form_data: {
-        file: null
       }
     }
   },
@@ -162,25 +160,45 @@ export default {
       files.forEach(file => {
         return this.$store.dispatch('auth/UPDATE_PERSON_AVATAR', file)
       })
+    },
+    onRemoved (file) {
+      return this.$store.dispatch('auth/DELETE_PERSON_AVATAR')
     }
   },
   computed: {
     avatar_url: function () {
       return this.$store.getters['auth/AVATAR']
+    },
+    avatarAllowMimes: function () {
+      return AVATAR_ALLOW_MIMES
     }
+  },
+  mounted () {
+
   }
 }
 </script>
 
-<style>
+<style lang="scss">
  .me_card {
-   height: 200px;
+   min-height: 200px;
    width: 213px;
  }
 
   .q-uploader__list {
     font-size: 0.5em;
+    padding: 5px;
+    background-color: $accent;
+    overflow: hidden;
+    height: 165px;
+    max-height: 165px;
   }
+
+ .q-uploader__file--img {
+   min-width: initial;
+   background-size: contain;
+   height: 155px;
+ }
 
   .q-uploader__subtitle {
    font-size: 10px;

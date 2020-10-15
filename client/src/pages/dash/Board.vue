@@ -4,19 +4,19 @@
       <!-- Here we gonna put information about sprint and view controls -->
 
       <div class="full-width row q-pa-sm">
-        <div class="col-6">
+        <div class="col">
           <span class="text-h5 q-mr-md">
             <!-- Sprint name -->
             {{ sprint.title }}
           </span>
-          <span class="text-h5  text-subtitle1 text-accent q-mr-md">
+          <span class="xs-hide sm-hide text-subtitle1 text-accent q-mr-md">
             <!-- Sprint goal -->
             ( {{ sprint.goal }} )
           </span>
 
         </div>
-        <div class="col-6 text-right">
-          <span class="text-h5 q-mr-md">
+        <div class="col text-right">
+          <span class="text-h6 q-mr-md">
             <!-- Days till the end of sprint remaining and dates on hover -->
             <q-icon name="access_time"></q-icon>
             <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
@@ -28,7 +28,7 @@
             size="md"
             color="accent"
             icon-right="edit"
-            class="float-right q-ml-md"
+            class="xs-hide sm-hide float-right q-ml-md"
             @click="editSprintDialog(sprint)"
           />
         </div>

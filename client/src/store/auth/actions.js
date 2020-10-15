@@ -52,7 +52,22 @@ export async function UPDATE_PERSON_AVATAR ({ commit }, file) {
         }
       })
 
+    HandleResponse.compare(200, response.status)
+    commit('SET_AVATAR', response.data.avatar)
+
+    return response.data
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function DELETE_PERSON_AVATAR ({ commit }, file) {
+  try {
+    const response = await new Api({ auth: true })
+      .delete('/auth/avatar/')
+
     HandleResponse.compare(204, response.status)
+    commit('RESET_AVATAR')
   } catch (error) {
     throw new ErrorWrapper(error)
   }
