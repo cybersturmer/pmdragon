@@ -4,7 +4,7 @@ from django.contrib.auth.admin import sensitive_post_parameters_m
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import viewsets, generics, mixins, status, views
 from rest_framework.generics import GenericAPIView, UpdateAPIView
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -206,23 +206,36 @@ class PersonSetPasswordView(GenericAPIView):
 
 class PersonAvatarUpload(views.APIView):
     """
-    Person update picture method
+    Person avatar picture APIView
     """
-    parser_classes = [FileUploadParser]
+    parser_classes = [MultiPartParser]
 
-    def get_parser_context(self, http_request):
-        context = super(PersonAvatarUpload, self).get_parser_context(http_request)
-        context['kwargs']['filename'] = 'avatar'
+    def put(self, request):
+        file_obj = request.data['image']
 
-        return context
+        person: Person = self.request.user.person
+        person.avatar.save(file_obj.name, file_obj)
+        person.save()
 
-    def put(self, request, filename='avatar'):
-        file_obj = request.data['file']
+        avatar_url = request.build_absolute_uri(person.avatar.url).replace('http://', 'https://')
 
-        print(file_obj)
-        print(filename)
+        response_data = {
+            'avatar': avatar_url
+        }
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            data=response_data,
+            status=status.HTTP_200_OK
+        )
+
+    def delete(self, request):
+        person: Person = self.request.user.person
+        person.avatar.delete()
+        person.save()
+
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class UserUpdateView(generics.UpdateAPIView,
