@@ -37,3 +37,12 @@ export function PROJECT_NAME (state, getters) {
 export function INTERFACE_THEME (state) {
   return state.interface_theme
 }
+
+export function PERSON_BY_ID (state, getters) {
+  /** Getting person by id from current workspace **/
+  return personId => {
+    return getters.WORKSPACE_DATA.participants
+      .filter((participant) => participant.id === personId)
+      .pop()
+  }
+}

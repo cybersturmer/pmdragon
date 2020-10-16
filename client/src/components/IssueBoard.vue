@@ -5,7 +5,10 @@
     bordered
     class="my-card bg-grey-8 q-ma-sm overflow-hidden text-center">
     <q-card-section>
-      <span class="text-muted">{{ title }}</span>
+      <span class="text-muted">#{{ issue.id }} {{ issue.title }}</span>
+      <q-avatar v-if="issue.assignee">
+        <img :src="assignee.avatar" :alt="`${assignee.first_name} ${assignee.last_name}`">
+      </q-avatar>
     </q-card-section>
   </q-card>
 </template>
@@ -14,13 +17,14 @@
 export default {
   name: 'IssueBoard',
   props: {
-    id: {
-      type: Number,
+    issue: {
+      type: Object,
       required: true
-    },
-    title: {
-      type: String,
-      required: true
+    }
+  },
+  computed: {
+    assignee: function () {
+      return this.$store.getters['current/PERSON_BY_ID'](this.issue.assignee)
     }
   }
 }

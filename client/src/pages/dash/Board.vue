@@ -71,8 +71,9 @@
                   <IssueBoard
                     v-for="issue in issuesByState(issue_state.id)"
                     :key="issue.id"
-                    :id="issue.id"
-                    :title="issue.title"/>
+                    :issue="issue"
+                    :assignee="getAssigneeById()"
+                  />
                 </transition-group>
               </draggable>
             </q-scroll-area>
@@ -147,6 +148,9 @@ export default {
     }
   },
   methods: {
+    getAssigneeById: function (assigneeId) {
+      return this.$store.getters['current/PERSON_BY_ID'](assigneeId)
+    },
     issuesByState: function (stateId) {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES']
         .filter((issue) => issue.state_category === stateId)
