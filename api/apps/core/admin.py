@@ -94,6 +94,7 @@ class IssueAdmin(admin.ModelAdmin):
         'title',
         'type_category',
         'state_category',
+        'assignee',
         'created_by'
     )
     readonly_fields = (

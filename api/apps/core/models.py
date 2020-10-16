@@ -389,9 +389,17 @@ class Issue(models.Model):
                                        null=True,
                                        on_delete=models.SET_NULL)
 
+    assignee = models.ForeignKey(Person,
+                                 verbose_name=_('Assignee'),
+                                 db_index=True,
+                                 null=True,
+                                 on_delete=models.SET_NULL,
+                                 related_name='assigned_issues')
+
     created_by = models.ForeignKey(Person,
                                    verbose_name=_('Created by'),
-                                   on_delete=models.CASCADE)
+                                   on_delete=models.CASCADE,
+                                   related_name='created_issues')
 
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)

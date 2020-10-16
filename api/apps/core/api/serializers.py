@@ -455,6 +455,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'project',
             'type_category',
             'state_category',
+            'assignee',
             'created_by',
             'created_at',
             'ordering',
