@@ -343,6 +343,7 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'username',
+            'avatar',
             'first_name',
             'last_name',
             'is_active',
