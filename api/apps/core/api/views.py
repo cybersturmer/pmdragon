@@ -217,7 +217,7 @@ class PersonAvatarUpload(views.APIView):
         person.avatar.save(file_obj.name, file_obj)
         person.save()
 
-        avatar_url = request.build_absolute_uri(person.avatar.url).replace('http://', 'https://')
+        avatar_url = request.build_absolute_uri(person.avatar.url)
 
         response_data = {
             'avatar': avatar_url
