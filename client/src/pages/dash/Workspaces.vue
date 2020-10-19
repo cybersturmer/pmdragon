@@ -45,14 +45,14 @@ export default {
   },
   computed: {
     workspaces: function () {
-      return this.$store.getters['current/WORKSPACES']
+      return this.$store.getters['auth/WORKSPACES']
     }
   },
   mounted () {
     this.$store.dispatch('current/RESET_WORKSPACE')
     this.$store.dispatch('current/RESET_PROJECT')
 
-    this.$store.dispatch('current/INIT_WORKSPACES')
+    this.$store.dispatch('auth/INIT_WORKSPACES')
       .catch((e) => {
         console.log(e)
         this.$q.dialog({

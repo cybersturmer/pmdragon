@@ -22,6 +22,39 @@ export function REFRESH_TOKEN (state) {
   return state.tokens.refresh.data
 }
 
+export function PERSON_BY_ID (state, getters) {
+  /** Getting person by id from current workspace **/
+  return personId => {
+    return getters.WORKSPACE_DATA.participants
+      .filter((participant) => participant.id === personId)
+      .pop()
+  }
+}
+
+export function WORKSPACES (state) {
+  return state.workspaces
+}
+
+export function WORKSPACE_DATA (state, getters, rootState, rootGetters) {
+  return state.workspaces.find(workspace => workspace.prefix_url === rootGetters['current/WORKSPACE'])
+}
+
+export function WORKSPACE_ID (state, getters) {
+  return getters.WORKSPACE_DATA.id
+}
+
+export function PROJECT_DATA (state, getters, rootState, rootGetters) {
+  return getters.WORKSPACE_DATA.projects.find(project => project.id === rootGetters['current/PROJECT'])
+}
+
+export function PROJECT_NAME (state, getters) {
+  try {
+    return getters.PROJECT_DATA.title
+  } catch (e) {
+    return null
+  }
+}
+
 export function FIRST_NAME (state) {
   return state.first_name
 }

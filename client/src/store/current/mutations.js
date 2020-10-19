@@ -1,13 +1,8 @@
 import { LocalStorage } from 'quasar'
 
-export function INIT_WORKSPACES (state, payload) {
-  state.workspaces = payload
-  LocalStorage.set('current.workspaces', payload)
-}
-
+// Workspaces managing
 export function SELECT_WORKSPACE (state, payload) {
   state.workspace = payload
-  // todo Do we really need to store data in LC?
   LocalStorage.set('current.workspace', payload)
 }
 
@@ -16,6 +11,7 @@ export function RESET_WORKSPACE (state) {
   LocalStorage.remove('current.workspace')
 }
 
+// Project managing
 export function RESET_PROJECT (state) {
   state.project = null
   LocalStorage.remove('current.project')
@@ -26,13 +22,13 @@ export function SELECT_PROJECT (state, payload) {
   LocalStorage.set('current.project', payload)
 }
 
+// Settings managing
 export function SELECT_INTERFACE_THEME (state, payload) {
   state.interface_theme = payload
   LocalStorage.set('current.interface_theme', payload)
 }
 
 export function RESET (state) {
-  state.workspaces = []
   state.workspace = null
   state.projects = []
   state.project = null

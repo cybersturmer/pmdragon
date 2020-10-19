@@ -148,8 +148,14 @@ export default {
     }
   },
   methods: {
+    getInitialData: function () {
+      this.$store.dispatch('issues/INIT_ISSUE_TYPES')
+      this.$store.dispatch('issues/INIT_ISSUE_STATES')
+      this.$store.dispatch('issues/INIT_SPRINTS')
+      this.$store.dispatch('issues/INIT_ISSUES')
+    },
     getAssigneeById: function (assigneeId) {
-      return this.$store.getters['current/PERSON_BY_ID'](assigneeId)
+      return this.$store.getters['auth/PERSON_BY_ID'](assigneeId)
     },
     issuesByState: function (stateId) {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES']
@@ -232,10 +238,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('issues/INIT_ISSUE_TYPES')
-    this.$store.dispatch('issues/INIT_ISSUE_STATES')
-    this.$store.dispatch('issues/INIT_SPRINTS')
-    this.$store.dispatch('issues/INIT_ISSUES')
+    this.getInitialData()
   }
 }
 </script>

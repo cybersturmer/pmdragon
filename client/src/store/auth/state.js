@@ -7,6 +7,7 @@ export default function () {
     first_name: LocalStorage.getItem('auth.first_name') || null,
     last_name: LocalStorage.getItem('auth.last_name') || null,
     avatar: LocalStorage.getItem('auth.avatar') || null,
+    workspaces: LocalStorage.getItem('auth.workspaces') || [],
     tokens: {
       access: LocalStorage.getItem('auth.tokens.access') || {
         data: null,

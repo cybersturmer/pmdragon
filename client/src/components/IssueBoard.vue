@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     assignee: function () {
-      return this.$store.getters['current/PERSON_BY_ID'](this.issue.assignee)
+      return this.$store.getters['auth/PERSON_BY_ID'](this.issue.assignee)
     }
   }
 }

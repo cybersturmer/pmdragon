@@ -78,12 +78,18 @@ export function RESET_AVATAR (state) {
   LocalStorage.remove('auth.avatar')
 }
 
+export function INIT_WORKSPACES (state, payload) {
+  state.workspaces = payload
+  LocalStorage.set('auth.workspaces', payload)
+}
+
 export function LOGOUT (state) {
   state.user_id = null
   state.username = null
-  state.avatar = null
   state.first_name = null
   state.last_name = null
+  state.avatar = null
+  state.workspaces = []
   state.tokens = {
     access: {
       data: null,

@@ -150,7 +150,7 @@ export default {
       const project = this.$store.getters['current/PROJECT']
 
       if (workspaceName && project) {
-        const projectName = this.$store.getters['current/PROJECT_NAME']
+        const projectName = this.$store.getters['auth/PROJECT_NAME']
         return `${workspaceName} - [ ${projectName} ]`
       }
 

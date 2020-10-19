@@ -232,7 +232,7 @@ export default {
       /** Create Issue, assigned to Backlog by frontend **/
       if (!this.form_data.title) return false
 
-      this.form_data.workspace = this.$store.getters['current/WORKSPACE_ID']
+      this.form_data.workspace = this.$store.getters['auth/WORKSPACE_ID']
       this.form_data.project = this.$store.getters['current/PROJECT']
       this.$store.dispatch('issues/ADD_ISSUE_TO_BACKLOG', this.form_data)
         .then(() => {
@@ -297,7 +297,7 @@ export default {
       })
         .onOk((data) => {
           const payload = {
-            workspace: this.$store.getters['current/WORKSPACE_ID'],
+            workspace: this.$store.getters['auth/WORKSPACE_ID'],
             project: this.$store.getters['current/PROJECT'],
             id: item.id,
             title: data
@@ -515,7 +515,7 @@ export default {
     },
     createSprint () {
       /** Create quite empty sprint **/
-      const workspace = this.$store.getters['current/WORKSPACE_ID']
+      const workspace = this.$store.getters['auth/WORKSPACE_ID']
       const project = this.$store.getters['current/PROJECT']
 
       const payload = {

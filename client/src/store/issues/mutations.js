@@ -28,6 +28,7 @@ function findSprintIndexById (state, sprintId) {
   })
 }
 
+// eslint-disable-next-line no-unused-vars
 function findBacklogIndexById (state, backlogId) {
   return state.backlogs.findIndex((el, index, array) => {
     return el.id === backlogId
@@ -55,11 +56,8 @@ export function INIT_SPRINT_DURATIONS (state, payload) {
 }
 
 export function ADD_ISSUE_TO_BACKLOG (state, payload) {
-  state.backlogs
-    .filter((backlog) => backlog.project_id === payload.project)
-    .pop()
-    .issues
-    .push(payload.id)
+  const backlog = state.backlogs.find(backlog => backlog.project_id === payload.project)
+  backlog.issues.push(payload.id)
 
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
@@ -73,6 +71,7 @@ export function EDIT_ISSUE (state, payload) {
   /**
    * Payload should contain at least workspace, project, id, field
    * It helps us to put it in the right place */
+
   const issueIndex = state.issues.findIndex((el, index, array) => {
     return el.id === payload.id
   })
@@ -90,7 +89,7 @@ export function ORDER_BACKLOG_ISSUES (state, payload) {
 
 export function UPDATE_ISSUE_STATE (state, payload) {
   /** Payload content issue object **/
-  const issue = state.issues.filter((issue) => issue.id === payload.id).pop()
+  const issue = state.issues.find(issue => issue.id === payload.id)
   issue.state_category = payload.state_category
 
   LocalStorage.set('issues.issues', state.issues)
@@ -114,15 +113,17 @@ export function ADD_SPRINT_TO_PROJECT (state, payload) {
 export function UPDATE_SPRINT_ISSUES (state, composite) {
   /** Just update issues inside sprint
    *  We use composite data for mutation **/
-  const sprintIndex = findSprintIndexById(state, composite.id)
-  state.sprints[sprintIndex].issues = composite.issues
+  const sprint = state.sprints.find(sprint => sprint.id === composite.id)
+  sprint.issues = composite.issues
+
   LocalStorage.set('issues.sprints', state.sprints)
 }
 
 export function START_SPRINT (state, sprintId) {
   /** Start sprint without checking - was it started before or no **/
-  const sprintIndex = findSprintIndexById(state, sprintId)
-  state.sprints[sprintIndex].is_started = true
+  const sprint = state.sprints.find(sprint => sprint.id === sprintId)
+  sprint.is_started = true
+
   LocalStorage.set('issues.sprints', state.sprints)
 }
 
@@ -130,8 +131,9 @@ export function COMPLETE_SPRINT (state, sprintId) {
   /** Compete sprint without checking - was it started
    * or completed before
    * **/
-  const sprintIndex = findSprintIndexById(state, sprintId)
-  state.sprints[sprintIndex].is_completed = true
+  const sprint = state.sprints.find(sprint => sprint.id === sprintId)
+  sprint.is_completed = true
+
   LocalStorage.set('issues.sprints', state.sprints)
 }
 
@@ -147,8 +149,9 @@ export function DELETE_SPRINT (state, sprintId) {
 export function UPDATE_BACKLOG_ISSUES (state, composite) {
   /** Just update issues inside of Backlog
    * We use composite data for mutation **/
-  const backlogIndex = findBacklogIndexById(state, composite.id)
-  state.backlogs[backlogIndex].issues = composite.issues
+  const backlog = state.backlogs.find(backlog => backlog.id === composite.id)
+  backlog.issues = composite.issues
+
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
@@ -158,22 +161,26 @@ export function UPDATE_SPRINT (state, payload) {
    * We can update base sprint information also **/
   const sprintIndex = findSprintIndexById(state, payload.id)
   state.sprints.splice(sprintIndex, 1, payload)
+
   LocalStorage.set('issues.sprints', state.sprints)
 }
 
 export function UPDATE_BACKLOG (state, payload) {
   const backlogIndex = findBacklogByProjectId(state, payload.id)
   state.backlogs.splice(backlogIndex, 1, payload)
+
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
 export function UPDATE_ISSUE_TYPES (state, payload) {
   state.types = payload
+
   LocalStorage.set('issues.issue_types', payload)
 }
 
 export function UPDATE_ISSUE_STATES (state, payload) {
   state.states = payload
+
   LocalStorage.set('issues.issue_states', payload)
 }
 

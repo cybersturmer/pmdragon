@@ -14,7 +14,17 @@ export async function LOGOUT ({ dispatch }) {
   await AuthService.logout()
 }
 
-export async function UPDATE_USER_DATA ({ commit }, payload) {
+export async function INIT_WORKSPACES ({ commit }) {
+  try {
+    const response = await new Api({ auth: true }).get('/auth/workspaces/')
+    HandleResponse.compare(200, response.status)
+    commit('INIT_WORKSPACES', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function UPDATE_USER_DATA ({ rootState, commit }, payload) {
   try {
     const response = await new Api({ auth: true })
       .put('/auth/me/', payload)
