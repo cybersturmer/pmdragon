@@ -65,6 +65,30 @@ class PersonVerifyView(generics.CreateAPIView,
     permission_classes = [AllowAny]
 
 
+class CollaboratorsViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Getting all persons in available workspaces
+    """
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer
+
+    def get_queryset(self):
+        workspaces = Workspace.objects\
+            .filter(participants__in=[self.request.user.person])\
+            .all()
+
+        collaborators = []
+        for workspace in workspaces:
+            for participant in workspace.participants.all():
+                collaborators.append(participant.id)
+
+        collaborators_set = set(collaborators)
+
+        queryset: Person.objects = super(CollaboratorsViewSet, self).get_queryset()
+
+        return queryset.filter(id__in=collaborators_set).all()
+
+
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Get all workspaces current Person participate in

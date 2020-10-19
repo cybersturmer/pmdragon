@@ -8,6 +8,7 @@ app_name = 'core_api'
 
 router = routers.SimpleRouter()
 router.register('projects', views.ProjectViewSet, basename='projects')
+router.register('persons', views.CollaboratorsViewSet, basename='collaborators')
 router.register('issues', views.IssueViewSet, basename='issues')
 router.register('issue/types', views.IssueTypeCategoryViewSet, basename='issue-types')
 router.register('issue/states', views.IssueStateCategoryViewSet, basename='issue-states')
