@@ -324,8 +324,12 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         fields = (
             'username',
             'first_name',
-            'last_name'
+            'last_name',
+            'avatar'
         )
+        extra_kwargs = {
+            'avatar': {'read_only': True}
+        }
 
 
 class PersonSerializer(serializers.ModelSerializer):
