@@ -58,22 +58,22 @@ export default {
     }
   },
   methods: {
-    async login () {
-      try {
-        await this.$store.dispatch('auth/LOGIN', this.form_data)
-
-        this.form_data.username = ''
-        this.form_data.password = ''
-
-        await this.$router.push({ path: '/dash/workspaces' })
-      } catch (error) {
-        this.$q.dialog({
-          title: 'Error - Cannot login',
-          message: 'Check your login / password'
+    login () {
+      this.$store.dispatch('auth/LOGIN', this.form_data)
+        .then(() => {
+          this.form_data.username = ''
+          this.form_data.password = ''
         })
+        .then(() => this.$router.push({ name: 'loading' }))
+        .catch((error) => {
+          console.log(error)
 
-        this.form_data.password = ''
-      }
+          this.$q.dialog({
+            title: 'Error - Cannot login',
+            message: 'Check your login / password'
+          })
+          this.form_data.password = ''
+        })
     }
   }
 }

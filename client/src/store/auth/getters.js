@@ -1,5 +1,9 @@
 export function IS_LOGGED_IN (state, getters) {
-  return getters.USER_ID && getters.IS_ACCESS_TOKEN_VALID && getters.IS_REFRESH_TOKEN_VALID
+  const isUserId = !!getters.MY_USER_ID
+  const isAccessTokenValid = !!getters.IS_ACCESS_TOKEN_VALID
+  const isRefreshTokenValid = !!getters.IS_REFRESH_TOKEN_VALID
+
+  return isUserId && isAccessTokenValid && isRefreshTokenValid
 }
 
 export function IS_ACCESS_TOKEN_VALID (state) {
@@ -25,9 +29,7 @@ export function REFRESH_TOKEN (state) {
 export function PERSON_BY_ID (state, getters) {
   /** Getting person by id from current workspace **/
   return personId => {
-    return getters.WORKSPACE_DATA.participants
-      .filter((participant) => participant.id === personId)
-      .pop()
+    return getters.PERSONS.find(person => person.id === personId)
   }
 }
 
@@ -35,16 +37,30 @@ export function WORKSPACES (state) {
   return state.workspaces
 }
 
+export function PERSONS (state) {
+  return state.persons
+}
+
 export function WORKSPACE_DATA (state, getters, rootState, rootGetters) {
-  return state.workspaces.find(workspace => workspace.prefix_url === rootGetters['current/WORKSPACE'])
+  return state.workspaces
+    .find(workspace => workspace.prefix_url === rootGetters['current/WORKSPACE'])
 }
 
 export function WORKSPACE_ID (state, getters) {
-  return getters.WORKSPACE_DATA.id
+  try {
+    return getters.WORKSPACE_DATA.id
+  } catch (error) {
+    return null
+  }
 }
 
 export function PROJECT_DATA (state, getters, rootState, rootGetters) {
-  return getters.WORKSPACE_DATA.projects.find(project => project.id === rootGetters['current/PROJECT'])
+  try {
+    return getters.WORKSPACE_DATA.projects.find(
+      project => project.id === rootGetters['current/PROJECT'])
+  } catch (error) {
+    return null
+  }
 }
 
 export function PROJECT_NAME (state, getters) {
@@ -55,22 +71,46 @@ export function PROJECT_NAME (state, getters) {
   }
 }
 
-export function FIRST_NAME (state) {
-  return state.first_name
+export function MY_DATA (state, getters) {
+  try {
+    return getters.PERSON_BY_ID(getters.MY_USER_ID)
+  } catch (error) {
+    return null
+  }
 }
 
-export function LAST_NAME (state) {
-  return state.last_name
+export function MY_FIRST_NAME (state, getters) {
+  try {
+    return getters.MY_DATA.first_name
+  } catch (error) {
+    return null
+  }
 }
 
-export function USERNAME (state) {
-  return state.username
+export function MY_LAST_NAME (state, getters) {
+  try {
+    return getters.MY_DATA.last_name
+  } catch (error) {
+    return null
+  }
 }
 
-export function AVATAR (state) {
-  return state.avatar ? state.avatar : null
+export function MY_USERNAME (state, getters) {
+  try {
+    return getters.MY_DATA.username
+  } catch (error) {
+    return null
+  }
 }
 
-export function USER_ID (state) {
-  return state.user_id
+export function MY_AVATAR (state, getters) {
+  try {
+    return getters.MY_DATA.avatar
+  } catch (error) {
+    return null
+  }
+}
+
+export function MY_USER_ID (state) {
+  return state.user_id ? state.user_id : null
 }

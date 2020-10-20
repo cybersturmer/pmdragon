@@ -9,7 +9,7 @@
             <!-- Sprint name -->
             {{ sprint.title }}
           </span>
-          <span class="xs-hide sm-hide text-subtitle1 text-accent q-mr-md">
+          <span class="xs-hide sm-hide md-hide text-subtitle1 text-accent q-mr-md">
             <!-- Sprint goal -->
             ( {{ sprint.goal }} )
           </span>
@@ -148,12 +148,6 @@ export default {
     }
   },
   methods: {
-    getInitialData: function () {
-      this.$store.dispatch('issues/INIT_ISSUE_TYPES')
-      this.$store.dispatch('issues/INIT_ISSUE_STATES')
-      this.$store.dispatch('issues/INIT_SPRINTS')
-      this.$store.dispatch('issues/INIT_ISSUES')
-    },
     getAssigneeById: function (assigneeId) {
       return this.$store.getters['auth/PERSON_BY_ID'](assigneeId)
     },
@@ -236,9 +230,6 @@ export default {
       value = value.toString()
       return value.toUpperCase()
     }
-  },
-  mounted () {
-    this.getInitialData()
   }
 }
 </script>

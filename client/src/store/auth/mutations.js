@@ -51,31 +51,36 @@ export function SET_REFRESH_TOKEN (state, payload) {
   SessionStorage.set('auth.user_id', tokenDetails.user_id)
 }
 
-export function SET_FIRST_NAME (state, payload) {
-  state.first_name = payload
-  LocalStorage.set('auth.first_name', payload)
+export function SET_MY_FIRST_NAME (state, payload) {
+  const me = state.persons.find(me => me.id === state.user_id)
+  me.first_name = payload
+  LocalStorage.set('auth.persons', state.persons)
 }
 
-export function SET_LAST_NAME (state, payload) {
-  state.last_name = payload
-  LocalStorage.set('auth.last_name', payload)
+export function SET_MY_LAST_NAME (state, payload) {
+  const me = state.persons.find(me => me.id === state.user_id)
+  me.last_name = payload
+  LocalStorage.set('auth.persons', state.persons)
 }
 
-export function SET_USERNAME (state, payload) {
-  state.username = payload
-  LocalStorage.set('auth.username', payload)
+export function SET_MY_USERNAME (state, payload) {
+  const me = state.persons.find(me => me.id === state.user_id)
+  me.username = payload
+  LocalStorage.set('auth.persons', state.persons)
 }
 
-export function SET_AVATAR (state, payload) {
+export function SET_MY_AVATAR (state, payload) {
   if (payload == null) return false
+  const me = state.persons.find(me => me.id === state.user_id)
 
-  state.avatar = payload
-  LocalStorage.set('auth.avatar', payload)
+  me.avatar = payload
+  LocalStorage.set('auth.persons', state.persons)
 }
 
-export function RESET_AVATAR (state) {
-  state.avatar = null
-  LocalStorage.remove('auth.avatar')
+export function RESET_MY_AVATAR (state) {
+  const me = state.persons.find(me => me.id === state.user_id)
+  me.avatar = null
+  LocalStorage.set('auth.persons', state.persons)
 }
 
 export function INIT_WORKSPACES (state, payload) {
@@ -83,13 +88,15 @@ export function INIT_WORKSPACES (state, payload) {
   LocalStorage.set('auth.workspaces', payload)
 }
 
+export function INIT_PERSONS (state, payload) {
+  state.persons = payload
+  LocalStorage.set('auth.persons', payload)
+}
+
 export function LOGOUT (state) {
   state.user_id = null
-  state.username = null
-  state.first_name = null
-  state.last_name = null
-  state.avatar = null
   state.workspaces = []
+  state.persons = []
   state.tokens = {
     access: {
       data: null,

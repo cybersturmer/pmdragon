@@ -22,7 +22,6 @@ export class AuthService {
 
       const tokens = response.data.tokens
       _setAuthData(tokens.access, tokens.refresh)
-      _setUserData(response.data)
 
       return new ResponseWrapper(response, response.data)
     } catch (error) {
@@ -113,19 +112,6 @@ export class AuthService {
 function _setAuthData (access, refresh) {
   $store.commit('auth/SET_ACCESS_TOKEN', access)
   $store.commit('auth/SET_REFRESH_TOKEN', refresh)
-}
-
-/**
- * Set User Data (to Vuex store).
- * @param data Is response of API (/api/auth/obtain),
- * at least first_name, last name and username should exists
- * @private
- */
-function _setUserData (data) {
-  $store.commit('auth/SET_FIRST_NAME', data.first_name)
-  $store.commit('auth/SET_LAST_NAME', data.last_name)
-  $store.commit('auth/SET_USERNAME', data.username)
-  $store.commit('auth/SET_AVATAR', data.avatar)
 }
 
 /**

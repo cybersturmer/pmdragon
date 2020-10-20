@@ -53,13 +53,7 @@ export default {
     this.$store.dispatch('current/RESET_PROJECT')
 
     this.$store.dispatch('auth/INIT_WORKSPACES')
-      .catch((e) => {
-        console.log(e)
-        this.$q.dialog({
-          title: 'Error - Cannot get Workspace list',
-          message: 'Please check your Internet connection'
-        })
-      })
+    this.$store.dispatch('auth/INIT_PERSONS')
   }
 }
 </script>

@@ -15,7 +15,7 @@ export async function initCurrentUserStateMiddleware (to, from, next) {
 }
 
 export function checkAccessMiddleware (to, from, next) {
-  const currentUserId = $store.getters['auth/USER_ID']
+  const currentUserId = $store.getters['auth/MY_USER_ID']
 
   const isAuthRoute = to.matched.some(item => item.meta.requiredAuth)
 

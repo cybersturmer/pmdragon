@@ -24,22 +24,36 @@ export async function INIT_WORKSPACES ({ commit }) {
   }
 }
 
-export async function UPDATE_USER_DATA ({ rootState, commit }, payload) {
+export async function INIT_PERSONS ({ commit }) {
+  /**
+  * Collaborator is everyone who is in the same workspaces as you are
+  * So by init we get all persons/participant in workspace we belong to **/
+
+  try {
+    const response = await new Api({ auth: true }).get('core/persons/')
+    HandleResponse.compare(200, response.status)
+    commit('INIT_PERSONS', response.data)
+  } catch (error) {
+    throw new ErrorWrapper(error)
+  }
+}
+
+export async function UPDATE_MY_DATA ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true })
       .put('/auth/me/', payload)
 
     HandleResponse.compare(200, response.status)
 
-    commit('SET_FIRST_NAME', response.data.first_name)
-    commit('SET_LAST_NAME', response.data.last_name)
-    commit('SET_USERNAME', response.data.username)
+    commit('SET_MY_FIRST_NAME', response.data.first_name)
+    commit('SET_MY_LAST_NAME', response.data.last_name)
+    commit('SET_MY_USERNAME', response.data.username)
   } catch (error) {
     throw new ErrorWrapper(error)
   }
 }
 
-export async function UPDATE_USER_PASSWORD ({ commit }, payload) {
+export async function UPDATE_MY_PASSWORD ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true })
       .post('/auth/password/', payload)
@@ -50,7 +64,7 @@ export async function UPDATE_USER_PASSWORD ({ commit }, payload) {
   }
 }
 
-export async function UPDATE_PERSON_AVATAR ({ commit }, file) {
+export async function UPDATE_MY_AVATAR ({ commit }, file) {
   const formData = new FormData()
   formData.append('image', file)
 
@@ -63,7 +77,7 @@ export async function UPDATE_PERSON_AVATAR ({ commit }, file) {
       })
 
     HandleResponse.compare(200, response.status)
-    commit('SET_AVATAR', response.data.avatar)
+    commit('SET_MY_AVATAR', response.data.avatar)
 
     return response.data
   } catch (error) {
@@ -71,13 +85,13 @@ export async function UPDATE_PERSON_AVATAR ({ commit }, file) {
   }
 }
 
-export async function DELETE_PERSON_AVATAR ({ commit }, file) {
+export async function DELETE_MY_AVATAR ({ commit }, file) {
   try {
     const response = await new Api({ auth: true })
       .delete('/auth/avatar/')
 
     HandleResponse.compare(204, response.status)
-    commit('RESET_AVATAR')
+    commit('RESET_MY_AVATAR')
   } catch (error) {
     throw new ErrorWrapper(error)
   }

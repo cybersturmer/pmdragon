@@ -27,6 +27,14 @@ const routes = [
           title: 'Verify your registration in PmDragon'
         },
         component: () => import('pages/index/Verify.vue')
+      },
+      {
+        name: 'loading',
+        path: '/loading',
+        meta: {
+          title: 'Loading workspaces...'
+        },
+        component: () => import('pages/index/Loading.vue')
       }
     ]
   },

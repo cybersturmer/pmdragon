@@ -196,37 +196,6 @@ export default {
       return Boolean(this.form_data.title)
     }
   },
-  mounted () {
-    this.$store.dispatch('issues/INIT_BACKLOGS')
-      .catch((error) => {
-        this.$q.dialog({
-          title: 'Error - Cannot get Backlogs',
-          message: 'Please check your Internet connection'
-        })
-
-        console.log(error)
-      })
-
-    this.$store.dispatch('issues/INIT_SPRINTS')
-      .catch((error) => {
-        this.$q.dialog({
-          title: 'Error = Cannot get Sprints',
-          message: 'Please check your Internet connection'
-        })
-
-        console.log(error)
-      })
-
-    this.$store.dispatch('issues/INIT_ISSUES')
-      .catch((error) => {
-        this.$q.dialog({
-          title: 'Error = Cannot get Issues',
-          message: 'Please check your Internet connection'
-        })
-
-        console.log(error)
-      })
-  },
   methods: {
     createIssue () {
       /** Create Issue, assigned to Backlog by frontend **/

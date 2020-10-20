@@ -126,9 +126,9 @@ export default {
   data () {
     return {
       user_form_data: {
-        firstName: this.$store.getters['auth/FIRST_NAME'],
-        lastName: this.$store.getters['auth/LAST_NAME'],
-        userName: this.$store.getters['auth/USERNAME']
+        firstName: this.$store.getters['auth/MY_FIRST_NAME'],
+        lastName: this.$store.getters['auth/MY_LAST_NAME'],
+        userName: this.$store.getters['auth/MY_USERNAME']
       },
       password_form_data: {
         oldPassword: '',
@@ -145,7 +145,7 @@ export default {
         username: this.user_form_data.userName
       }
 
-      this.$store.dispatch('auth/UPDATE_USER_DATA', payload)
+      this.$store.dispatch('auth/UPDATE_MY_DATA', payload)
     },
     savePassword () {
       const payload = {
@@ -154,20 +154,20 @@ export default {
         new_password2: this.password_form_data.newPassword2
       }
 
-      this.$store.dispatch('auth/UPDATE_USER_PASSWORD', payload)
+      this.$store.dispatch('auth/UPDATE_MY_PASSWORD', payload)
     },
     uploadFileAvatar (files) {
       files.forEach(file => {
-        return this.$store.dispatch('auth/UPDATE_PERSON_AVATAR', file)
+        return this.$store.dispatch('auth/UPDATE_MY_AVATAR', file)
       })
     },
     onRemoved (file) {
-      return this.$store.dispatch('auth/DELETE_PERSON_AVATAR')
+      return this.$store.dispatch('auth/DELETE_MY_AVATAR')
     }
   },
   computed: {
     avatar_url: function () {
-      return this.$store.getters['auth/AVATAR']
+      return this.$store.getters['auth/MY_AVATAR']
     },
     avatarAllowMimes: function () {
       return AVATAR_ALLOW_MIMES

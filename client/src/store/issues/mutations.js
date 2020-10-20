@@ -173,13 +173,13 @@ export function UPDATE_BACKLOG (state, payload) {
 }
 
 export function UPDATE_ISSUE_TYPES (state, payload) {
-  state.types = payload
+  state.issue_types = payload
 
   LocalStorage.set('issues.issue_types', payload)
 }
 
 export function UPDATE_ISSUE_STATES (state, payload) {
-  state.states = payload
+  state.issue_states = payload
 
   LocalStorage.set('issues.issue_states', payload)
 }
@@ -207,6 +207,7 @@ export function UNBIND_ISSUE_FROM_SPRINT (state, payload) {
 export function RESET (state) {
   state.backlogs = []
   state.sprints = []
+  state.issues = []
   state.issue_states = []
   state.issue_types = []
   state.sprint_durations = []

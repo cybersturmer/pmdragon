@@ -22,8 +22,9 @@
           class="q-mr-xs"
           @click="goToWorkspaces"
         />
+        <!-- @todo I Need to remove this hack when settings ready -->
         <q-btn
-          v-if="isWorkspaceSelected"
+          v-if="isWorkspaceSelected && 1 === 0"
           flat
           round
           dense
@@ -157,16 +158,16 @@ export default {
       return '  PmDragon Community Edition'
     },
     firstName: function () {
-      return this.$store.getters['auth/FIRST_NAME']
+      return this.$store.getters['auth/MY_FIRST_NAME']
     },
     lastName: function () {
-      return this.$store.getters['auth/LAST_NAME']
+      return this.$store.getters['auth/MY_LAST_NAME']
     },
     username: function () {
-      return this.$store.getters['auth/USERNAME']
+      return this.$store.getters['auth/MY_USERNAME']
     },
     avatar_url: function () {
-      return this.$store.getters['auth/AVATAR']
+      return this.$store.getters['auth/MY_AVATAR']
     },
     isWorkspaceSelected: function () {
       return this.$store.getters['current/WORKSPACE']
