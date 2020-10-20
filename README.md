@@ -19,8 +19,11 @@ High-performance VueJs user interface built in MPA application.
 *Board page*
 <img src="docs/images/board.png">
 
-*Settings page*
-<img src="docs/images/settings.png">
+*Me page*
+<img src="docs/images/me.png">
+
+*Sprint edit page*
+<img src="docs/images/sprint_edit.png">
 
 ## Notice
 
