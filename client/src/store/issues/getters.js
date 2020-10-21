@@ -89,6 +89,17 @@ export function ISSUE_STATES_BY_CURRENT_PROJECT (state, getters, rootState, root
     .filter((issueState) => issueState.project === rootGetters['current/PROJECT'])
 }
 
+export function IS_ISSUE_STATE_DONE (state) {
+  return issueStateId => {
+    try {
+      return state.issue_states
+        .find(issueState => issueState.id === issueStateId).is_done
+    } catch (error) {
+      return false
+    }
+  }
+}
+
 export function ISSUE_TYPES_BY_CURRENT_PROJECT (state, getters, rootState, rootGetters) {
   return state.issue_types
     .filter((issueType) => issueType.project === rootGetters['current/PROJECT'])

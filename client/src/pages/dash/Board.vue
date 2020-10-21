@@ -9,23 +9,23 @@
             <!-- Sprint name -->
             {{ sprint.title }}
           </span>
-          <span class="xs-hide sm-hide md-hide text-subtitle1 text-accent q-mr-md">
+          <span class="xs-hide sm-hide text-subtitle1 text-accent q-mr-md">
             <!-- Sprint goal -->
             ( {{ sprint.goal }} )
           </span>
 
         </div>
         <div class="col text-right">
-          <span class="text-h6 q-mr-md">
+          <span class="text-subtitle1 q-mr-md">
             <!-- Days till the end of sprint remaining and dates on hover -->
             <q-icon name="access_time"></q-icon>
             <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
           </span>
-          <StartCompleteSprintButton size="md" :sprint="sprint"/>
+          <StartCompleteSprintButton size="sm" :sprint="sprint"/>
           <q-btn
             dark
             outline
-            size="md"
+            size="sm"
             color="accent"
             icon-right="edit"
             class="xs-hide sm-hide float-right q-ml-md"
@@ -44,9 +44,15 @@
           class="col bg-primary q-ma-sm">
           <!-- Column for head of column and state column -->
 
-          <div class="q-pa-sm text-center" style="border: 1px solid #343434">
+          <div class="q-pa-sm text-center text-uppercase" style="border: 1px solid #343434">
             <!-- Printable HEAD of column -->
-            {{ issue_state.title | capitalize }}
+            {{ issue_state.title }}&nbsp;&nbsp;&nbsp;{{ issuesByStateAmount(issue_state.id) }}
+            <q-icon v-if="issue_state.is_done"
+                    name="done"
+                    color="positive"
+                    class="q-ml-sm"
+            />
+
           </div>
 
           <!--  Block of main state info  -->
@@ -84,7 +90,7 @@
     <div v-if="!sprint" class="full-width q-pa-md text-center">
       <div class="text-h5"><q-icon name="history"/>&nbsp;You have not started a sprint.</div>
       <span class="text-subtitle1">Go to
-        <router-link :to="{ path: 'backlog' }" class="text-accent">
+        <router-link :to="{ path: 'backlog' }" class="text-info">
           Backlog page
         </router-link> and start a sprint to continue...</span>
     </div>
@@ -155,6 +161,9 @@ export default {
       return this.$store.getters['issues/SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES']
         .filter((issue) => issue.state_category === stateId)
     },
+    issuesByStateAmount: function (stateId) {
+      return this.issuesByState(stateId).length
+    },
     handleIssueAdded: function (event, issueStateId) {
       /** Handling added in Issues State **/
       const updatedElement = unWatch(event.added.element)
@@ -222,13 +231,6 @@ export default {
         .onOk((data) => {
           this.$store.dispatch('issues/EDIT_SPRINT', data)
         })
-    }
-  },
-  filters: {
-    capitalize: function (value) {
-      if (!value) return ''
-      value = value.toString()
-      return value.toUpperCase()
     }
   }
 }

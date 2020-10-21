@@ -88,7 +88,7 @@
 
       <q-card square flat class="absolute-top bg-grey-8" style="height: 150px;">
         <div class="absolute-bottom text-center bg-grey-8" style="margin-bottom: 1em;">
-          <q-avatar v-if="avatar_url" size="65px" class="q-mb-sm" style="filter: grayscale(100%)">
+          <q-avatar v-if="avatar_url" size="65px" class="q-mb-sm">
             <img :src="avatar_url">
           </q-avatar>
           <div class="text-h6">{{ firstName }} {{ lastName }}</div>
