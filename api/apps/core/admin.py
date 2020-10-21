@@ -37,6 +37,7 @@ class IssueStateAdmin(admin.ModelAdmin):
         'project',
         'title',
         'is_default',
+        'is_done',
         'ordering'
     )
     save_as = True
@@ -90,6 +91,7 @@ class SprintAdmin(admin.ModelAdmin):
 class IssueAdmin(admin.ModelAdmin):
     model = Issue
     list_display = (
+        'id',
         'project',
         'title',
         'type_category',

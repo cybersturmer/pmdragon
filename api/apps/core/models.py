@@ -317,6 +317,10 @@ class IssueStateCategory(models.Model):
     is_default = models.BooleanField(verbose_name=_('Is type set by default?'),
                                      default=False)
 
+    is_done = models.BooleanField(verbose_name=_('Is done state?'),
+                                  help_text=_('Is task completed when moved to this column?'),
+                                  default=False)
+
     ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
                                                 blank=True,
                                                 null=True,
@@ -345,18 +349,39 @@ class IssueStateCategory(models.Model):
         super(IssueStateCategory, self).clean()
 
     def save(self, *args, **kwargs):
+        """
+        There is only one task in a project with:
+        1) Done
+        2) Default as state
+        So we have to control it carefully
+        """
         if self.is_default:
-            try:
-                temp = IssueStateCategory.objects \
-                    .filter(workspace=self.workspace,
-                            project=self.project,
-                            is_default=True) \
-                    .get()
-                if self != temp:
-                    temp.is_default = False
-                    temp.save()
-            except IssueStateCategory.DoesNotExist:
-                pass
+            default_issue_states = IssueStateCategory.objects\
+                .filter(workspace=self.workspace,
+                        project=self.project,
+                        is_default=True)\
+                .all()
+
+            for state in default_issue_states:
+                if state == self:
+                    continue
+
+                state.is_default = False
+                state.save()
+
+        if self.is_done:
+            done_issue_states = IssueStateCategory.objects\
+                .filter(workspace=self.workspace,
+                        project=self.project,
+                        is_done=True)\
+                .all()
+
+            for state in done_issue_states:
+                if state == self:
+                    continue
+
+                state.is_done = False
+                state.save()
 
         super(IssueStateCategory, self).save(*args, **kwargs)
 

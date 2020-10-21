@@ -434,6 +434,8 @@ class IssueStateSerializer(WorkspaceModelSerializer):
             'workspace',
             'project',
             'title',
+            'is_default',
+            'is_done',
             'ordering'
         )
 
