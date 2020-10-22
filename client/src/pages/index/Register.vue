@@ -43,8 +43,10 @@ export default {
   name: 'Register',
   data () {
     return {
-      prefix_url: '',
-      email: ''
+      form_data: {
+        prefix_url: '',
+        email: ''
+      }
     }
   },
   methods: {
