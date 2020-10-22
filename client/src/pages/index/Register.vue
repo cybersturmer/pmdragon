@@ -46,6 +46,14 @@ export default {
       prefix_url: '',
       email: ''
     }
+  },
+  methods: {
+    check_prefix: function () {
+      console.log('Checked')
+    },
+    register: function () {
+      console.log('registered')
+    }
   }
 }
 </script>
