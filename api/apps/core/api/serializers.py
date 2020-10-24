@@ -99,13 +99,21 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonRegistrationRequest
         fields = (
-            'id',
             'email',
             'prefix_url'
         )
-        extra_kwargs = {
-            'id': {'read_only': True},
-        }
+
+    def validate_prefix_url(self, attrs):
+        """
+        We want to be sure that user not except to get
+        workspace with already exists prefix
+        @rtype: None
+        @param attrs: string
+        """
+        prefix_url = attrs
+        workspaces_with_same_prefix = Workspace.objects.filter(prefix_url=prefix_url)
+        if workspaces_with_same_prefix.count() > 0:
+            raise ValidationError(_('Workspace with given prefix already exists.'))
 
 
 class UserSetPasswordSerializer(serializers.Serializer):

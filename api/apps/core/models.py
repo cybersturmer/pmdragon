@@ -93,10 +93,9 @@ class PersonRegistrationRequest(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            raw_string = ''.join([str(self.expired_at), self.email, self.prefix_url])
-            self.key = hashing.get_hash(raw_string)
+            self.key = hashing.get_hash(''.join([str(self.expired_at), self.email, self.prefix_url]))
 
-        super(PersonRegistrationRequest, self).save(self, *args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Person(models.Model):
