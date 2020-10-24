@@ -41,7 +41,7 @@ export default {
     isAvatar: function () {
       try {
         return this.assignee.avatar
-      } catch (error) {
+      } catch (e) {
         return false
       }
     },

@@ -65,8 +65,8 @@ export default {
           this.form_data.password = ''
         })
         .then(() => this.$router.push({ name: 'loading' }))
-        .catch((error) => {
-          console.log(error)
+        .catch((e) => {
+          console.log(e)
 
           this.$q.dialog({
             title: 'Error - Cannot login',

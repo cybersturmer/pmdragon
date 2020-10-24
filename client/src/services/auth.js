@@ -24,8 +24,8 @@ export class AuthService {
       _setAuthData(tokens.access, tokens.refresh)
 
       return new ResponseWrapper(response, response.data)
-    } catch (error) {
-      throw new ErrorWrapper(error)
+    } catch (e) {
+      throw new ErrorWrapper(e)
     }
   }
 
@@ -46,8 +46,8 @@ export class AuthService {
       _setAuthData(tokens.access, tokens.refresh)
 
       return response
-    } catch (error) {
-      console.log(error)
+    } catch (e) {
+      console.log(e)
       $router.push({ name: 'login' })
         .catch(() => {})
     }

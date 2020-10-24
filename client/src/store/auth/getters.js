@@ -49,7 +49,7 @@ export function WORKSPACE_DATA (state, getters, rootState, rootGetters) {
 export function WORKSPACE_ID (state, getters) {
   try {
     return getters.WORKSPACE_DATA.id
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -58,7 +58,7 @@ export function PROJECT_DATA (state, getters, rootState, rootGetters) {
   try {
     return getters.WORKSPACE_DATA.projects.find(
       project => project.id === rootGetters['current/PROJECT'])
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -74,7 +74,7 @@ export function PROJECT_NAME (state, getters) {
 export function MY_DATA (state, getters) {
   try {
     return getters.PERSON_BY_ID(getters.MY_USER_ID)
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -82,7 +82,7 @@ export function MY_DATA (state, getters) {
 export function MY_FIRST_NAME (state, getters) {
   try {
     return getters.MY_DATA.first_name
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -90,7 +90,7 @@ export function MY_FIRST_NAME (state, getters) {
 export function MY_LAST_NAME (state, getters) {
   try {
     return getters.MY_DATA.last_name
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -98,7 +98,7 @@ export function MY_LAST_NAME (state, getters) {
 export function MY_USERNAME (state, getters) {
   try {
     return getters.MY_DATA.username
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -106,7 +106,7 @@ export function MY_USERNAME (state, getters) {
 export function MY_AVATAR (state, getters) {
   try {
     return getters.MY_DATA.avatar
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }

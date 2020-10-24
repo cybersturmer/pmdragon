@@ -64,8 +64,8 @@ export default {
           .then(() => {
             return resolve('Loaded successfully')
           })
-          .catch((error) => {
-            return reject(error)
+          .catch((e) => {
+            return reject(e)
           })
       })
     }
@@ -76,13 +76,13 @@ export default {
       .then(() => {
         this.$router.push({ name: 'workspaces' })
       })
-      .catch((error) => {
+      .catch((e) => {
         this.$q.dialog({
           title: 'Error',
           message: 'Error occurred while loading.'
         })
 
-        console.log(error)
+        console.log(e)
       })
       .finally(() => {
         this.hideProgress()

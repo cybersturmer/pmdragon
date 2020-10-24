@@ -162,8 +162,8 @@ export default {
       },
       set: function (payload) {
         this.$store.dispatch('issues/INIT_SPRINT_DURATIONS', payload)
-          .catch((error) => {
-            console.log(error)
+          .catch((e) => {
+            console.log(e)
           })
       }
     },
@@ -178,8 +178,8 @@ export default {
   },
   mounted () {
     this.$store.dispatch('issues/INIT_SPRINT_DURATIONS')
-      .catch((error) => {
-        console.log(error)
+      .catch((e) => {
+        console.log(e)
       })
   }
 }

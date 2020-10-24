@@ -126,10 +126,10 @@ export default {
           this.$store.dispatch('issues/RESET')
           this.$router.push({ name: 'login' })
         })
-        .catch((error) => {
+        .catch((e) => {
           this.$q.dialog({
             title: 'Error - Cannot LogOut',
-            message: error
+            message: e
           })
         })
     },

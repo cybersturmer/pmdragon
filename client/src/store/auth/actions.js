@@ -2,6 +2,17 @@ import { AuthService } from 'src/services/auth'
 import { Api } from 'src/services/api'
 import { ErrorWrapper, HandleResponse } from 'src/services/util'
 
+export async function REGISTER ({ commit }, credentials) {
+  try {
+    const response = await new Api()
+      .post('/auth/requests/', credentials)
+
+    HandleResponse.compare(200, response.status)
+  } catch (e) {
+    throw new ErrorWrapper(e)
+  }
+}
+
 export async function LOGIN ({ commit }, credentials) {
   return await AuthService.login(credentials)
 }
@@ -19,8 +30,8 @@ export async function INIT_WORKSPACES ({ commit }) {
     const response = await new Api({ auth: true }).get('/auth/workspaces/')
     HandleResponse.compare(200, response.status)
     commit('INIT_WORKSPACES', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -33,8 +44,8 @@ export async function INIT_PERSONS ({ commit }) {
     const response = await new Api({ auth: true }).get('core/persons/')
     HandleResponse.compare(200, response.status)
     commit('INIT_PERSONS', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -48,8 +59,8 @@ export async function UPDATE_MY_DATA ({ commit }, payload) {
     commit('SET_MY_FIRST_NAME', response.data.first_name)
     commit('SET_MY_LAST_NAME', response.data.last_name)
     commit('SET_MY_USERNAME', response.data.username)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -59,8 +70,8 @@ export async function UPDATE_MY_PASSWORD ({ commit }, payload) {
       .post('/auth/password/', payload)
 
     HandleResponse.compare(200, response.status)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -80,8 +91,8 @@ export async function UPDATE_MY_AVATAR ({ commit }, file) {
     commit('SET_MY_AVATAR', response.data.avatar)
 
     return response.data
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -92,7 +103,7 @@ export async function DELETE_MY_AVATAR ({ commit }, file) {
 
     HandleResponse.compare(204, response.status)
     commit('RESET_MY_AVATAR')
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }

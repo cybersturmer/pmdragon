@@ -9,8 +9,8 @@ export async function INIT_BACKLOGS ({ rootGetters, commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('INIT_BACKLOGS', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -22,8 +22,8 @@ export async function INIT_SPRINTS ({ rootGetters, commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('INIT_SPRINTS', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -35,8 +35,8 @@ export async function INIT_ISSUES ({ commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('INIT_ISSUES', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -48,8 +48,8 @@ export async function INIT_SPRINT_DURATIONS ({ commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('INIT_SPRINT_DURATIONS', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -61,8 +61,8 @@ export async function INIT_ISSUE_STATES ({ commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_STATES', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -74,8 +74,8 @@ export async function INIT_ISSUE_TYPES ({ commit }) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_TYPES', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -88,8 +88,8 @@ export async function UPDATE_ISSUE_STATE ({ commit }, payload) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_STATE', payload)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -106,8 +106,8 @@ export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, composite) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_SPRINT_ISSUES', composite)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -124,8 +124,8 @@ export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, composite) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_BACKLOG_ISSUES', composite)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -140,8 +140,8 @@ export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
 
     commit('ADD_ISSUE_TO_BACKLOG', response.data)
     commit('ADD_ISSUE_TO_ISSUES', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -154,8 +154,8 @@ export async function ADD_SPRINT_TO_PROJECT ({ commit }, payload) {
 
     HandleResponse.compare(201, response.status)
     commit('ADD_SPRINT_TO_PROJECT', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -168,8 +168,8 @@ export async function START_SPRINT ({ commit }, sprintId) {
 
     HandleResponse.compare(200, response.status)
     commit('START_SPRINT', sprintId)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -182,8 +182,8 @@ export async function COMPLETE_SPRINT ({ commit }, sprintId) {
 
     HandleResponse.compare(200, response.status)
     commit('COMPLETE_SPRINT', sprintId)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -203,8 +203,8 @@ export async function EDIT_SPRINT ({ commit }, payload) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_SPRINT', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -216,8 +216,8 @@ export async function DELETE_SPRINT ({ commit }, sprintId) {
 
     HandleResponse.compare(204, response.status)
     commit('DELETE_SPRINT', sprintId)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -230,8 +230,8 @@ export async function EDIT_ISSUE ({ commit }, payload) {
 
     HandleResponse.compare(200, response.status)
     commit('EDIT_ISSUE', response.data)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -243,8 +243,8 @@ export async function DELETE_ISSUE ({ commit }, payload) {
 
     HandleResponse.compare(204, response.status)
     commit('DELETE_ISSUE', payload)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -258,8 +258,8 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
         ordering: value.ordering
       })
     })
-  } catch (error) {
-    console.log(error)
+  } catch (e) {
+    console.log(e)
   }
 
   try {
@@ -270,8 +270,8 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
 
     HandleResponse.compare(200, response.status)
     commit('ORDER_BACKLOG_ISSUES', payload)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 
@@ -284,8 +284,8 @@ export async function UPDATE_ISSUES_ORDERING ({ commit }, payload) {
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUES_ORDERING', payload)
-  } catch (error) {
-    throw new ErrorWrapper(error)
+  } catch (e) {
+    throw new ErrorWrapper(e)
   }
 }
 

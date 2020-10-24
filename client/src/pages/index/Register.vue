@@ -7,7 +7,7 @@
             <q-input
               square
               filled
-              v-model="prefix_url"
+              v-model="form_data.prefix_url"
               label="URL of your team"
             />
           </div>
@@ -15,7 +15,7 @@
             <q-input
               square
               filled
-              v-model="email"
+              v-model="form_data.email"
               label="Your email"
             />
           </div>

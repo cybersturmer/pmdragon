@@ -43,7 +43,7 @@ export function CURRENT_SPRINT (state, getters, rootState, rootGetters) {
         sprint.is_started === true &&
         sprint.is_completed === false)
       .pop()
-  } catch (error) {
+  } catch (e) {
     return false
   }
 }
@@ -51,7 +51,7 @@ export function CURRENT_SPRINT (state, getters, rootState, rootGetters) {
 export function SPRINT_STARTED_BY_CURRENT_PROJECT_ISSUES (state, getters) {
   try {
     return getters.ISSUES_BY_IDS(getters.CURRENT_SPRINT.issues)
-  } catch (error) {
+  } catch (e) {
     return []
   }
 }
@@ -60,7 +60,7 @@ export function PROJECT_SPRINTS (state, getters, rootState, rootGetters) {
   try {
     return state.sprints
       .filter((sprint) => sprint.project === rootGetters['current/PROJECT'])
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -68,7 +68,7 @@ export function PROJECT_SPRINTS (state, getters, rootState, rootGetters) {
 export function UNCOMPLETED_PROJECT_SPRINTS (state, getters) {
   try {
     return getters.PROJECT_SPRINTS.filter((sprint) => sprint.is_completed === false)
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -94,7 +94,7 @@ export function IS_ISSUE_STATE_DONE (state) {
     try {
       return state.issue_states
         .find(issueState => issueState.id === issueStateId).is_done
-    } catch (error) {
+    } catch (e) {
       return false
     }
   }
@@ -114,7 +114,7 @@ export function BACKLOG (state, getters, rootState, rootGetters) {
   try {
     return state.backlogs
       .filter((backlog) => backlog.project_id === rootGetters['current/PROJECT'])[0]
-  } catch (error) {
+  } catch (e) {
     return null
   }
 }
@@ -122,7 +122,7 @@ export function BACKLOG (state, getters, rootState, rootGetters) {
 export function BACKLOG_ISSUES (state, getters) {
   try {
     return getters.ISSUES_BY_IDS(getters.BACKLOG.issues)
-  } catch (error) {
+  } catch (e) {
     return []
   }
 }
@@ -130,7 +130,7 @@ export function BACKLOG_ISSUES (state, getters) {
 export function BACKLOG_ISSUES_COUNT (state, getters) {
   try {
     return getters.BACKLOG.issues.length
-  } catch (error) {
+  } catch (e) {
     return 0
   }
 }

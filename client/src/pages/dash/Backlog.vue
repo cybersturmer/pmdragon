@@ -207,13 +207,13 @@ export default {
         .then(() => {
           this.form_data.title = ''
         })
-        .catch((error) => {
+        .catch((e) => {
           this.$q.dialog({
             title: 'Error - Cannot add issue to Backlog',
             message: 'Please check your Internet connection'
           })
 
-          console.log(error)
+          console.log(e)
         })
     },
     isIssueMenuVisible (id) {
@@ -242,13 +242,13 @@ export default {
         persistent: true
       }).onOk(() => {
         this.$store.dispatch('issues/DELETE_SPRINT', item.id)
-          .catch((error) => {
+          .catch((e) => {
             this.$q.dialog({
               title: 'Error - Cannot delete sprint',
               message: 'Please check your Internet connection'
             })
 
-            console.log(error)
+            console.log(e)
           })
       })
     },
@@ -273,12 +273,12 @@ export default {
           }
 
           this.$store.dispatch('issues/EDIT_ISSUE', payload)
-            .catch((error) => {
+            .catch((e) => {
               this.$q.dialog({
                 title: 'Error - Cannot edit issue',
                 message: 'Please check your Internet connection'
               })
-              console.log(error)
+              console.log(e)
             })
         })
     },
@@ -291,13 +291,13 @@ export default {
         persistent: true
       }).onOk(() => {
         this.$store.dispatch('issues/DELETE_ISSUE', item)
-          .catch((error) => {
+          .catch((e) => {
             this.$q.dialog({
               title: 'Error - Cannot delete issue',
               message: 'Please check your Internet connection'
             })
 
-            console.log(error)
+            console.log(e)
           })
       })
     },

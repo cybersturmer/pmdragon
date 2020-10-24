@@ -42,8 +42,8 @@ export default {
         })
       } else {
         this.$store.dispatch('issues/START_SPRINT', sprintId)
-          .catch((error) => {
-            console.log(error)
+          .catch((e) => {
+            console.log(e)
           })
       }
     },
@@ -65,8 +65,8 @@ export default {
       })
         .onOk(() => {
           this.$store.dispatch('issues/COMPLETE_SPRINT', sprintId)
-            .catch((error) => {
-              console.log(error)
+            .catch((e) => {
+              console.log(e)
             })
         })
     },
