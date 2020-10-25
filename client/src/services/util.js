@@ -33,12 +33,19 @@ function _getResponseErrorMessage (error) {
 }
 
 export class ResponseWrapper {
-  constructor (response, data = {}, message) {
-    this.data = data
-    this.success = response.data.success
+  constructor (response) {
+    this.data = response.data
+    this.success = response.response ? response.data.success : false
     this.status = response.status
     this.statusMessage = _getStatusMessage(this.status)
-    this.message = message || null
+  }
+
+  setErrors (errors) {
+    for (const [key, value] of Object.entries(this.data)) {
+      if (key in errors) {
+        errors[key] = value
+      }
+    }
   }
 }
 
