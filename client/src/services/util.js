@@ -27,44 +27,43 @@ function _getStatusMessage (status) {
 }
 
 function _getResponseErrorMessage (error) {
-  if (error.response && error.response.data) return error.response.data.message
+  if (error.response && error.response.data) {
+    if (error.response.data.detail) return error.response.data.detail
+    else return _getStatusMessage(error.response.status)
+  }
+
   if (error.response && error.response.statusText) return error.response.statusText
   return error.message === 'Network Error' ? 'Oops ! Network error. Try again later' : error.message
 }
 
-export class ResponseWrapper {
-  constructor (response) {
-    this.data = response.data
-    this.success = response.response ? response.data.success : false
-    this.status = response.status
-    this.statusMessage = _getStatusMessage(this.status)
-  }
-
-  setErrors (errors) {
-    for (const [key, value] of Object.entries(this.data)) {
-      if (key in errors) {
-        errors[key] = value
-      }
-    }
-  }
-}
-
-export class ErrorWrapper extends Error {
+export class ErrorHandler extends Error {
   constructor (error, message) {
     super()
+    this.request = !!error.response
+    this.data = error.response ? error.response.data : false
     this.success = error.response ? error.response.data.success : false
     this.meta = error.response ? error.response.data.meta : false
     this.code = error.response ? error.response.data.code : false
     this.status = error.response ? error.response.status : false
     this.statusMessage = _getStatusMessage(this.status)
     this.message = message || _getResponseErrorMessage(error)
+    this.messageUseful = this.data ? !!error.response.data.detail : false
+  }
+
+  setErrors (errors) {
+    if (!this.request) return false
+    for (const [key, value] of Object.entries(this.data)) {
+      if (key in errors) {
+        errors[key] = Array.isArray(value) ? value.join('\r\n') : value
+      }
+    }
   }
 }
 
 export class HandleResponse {
   static compare (codeExpectation = 200, codeReality) {
     if (codeExpectation !== codeReality) {
-      throw new ErrorWrapper(Error('Expectation code mismatch'), _getStatusMessage(codeReality))
+      throw new ErrorHandler(Error('Expectation code mismatch'), _getStatusMessage(codeReality))
     }
   }
 }

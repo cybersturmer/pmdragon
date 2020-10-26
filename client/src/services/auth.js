@@ -2,7 +2,7 @@ import { DEBUG, PROD_ENV, DEBUG_ENV } from 'src/.env'
 import axios from 'axios'
 import $store from 'src/store'
 import $router from 'src/router'
-import { HandleResponse, ErrorWrapper, ResponseWrapper } from 'src/services/util'
+import { HandleResponse } from 'src/services/util'
 
 // Inspired by https://github.com/zmts/beauty-vuejs-boilerplate/blob/master/src/services/auth.service.js
 export class AuthService {
@@ -11,22 +11,18 @@ export class AuthService {
      * Login by sending login and password
      * @param credentials Object { username: '', password: ''}
      */
-    try {
-      const url = (DEBUG ? DEBUG_ENV.url : PROD_ENV.url) + '/auth/obtain/'
+    const url = (DEBUG ? DEBUG_ENV.url : PROD_ENV.url) + '/auth/obtain/'
 
-      const response = await axios.post(
-        url,
-        credentials
-      )
-      HandleResponse.compare(200, response.status)
+    const response = await axios.post(
+      url,
+      credentials
+    )
+    HandleResponse.compare(200, response.status)
 
-      const tokens = response.data.tokens
-      _setAuthData(tokens.access, tokens.refresh)
+    const tokens = response.data.tokens
+    _setAuthData(tokens.access, tokens.refresh)
 
-      return new ResponseWrapper(response, response.data)
-    } catch (e) {
-      throw new ErrorWrapper(e)
-    }
+    return response
   }
 
   static async refresh () {

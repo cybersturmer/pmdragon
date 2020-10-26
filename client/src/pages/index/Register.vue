@@ -8,9 +8,10 @@
               square
               filled
               v-model="form_data.prefix_url"
-              :error="!!isPrefixUrlValid"
+              :error="isFieldValid('prefix_url')"
               :error-message="form_errors.prefix_url"
               label="URL of your team"
+              class="q-mb-md"
             />
           </div>
           <div class="col">
@@ -18,9 +19,10 @@
               square
               filled
               v-model="form_data.email"
-              :error="!!isEmailValid"
+              :error="isFieldValid('email')"
               :error-message="form_errors.email"
               label="Your email"
+              class="q-mb-md"
             />
           </div>
         </div>
@@ -44,8 +46,13 @@
 
 <script>
 
+import { fieldValidationMixin } from 'pages/mixins/field_validation'
+import { ErrorHandler } from 'src/services/util'
+import { Dialogs } from 'pages/mixins/dialogs'
+
 export default {
   name: 'Register',
+  mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
       form_data: {
@@ -62,18 +69,14 @@ export default {
     check_prefix: function () {
       console.log('Checked')
     },
-    register: async function () {
+    async register () {
       try {
         await this.$store.dispatch('auth/REGISTER', this.form_data)
-        this.$q.dialog({
-          dark: true,
-          message: 'Registered successfully. Check your email.'
-        })
       } catch (e) {
-        this.$q.dialog({
-          dark: true,
-          message: 'Something was wrong, try another data or check your connection to internet.'
-        })
+        const error = new ErrorHandler(e)
+
+        error.setErrors(this.form_errors)
+        if (error.messageUseful) this.showErrorDialog('Registration was not successful', error.message)
       }
     }
   },
@@ -88,8 +91,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .q-field__bottom {
     padding: 5px 12px 0;
+  }
+
+  .q-field__messages {
+    line-height: 1.25;
   }
 </style>

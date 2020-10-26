@@ -1,16 +1,9 @@
 import { AuthService } from 'src/services/auth'
 import { Api } from 'src/services/api'
-import { ErrorWrapper, HandleResponse } from 'src/services/util'
+import { ErrorHandler, HandleResponse } from 'src/services/util'
 
 export async function REGISTER ({ commit }, credentials) {
-  try {
-    const response = await new Api()
-      .post('/auth/requests/', credentials)
-
-    HandleResponse.compare(200, response.status)
-  } catch (e) {
-    throw new ErrorWrapper(e)
-  }
+  return await new Api().post('/auth/requests/', credentials)
 }
 
 export async function LOGIN ({ commit }, credentials) {
@@ -31,7 +24,7 @@ export async function INIT_WORKSPACES ({ commit }) {
     HandleResponse.compare(200, response.status)
     commit('INIT_WORKSPACES', response.data)
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
 
@@ -45,7 +38,7 @@ export async function INIT_PERSONS ({ commit }) {
     HandleResponse.compare(200, response.status)
     commit('INIT_PERSONS', response.data)
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
 
@@ -60,7 +53,7 @@ export async function UPDATE_MY_DATA ({ commit }, payload) {
     commit('SET_MY_LAST_NAME', response.data.last_name)
     commit('SET_MY_USERNAME', response.data.username)
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
 
@@ -71,7 +64,7 @@ export async function UPDATE_MY_PASSWORD ({ commit }, payload) {
 
     HandleResponse.compare(200, response.status)
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
 
@@ -92,7 +85,7 @@ export async function UPDATE_MY_AVATAR ({ commit }, file) {
 
     return response.data
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
 
@@ -104,6 +97,6 @@ export async function DELETE_MY_AVATAR ({ commit }, file) {
     HandleResponse.compare(204, response.status)
     commit('RESET_MY_AVATAR')
   } catch (e) {
-    throw new ErrorWrapper(e)
+    throw new ErrorHandler(e)
   }
 }
