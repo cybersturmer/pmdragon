@@ -115,6 +115,8 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
         if workspaces_with_same_prefix.count() > 0:
             raise ValidationError(_('Workspace with given prefix already exists.'))
 
+        return prefix_url
+
 
 class UserSetPasswordSerializer(serializers.Serializer):
     """
@@ -311,7 +313,9 @@ class PersonVerifySerializer(serializers.Serializer):
             user.save()
 
         except IntegrityError:
-            raise serializers.ValidationError(_('Someone already registered with this data'))
+            raise serializers.ValidationError({
+                'detail': _('Someone already registered with this data')
+            })
 
         person = Person(user=user)
         person.save()
@@ -327,6 +331,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     We need this serializer for update base information
     about user
     """
+
     class Meta:
         model = UserModel
         fields = (
