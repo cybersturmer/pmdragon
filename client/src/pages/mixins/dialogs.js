@@ -1,8 +1,9 @@
 export const Dialogs = {
   methods: {
-    showErrorDialog (title, message) {
+    showConfirmDialog (title, message, unsafe = false) {
       this.$q.dialog({
         dark: true,
+        html: unsafe,
         title: title,
         message: message,
         ok: {

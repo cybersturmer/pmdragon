@@ -3,7 +3,7 @@ import { Api } from 'src/services/api'
 import { ErrorHandler, HandleResponse } from 'src/services/util'
 
 export async function REGISTER ({ commit }, credentials) {
-  return await new Api().post('/auth/requests/', credentials)
+  return await new Api().post('/core/requests/', credentials)
 }
 
 export async function LOGIN ({ commit }, credentials) {

@@ -8,10 +8,10 @@
               square
               filled
               v-model="form_data.prefix_url"
+              @input="resetFieldErrorMessage('prefix_url')"
               :error="isFieldValid('prefix_url')"
               :error-message="form_errors.prefix_url"
-              label="URL of your team"
-              class="q-mb-md"
+              label="Workspace prefix"
             />
           </div>
           <div class="col">
@@ -19,10 +19,10 @@
               square
               filled
               v-model="form_data.email"
+              @change="resetFieldErrorMessage('email')"
               :error="isFieldValid('email')"
               :error-message="form_errors.email"
               label="Your email"
-              class="q-mb-md"
             />
           </div>
         </div>
@@ -72,28 +72,28 @@ export default {
     async register () {
       try {
         await this.$store.dispatch('auth/REGISTER', this.form_data)
+        const dialog = [
+          'Congratulations',
+          "We've sent you an email." +
+          '<br>Please follow the link inside of it. ' +
+          '<br> Link is valid only 24 hours',
+          true
+        ]
+
+        this.showConfirmDialog(...dialog)
       } catch (e) {
         const error = new ErrorHandler(e)
-
         error.setErrors(this.form_errors)
-        if (error.messageUseful) this.showErrorDialog('Registration was not successful', error.message)
+        if (error.messageUseful) this.showConfirmDialog('Registration was not successful', error.message)
       }
-    }
-  },
-  computed: {
-    isEmailValid: function () {
-      return this.form_errors.email.length > 0
-    },
-    isPrefixUrlValid: function () {
-      return this.form_errors.prefix_url.length > 0
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
   .q-field__bottom {
-    padding: 5px 12px 0;
+    padding: 5px 0;
   }
 
   .q-field__messages {

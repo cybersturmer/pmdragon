@@ -22,7 +22,8 @@ const routes = [
       },
       {
         name: 'verify',
-        path: '/verify',
+        path: '/verify/:key',
+        props: true,
         meta: {
           title: 'Verify your registration in PmDragon'
         },

@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
         <q-card flat bordered class="my-card bg-grey-6" style="width: 320px">
-          <q-card-section>
+          <q-card-section style="padding: 16px 16px 0 16px">
             <div class="column">
               <div class="col">
                 <q-input
@@ -11,19 +11,12 @@
                   :error="isFieldValid('username')"
                   :error-message="form_errors.username"
                   label="Email"
-                  class="q-mb-md"
                 />
               </div>
               <div class="col">
-                <q-input
-                  square
-                  filled
-                  type="password"
+                <PasswordField
                   v-model="form_data.password"
-                  :error="isFieldValid('password')"
-                  :error-message="form_errors.password"
-                  label="Password"
-                  @keyup.enter="login"
+                  :error_message="form_errors.password"
                 />
               </div>
             </div>
@@ -56,9 +49,11 @@
 import { fieldValidationMixin } from 'pages/mixins/field_validation'
 import { ErrorHandler } from 'src/services/util'
 import { Dialogs } from 'pages/mixins/dialogs'
+import PasswordField from 'components/PasswordField'
 
 export default {
   name: 'Login',
+  components: { PasswordField },
   mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
@@ -81,15 +76,18 @@ export default {
         await this.$router.push({ name: 'loading' })
       } catch (e) {
         const error = new ErrorHandler(e)
-        this.showErrorDialog('Login was not successful', error.message)
+        this.showConfirmDialog('Login was not successful', error.message)
       }
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
   .q-field__messages {
     line-height: 1.25;
+  }
+  .q-field__bottom {
+    padding: 5px 0;
   }
 </style>

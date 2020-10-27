@@ -1,15 +1,94 @@
 <template>
-<div>
-  verify
-</div>
+  <q-page class="flex flex-center">
+    <q-card flat bordered class="bg-grey-6 my-card" style="width: 320px">
+      <q-card-section>
+        <div class="text-h6 text-primary">Complete your registration</div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <div class="text-subtitle2 text-primary">Workspace: {{ info_data.prefix_url }}</div>
+        <div class="text-subtitle2 text-primary">Email: {{ info_data.email }}</div>
+      </q-card-section>
+      <q-separator />
+      <q-card-section>
+        <div class="text-subtitle2 text-primary">
+          Please set your password.
+        </div>
+        <PasswordField
+          v-model="form_data.password"
+          :error_message="form_errors.password"
+        />
+      </q-card-section>
+      <q-card-actions vertical>
+        <q-btn
+          outline
+          text-color="black"
+          @click="completeRegistration"
+        >
+          Complete
+        </q-btn>
+      </q-card-actions>
+    </q-card>
+  </q-page>
 </template>
 
 <script>
+import { Api } from 'src/services/api'
+import { ErrorHandler, HandleResponse } from 'src/services/util'
+import PasswordField from 'components/PasswordField'
+import { Dialogs } from 'pages/mixins/dialogs'
+
 export default {
-  name: 'Verify'
+  name: 'Verify',
+  mixins: [Dialogs],
+  components: { PasswordField },
+  data () {
+    return {
+      info_data: {
+        prefix_url: '',
+        email: ''
+      },
+      form_data: {
+        key: this.$attrs.key,
+        password: ''
+      },
+      form_errors: {
+        password: ''
+      }
+    }
+  },
+  computed: {
+    key () {
+      return this.$attrs.key
+    }
+  },
+  async mounted () {
+    const response = await new Api().get(`/core/requests/${this.key}/`)
+    HandleResponse.compare(200, response.status)
+
+    this.info_data.prefix_url = response.data.prefix_url
+    this.info_data.email = response.data.email
+  },
+  methods: {
+    async completeRegistration () {
+      try {
+        const response = await new Api()
+          .post('/auth/registrations/', this.form_data)
+
+        HandleResponse.compare(201, response.status)
+        await this.$router.push({ name: 'register' })
+      } catch (e) {
+        const error = new ErrorHandler(e)
+        error.setErrors(this.form_errors)
+        if (error.messageUseful) this.showConfirmDialog('Registration was not successful', error.message)
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-
+  .q-card__section--vert {
+    padding: 13px;
+  }
 </style>
