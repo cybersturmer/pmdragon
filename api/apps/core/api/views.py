@@ -7,6 +7,7 @@ from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from libs.email.compose import EmailComposer
@@ -25,15 +26,18 @@ class TokenObtainPairExtendedView(TokenObtainPairView):
     serializer_class = TokenObtainPairExtendedSerializer
 
 
-class PersonRegistrationRequestCreateView(generics.CreateAPIView,
-                                          viewsets.ViewSetMixin):
+class PersonRegistrationRequestView(viewsets.GenericViewSet,
+                                    mixins.RetrieveModelMixin,
+                                    mixins.CreateModelMixin):
     """
     Create a user registration request by using email and URL prefix.
-    After it generates an email with verification token and sends it to chosen email.
+    It also can be user to retrieve one registration request by given key
     """
     queryset = PersonRegistrationRequest.valid.all()
     serializer_class = PersonRegistrationRequestSerializer
     permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
+    lookup_field = 'key'
 
     def perform_create(self, serializer):
         instance: PersonRegistrationRequest = serializer.save()

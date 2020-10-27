@@ -15,6 +15,7 @@ router.register('issue/states', views.IssueStateCategoryViewSet, basename='issue
 router.register('backlogs', views.ProjectBacklogViewSet, basename='backlogs')
 router.register('sprints', views.SprintViewSet, basename='sprints')
 router.register('sprint/durations', views.SprintDurationViewSet, basename='sprint-durations')
+router.register('requests', views.PersonRegistrationRequestView, basename='requests')
 
 urlpatterns = router.urls
 urlpatterns += [path('issue/ordering/',

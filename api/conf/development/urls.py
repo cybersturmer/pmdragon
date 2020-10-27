@@ -8,8 +8,7 @@ from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from apps.core.api.views import PersonRegistrationRequestCreateView, \
-    PersonVerifyView, \
+from apps.core.api.views import PersonVerifyView, \
     PersonSetPasswordView, \
     WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
@@ -44,9 +43,9 @@ urlpatterns = [
          TokenRefreshView.as_view(),
          name='token_refresh'),
 
-    path('api/auth/requests/',
-         PersonRegistrationRequestCreateView.as_view(),
-         name='request_create'),
+    # path('api/auth/requests/',
+    #      PersonRegistrationRequestView.as_view(),
+    #      name='request_create'),
 
     path('api/auth/password/',
          PersonSetPasswordView.as_view(),
