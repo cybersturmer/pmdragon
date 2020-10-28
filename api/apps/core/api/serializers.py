@@ -294,19 +294,27 @@ class PersonVerifySerializer(serializers.Serializer):
         password = validated_data['password']
         key = validated_data['key']
 
+        """
+        Check do we have registration request with given credentials """
         try:
             request = PersonRegistrationRequest.valid.filter(key__exact=key).get()
 
         except PersonRegistrationRequest.DoesNotExist as ne:
-            raise serializers.ValidationError(_('Request for registration was expired or not correct'))
-
-        email = request.email
+            raise serializers.ValidationError({
+                'detail': _('Request for registration was expired or not correct')
+            })
 
         """
-        Person foreign key user not visible for user.
-        Used for SaaS service
-        """
-        user = User(username=email, email=email)
+        Check if user with the same email already exists """
+        email_equal_users_count = User.objects.filter(email=request.email).count()
+        if email_equal_users_count > 0:
+            raise serializers.ValidationError({
+                'detail': _('User with the same email already exists. '
+                            'You can create new workspace in you account. '
+                            'If you forgot you password you also can restore it')
+            })
+
+        user = User(username=request.email, email=request.email)
         user.set_password(password)
 
         try:
@@ -319,6 +327,18 @@ class PersonVerifySerializer(serializers.Serializer):
 
         person = Person(user=user)
         person.save()
+
+        workspace = Workspace(prefix_url=request.prefix_url)
+
+        try:
+            workspace.save()
+        except IntegrityError:
+            raise serializers.ValidationError({
+                'detail': _('Workspace with given prefix url was already registered.')
+            })
+
+        workspace.participants.add(person)
+        workspace.save()
 
         return person
 
