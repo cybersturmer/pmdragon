@@ -1,11 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card flat bordered class="my-card bg-grey-6" style="width: 320px">
+    <q-card dark bordered flat class="my-card" style="width: 320px">
       <q-card-section style="padding: 16px 16px 0 16px">
         <div class="column">
           <div class="col">
             <q-input
-              square
+              dark
               filled
               v-model="form_data.prefix_url"
               @input="resetFieldErrorMessage('prefix_url')"
@@ -16,6 +16,7 @@
           </div>
           <div class="col">
             <q-input
+              dark
               square
               filled
               v-model="form_data.email"
@@ -27,15 +28,15 @@
           </div>
         </div>
         </q-card-section>
-        <q-separator />
+        <q-separator dark inset/>
         <q-card-section>
-            <q-btn outline color="grey-8" text-color="black" label="Register" @click="register"/>
+            <q-btn outline label="Register" @click="register"/>
             <router-link :to="{ path: '/login' }" class="float-right"  style="text-decoration: none">
               <template>
                 <q-btn
                   flat
                   size="md"
-                  text-color="black"
+                  text-color="white"
                   label="Already a member?"/>
               </template>
             </router-link>
@@ -93,7 +94,7 @@ export default {
 
 <style>
   .q-field__bottom {
-    padding: 5px 0;
+    padding: 3px 5px;
   }
 
   .q-field__messages {

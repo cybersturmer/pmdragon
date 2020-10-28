@@ -3,7 +3,7 @@
     dense
     dark
     bordered
-    class="my-card bg-accent"
+    class="my-card"
     @mouseover="is_edit_button_visible = true"
     @mouseleave="is_edit_button_visible = false"
   >

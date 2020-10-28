@@ -1,11 +1,11 @@
 <template>
   <q-page class="flex flex-center">
-        <q-card flat bordered class="my-card bg-grey-6" style="width: 320px">
+        <q-card dark flat bordered class="my-card" style="width: 320px">
           <q-card-section style="padding: 16px 16px 0 16px">
             <div class="column">
               <div class="col">
                 <q-input
-                  square
+                  dark
                   filled
                   v-model="form_data.username"
                   :error="isFieldValid('username')"
@@ -21,12 +21,11 @@
               </div>
             </div>
           </q-card-section>
-          <q-separator />
+          <q-separator dark inset/>
           <q-card-section>
             <q-btn
               outline
-              color="grey-8"
-              text-color="black"
+              text-color="white"
               label="Sign In"
               @click="login"
             />
@@ -35,7 +34,7 @@
               <q-btn
                 flat
                 size='md'
-                text-color="black"
+                text-color="white"
                 label="Want to register?"
                 style="margin-left: 30px"/>
               </template>

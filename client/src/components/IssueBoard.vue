@@ -3,14 +3,16 @@
     dense
     dark
     bordered
-    class="my-card bg-grey-8 q-ma-sm overflow-hidden text-center">
+    class="my-card q-ma-sm overflow-hidden text-center">
     <q-card-section>
       <span :class="`text-muted ${ this.isDone ? 'text-strike': '' }`">
         #{{ issue.id }} {{ issue.title }}
       </span>
     </q-card-section>
     <q-card-actions horizontal align="right">
-      <q-chip dark
+      <q-chip
+              v-if="assigneeUsername"
+              dark
               size="md"
               color="secondary"
               text-color="amber"
@@ -46,7 +48,7 @@ export default {
       }
     },
     assigneeUsername: function () {
-      return this.assignee ? this.assignee.username : 'unassigned'
+      return this.assignee ? this.assignee.username : false
     },
     isDone: function () {
       return this.$store.getters['issues/IS_ISSUE_STATE_DONE'](this.issue.state_category)

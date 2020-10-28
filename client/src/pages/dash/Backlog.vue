@@ -98,16 +98,15 @@
         <q-card dark
                 bordered
                 square
-                class="my-card bg-grey-8 text-white shadow-3 absolute-bottom card-no-padding"
+                class="my-card text-white shadow-3 absolute-bottom card-no-padding"
                 style="margin: 0.3em"
         >
           <q-card-section>
             <q-input
               v-model="form_data.title"
               @keyup.enter="createIssue"
-              dark
               dense
-              square
+              dark
               filled
               placeholder="Add Issue">
               <template v-slot:append>

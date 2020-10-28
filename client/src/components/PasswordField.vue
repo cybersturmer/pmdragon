@@ -1,6 +1,6 @@
 <template>
   <q-input
-    square
+    dark
     filled
     type="password"
     @input="handleInput"
