@@ -44,6 +44,14 @@ const routes = [
     component: () => import('layouts/DashLayout.vue'),
     children: [
       {
+        name: 'kickstart',
+        path: 'kickstart',
+        meta: {
+          title: 'Welcome pmdragon...'
+        },
+        component: () => import('pages/index/Kickstart.vue')
+      },
+      {
         name: 'workspaces',
         path: 'workspaces',
         meta: {
