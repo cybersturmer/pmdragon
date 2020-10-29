@@ -4,12 +4,12 @@
       <q-card-section>
         <div class="text-h6">Complete your registration</div>
       </q-card-section>
-      <q-separator />
+      <q-separator dark inset/>
       <q-card-section>
         <div class="text-subtitle2">Workspace: {{ info_data.prefix_url }}</div>
         <div class="text-subtitle2">Email: {{ info_data.email }}</div>
       </q-card-section>
-      <q-separator />
+      <q-separator dark inset/>
       <q-card-section>
         <PasswordField
           v-model="form_data.password"
