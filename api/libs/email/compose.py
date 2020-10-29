@@ -20,13 +20,13 @@ class EmailComposer:
             message=self.message,
             from_email=self.from_email,
             recipient_list=[self.to_email],
-            fail_silently=True,
+            fail_silently=False,
         )
 
     def send_verification_email(self, key: str, prefix_url: str, expired_at: datetime, email: str):
 
         self.subject = 'PMDragon verification email'
-        action_link = f'{settings.HOST_BY_DEFAULT}/verify?key={key}'
+        action_link = f'{settings.HOST_BY_DEFAULT}/verify/{key}'
         context = {
             'action_link': action_link,
             'prefix_url': prefix_url,

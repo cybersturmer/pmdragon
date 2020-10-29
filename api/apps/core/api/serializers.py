@@ -105,17 +105,32 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
 
     def validate_prefix_url(self, attrs):
         """
-        We want to be sure that user not except to get
+        We want to be sure that user not expect to get
         workspace with already exists prefix
         @rtype: None
         @param attrs: string
         """
         prefix_url = attrs
         workspaces_with_same_prefix = Workspace.objects.filter(prefix_url=prefix_url)
-        if workspaces_with_same_prefix.count() > 0:
+        if workspaces_with_same_prefix.exists():
             raise ValidationError(_('Workspace with given prefix already exists.'))
 
         return prefix_url
+
+    def validate_email(self, attrs):
+        """
+        We want to be sure that user,
+        that already exists will register one more time with the same email
+        @param attrs: We expect to have email here
+        @return:
+        """
+
+        email = attrs
+        users_with_the_same_email = User.objects.filter(email=email)
+        if users_with_the_same_email.exists():
+            raise ValidationError(_('User with given email already exists.'))
+
+        return email
 
 
 class UserSetPasswordSerializer(serializers.Serializer):
@@ -306,8 +321,8 @@ class PersonVerifySerializer(serializers.Serializer):
 
         """
         Check if user with the same email already exists """
-        email_equal_users_count = User.objects.filter(email=request.email).count()
-        if email_equal_users_count > 0:
+        email_equal_users_count = User.objects.filter(email=request.email)
+        if email_equal_users_count.exists():
             raise serializers.ValidationError({
                 'detail': _('User with the same email already exists. '
                             'You can create new workspace in you account. '

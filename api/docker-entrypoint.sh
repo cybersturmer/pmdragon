@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo -e "\e[94m Collecting static...\e[0m"
-python manage.py collectstatic --clear
+python manage.py collectstatic --clear --noinput
 
 echo -e "\e[94m Making migrations...\e[0m"
 python manage.py makemigrations

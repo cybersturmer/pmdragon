@@ -22,6 +22,7 @@ requests = "==2.24.0"
 urllib3 = "==1.25.11"
 asgiref = "==3.2.10"
 h11 = "==0.11.0"
+celery = "*"
 
 [requires]
 python_version = "3.8"

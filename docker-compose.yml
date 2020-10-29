@@ -1,9 +1,4 @@
-# Just for tests and development on localhost
-# Do not keep secrets in vcs.
-# Do not use real password or any kind of credentials
-
-version: '3'
-
+version: "3.8"
 services:
   web:
     restart: always
@@ -20,11 +15,13 @@ services:
       - media_volume:/srv/www/pmdragon/media
       - ./client/nginx.conf:/etc/nginx/nginx.conf
       - uvicorn_socket:/run/uvicorn
-  api:
+  api: &api
     restart: always
     build:
       context: ./api/
       dockerfile: Dockerfile
+    env_file: 
+      - ./api/env/email.env
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_DB=pmdragon
@@ -32,6 +29,8 @@ services:
       - POSTGRES_PASSWORD=wAzA9OZjZ1DIZbBaRI+bKg==
     depends_on:
       - postgres
+      - rabbit
+      - worker
     volumes:
       - static_volume:/srv/www/pmdragon/static
       - media_volume:/srv/www/pmdragon/media
@@ -52,6 +51,19 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - pgbackup:/var/lib/postgresql/backups
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 15672:15762 # rabbitmq management plugin
+  worker:
+    <<: *api
+    command: sh ./celery-entrypoint.sh
+    ports: []
+    depends_on: 
+      - rabbit
+      - postgres
 volumes:
   uvicorn_socket:
     driver: local

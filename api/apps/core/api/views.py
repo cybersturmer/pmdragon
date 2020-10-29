@@ -1,5 +1,3 @@
-from smtplib import SMTPException
-
 from django.contrib.auth.admin import sensitive_post_parameters_m
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import viewsets, generics, mixins, status, views
@@ -10,9 +8,9 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from libs.email.compose import EmailComposer
 from .schemas import IssueListUpdateSchema
 from .serializers import *
+from .tasks import send_verification_email
 
 
 class TokenObtainPairExtendedView(TokenObtainPairView):
@@ -42,21 +40,11 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
     def perform_create(self, serializer):
         instance: PersonRegistrationRequest = serializer.save()
 
-        try:
-            # @todo Better to do it asynchronously (Celery, RabbitMQ)?
-            EmailComposer().send_verification_email(
-                key=instance.key,
-                prefix_url=instance.prefix_url,
-                expired_at=instance.expired_at,
-                email=instance.email
-            )
-        except SMTPException:
-            instance.email_sent = False
-            instance.save()
+        # Send verification email to user on request
+        send_verification_email.delay(instance.pk)
+        instance.save()
 
-        else:
-            instance.email_sent = True
-            instance.save()
+        return True
 
 
 class PersonVerifyView(generics.CreateAPIView,

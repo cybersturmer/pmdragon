@@ -18,6 +18,7 @@ RUN set -ex; \
     pip install pipenv; \
     pipenv install --deploy --system; \
     ln -s usr/local/bin/docker-entrypoint.sh; \
-    chmod +x /usr/local/bin/docker-entrypoint.sh
+    chmod +x /usr/local/bin/docker-entrypoint.sh; \
+    adduser --disabled-password --gecos '' rabbituu
 
 COPY . .

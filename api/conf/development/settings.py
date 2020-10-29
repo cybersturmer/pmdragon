@@ -40,6 +40,8 @@ SIMPLE_JWT = {
     'ISSUER': 'PMDragon API',
 }
 
+CELERY_BROKER_URL = 'amqp://rabbit'
+
 """
 Django rest framework cors headers """
 CORS_ORIGIN_ALLOW_ALL = True
@@ -70,5 +72,16 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
 
 """
 Email settings use console backend to output email in console """
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_SUBJECT_PREFIX = '[PmDragon] '
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+
 EMAIL_SUBJECT_PREFIX = '[PmDragon] '
