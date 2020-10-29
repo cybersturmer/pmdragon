@@ -1,19 +1,16 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card flat bordered class="bg-grey-6 my-card" style="width: 320px">
+    <q-card dark flat bordered class="my-card" style="width: 320px">
       <q-card-section>
-        <div class="text-h6 text-primary">Complete your registration</div>
+        <div class="text-h6">Complete your registration</div>
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <div class="text-subtitle2 text-primary">Workspace: {{ info_data.prefix_url }}</div>
-        <div class="text-subtitle2 text-primary">Email: {{ info_data.email }}</div>
+        <div class="text-subtitle2">Workspace: {{ info_data.prefix_url }}</div>
+        <div class="text-subtitle2">Email: {{ info_data.email }}</div>
       </q-card-section>
       <q-separator />
       <q-card-section>
-        <div class="text-subtitle2 text-primary">
-          Please set your password.
-        </div>
         <PasswordField
           v-model="form_data.password"
           :error_message="form_errors.password"
@@ -21,8 +18,8 @@
       </q-card-section>
       <q-card-actions vertical>
         <q-btn
+          dark
           outline
-          text-color="black"
           @click="completeRegistration"
         >
           Complete

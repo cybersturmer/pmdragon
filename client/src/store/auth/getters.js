@@ -54,6 +54,14 @@ export function WORKSPACE_ID (state, getters) {
   }
 }
 
+export function WORKSPACE_FIRST_ID (state) {
+  try {
+    return state.workspaces[0].id
+  } catch (e) {
+    return null
+  }
+}
+
 export function PROJECT_DATA (state, getters, rootState, rootGetters) {
   try {
     return getters.WORKSPACE_DATA.projects.find(

@@ -16,7 +16,7 @@
         icon="face"
       >
         <q-input
-          value="Wladimir"
+          v-model="user_form_data.first_name"
           dark
           dense
           square
@@ -27,7 +27,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          value="Sturmer"
+          v-model="user_form_data.last_name"
           dark
           dense
           square
@@ -38,7 +38,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          value="cybersturmer"
+          v-model="user_form_data.username"
           dark
           dense
           square
@@ -54,7 +54,7 @@
         icon="work"
       >
         <q-input
-          value="aether leaps"
+          v-model="project_form_data.title"
           dark
           dense
           square
@@ -65,7 +65,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          value="alps"
+          v-model="project_form_data.key"
           dark
           dense
           square
@@ -102,11 +102,41 @@
 </template>
 
 <script>
+import { Api } from 'src/services/api'
+
 export default {
   name: 'Kickstart',
   data () {
     return {
-      step: 1
+      step: 1,
+      user_form_data: {
+        first_name: '',
+        last_name: '',
+        username: ''
+      },
+      user_form_errors: {
+        first_name: '',
+        last_name: '',
+        username: ''
+      },
+      project_form_data: {
+        workspace: this.$store.getters['auth/WORKSPACE_FIRST_ID'],
+        title: '',
+        key: ''
+      },
+      project_form_errors: {
+        workspace: '',
+        title: '',
+        key: ''
+      },
+      team_form_data: []
+    }
+  },
+  methods: {
+    async addTeamMember (email) {
+      /** Invite team member **/
+      const response = new Api({ auth: true }).get()
+      console.log(response)
     }
   }
 }
