@@ -24,6 +24,18 @@ class PersonRegistrationRequestAdmin(admin.ModelAdmin):
     readonly_fields = ('key',)
 
 
+@admin.register(PersonCollaborationRequest)
+class PersonCollaborationRequestAdmin(admin.ModelAdmin):
+    model = PersonCollaborationRequest
+    readonly_fields = ('key',)
+
+
+@admin.register(PersonInvitationRequest)
+class PersonInvitationRequestAdmin(admin.ModelAdmin):
+    model = PersonInvitationRequest
+    readonly_fields = ('key',)
+
+
 @admin.register(Workspace)
 class WorkspaceAdmin(admin.ModelAdmin):
     model = Workspace

@@ -133,6 +133,42 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
         return email
 
 
+class PersonParticipationEmailSerializer(serializers.Serializer):
+    email = serializers.ListField(
+        child=serializers.EmailField()
+    )
+    workspace = serializers.SlugField(max_length=20)
+
+    def create(self, validated_data):
+        raise NotImplementedError
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError
+
+    class Meta:
+        field = (
+            'email',
+            'workspace'
+        )
+
+
+# class PersonParticipationSerializer(serializers.Serializer):
+#     emails = PersonParticipationEmailSerializer(child=)
+#     prefix_url = serializers.CharField()
+#
+#     def create(self, validated_data):
+#         print(validated_data)
+#
+#     def update(self, instance, validated_data):
+#         print(validated_data)
+#
+#     class Meta:
+#         field = (
+#             'email',
+#             'prefix_url'
+#         )
+
+
 class UserSetPasswordSerializer(serializers.Serializer):
     """
     Serializer to update password of user.

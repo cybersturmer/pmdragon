@@ -23,6 +23,8 @@ class UploadPersonsDirections(Enum):
 
 def image_upload_location(instance, filename) -> str:
 
+    """
+    Getting prefix by checking is it instance of ..."""
     direction = {
         isinstance(instance, Person): UploadPersonsDirections.AVATAR.value
     }[True]
@@ -33,69 +35,6 @@ def image_upload_location(instance, filename) -> str:
     path = f'person_{instance.user.id}/images/{direction}_{uniq_name}{extension}'
 
     return path
-
-
-class PersonRegistrationRequestValidManager(models.Manager):
-    """
-    Get not expired Person registration requests manager
-    """
-
-    def get_queryset(self):
-        return super(PersonRegistrationRequestValidManager, self). \
-            get_queryset(). \
-            filter(expired_at__gt=timezone.now())
-
-
-class PersonRegistrationRequest(models.Model):
-    objects = models.Manager()
-    valid = PersonRegistrationRequestValidManager()
-
-    email = models.EmailField(verbose_name=_('Email'),
-                              max_length=128)
-
-    prefix_url = models.SlugField(verbose_name=_('Prefix URL'),
-                                  help_text=_('String should contain from 3 to 20 small english letters '
-                                              'without special chars'),
-                                  validators=[url_validator],
-                                  max_length=20)
-
-    key = models.CharField(verbose_name=_('Registration key'),
-                           db_index=True,
-                           editable=False,
-                           max_length=128)
-
-    email_sent = models.BooleanField(verbose_name=_('Registration mail was successfully sent'),
-                                     default=False)
-
-    created_at = models.DateTimeField(verbose_name=_('Created at'),
-                                      auto_now_add=True)
-
-    expired_at = models.DateTimeField(verbose_name=_('Expired at'),
-                                      db_index=True,
-                                      default=day_later)
-
-    class Meta:
-        db_table = 'core_person_registration_request'
-        ordering = ['-expired_at']
-
-        indexes = (
-            models.Index(fields=['key']),
-            models.Index(fields=['key', '-expired_at'])
-        )
-
-        verbose_name = _('Person Registration Request')
-        verbose_name_plural = _('Person Registration Requests')
-
-    def __str__(self):
-        return f'{self.email} - {self.prefix_url}'
-
-    __repr__ = __str__
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.key = hashing.get_hash(''.join([str(self.expired_at), self.email, self.prefix_url]))
-
-        super().save(*args, **kwargs)
 
 
 class Person(models.Model):
@@ -195,6 +134,139 @@ class Workspace(models.Model):
         return self.prefix_url
 
     __repr__ = __str__
+
+
+class PersonParticipationRequestAbstractValidManager(models.Manager):
+    """
+    Get not expired Person registration requests manager
+    """
+
+    def get_queryset(self):
+        return super(). \
+            get_queryset(). \
+            filter(expired_at__gt=timezone.now())
+
+
+class PersonParticipationRequestAbstract(models.Model):
+    objects = models.Manager()
+    valid = PersonParticipationRequestAbstractValidManager()
+
+    key = models.CharField(verbose_name=_('Registration key'),
+                           db_index=True,
+                           editable=False,
+                           max_length=128)
+
+    email_sent = models.BooleanField(verbose_name=_('Registration mail was successfully sent'),
+                                     default=False)
+
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
+    expired_at = models.DateTimeField(verbose_name=_('Expired at'),
+                                      db_index=True,
+                                      default=day_later)
+
+    class Meta:
+        abstract = True
+        ordering = ['-expired_at']
+
+        indexes = (
+            models.Index(fields=['key']),
+            models.Index(fields=['key', '-expired_at'])
+        )
+
+    def __str__(self):
+        return str(self.pk)
+
+    __repr__ = __str__
+
+
+class PersonRegistrationRequest(PersonParticipationRequestAbstract):
+    """
+    Normal registration when user try to get workspace url and input
+    email.
+    These persons are not registered yet in PmDragon.
+    """
+
+    email = models.EmailField(verbose_name=_('Email'),
+                              max_length=128)
+
+    prefix_url = models.SlugField(verbose_name=_('Prefix URL'),
+                                  help_text=_('String should contain from 3 to 20 small english letters '
+                                              'without special chars'),
+                                  validators=[url_validator],
+                                  max_length=20)
+
+    class Meta:
+        db_table = 'core_person_registration_request'
+        verbose_name = _('Person Registration Request')
+        verbose_name_plural = _('Person Registration Requests')
+
+    def __str__(self):
+        return f'{self.prefix_url} - {self.email}'
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.key = hashing.get_hash(self.expired_at, self.email, self.prefix_url)
+
+        super().save(*args, **kwargs)
+
+
+class PersonCollaborationRequest(PersonParticipationRequestAbstract):
+    """
+    Request for invitation of person in PmDragon, that already exists with given email.
+    These persons can already be part of other workspaces.
+    """
+
+    person = models.ForeignKey(Person,
+                               verbose_name=_('Person'),
+                               on_delete=models.CASCADE)
+
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'core_person_collaboration_request'
+        verbose_name = _('Person Collaboration Request')
+        verbose_name_plural = _('Person Collaboration Requests')
+
+    def __str__(self):
+        return f'{self.workspace.prefix_url} - {self.person.email}'
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.key = hashing.get_hash(self.expired_at, self.person.email, self.workspace.prefix_url)
+
+        super().save(*args, **kwargs)
+
+
+class PersonInvitationRequest(PersonParticipationRequestAbstract):
+    """
+    Request for invitation of person that are not registered in PmDragon yet, with given email.
+    These users don't want to create their own workspace.
+    """
+
+    email = models.EmailField(verbose_name=_('Email'),
+                              max_length=128)
+
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'core_person_invitation_request'
+        verbose_name = _('Person Invitation Request')
+        verbose_name_plural = _('Person Invitation Requests')
+
+    def __str__(self):
+        return f'{self.workspace.prefix_url} - {self.email}'
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.key = hashing.get_hash(self.expired_at, self.email, self.workspace.prefix_url)
+
+        super().save(*args, **kwargs)
 
 
 class Project(models.Model):

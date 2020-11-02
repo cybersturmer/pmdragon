@@ -16,7 +16,7 @@ def send_verification_email(request_pk=None):
     request = PersonRegistrationRequest.objects.get(pk=request_pk)
 
     try:
-        EmailComposer().send_verification_email(
+        EmailComposer().verify_registration(
             key=request.key,
             prefix_url=request.prefix_url,
             expired_at=request.expired_at,

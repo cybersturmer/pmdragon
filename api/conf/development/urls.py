@@ -43,10 +43,6 @@ urlpatterns = [
          TokenRefreshView.as_view(),
          name='token_refresh'),
 
-    # path('api/auth/requests/',
-    #      PersonRegistrationRequestView.as_view(),
-    #      name='request_create'),
-
     path('api/auth/password/',
          PersonSetPasswordView.as_view(),
          name='person_update_password'),

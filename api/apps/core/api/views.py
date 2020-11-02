@@ -47,6 +47,40 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
         return True
 
 
+class PersonParticipateRequestView(generics.GenericAPIView):
+    """
+    Create collaboration / invite request
+    Post method returns email list
+    """
+    serializer_class = PersonParticipationEmailSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        workspace_prefix = serializer.data['workspace']
+        emails = serializer.data['email']
+
+        workspace = Workspace.objects.filter(prefix_url=workspace_prefix)
+        if not workspace.exists():
+            raise ValidationError(_('Workspace not exists'))
+
+        for _email in emails:
+            _person = Person.objects.filter(user__email=_email)
+
+            if _person.exists():
+                _request = PersonCollaborationRequest(person=_person,
+                                                      workspace=workspace.get())
+                _request.save()
+
+            else:
+                _request = PersonInvitationRequest(email=_email,
+                                                   workspace=workspace.get())
+                _request.save()
+
+        return Response([1, 2, 3, 4, 5, 6])
+
+
 class PersonVerifyView(generics.CreateAPIView,
                        viewsets.ViewSetMixin):
     """
@@ -65,8 +99,8 @@ class CollaboratorsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PersonSerializer
 
     def get_queryset(self):
-        workspaces = Workspace.objects\
-            .filter(participants__in=[self.request.user.person])\
+        workspaces = Workspace.objects \
+            .filter(participants__in=[self.request.user.person]) \
             .all()
 
         collaborators = []
@@ -256,7 +290,6 @@ class PersonAvatarUpload(views.APIView):
 
 class UserUpdateView(generics.UpdateAPIView,
                      viewsets.ViewSetMixin):
-
     queryset = User.objects.all()
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
@@ -267,7 +300,7 @@ class UserUpdateView(generics.UpdateAPIView,
         self.check_object_permissions(self.request, object_)
 
         return object_
-    
+
     def update(self, request, *args, **kwargs):
         user = request.user
 
@@ -360,7 +393,7 @@ class PasswordResetConfirmView(generics.GenericAPIView):
     Returns the success/fail message.
     """
     serializer_class = UserPasswordConfirmSerializer
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
 
     @sensitive_post_parameters_m
     def dispatch(self, request, *args, **kwargs):
