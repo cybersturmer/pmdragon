@@ -29,7 +29,7 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
                                     mixins.CreateModelMixin):
     """
     Create a user registration request by using email and URL prefix.
-    It also can be user to retrieve one registration request by given key
+    It also can be used to get registration request by given key
     """
     queryset = PersonRegistrationRequest.valid.all()
     serializer_class = PersonRegistrationRequestSerializer
@@ -49,7 +49,7 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
 
 class PersonParticipateRequestView(generics.GenericAPIView):
     """
-    Create collaboration / invite request
+    Create collaboration / invitation request
     Post method returns email list
     """
     serializer_class = PersonParticipationEmailSerializer
@@ -326,6 +326,7 @@ class IssueListUpdateApiView(UpdateAPIView):
     """
     schema = IssueListUpdateSchema()
     serializer_class = IssueChildOrderingSerializer
+    http_method_names = ['put', 'options', 'head']
 
     def get_serializer(self, *args, **kwargs):
         return super(IssueListUpdateApiView, self).get_serializer(*args, **kwargs)
