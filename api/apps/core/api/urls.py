@@ -15,12 +15,11 @@ router.register('issue/states', views.IssueStateCategoryViewSet, basename='issue
 router.register('backlogs', views.ProjectBacklogViewSet, basename='backlogs')
 router.register('sprints', views.SprintViewSet, basename='sprints')
 router.register('sprint/durations', views.SprintDurationViewSet, basename='sprint-durations')
-router.register('register', views.PersonRegistrationRequestView, basename='requests')
 
 urlpatterns = router.urls
 urlpatterns += [path('issue/ordering/',
                      IssueListUpdateApiView.as_view(),
                      name='issue-ordering'),
-                path('invite/',
+                path('request/invite/',
                      views.PersonParticipateRequestView.as_view(),
                      name='invite')]

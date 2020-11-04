@@ -8,11 +8,11 @@ from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from apps.core.api.views import PersonVerifyView, \
+from apps.core.api.views import PersonRegistrationRequestVerifyView, \
     PersonSetPasswordView, \
     WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
-    PersonAvatarUpload
+    PersonAvatarUpload, PersonRegistrationRequestView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -47,9 +47,13 @@ urlpatterns = [
          PersonSetPasswordView.as_view(),
          name='person_update_password'),
 
-    path('api/auth/registrations/',
-         PersonVerifyView.as_view(),
-         name='request_update'),
+    path('api/auth/person/',
+         PersonRegistrationRequestVerifyView.as_view(),
+         name='person_create'),
+
+    path('api/auth/request/registrations/',
+         PersonRegistrationRequestView.as_view({'get': 'list', 'post': 'create'}),
+         name='request-register'),
 
     path('api/auth/workspaces/',
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
