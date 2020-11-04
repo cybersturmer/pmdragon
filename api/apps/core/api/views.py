@@ -81,13 +81,13 @@ class PersonParticipateRequestView(generics.GenericAPIView):
         return Response([1, 2, 3, 4, 5, 6])
 
 
-class PersonVerifyView(generics.CreateAPIView,
-                       viewsets.ViewSetMixin):
+class PersonRegistrationRequestVerifyView(generics.CreateAPIView,
+                                          viewsets.ViewSetMixin):
     """
     Create a Person object linked to User after confirmation email.
     """
     queryset = Person.objects.all()
-    serializer_class = PersonVerifySerializer
+    serializer_class = PersonRegistrationRequestVerifySerializer
     permission_classes = [AllowAny]
 
 

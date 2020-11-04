@@ -152,23 +152,6 @@ class PersonParticipationEmailSerializer(serializers.Serializer):
         )
 
 
-# class PersonParticipationSerializer(serializers.Serializer):
-#     emails = PersonParticipationEmailSerializer(child=)
-#     prefix_url = serializers.CharField()
-#
-#     def create(self, validated_data):
-#         print(validated_data)
-#
-#     def update(self, instance, validated_data):
-#         print(validated_data)
-#
-#     class Meta:
-#         field = (
-#             'email',
-#             'prefix_url'
-#         )
-
-
 class UserSetPasswordSerializer(serializers.Serializer):
     """
     Serializer to update password of user.
@@ -323,7 +306,7 @@ class UserPasswordConfirmSerializer(serializers.Serializer):
         return self.set_password_form.save()
 
 
-class PersonVerifySerializer(serializers.Serializer):
+class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
     """
     Custom Serializer for verifying Person registration
     For creating Person after confirmation of authenticity of email
@@ -347,13 +330,14 @@ class PersonVerifySerializer(serializers.Serializer):
 
         """
         Check do we have registration request with given credentials """
-        try:
-            request = PersonRegistrationRequest.valid.filter(key__exact=key).get()
+        request_with_key = PersonRegistrationRequest.valid.filter(key=key)
 
-        except PersonRegistrationRequest.DoesNotExist as ne:
+        if not request_with_key.exists():
             raise serializers.ValidationError({
                 'detail': _('Request for registration was expired or not correct')
             })
+
+        request = request_with_key.get()
 
         """
         Check if user with the same email already exists """
@@ -395,6 +379,39 @@ class PersonVerifySerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class PersonCollaborationRequestVerifySerializer(serializers.Serializer):
+    key = serializers.CharField(max_length=128, write_only=True)
+
+    class Meta:
+        fields = (
+            'key'
+        )
+
+    def create(self, validated_data):
+        key = validated_data['key']
+
+        """
+        Check do we have collaboration request or invitation """
+        collaboration_with_key = PersonCollaborationRequest\
+            .objects\
+            .filter(key=key)
+
+        if not collaboration_with_key.exists():
+            raise ValidationError(_('Request with given key is not found.'))
+
+        collaboration_request: PersonCollaborationRequest = collaboration_with_key.get()
+        person = collaboration_request.person
+        workspace = collaboration_request.workspace
+
+        workspace.participants.add(person)
+        workspace.save()
+
+        return workspace
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
