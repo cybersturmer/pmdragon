@@ -47,12 +47,16 @@ urlpatterns = [
          PersonSetPasswordView.as_view(),
          name='person_update_password'),
 
-    path('api/auth/person/',
+    path('api/auth/persons/',
          PersonRegistrationRequestVerifyView.as_view(),
          name='person_create'),
 
     path('api/auth/request/registrations/',
-         PersonRegistrationRequestView.as_view({'get': 'list', 'post': 'create'}),
+         PersonRegistrationRequestView.as_view({'post': 'create'}),
+         name='request-register'),
+
+    path('api/auth/request/registrations/<str:key>/',
+         PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
 
     path('api/auth/workspaces/',

@@ -20,6 +20,6 @@ urlpatterns = router.urls
 urlpatterns += [path('issue/ordering/',
                      IssueListUpdateApiView.as_view(),
                      name='issue-ordering'),
-                path('request/invite/',
+                path('persons/invitations/',
                      views.PersonParticipateRequestView.as_view(),
-                     name='invite')]
+                     name='invitations')]
