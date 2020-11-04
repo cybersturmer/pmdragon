@@ -7,6 +7,7 @@
     :value="password"
     :error="isError"
     :error-message="error_message"
+    label-color="amber"
     label="Password"/>
 </template>
 

@@ -11,6 +11,7 @@
                   :error="isFieldValid('username')"
                   :error-message="form_errors.username"
                   label="Email"
+                  label-color="amber"
                 />
               </div>
               <div class="col">

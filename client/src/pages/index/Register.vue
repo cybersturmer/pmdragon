@@ -11,18 +11,19 @@
               @input="resetFieldErrorMessage('prefix_url')"
               :error="isFieldValid('prefix_url')"
               :error-message="form_errors.prefix_url"
+              label-color="amber"
               label="Workspace prefix"
             />
           </div>
           <div class="col">
             <q-input
               dark
-              square
               filled
               v-model="form_data.email"
-              @change="resetFieldErrorMessage('email')"
+              @input="resetFieldErrorMessage('email')"
               :error="isFieldValid('email')"
               :error-message="form_errors.email"
+              label-color="amber"
               label="Your email"
             />
           </div>
@@ -30,7 +31,7 @@
         </q-card-section>
         <q-separator dark inset/>
         <q-card-section>
-            <q-btn outline label="Register" @click="register"/>
+            <q-btn outline label="Sign Up" @click="register"/>
             <router-link :to="{ path: '/login' }" class="float-right"  style="text-decoration: none">
               <template>
                 <q-btn
