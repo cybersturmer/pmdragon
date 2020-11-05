@@ -133,6 +133,29 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
         return email
 
 
+class PersonCollaborationRequestVerifySerializer(serializers.ModelSerializer):
+    """
+    Accept collaboration requests by collaborator person """
+
+    class Meta:
+        model = PersonCollaborationRequest
+        fields = (
+            'is_accepted',
+        )
+
+    def update(self, instance: PersonCollaborationRequest, validated_data):
+        workspace = instance.workspace
+        person = instance.person
+
+        workspace.participants.add(person)
+        workspace.save()
+
+        instance.is_accepted = True
+        instance.save()
+
+        return instance
+
+
 class PersonParticipationEmailSerializer(serializers.Serializer):
     email = serializers.ListField(
         child=serializers.EmailField()
@@ -381,7 +404,8 @@ class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
         pass
 
 
-class PersonCollaborationRequestVerifySerializer(serializers.Serializer):
+# @todo Maybe better to remove?
+class PersonCollaborationRequestVerify2Serializer(serializers.Serializer):
     key = serializers.CharField(max_length=128, write_only=True)
 
     class Meta:

@@ -47,6 +47,15 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
         return True
 
 
+class PersonCollaborationRequestAcceptView(viewsets.GenericViewSet,
+                                           mixins.UpdateModelMixin):
+    queryset = PersonCollaborationRequest.valid.all()
+    serializer_class = PersonCollaborationRequestVerifySerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
+    lookup_field = 'key'
+
+
 class PersonParticipateRequestView(generics.GenericAPIView):
     """
     Create collaboration / invitation request
