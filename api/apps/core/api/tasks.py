@@ -23,11 +23,11 @@ def send_verification_email(request_pk=None):
             email=request.email
         )
     except SMTPException:
-        request.email_sent = False
+        request.is_email_sent = False
         request.save()
 
     else:
-        request.email_sent = True
+        request.is_email_sent = True
         request.save()
 
     return True
