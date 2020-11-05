@@ -144,7 +144,8 @@ class PersonParticipationRequestAbstractValidManager(models.Manager):
     def get_queryset(self):
         return super(). \
             get_queryset(). \
-            filter(expired_at__gt=timezone.now())
+            filter(expired_at__gt=timezone.now(),
+                   is_accepted=False)
 
 
 class PersonParticipationRequestAbstract(models.Model):
@@ -156,8 +157,11 @@ class PersonParticipationRequestAbstract(models.Model):
                            editable=False,
                            max_length=128)
 
-    email_sent = models.BooleanField(verbose_name=_('Registration mail was successfully sent'),
-                                     default=False)
+    is_email_sent = models.BooleanField(verbose_name=_('Registration mail was successfully sent'),
+                                        default=False)
+
+    is_accepted = models.BooleanField(verbose_name=_('Was collaboration request approved?'),
+                                       default=False)
 
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)
