@@ -12,7 +12,9 @@ from apps.core.api.views import PersonRegistrationRequestVerifyView, \
     PersonSetPasswordView, \
     WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
-    PersonAvatarUpload, PersonRegistrationRequestView
+    PersonAvatarUpload, \
+    PersonRegistrationRequestView, \
+    PersonCollaborationRequestAcceptView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -27,6 +29,7 @@ schema_view = get_schema_view(version=1,
                               description=API_DESCRIPTION,
                               renderer_classes=[JSONOpenAPIRenderer],
                               permission_classes=(AllowAny,))
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -58,6 +61,10 @@ urlpatterns = [
     path('api/auth/request/registrations/<str:key>/',
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
+
+    path('api/auth/request/collaborations/<str:key>/',
+         PersonCollaborationRequestAcceptView.as_view({'put': 'update'}),
+         name='request-collaboration'),
 
     path('api/auth/workspaces/',
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
