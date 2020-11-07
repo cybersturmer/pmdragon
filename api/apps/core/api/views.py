@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .schemas import IssueListUpdateSchema
 from .serializers import *
-from .tasks import send_verification_email
+from .tasks import send_registration_email, send_invitation_email
 
 
 class TokenObtainPairExtendedView(TokenObtainPairView):
@@ -41,53 +41,68 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
         instance: PersonRegistrationRequest = serializer.save()
 
         # Send verification email to user on request
-        send_verification_email.delay(instance.pk)
+        send_registration_email.delay(instance.pk)
         instance.save()
 
         return True
 
 
-class PersonCollaborationRequestAcceptView(viewsets.GenericViewSet,
-                                           mixins.UpdateModelMixin):
-    queryset = PersonCollaborationRequest.valid.all()
-    serializer_class = PersonCollaborationRequestVerifySerializer
-    permission_classes = [AllowAny]
-    throttle_classes = [AnonRateThrottle]
+class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
+    queryset = PersonInvitationRequest.valid.all()
+    serializer_class = PersonInvitationRequestList
+
+    def create(self, request, *args, **kwargs):
+        try:
+            invitations = request.data['invites']
+        except KeyError:
+            raise ValidationError(_('Invalid data. Expected a invites key in dictionary.'))
+
+        if type(invitations) is not list:
+            raise ValidationError(_('Invalid data. Expected a list'))
+
+        invitations_response = []
+
+        for invitation in invitations:
+            _email = invitation['email']
+            _workspace_with_prefix = Workspace.objects.filter(prefix_url=invitation['workspace'])
+
+            if not _workspace_with_prefix.exists():
+                raise ValidationError(_('Workspace with given prefix does not exists'))
+
+            _workspace = _workspace_with_prefix.get()
+
+            _invitation_request = PersonInvitationRequest(
+                email=_email,
+                workspace=_workspace
+            )
+
+            _invitation_request.save()
+
+            send_invitation_email.delay(_invitation_request.pk)
+
+            invitations_response.append(PersonInvitationRequestSerializer(_invitation_request).data)
+
+        return Response(invitations_response)
+
+
+class PersonInvitationRequestViewSet(viewsets.GenericViewSet,
+                                     mixins.RetrieveModelMixin,
+                                     mixins.CreateModelMixin):
+    queryset = PersonInvitationRequest.valid.all()
+    serializer_class = PersonInvitationRequestSerializer
     lookup_field = 'key'
 
 
-class PersonParticipateRequestView(generics.GenericAPIView):
+class PersonInvitationRequestAcceptView(viewsets.GenericViewSet,
+                                        mixins.UpdateModelMixin):
     """
-    Create collaboration / invitation request
-    Post method returns email list
+    Accept collaboration request for already registered persons.
     """
-    serializer_class = PersonParticipationEmailSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        workspace_prefix = serializer.data['workspace']
-        emails = serializer.data['email']
-
-        workspace = Workspace.objects.filter(prefix_url=workspace_prefix)
-        if not workspace.exists():
-            raise ValidationError(_('Workspace not exists'))
-
-        for _email in emails:
-            _person = Person.objects.filter(user__email=_email)
-
-            if _person.exists():
-                _request = PersonCollaborationRequest(person=_person,
-                                                      workspace=workspace.get())
-                _request.save()
-
-            else:
-                _request = PersonInvitationRequest(email=_email,
-                                                   workspace=workspace.get())
-                _request.save()
-
-        return Response([1, 2, 3, 4, 5, 6])
+    queryset = PersonInvitationRequest.valid.all()
+    serializer_class = PersonInvitationRequestSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
+    lookup_field = 'key'
 
 
 class PersonRegistrationRequestVerifyView(generics.CreateAPIView,

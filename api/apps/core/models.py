@@ -22,7 +22,6 @@ class UploadPersonsDirections(Enum):
 
 
 def image_upload_location(instance, filename) -> str:
-
     """
     Getting prefix by checking is it instance of ..."""
     direction = {
@@ -139,6 +138,7 @@ class Workspace(models.Model):
 class PersonParticipationRequestAbstractValidManager(models.Manager):
     """
     Get not expired Person registration requests manager
+    We also have to filter already accepted requests.
     """
 
     def get_queryset(self):
@@ -149,6 +149,9 @@ class PersonParticipationRequestAbstractValidManager(models.Manager):
 
 
 class PersonParticipationRequestAbstract(models.Model):
+    """
+    Abstract class to extend by all requests.
+    """
     objects = models.Manager()
     valid = PersonParticipationRequestAbstractValidManager()
 
@@ -161,7 +164,7 @@ class PersonParticipationRequestAbstract(models.Model):
                                         default=False)
 
     is_accepted = models.BooleanField(verbose_name=_('Was collaboration request approved?'),
-                                       default=False)
+                                      default=False)
 
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)
@@ -212,35 +215,6 @@ class PersonRegistrationRequest(PersonParticipationRequestAbstract):
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.key = hashing.get_hash(self.expired_at, self.email, self.prefix_url)
-
-        super().save(*args, **kwargs)
-
-
-class PersonCollaborationRequest(PersonParticipationRequestAbstract):
-    """
-    Request for invitation of person in PmDragon, that already exists with given email.
-    These persons can already be part of other workspaces.
-    """
-
-    person = models.ForeignKey(Person,
-                               verbose_name=_('Person'),
-                               on_delete=models.CASCADE)
-
-    workspace = models.ForeignKey(Workspace,
-                                  verbose_name=_('Workspace'),
-                                  on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'core_person_collaboration_request'
-        verbose_name = _('Person Collaboration Request')
-        verbose_name_plural = _('Person Collaboration Requests')
-
-    def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.person.email}'
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.key = hashing.get_hash(self.expired_at, self.person.email, self.workspace.prefix_url)
 
         super().save(*args, **kwargs)
 
@@ -431,10 +405,10 @@ class IssueStateCategory(models.Model):
         So we have to control it carefully
         """
         if self.is_default:
-            default_issue_states = IssueStateCategory.objects\
+            default_issue_states = IssueStateCategory.objects \
                 .filter(workspace=self.workspace,
                         project=self.project,
-                        is_default=True)\
+                        is_default=True) \
                 .all()
 
             for state in default_issue_states:
@@ -445,10 +419,10 @@ class IssueStateCategory(models.Model):
                 state.save()
 
         if self.is_done:
-            done_issue_states = IssueStateCategory.objects\
+            done_issue_states = IssueStateCategory.objects \
                 .filter(workspace=self.workspace,
                         project=self.project,
-                        is_done=True)\
+                        is_done=True) \
                 .all()
 
             for state in done_issue_states:

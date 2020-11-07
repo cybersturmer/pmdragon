@@ -21,6 +21,7 @@ UserModel = get_user_model()
 def order_issues(validated_data):
     """
     validated_data should contain issues key.
+    We use it in Backlog and Sprint serializers.
     """
     if 'issues' not in validated_data:
         return validated_data
@@ -133,45 +134,26 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
         return email
 
 
-class PersonCollaborationRequestVerifySerializer(serializers.ModelSerializer):
+class PersonInvitationRequestSerializer(serializers.ModelSerializer):
     """
-    Accept collaboration requests by collaborator person """
+    Serializer for invite person to team.
+    Doesn't matter is his email used by registered person or no
+    """
 
     class Meta:
-        model = PersonCollaborationRequest
+        model = PersonInvitationRequest
         fields = (
-            'is_accepted',
-        )
-
-    def update(self, instance: PersonCollaborationRequest, validated_data):
-        workspace = instance.workspace
-        person = instance.person
-
-        workspace.participants.add(person)
-        workspace.save()
-
-        instance.is_accepted = True
-        instance.save()
-
-        return instance
-
-
-class PersonParticipationEmailSerializer(serializers.Serializer):
-    email = serializers.ListField(
-        child=serializers.EmailField()
-    )
-    workspace = serializers.SlugField(max_length=20)
-
-    def create(self, validated_data):
-        raise NotImplementedError
-
-    def update(self, instance, validated_data):
-        raise NotImplementedError
-
-    class Meta:
-        field = (
             'email',
             'workspace'
+        )
+
+
+class PersonInvitationRequestList(serializers.Serializer):
+    invites = PersonInvitationRequestSerializer(many=True)
+
+    class Meta:
+        fields = (
+            'invites',
         )
 
 
@@ -240,7 +222,8 @@ class UserPasswordResetSerializer(serializers.Serializer):
     """
     Some serializer for request a password reset email
     """
-    email = serializers.EmailField()
+    email = serializers.EmailField(max_length=128,
+                                   min_length=4)
 
     password_reset_form_class = PasswordResetForm
     reset_form: [Form] = None
@@ -402,40 +385,6 @@ class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
-
-
-# @todo Maybe better to remove?
-class PersonCollaborationRequestVerify2Serializer(serializers.Serializer):
-    key = serializers.CharField(max_length=128, write_only=True)
-
-    class Meta:
-        fields = (
-            'key'
-        )
-
-    def create(self, validated_data):
-        key = validated_data['key']
-
-        """
-        Check do we have collaboration request or invitation """
-        collaboration_with_key = PersonCollaborationRequest\
-            .objects\
-            .filter(key=key)
-
-        if not collaboration_with_key.exists():
-            raise ValidationError(_('Request with given key is not found.'))
-
-        collaboration_request: PersonCollaborationRequest = collaboration_with_key.get()
-        person = collaboration_request.person
-        workspace = collaboration_request.workspace
-
-        workspace.participants.add(person)
-        workspace.save()
-
-        return workspace
-
-    def update(self, instance, validated_data):
-        raise NotImplementedError
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):

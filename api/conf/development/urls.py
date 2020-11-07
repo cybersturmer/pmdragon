@@ -13,8 +13,7 @@ from apps.core.api.views import PersonRegistrationRequestVerifyView, \
     WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
     PersonAvatarUpload, \
-    PersonRegistrationRequestView, \
-    PersonCollaborationRequestAcceptView
+    PersonRegistrationRequestView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -54,17 +53,13 @@ urlpatterns = [
          PersonRegistrationRequestVerifyView.as_view(),
          name='person_create'),
 
-    path('api/auth/request/registrations/',
+    path('api/auth/person-registration-requests/',
          PersonRegistrationRequestView.as_view({'post': 'create'}),
          name='request-register'),
 
-    path('api/auth/request/registrations/<str:key>/',
+    path('api/auth/person-registration-requests/<str:key>/',
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
-
-    path('api/auth/request/collaborations/<str:key>/',
-         PersonCollaborationRequestAcceptView.as_view({'put': 'update'}),
-         name='request-collaboration'),
 
     path('api/auth/workspaces/',
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
