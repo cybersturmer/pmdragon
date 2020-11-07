@@ -37,13 +37,25 @@ def send_registration_email(request_pk=None):
 def send_invitation_email(request_pk=None):
     request = PersonInvitationRequest.valid.get(pk=request_pk)
 
+    user_with_email = User.objects.filter(email=request.email)
+
     try:
-        EmailComposer().verify_invitation(
-            key=request.key,
-            prefix_url=request.workspace.prefix_url,
-            expired_at=request.expired_at,
-            email=request.email
-        )
+
+        if user_with_email.exists():
+            person = user_with_email.get().person
+            EmailComposer().verify_collaboration(
+                key=request.key,
+                prefix_url=request.workspace.prefix_url,
+                expired_at=request.expired_at,
+                person=person
+            )
+        else:
+            EmailComposer().verify_invitation(
+                key=request.key,
+                prefix_url=request.workspace.prefix_url,
+                expired_at=request.expired_at,
+                email=request.email
+            )
     except SMTPException:
         request.is_email_sent = False
         request.save()
