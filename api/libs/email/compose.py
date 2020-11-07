@@ -54,7 +54,8 @@ class EmailComposer:
         context = {
             'action_link': action_link,
             'prefix_url': prefix_url,
-            'expired_at': expired_at
+            'expired_at': expired_at,
+            'person': person
         }
 
         self.html_message = render_to_string('email/verification/collaboration.html', context)
