@@ -4,7 +4,7 @@
       <q-card-section class="text-center">
         <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
           <div v-if="is_success" class="text-h6">You accepted invitation to workspace.</div>
-          <div v-else-if="is_error" class="text-h6">Some error occurred</div>
+          <div v-else-if="is_error" class="text-h6">Registration request was not found.</div>
         </transition>
       </q-card-section>
       <q-inner-loading :showing="!is_request_sent">
@@ -43,8 +43,12 @@ export default {
   },
   methods: {
     async verifyCollaboration () {
+      const payload = {
+        is_accepted: true
+      }
+
       try {
-        await new Api().put(`/auth/request/collaborations/${this.key}/`)
+        await new Api().put(`/auth/person-invitation-requests/${this.key}/`, payload)
         this.is_request_sent = true
         this.is_verified = true
       } catch (e) {
