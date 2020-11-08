@@ -43,7 +43,7 @@ export async function INIT_ISSUES ({ commit }) {
 export async function INIT_SPRINT_DURATIONS ({ commit }) {
   try {
     const response = await new Api({ auth: true }).get(
-      '/core/sprint/durations/'
+      '/core/sprint-durations/'
     )
 
     HandleResponse.compare(200, response.status)
@@ -56,7 +56,7 @@ export async function INIT_SPRINT_DURATIONS ({ commit }) {
 export async function INIT_ISSUE_STATES ({ commit }) {
   try {
     const response = await new Api({ auth: true }).get(
-      '/core/issue/states/'
+      '/core/issue-states/'
     )
 
     HandleResponse.compare(200, response.status)
@@ -69,7 +69,7 @@ export async function INIT_ISSUE_STATES ({ commit }) {
 export async function INIT_ISSUE_TYPES ({ commit }) {
   try {
     const response = await new Api({ auth: true }).get(
-      '/core/issue/types/'
+      '/core/issue-types/'
     )
 
     HandleResponse.compare(200, response.status)
