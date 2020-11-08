@@ -13,7 +13,8 @@ from apps.core.api.views import PersonRegistrationRequestVerifyView, \
     WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
     PersonAvatarUpload, \
-    PersonRegistrationRequestView
+    PersonRegistrationRequestView, \
+    PersonInvitationRequestRetrieveUpdateView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
 
@@ -28,7 +29,6 @@ schema_view = get_schema_view(version=1,
                               description=API_DESCRIPTION,
                               renderer_classes=[JSONOpenAPIRenderer],
                               permission_classes=(AllowAny,))
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,6 +60,10 @@ urlpatterns = [
     path('api/auth/person-registration-requests/<str:key>/',
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
+
+    path('api/auth/persons-invitations-requests/<key>/',
+         PersonInvitationRequestRetrieveUpdateView.as_view(),
+         name='person-invitations-requests-retrieve-update'),
 
     path('api/auth/workspaces/',
          WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),

@@ -22,7 +22,4 @@ urlpatterns += [path('issue/ordering/',
                      name='issue-ordering'),
                 path('persons-invitations-requests/',
                      views.PersonInvitationRequestListCreateView.as_view(),
-                     name='person-invitations-requests-list-create'),
-                path('persons-invitations-requests/<key>/',
-                     views.PersonInvitationRequestRetrieveUpdateView.as_view(),
-                     name='person-invitations-requests-retrieve-update')]
+                     name='person-invitations-requests-list-create')]
