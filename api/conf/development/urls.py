@@ -61,7 +61,7 @@ urlpatterns = [
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
 
-    path('api/auth/persons-invitations-requests/<key>/',
+    path('api/auth/person-invitation-requests/<key>/',
          PersonInvitationRequestRetrieveUpdateView.as_view(),
          name='person-invitations-requests-retrieve-update'),
 
