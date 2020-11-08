@@ -142,7 +142,7 @@ class PersonRegistrationRequestVerifyView(generics.CreateAPIView,
     Create a Person object linked to User after confirmation email.
     """
     queryset = Person.objects.all()
-    serializer_class = PersonRegistrationRequestVerifySerializer
+    serializer_class = PersonRegistrationOrInvitationRequestSerializer
     permission_classes = [AllowAny]
 
 

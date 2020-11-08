@@ -331,13 +331,15 @@ class UserPasswordConfirmSerializer(serializers.Serializer):
         return self.set_password_form.save()
 
 
-class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
+class PersonRegistrationOrInvitationRequestSerializer(serializers.Serializer):
     """
     Custom Serializer for verifying Person registration
     For creating Person after confirmation of authenticity of email
     """
     key = serializers.CharField(max_length=128, write_only=True)
     password = serializers.CharField(max_length=30, write_only=True)
+    is_invited = serializers.BooleanField(required=True,
+                                          default=False)
 
     class Meta:
         fields = (
@@ -345,21 +347,27 @@ class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
             'password'
         )
         extra_kwargs = {
+            'key': {'write_only': True},
             'password': {'write_only': True},
-            'key': {'write_only': True}
+            'is_invited': {'write_only': True}
         }
 
     def create(self, validated_data):
-        password = validated_data['password']
-        key = validated_data['key']
+        key = validated_data.get('key')
+        password = validated_data.get('password')
+        is_invited = validated_data.get('is_invited')
 
         """
-        Check do we have registration request with given credentials """
-        request_with_key = PersonRegistrationRequest.valid.filter(key=key)
+        If person was invited than we have to search him in PersonInvitationRequests 
+        else we will try to find him in PersonRegistrationRequests """
+        if is_invited:
+            request_with_key = PersonInvitationRequest.valid.filter(key=key)
+        else:
+            request_with_key = PersonRegistrationRequest.valid.filter(key=key)
 
         if not request_with_key.exists():
             raise serializers.ValidationError({
-                'detail': _('Request for registration was expired or not correct')
+                'detail': _('Request for registration or invitation was expired or not correct')
             })
 
         request = request_with_key.get()
@@ -388,14 +396,25 @@ class PersonRegistrationRequestVerifySerializer(serializers.Serializer):
         person = Person(user=user)
         person.save()
 
-        workspace = Workspace(prefix_url=request.prefix_url)
+        if is_invited:
+            """
+            If user was invited then workspace already exists
+            And we don't need to create it """
+            request: PersonInvitationRequest
+            workspace = request.workspace
+        else:
+            """
+            If user is self registered with prefix_url for workspace then 
+            we have to create workspace for him. """
+            request: PersonRegistrationRequest
+            workspace = Workspace(prefix_url=request.prefix_url)
 
-        try:
-            workspace.save()
-        except IntegrityError:
-            raise serializers.ValidationError({
-                'detail': _('Workspace with given prefix url was already registered.')
-            })
+            try:
+                workspace.save()
+            except IntegrityError:
+                raise serializers.ValidationError({
+                    'detail': _('Workspace with given prefix url was already registered.')
+                })
 
         workspace.participants.add(person)
         workspace.save()
