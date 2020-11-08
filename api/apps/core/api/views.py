@@ -50,6 +50,8 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
 class PersonInvitationRequestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     queryset = PersonInvitationRequest.valid.all()
     serializer_class = PersonInvitationRequestRetrieveUpdateSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = [AnonRateThrottle]
     lookup_field = 'key'
     http_method_names = (
         'head',
