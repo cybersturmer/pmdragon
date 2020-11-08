@@ -12,6 +12,8 @@
     >
       <q-step
         :name="1"
+        :disable="is_user_data_filled"
+        :done="is_user_data_filled"
         title="Some bytes about you"
         icon="face"
       >
@@ -50,6 +52,8 @@
       </q-step>
       <q-step
         :name="2"
+        :disable="is_any_project"
+        :done="is_any_project"
         title="Create your first project"
         icon="work"
       >
@@ -78,10 +82,38 @@
       </q-step>
       <q-step
         :name="3"
-        title="Add people you work with"
+        :title="`Add people you work with in workspace ${this.workspace}`"
         icon="supervisor_account"
       >
-        Add your team
+        <q-table
+          dense
+          flat
+          square
+          row-key="name"
+          dark
+          no-data-label="Invite your team members by adding them by email."
+          :hide-bottom="true"
+          :hide-header="true"
+          :data="team_table_data.data"
+          :columns="team_table_data.columns"
+        />
+        <q-input
+          v-model="team_form_email"
+          type="email"
+          square
+          dense
+          dark
+          filled
+          label-color="amber"
+          placeholder="user@mail.com">
+          <template v-slot:append>
+            <q-btn dense
+                   flat
+                   icon="add"
+                   @click="addTeamMember"
+            />
+          </template>
+        </q-input>
       </q-step>
       <template v-slot:navigation>
         <q-stepper-navigation>
@@ -102,17 +134,16 @@
 </template>
 
 <script>
-import { Api } from 'src/services/api'
 
 export default {
   name: 'Kickstart',
   data () {
     return {
-      step: 1,
+      step: this.getInitStep(),
       user_form_data: {
-        first_name: '',
-        last_name: '',
-        username: ''
+        first_name: this.$store.getters['auth/MY_FIRST_NAME'],
+        last_name: this.$store.getters['auth/MY_LAST_NAME'],
+        username: this.$store.getters['auth/MY_USERNAME']
       },
       user_form_errors: {
         first_name: '',
@@ -129,14 +160,60 @@ export default {
         title: '',
         key: ''
       },
-      team_form_data: []
+      team_table_data: {
+        columns: [
+          {
+            name: 'Email',
+            required: true,
+            align: 'left',
+            field: row => row.email,
+            format: val => `${val}`
+          }
+        ],
+        data: []
+      },
+      team_form_email: null
+    }
+  },
+  computed: {
+    workspace () {
+      return this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
+    },
+    is_user_data_filled () {
+      const isFirstName = !!this.$store.getters['auth/MY_FIRST_NAME']
+      const isLastName = !!this.$store.getters['auth/MY_LAST_NAME']
+      const isUsername = !!this.$store.getters['auth/MY_USERNAME']
+
+      return isFirstName && isLastName && isUsername
+    },
+    is_any_project () {
+      return this.$store.getters['auth/IS_ANY_PROJECT']
     }
   },
   methods: {
-    async addTeamMember (email) {
-      /** Invite team member **/
-      const response = new Api({ auth: true }).get()
-      console.log(response)
+    addTeamMember () {
+      if (this.team_form_email === null) return false
+
+      this.team_table_data.data.push({
+        email: this.team_form_email
+      })
+
+      this.team_form_email = null
+    },
+    getInitStep () {
+      const isMyDataFilled = !!this.$store.getters['auth/IS_MY_DATA_FILLED']
+      const isAnyProject = !!this.$store.getters['auth/IS_ANY_PROJECT']
+
+      switch (true) {
+        case isAnyProject && isMyDataFilled:
+          return 3
+        case isAnyProject && !isMyDataFilled:
+          return 1
+        case !isAnyProject && isMyDataFilled:
+          return 2
+        default:
+          return 1
+      }
     }
   }
 }

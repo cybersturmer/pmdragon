@@ -62,6 +62,22 @@ export function WORKSPACE_FIRST_ID (state) {
   }
 }
 
+export function WORKSPACE_FIRST_PREFIX (state) {
+  try {
+    return state.workspaces[0].prefix_url
+  } catch (e) {
+    return null
+  }
+}
+
+export function IS_ANY_PROJECT (state) {
+  try {
+    return !!state.workspaces.find(workspace => workspace.projects.length > 0)
+  } catch (e) {
+    return null
+  }
+}
+
 export function PROJECT_DATA (state, getters, rootState, rootGetters) {
   try {
     return getters.WORKSPACE_DATA.projects.find(
@@ -84,6 +100,16 @@ export function MY_DATA (state, getters) {
     return getters.PERSON_BY_ID(getters.MY_USER_ID)
   } catch (e) {
     return null
+  }
+}
+
+export function IS_MY_DATA_FILLED (state, getters) {
+  try {
+    return !!getters.MY_FIRST_NAME &&
+           !!getters.MY_LAST_NAME &&
+           !!getters.MY_USERNAME
+  } catch (e) {
+    return false
   }
 }
 

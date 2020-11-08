@@ -107,6 +107,7 @@
             <q-input
               v-model="form_data.title"
               @keyup.enter="createIssue"
+              square
               dense
               dark
               filled
