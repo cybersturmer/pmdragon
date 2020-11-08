@@ -36,7 +36,7 @@ import PasswordField from 'components/PasswordField'
 import { Dialogs } from 'pages/mixins/dialogs'
 
 export default {
-  name: 'Verify',
+  name: 'VerifyInvitation',
   mixins: [Dialogs],
   components: { PasswordField },
   data () {
@@ -47,7 +47,8 @@ export default {
       },
       form_data: {
         key: this.$attrs.key,
-        password: ''
+        password: '',
+        is_invited: true
       },
       form_errors: {
         password: ''
@@ -60,17 +61,17 @@ export default {
     }
   },
   async mounted () {
-    const response = await new Api().get(`/core/requests/${this.key}/`)
+    const response = await new Api().get(`/auth/person-invitation-requests/${this.key}/`)
     HandleResponse.compare(200, response.status)
 
-    this.info_data.prefix_url = response.data.prefix_url
+    this.info_data.prefix_url = response.data.workspace.prefix_url
     this.info_data.email = response.data.email
   },
   methods: {
     async completeRegistration () {
       try {
         const response = await new Api()
-          .post('/auth/registrations/', this.form_data)
+          .post('/auth/persons/', this.form_data)
 
         HandleResponse.compare(201, response.status)
         await this.$router.push({ name: 'register' })
