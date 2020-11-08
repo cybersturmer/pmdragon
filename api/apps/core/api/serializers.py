@@ -150,6 +150,7 @@ class PersonInvitationRequestRetrieveUpdateSerializer(serializers.ModelSerialize
             'workspace': {'read_only': True},
             'is_accepted': {'write_only': True}
         }
+        depth = 1
 
 
 class PersonInvitationRequestSerializer(serializers.ModelSerializer):
