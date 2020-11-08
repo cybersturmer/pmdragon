@@ -338,8 +338,7 @@ class PersonRegistrationOrInvitationRequestSerializer(serializers.Serializer):
     """
     key = serializers.CharField(max_length=128, write_only=True)
     password = serializers.CharField(max_length=30, write_only=True)
-    is_invited = serializers.BooleanField(required=True,
-                                          default=False)
+    is_invited = serializers.BooleanField(default=False)
 
     class Meta:
         fields = (
