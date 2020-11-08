@@ -134,6 +134,24 @@ class PersonRegistrationRequestSerializer(serializers.ModelSerializer):
         return email
 
 
+class PersonInvitationRequestRetrieveUpdateSerializer(serializers.ModelSerializer):
+    """
+    Update request after getting email and follow link inside
+    """
+    class Meta:
+        model = PersonInvitationRequest
+        fields = (
+            'email',
+            'workspace',
+            'is_accepted'
+        )
+        extra_kwargs = {
+            'email': {'read_only': True},
+            'workspace': {'read_only': True},
+            'is_accepted': {'write_only': True}
+        }
+
+
 class PersonInvitationRequestSerializer(serializers.ModelSerializer):
     """
     Serializer for invite person to team.

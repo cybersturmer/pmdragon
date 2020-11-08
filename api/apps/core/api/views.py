@@ -47,9 +47,26 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
         return True
 
 
+class PersonInvitationRequestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = PersonInvitationRequest.valid.all()
+    serializer_class = PersonInvitationRequestRetrieveUpdateSerializer
+    lookup_field = 'key'
+    http_method_names = (
+        'head',
+        'options',
+        'get',
+        'put'
+    )
+
+
 class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
     queryset = PersonInvitationRequest.valid.all()
     serializer_class = PersonInvitationRequestList
+    http_method_names = (
+        'post',
+        'head',
+        'options'
+    )
 
     def create(self, request, *args, **kwargs):
         try:
@@ -79,8 +96,8 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
             _invitation_request.save()
 
             send_invitation_email.delay(_invitation_request.pk)
-
-            invitations_response.append(PersonInvitationRequestSerializer(_invitation_request).data)
+            serializer = PersonInvitationRequestRetrieveUpdateSerializer(_invitation_request)
+            invitations_response.append(serializer.data)
 
         return Response(invitations_response)
 
