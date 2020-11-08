@@ -48,6 +48,10 @@ class PersonRegistrationRequestView(viewsets.GenericViewSet,
 
 
 class PersonInvitationRequestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    """
+    Can to be used for check does invitation requests exists by key.
+    It also can be used to update state of requests, mark it as accepted.
+    """
     queryset = PersonInvitationRequest.valid.all()
     serializer_class = PersonInvitationRequestRetrieveUpdateSerializer
     permission_classes = [AllowAny]
@@ -62,6 +66,11 @@ class PersonInvitationRequestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
+    """
+    Can be useful for bulk create requests by giving
+    1) Email
+    2) Workspace prefix
+    """
     queryset = PersonInvitationRequest.valid.all()
     serializer_class = PersonInvitationRequestList
     http_method_names = (
@@ -71,6 +80,8 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
     )
 
     def create(self, request, *args, **kwargs):
+        requested_person = request.user.person
+
         try:
             invitations = request.data['invites']
         except KeyError:
@@ -83,10 +94,11 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
 
         for invitation in invitations:
             _email = invitation['email']
-            _workspace_with_prefix = Workspace.objects.filter(prefix_url=invitation['workspace'])
+            _workspace_with_prefix = Workspace.objects.filter(prefix_url=invitation['workspace'],
+                                                              participants__in=[requested_person])
 
             if not _workspace_with_prefix.exists():
-                raise ValidationError(_('Workspace with given prefix does not exists'))
+                raise ValidationError(_('Workspace with given prefix and available for you does not exists'))
 
             _workspace = _workspace_with_prefix.get()
 
