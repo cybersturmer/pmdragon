@@ -3,7 +3,8 @@ import { Api } from 'src/services/api'
 import { ErrorHandler, HandleResponse } from 'src/services/util'
 
 export async function REGISTER ({ commit }, credentials) {
-  return await new Api().post('/core/requests/', credentials)
+  return await new Api().post('/auth/person-registration-requests/',
+    credentials)
 }
 
 export async function LOGIN ({ commit }, credentials) {
@@ -89,7 +90,7 @@ export async function UPDATE_MY_AVATAR ({ commit }, file) {
   }
 }
 
-export async function DELETE_MY_AVATAR ({ commit }, file) {
+export async function DELETE_MY_AVATAR ({ commit }) {
   try {
     const response = await new Api({ auth: true })
       .delete('/auth/avatar/')

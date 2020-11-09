@@ -78,7 +78,7 @@ export default {
   },
   async mounted () {
     try {
-      const response = await new Api().get(`/auth/request/registrations/${this.key}/`)
+      const response = await new Api().get(`/auth/person-registration-requests/${this.key}/`)
 
       HandleResponse.compare(200, response.status)
 
