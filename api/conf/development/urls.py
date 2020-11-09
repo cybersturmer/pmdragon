@@ -57,7 +57,7 @@ urlpatterns = [
          PersonRegistrationRequestView.as_view({'post': 'create'}),
          name='request-register'),
 
-    path('api/auth/person-registration-requests/<str:key>/',
+    path('api/auth/person-registration-requests/<key>/',
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
 
