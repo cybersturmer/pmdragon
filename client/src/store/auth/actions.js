@@ -43,6 +43,35 @@ export async function INIT_PERSONS ({ commit }) {
   }
 }
 
+export async function ADD_PROJECT ({ commit }, payload) {
+  try {
+    const response = await new Api({ auth: true }).post(
+      '/core/projects/',
+      payload
+    )
+
+    HandleResponse.compare(201, response.status)
+    commit('ADD_PROJECT', response.data)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
+export async function INVITE_TEAM ({ commit }, payload) {
+  /**
+   * Not related to Vuex store now, however gonna let it stay here **/
+  try {
+    const response = await new Api({ auth: true }).post(
+      '/core/person-invitation-requests/',
+      payload
+    )
+
+    HandleResponse.compare(201, response.status)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
 export async function UPDATE_MY_DATA ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true })

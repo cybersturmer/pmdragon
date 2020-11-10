@@ -8,6 +8,7 @@
       inactive-color="accent"
       active-color="amber"
       done-color="positive"
+      @before-transition="makeTransition"
       animated
     >
       <q-step
@@ -96,6 +97,7 @@
           :hide-header="true"
           :data="team_table_data.data"
           :columns="team_table_data.columns"
+          :pagination="team_table_data.pagination"
         />
         <q-input
           v-model="team_form_email"
@@ -105,7 +107,9 @@
           dark
           filled
           label-color="amber"
-          placeholder="user@mail.com">
+          placeholder="user@mail.com"
+          @keyup.enter="addTeamMember"
+        >
           <template v-slot:append>
             <q-btn dense
                    flat
@@ -118,9 +122,9 @@
       <template v-slot:navigation>
         <q-stepper-navigation>
           <q-btn
-            @click="$refs.stepper.next()"
+            @click="continueClick($refs)"
             outline
-            :label="step === 3 ? 'Finish' : 'Continue'"
+            :label="next_label"
           />
           <q-btn
             v-if="step > 1"
@@ -135,8 +139,12 @@
 
 <script>
 
+import { fieldValidationMixin } from 'pages/mixins/field_validation'
+import { Dialogs } from 'pages/mixins/dialogs'
+
 export default {
   name: 'Kickstart',
+  mixins: [fieldValidationMixin, Dialogs],
   data () {
     return {
       step: this.getInitStep(),
@@ -170,6 +178,9 @@ export default {
             format: val => `${val}`
           }
         ],
+        pagination: {
+          rowsPerPage: 0
+        },
         data: []
       },
       team_form_email: null
@@ -188,11 +199,59 @@ export default {
     },
     is_any_project () {
       return this.$store.getters['auth/IS_ANY_PROJECT']
+    },
+    next_label () {
+      return this.step === 3 ? 'Finish' : 'Continue'
     }
   },
   methods: {
+    makeTransition (newValue, oldValue) {
+      switch (oldValue) {
+        case 1:
+          return this.updateUserData()
+        case 2:
+          return this.createProject()
+        case 3:
+          return this.createTeam()
+      }
+    },
+    async updateUserData () {
+      await this.$store.dispatch('auth/UPDATE_MY_DATA', this.user_form_data)
+    },
+    async createProject () {
+      await this.$store.dispatch('auth/ADD_PROJECT', this.project_form_data)
+    },
+    async createTeam () {
+      const payload = {
+        invites: []
+      }
+
+      for (const emailElement in this.team_table_data.data) {
+        payload.invites.push(
+          {
+            email: emailElement.email,
+            workspace: this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
+          })
+      }
+
+      await this.$store.dispatch('auth/INVITE_TEAM', payload)
+      await this.$router.push({ name: 'workspaces' })
+    },
+    async continueClick ($refs) {
+      $refs.stepper.next()
+      if (this.step === 3) await this.createTeam()
+    },
     addTeamMember () {
       if (this.team_form_email === null) return false
+
+      if (!this.isValidEmail(this.team_form_email)) {
+        this.showConfirmDialog(
+          'Not a correct email',
+          'Please input correct email address'
+        )
+
+        return false
+      }
 
       this.team_table_data.data.push({
         email: this.team_form_email
