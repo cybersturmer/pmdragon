@@ -21,6 +21,7 @@
               filled
               v-model="form_data.email"
               @input="resetFieldErrorMessage('email')"
+              @keyup.enter="register"
               :error="isFieldValid('email')"
               :error-message="form_errors.email"
               label-color="amber"
@@ -83,6 +84,8 @@ export default {
         ]
 
         this.showConfirmDialog(...dialog)
+        this.form_data.prefix_url = ''
+        this.form_data.email = ''
       } catch (e) {
         const error = new ErrorHandler(e)
         error.setErrors(this.form_errors)

@@ -14,7 +14,8 @@
       <q-step
         :name="1"
         :disable="is_user_data_filled"
-        :done="is_user_data_filled"
+        :done="is_user_step_done"
+        done-color="positive"
         title="Some bytes about you"
         icon="face"
       >
@@ -54,7 +55,8 @@
       <q-step
         :name="2"
         :disable="is_any_project"
-        :done="is_any_project"
+        :done="is_project_step_done"
+        done-color="positive"
         title="Create your first project"
         icon="work"
       >
@@ -84,6 +86,8 @@
       <q-step
         :name="3"
         :title="`Add people you work with in workspace ${this.workspace}`"
+        :done="is_team_step_done"
+        done-color="positive"
         icon="supervisor_account"
       >
         <q-table
@@ -148,6 +152,9 @@ export default {
   data () {
     return {
       step: this.getInitStep(),
+      is_user_step_done: false,
+      is_project_step_done: false,
+      is_team_step_done: false,
       user_form_data: {
         first_name: this.$store.getters['auth/MY_FIRST_NAME'],
         last_name: this.$store.getters['auth/MY_LAST_NAME'],
@@ -217,29 +224,39 @@ export default {
     },
     async updateUserData () {
       await this.$store.dispatch('auth/UPDATE_MY_DATA', this.user_form_data)
+      this.is_user_step_done = true
     },
     async createProject () {
       await this.$store.dispatch('auth/ADD_PROJECT', this.project_form_data)
+      this.is_project_step_done = true
     },
     async createTeam () {
       const payload = {
         invites: []
       }
 
-      for (const emailElement in this.team_table_data.data) {
-        payload.invites.push(
-          {
-            email: emailElement.email,
-            workspace: this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
-          })
+      const teamData = this.team_table_data.data
+
+      for (const emailElement in teamData) {
+        const dictPayload = {
+          email: teamData[emailElement].email,
+          workspace: this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
+        }
+
+        payload.invites.push(dictPayload)
       }
 
       await this.$store.dispatch('auth/INVITE_TEAM', payload)
+      this.is_team_step_done = true
+
       await this.$router.push({ name: 'workspaces' })
     },
     async continueClick ($refs) {
       $refs.stepper.next()
-      if (this.step === 3) await this.createTeam()
+      if (this.step === 3) {
+        await this.createTeam()
+        await this.$router.push({ name: 'loading' })
+      }
     },
     addTeamMember () {
       if (this.team_form_email === null) return false

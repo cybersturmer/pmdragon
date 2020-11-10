@@ -19,6 +19,7 @@
         <PasswordField
           v-model="form_data.password"
           :error_message="form_errors.password"
+          @keyup.enter="completeRegistration"
         />
       </q-card-section>
       <q-card-actions vertical>
@@ -98,6 +99,12 @@ export default {
 
         HandleResponse.compare(201, response.status)
         await this.$router.push({ name: 'register' })
+        this.showConfirmDialog(
+          'You are registered successfully',
+          'Congratulations! You\'ve been registered')
+          .onOk(() => {
+            return this.$router.push({ name: 'register' })
+          })
       } catch (e) {
         const error = new ErrorHandler(e)
         error.setErrors(this.form_errors)

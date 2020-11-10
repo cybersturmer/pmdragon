@@ -1,7 +1,7 @@
 export const Dialogs = {
   methods: {
     showConfirmDialog (title, message, unsafe = false) {
-      this.$q.dialog({
+      return this.$q.dialog({
         dark: true,
         html: unsafe,
         title: title,
