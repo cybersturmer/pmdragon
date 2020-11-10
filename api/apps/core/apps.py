@@ -8,4 +8,4 @@ class CoreConfig(AppConfig):
     verbose_name = _('Core')
 
     def ready(self):
-        print('hello')
+        from apps.core import signals
