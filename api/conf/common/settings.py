@@ -99,9 +99,3 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
-
-"""
-Custom EMAIL Settings 
-HOST_BY_DEFAULT just for email replacing """
-EMAIL_FROM_BY_DEFAULT = 'vlad@sturmer.pro'
-HOST_BY_DEFAULT = 'localhost'

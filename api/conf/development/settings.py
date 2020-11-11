@@ -71,15 +71,17 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
     })
 
 """
-Email settings use console backend to output email in console """
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# EMAIL_SUBJECT_PREFIX = '[PmDragon] '
+Custom EMAIL Settings 
+HOST_BY_DEFAULT just for email replacing """
+EMAIL_FROM_BY_DEFAULT = os.getenv('EMAIL_USER')
+HOST_BY_DEFAULT = 'localhost'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+
 
 EMAIL_USE_SSL = True
 EMAIL_PORT = 465
