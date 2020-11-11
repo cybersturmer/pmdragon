@@ -1,5 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from .models import Project, \
     ProjectBacklog, \
@@ -32,7 +33,7 @@ def create_default_issue_type_category_for_project(sender, **kwargs):
     if created and not issue_types.exists():
         epic = IssueTypeCategory(workspace=instance.workspace,
                                  project=instance,
-                                 title='Epic',
+                                 title=_('Epic'),
                                  is_subtask=False,
                                  is_default=False,
                                  ordering=0)
@@ -41,7 +42,7 @@ def create_default_issue_type_category_for_project(sender, **kwargs):
 
         user_story = IssueTypeCategory(workspace=instance.workspace,
                                        project=instance,
-                                       title='User Story',
+                                       title=_('User Story'),
                                        is_subtask=True,
                                        is_default=True,
                                        ordering=1)
@@ -50,7 +51,7 @@ def create_default_issue_type_category_for_project(sender, **kwargs):
 
         task = IssueTypeCategory(workspace=instance.workspace,
                                  project=instance,
-                                 title='Task',
+                                 title=_('Task'),
                                  is_subtask=True,
                                  is_default=False,
                                  ordering=2)
@@ -59,7 +60,7 @@ def create_default_issue_type_category_for_project(sender, **kwargs):
 
         bug = IssueTypeCategory(workspace=instance.workspace,
                                 project=instance,
-                                title='Bug',
+                                title=_('Bug'),
                                 is_subtask=False,
                                 is_default=False,
                                 ordering=3)
@@ -79,7 +80,7 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
 
         todo = IssueStateCategory(workspace=instance.workspace,
                                   project=instance,
-                                  title='Todo',
+                                  title=_('Todo'),
                                   is_default=True,
                                   is_done=False)
 
@@ -87,7 +88,7 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
 
         in_progress = IssueStateCategory(workspace=instance.workspace,
                                          project=instance,
-                                         title='In Progress',
+                                         title=_('In Progress'),
                                          is_default=False,
                                          is_done=False)
 
@@ -95,7 +96,7 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
 
         verify = IssueStateCategory(workspace=instance.workspace,
                                     project=instance,
-                                    title='Verify',
+                                    title=_('Verify'),
                                     is_default=False,
                                     is_done=False)
 
@@ -103,7 +104,7 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
 
         done = IssueStateCategory(workspace=instance.workspace,
                                   project=instance,
-                                  title='Done',
+                                  title=_('Done'),
                                   is_default=False,
                                   is_done=True)
 
