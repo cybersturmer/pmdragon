@@ -66,7 +66,7 @@ export async function INVITE_TEAM ({ commit }, payload) {
       payload
     )
 
-    HandleResponse.compare(201, response.status)
+    HandleResponse.compare(200, response.status)
   } catch (e) {
     throw new ErrorHandler(e)
   }
