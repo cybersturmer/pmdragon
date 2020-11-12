@@ -19,7 +19,7 @@
         <PasswordField
           v-model="form_data.password"
           :error_message="form_errors.password"
-          @keyup.enter="completeRegistration"
+          @keyup.enter.native="completeRegistration"
         />
       </q-card-section>
       <q-card-actions vertical>

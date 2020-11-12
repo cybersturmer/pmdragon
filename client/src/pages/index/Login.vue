@@ -18,7 +18,7 @@
                 <PasswordField
                   v-model="form_data.password"
                   :error_message="form_errors.password"
-                  @keyup.enter="login"
+                  @keyup.enter.native="login"
                 />
               </div>
             </div>
