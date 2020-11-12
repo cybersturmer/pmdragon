@@ -98,12 +98,12 @@ export default {
           .post('/auth/persons/', this.form_data)
 
         HandleResponse.compare(201, response.status)
-        await this.$router.push({ name: 'register' })
+
         this.showConfirmDialog(
           'You are registered successfully',
-          'Congratulations! You\'ve been registered')
-          .onOk(() => {
-            return this.$router.push({ name: 'register' })
+          'Congratulations! You\'ve been registered. Now you can log in.')
+          .onOKClick(() => {
+            this.$router.push({ name: 'login' })
           })
       } catch (e) {
         const error = new ErrorHandler(e)
