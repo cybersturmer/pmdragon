@@ -5,12 +5,14 @@
            style="margin-left: 1em; margin-bottom: 1em"
            v-for="workspace in workspaces"
            v-bind:key="workspace.id">
-        <q-card class="my-card bordered bg-primary shadow">
+        <q-card
+          class="my-card bordered bg-primary shadow"
+        >
           <q-card-section class="text-center">
             <div class="text-h6">{{ workspace.prefix_url }}</div>
             <div class="text-subtitle1">Participants</div>
             <q-chip
-              v-for="participant in workspace.participants"
+              v-for="participant in participants"
               v-bind:key="participant.id"
               outline
               square
@@ -45,7 +47,15 @@ export default {
   },
   computed: {
     workspaces: function () {
-      return this.$store.getters['auth/WORKSPACES']
+      const workspaces = this.$store.getters['auth/WORKSPACES']
+      return workspaces.filter(workspace => workspace.projects.length > 0)
+    },
+    participants: function () {
+      try {
+        return this.$store.getters['auth/WORKSPACES'].participants
+      } catch (e) {
+        return []
+      }
     }
   },
   mounted () {
