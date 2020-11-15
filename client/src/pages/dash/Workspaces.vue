@@ -12,12 +12,17 @@
             <div class="text-h6">{{ workspace.prefix_url }}</div>
             <div class="text-subtitle1">Participants</div>
             <q-chip
-              v-for="participant in participants"
+              v-for="participant in workspace.participants"
               v-bind:key="participant.id"
-              outline
-              square
-              color="grey"
+              dark
+              size="md"
+              color="secondary"
+              text-color="amber"
+              style="border-radius: 15px"
               >
+              <q-avatar v-if="participant.avatar">
+                <img :src="participant.avatar" :alt="`${participant.first_name} ${participant.last_name}`">
+              </q-avatar>
               {{ participant.first_name }} {{ participant.last_name }}
             </q-chip>
           </q-card-section>
@@ -49,13 +54,6 @@ export default {
     workspaces: function () {
       const workspaces = this.$store.getters['auth/WORKSPACES']
       return workspaces.filter(workspace => workspace.projects.length > 0)
-    },
-    participants: function () {
-      try {
-        return this.$store.getters['auth/WORKSPACES'].participants
-      } catch (e) {
-        return []
-      }
     }
   },
   mounted () {

@@ -110,6 +110,14 @@ const routes = [
           title: 'Board' + PMDRAGON_STRING
         },
         component: () => import('pages/dash/Board.vue')
+      },
+      {
+        name: 'team',
+        path: 'team',
+        meta: {
+          title: 'Team' + PMDRAGON_STRING
+        },
+        component: () => import('pages/dash/Team.vue')
       }
     ],
     meta: {

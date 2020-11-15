@@ -62,7 +62,7 @@
       bordered
     >
       <q-scroll-area style="height: calc(100% - 150px); margin-top: 150px;">
-        <q-list dark>
+        <q-list dark class="q-pa-md">
           <q-item clickable v-ripple to="/dash/backlog">
             <q-item-section avatar>
               <q-icon name="toc" />
@@ -80,6 +80,16 @@
 
             <q-item-section>
               Board
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple to="/dash/team">
+            <q-item-section avatar>
+              <q-icon name="people" />
+            </q-item-section>
+
+            <q-item-section>
+              Team
             </q-item-section>
           </q-item>
 
