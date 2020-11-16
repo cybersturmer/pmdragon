@@ -1,18 +1,17 @@
 <template>
   <q-page class="q-pa-lg">
     <q-table
+      dark
       grid
-      card-class="bg-primary text-white"
       title="Team"
       row-key="username"
-      dark
       no-data-label="Invite your team members by adding them by email."
       :data="participants"
-      :columns="columns"
-      :filter="filter"
+      :columns="team_table.columns"
+      :filter="team_table.filter"
     >
       <template v-slot:top-right>
-        <q-input dark dense debounce="300" v-model="filter" placeholder="Search">
+        <q-input dark dense debounce="300" v-model="team_table.filter" placeholder="Search">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -43,28 +42,30 @@ export default {
   name: 'Team',
   data () {
     return {
-      columns: [
-        {
-          name: 'avatar'
-        },
-        {
-          name: 'username',
-          required: true,
-          label: 'Username',
-          align: 'left',
-          field: row => row.username,
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: 'name',
-          required: true,
-          label: 'Name',
-          field: row => `${row.first_name} ${row.last_name}`,
-          sortable: true
-        }
-      ],
-      filter: ''
+      team_table: {
+        columns: [
+          {
+            name: 'avatar'
+          },
+          {
+            name: 'username',
+            required: true,
+            label: 'Username',
+            align: 'left',
+            field: row => row.username,
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'name',
+            required: true,
+            label: 'Name',
+            field: row => `${row.first_name} ${row.last_name}`,
+            sortable: true
+          }
+        ],
+        filter: ''
+      }
     }
   },
   computed: {
