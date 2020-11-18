@@ -50,7 +50,7 @@
 import { fieldValidationMixin } from 'pages/mixins/field_validation'
 import { ErrorHandler } from 'src/services/util'
 import { Dialogs } from 'pages/mixins/dialogs'
-import PasswordField from 'components/PasswordField'
+import PasswordField from 'components/fields/PasswordField'
 
 export default {
   name: 'Login',

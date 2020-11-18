@@ -33,7 +33,7 @@
 <script>
 import { Api } from 'src/services/api'
 import { ErrorHandler, HandleResponse } from 'src/services/util'
-import PasswordField from 'components/PasswordField'
+import PasswordField from 'components/fields/PasswordField'
 import { Dialogs } from 'pages/mixins/dialogs'
 
 export default {

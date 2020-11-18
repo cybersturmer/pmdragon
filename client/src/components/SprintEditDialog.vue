@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import DateTimeField from 'components/DateTimeField.vue'
+import DateTimeField from 'components/fields/DateTimeField.vue'
 import { date } from 'quasar'
 import { DATETIME_MASK } from 'src/services/masks'
 
