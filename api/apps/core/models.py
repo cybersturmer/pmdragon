@@ -493,7 +493,7 @@ class Issue(models.Model):
         verbose_name_plural = _('Issues')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.project.title} - {self.title}'
+        return f'#{self.id} {self.workspace.prefix_url} - {self.project.title} - {self.title}'
 
     __repr__ = __str__
 
@@ -631,6 +631,10 @@ class ProjectBacklog(models.Model):
     __repr__ = __str__
 
     def clean(self):
+        for _issue in self.issues.all():
+            if _issue.workspace != self.workspace or _issue.project != self.project:
+                raise ValidationError(_('Issues must be assigned to the same Project and Workspace as Backlog'))
+
         try:
             self.workspace = self.project.workspace
         except Project.DoesNotExist:
@@ -715,48 +719,15 @@ class Sprint(models.Model):
         verbose_name_plural = _('Sprints')
 
     def __str__(self):
-        return f'{self.workspace.prefix_url} - {self.title}'
+        return f'#{self.id} {self.workspace.prefix_url} - {self.title}'
 
     __repr__ = __str__
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
-
-        super(Sprint, self).save(force_insert, force_update, using,
-                                 update_fields)
-
-        try:
-            """
-            Define default state for issue in current workspace and project """
-            default_issue_state = IssueStateCategory \
-                .objects \
-                .filter(workspace=self.workspace,
-                        project=self.project,
-                        is_default=True).get()
-
-            project_backlog = ProjectBacklog.objects.filter(workspace=self.workspace,
-                                                            project=self.project).get()
-
-            project_backlog.issues.all()
-
-            for _issue in self.issues.all():
-                """
-                Iterate over all issues to replace None data to default one """
-                if _issue.state_category is None:
-                    _issue.state_category = default_issue_state
-
-                """
-                Iterate over all issues to remove issues belong to Sprint 
-                from ProjectBacklog """
-                if _issue in project_backlog.issues.all():
-                    project_backlog.issues.remove(_issue)
-
-                _issue.save()
-
-        except IssueStateCategory.DoesNotExist:
-            pass
-
     def clean(self):
+
+        for _issue in self.issues.all():
+            if _issue.workspace != self.workspace or _issue.project != self.project:
+                raise ValidationError(_('Issues must be assigned to the same Project and Workspace as Sprint'))
 
         try:
             self.workspace = self.project.workspace
