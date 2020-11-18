@@ -1,11 +1,12 @@
-from django.db.models.signals import post_save
+from django.db.models import Q
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from .models import Project, \
     ProjectBacklog, \
     IssueTypeCategory, \
-    IssueStateCategory
+    IssueStateCategory, Sprint
 
 
 @receiver(post_save, sender=Project)
@@ -77,7 +78,6 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
                                                      project=instance)
 
     if created and not issue_states.exists():
-
         todo = IssueStateCategory(workspace=instance.workspace,
                                   project=instance,
                                   title=_('Todo'),
@@ -109,3 +109,58 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
                                   is_done=True)
 
         done.save()
+
+
+@receiver(m2m_changed, sender=Sprint.issues.through)
+@receiver(m2m_changed, sender=ProjectBacklog.issues.through)
+def arrange_issue_in_sprints(sender, **kwargs):
+    """
+    1) find any sprints that have the same issues.
+    2) Iterate all over sprints to remove issues that
+    bind to sprint or Backlog from sprints.
+    """
+    instance: [Sprint, ProjectBacklog] = kwargs.get('instance')
+    action = kwargs.get('action')
+
+    if action != 'post_add':
+        return True
+
+    base_query = Q(issues__in=instance.issues.all())
+    additional_query = {
+        sender is Sprint.issues.through: ~Q(id=instance.pk),
+        sender is ProjectBacklog.issues.through: Q()
+    }[True]
+
+    sprint_with_intersection_of_issues = Sprint.objects \
+        .filter(base_query, additional_query)
+
+    if not sprint_with_intersection_of_issues.exists():
+        return True
+
+    to_remove = instance.issues.values_list('id', flat=True)
+    for _sprint in sprint_with_intersection_of_issues.all():
+        _sprint.issues.remove(*to_remove)
+
+
+@receiver(m2m_changed, sender=Sprint.issues.through)
+def arrange_issue_in_backlog(sender, **kwargs):
+    """
+    1) Find Backlog that have same issues as sender Sprint.
+    2) Remove that issues from Backlog.
+    """
+    instance: Sprint = kwargs['instance']
+    action = kwargs.get('action')
+
+    if action != 'post_add':
+        return True
+
+    base_query = Q(workspace=instance.workspace) & Q(project=instance.project) & Q(issues__in=instance.issues.all())
+
+    to_remove = instance.issues.values_list('id', flat=True)
+
+    try:
+        backlog = ProjectBacklog.objects.filter(base_query).get()
+        backlog.issues.remove(*to_remove)
+
+    except ProjectBacklog.DoesNotExist:
+        pass
