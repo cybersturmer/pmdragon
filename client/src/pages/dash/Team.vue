@@ -7,11 +7,11 @@
       row-key="username"
       no-data-label="Invite your team members by adding them by email."
       :data="participants"
-      :columns="team_table.columns"
-      :filter="team_table.filter"
+      :columns="teamTable.columns"
+      :filter="teamTable.filter"
     >
       <template v-slot:top-right>
-        <q-input dark dense debounce="300" v-model="team_table.filter" placeholder="Search">
+        <q-input dark dense debounce="300" v-model="teamTable.filter" placeholder="Search">
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -42,7 +42,7 @@ export default {
   name: 'Team',
   data () {
     return {
-      team_table: {
+      teamTable: {
         columns: [
           {
             name: 'avatar'

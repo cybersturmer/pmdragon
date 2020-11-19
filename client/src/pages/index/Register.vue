@@ -69,12 +69,9 @@ export default {
     }
   },
   methods: {
-    check_prefix: function () {
-      console.log('Checked')
-    },
     async register () {
       try {
-        await this.$store.dispatch('auth/REGISTER', this.form_data)
+        await this.$store.dispatch('auth/REGISTER', this.formData)
         const dialog = [
           'Congratulations',
           "We've sent you an email." +

@@ -13,7 +13,7 @@
               square
               outlined
               type="text"
-              v-model="user_form_data.firstName"
+              v-model="userFormData.firstName"
               label="First name"
               class="q-mb-sm"
               standout="text-white bg-primary"
@@ -24,7 +24,7 @@
               square
               outlined
               type="text"
-              v-model="user_form_data.lastName"
+              v-model="userFormData.lastName"
               label="Last name"
               class="q-mb-sm"
               standout="text-white bg-primary"
@@ -35,7 +35,7 @@
               square
               outlined
               type="text"
-              v-model="user_form_data.userName"
+              v-model="userFormData.userName"
               label="Username"
               standout="text-white bg-primary"
             />
@@ -60,7 +60,7 @@
               outlined
               type="password"
               label="Old password"
-              v-model="password_form_data.oldPassword"
+              v-model="passwordFormData.oldPassword"
               class="q-mb-sm"
               standout="text-white bg-primary"
             />
@@ -71,7 +71,7 @@
               outlined
               type="password"
               label="Password"
-              v-model="password_form_data.newPassword1"
+              v-model="passwordFormData.newPassword1"
               class="q-mb-sm"
               standout="text-white bg-primary"
             />
@@ -82,7 +82,7 @@
               outlined
               type="password"
               label="Password confirmation"
-              v-model="password_form_data.newPassword2"
+              v-model="passwordFormData.newPassword2"
               standout="text-white bg-primary"
             />
           </q-card-section>
@@ -125,12 +125,12 @@ export default {
   name: 'AccountView',
   data () {
     return {
-      user_form_data: {
+      userFormData: {
         firstName: this.$store.getters['auth/MY_FIRST_NAME'],
         lastName: this.$store.getters['auth/MY_LAST_NAME'],
         userName: this.$store.getters['auth/MY_USERNAME']
       },
-      password_form_data: {
+      passwordFormData: {
         oldPassword: '',
         newPassword1: '',
         newPassword2: ''
@@ -139,19 +139,21 @@ export default {
   },
   methods: {
     saveUserData () {
+      // Snake case cuz of API
       const payload = {
-        first_name: this.user_form_data.firstName,
-        last_name: this.user_form_data.lastName,
-        username: this.user_form_data.userName
+        first_name: this.userFormData.firstName,
+        last_name: this.userFormData.lastName,
+        username: this.userFormData.userName
       }
 
       this.$store.dispatch('auth/UPDATE_MY_DATA', payload)
     },
     savePassword () {
+      // Snake case cuz of API
       const payload = {
-        old_password: this.password_form_data.oldPassword,
-        new_password1: this.password_form_data.newPassword1,
-        new_password2: this.password_form_data.newPassword2
+        old_password: this.passwordFormData.oldPassword,
+        new_password1: this.passwordFormData.newPassword1,
+        new_password2: this.passwordFormData.newPassword2
       }
 
       this.$store.dispatch('auth/UPDATE_MY_PASSWORD', payload)
@@ -166,7 +168,7 @@ export default {
     }
   },
   computed: {
-    avatar_url: function () {
+    avatarUrl: function () {
       return this.$store.getters['auth/MY_AVATAR']
     },
     avatarAllowMimes: function () {

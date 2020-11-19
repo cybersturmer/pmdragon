@@ -13,14 +13,14 @@
     >
       <q-step
         :name="1"
-        :disable="is_user_data_filled"
-        :done="is_user_step_done"
+        :disable="isUserDataFilled"
+        :done="isUserStepDone"
         done-color="positive"
         title="Some bytes about you"
         icon="face"
       >
         <q-input
-          v-model="user_form_data.first_name"
+          v-model="userFormData.first_name"
           dark
           dense
           square
@@ -31,7 +31,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          v-model="user_form_data.last_name"
+          v-model="userFormData.last_name"
           dark
           dense
           square
@@ -42,7 +42,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          v-model="user_form_data.username"
+          v-model="userFormData.username"
           dark
           dense
           square
@@ -54,14 +54,14 @@
       </q-step>
       <q-step
         :name="2"
-        :disable="is_any_project"
-        :done="is_project_step_done"
+        :disable="isAnyProject"
+        :done="isProjectStepDone"
         done-color="positive"
         title="Create your first project"
         icon="work"
       >
         <q-input
-          v-model="project_form_data.title"
+          v-model="projectFormData.title"
           dark
           dense
           square
@@ -72,7 +72,7 @@
           standout="text-white bg-primary"
         />
         <q-input
-          v-model="project_form_data.key"
+          v-model="projectFormData.key"
           dark
           dense
           square
@@ -86,7 +86,7 @@
       <q-step
         :name="3"
         :title="`Add people you work with in workspace ${this.workspace}`"
-        :done="is_team_step_done"
+        :done="isTeamStepDone"
         done-color="positive"
         icon="supervisor_account"
       >
@@ -99,12 +99,12 @@
           no-data-label="Invite your team members by adding them by email."
           :hide-bottom="true"
           :hide-header="true"
-          :data="team_table_data.data"
-          :columns="team_table_data.columns"
-          :pagination="team_table_data.pagination"
+          :data="teamTableData.data"
+          :columns="teamTableData.columns"
+          :pagination="teamTableData.pagination"
         />
         <q-input
-          v-model="team_form_email"
+          v-model="teamFormEmail"
           type="email"
           square
           dense
@@ -128,7 +128,7 @@
           <q-btn
             @click="continueClick($refs)"
             outline
-            :label="next_label"
+            :label="nextLabel"
           />
           <q-btn
             v-if="step > 1"
@@ -152,30 +152,30 @@ export default {
   data () {
     return {
       step: this.getInitStep(),
-      is_user_step_done: false,
-      is_project_step_done: false,
-      is_team_step_done: false,
-      user_form_data: {
+      isUserStepDone: false,
+      isProjectStepDone: false,
+      isTeamStepDone: false,
+      userFormData: {
         first_name: this.$store.getters['auth/MY_FIRST_NAME'],
         last_name: this.$store.getters['auth/MY_LAST_NAME'],
         username: this.$store.getters['auth/MY_USERNAME']
       },
-      user_form_errors: {
+      userFormErrors: {
         first_name: '',
         last_name: '',
         username: ''
       },
-      project_form_data: {
+      projectFormData: {
         workspace: this.$store.getters['auth/WORKSPACE_FIRST_ID'],
         title: '',
         key: ''
       },
-      project_form_errors: {
+      projectFormErrors: {
         workspace: '',
         title: '',
         key: ''
       },
-      team_table_data: {
+      teamTableData: {
         columns: [
           {
             name: 'Email',
@@ -190,24 +190,24 @@ export default {
         },
         data: []
       },
-      team_form_email: null
+      teamFormEmail: null
     }
   },
   computed: {
     workspace () {
       return this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
     },
-    is_user_data_filled () {
+    isUserDataFilled () {
       const isFirstName = !!this.$store.getters['auth/MY_FIRST_NAME']
       const isLastName = !!this.$store.getters['auth/MY_LAST_NAME']
       const isUsername = !!this.$store.getters['auth/MY_USERNAME']
 
       return isFirstName && isLastName && isUsername
     },
-    is_any_project () {
+    isAnyProject () {
       return this.$store.getters['auth/IS_ANY_PROJECT']
     },
-    next_label () {
+    nextLabel () {
       return this.step === 3 ? 'Finish' : 'Continue'
     }
   },
@@ -223,19 +223,19 @@ export default {
       }
     },
     async updateUserData () {
-      await this.$store.dispatch('auth/UPDATE_MY_DATA', this.user_form_data)
-      this.is_user_step_done = true
+      await this.$store.dispatch('auth/UPDATE_MY_DATA', this.userFormData)
+      this.isUserStepDone = true
     },
     async createProject () {
-      await this.$store.dispatch('auth/ADD_PROJECT', this.project_form_data)
-      this.is_project_step_done = true
+      await this.$store.dispatch('auth/ADD_PROJECT', this.projectFormData)
+      this.isProjectStepDone = true
     },
     async createTeam () {
       const payload = {
         invites: []
       }
 
-      const teamData = this.team_table_data.data
+      const teamData = this.teamTableData.data
 
       for (const emailElement in teamData) {
         const dictPayload = {
@@ -247,7 +247,7 @@ export default {
       }
 
       await this.$store.dispatch('auth/INVITE_TEAM', payload)
-      this.is_team_step_done = true
+      this.isTeamStepDone = true
 
       await this.$router.push({ name: 'workspaces' })
     },
@@ -259,9 +259,9 @@ export default {
       }
     },
     addTeamMember () {
-      if (this.team_form_email === null) return false
+      if (this.teamFormEmail === null) return false
 
-      if (!this.isValidEmail(this.team_form_email)) {
+      if (!this.isValidEmail(this.teamFormEmail)) {
         this.showConfirmDialog(
           'Not a correct email',
           'Please input correct email address'
@@ -270,11 +270,11 @@ export default {
         return false
       }
 
-      this.team_table_data.data.push({
-        email: this.team_form_email
+      this.teamTableData.data.push({
+        email: this.teamFormEmail
       })
 
-      this.team_form_email = null
+      this.teamFormEmail = null
     },
     getInitStep () {
       const isMyDataFilled = !!this.$store.getters['auth/IS_MY_DATA_FILLED']

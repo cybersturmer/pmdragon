@@ -6,8 +6,8 @@
       </q-card-section>
       <q-separator dark inset/>
       <q-card-section>
-        <div class="text-subtitle2">Workspace: {{ info_data.prefix_url }}</div>
-        <div class="text-subtitle2">Email: {{ info_data.email }}</div>
+        <div class="text-subtitle2">Workspace: {{ infoData.prefix_url }}</div>
+        <div class="text-subtitle2">Email: {{ infoData.email }}</div>
       </q-card-section>
       <q-separator dark inset/>
       <q-card-section>
@@ -42,7 +42,7 @@ export default {
   components: { PasswordField },
   data () {
     return {
-      info_data: {
+      infoData: {
         prefix_url: '',
         email: ''
       },
@@ -65,8 +65,8 @@ export default {
     const response = await new Api().get(`/auth/person-invitation-requests/${this.key}/`)
     HandleResponse.compare(200, response.status)
 
-    this.info_data.prefix_url = response.data.workspace.prefix_url
-    this.info_data.email = response.data.email
+    this.infoData.prefix_url = response.data.workspace.prefix_url
+    this.infoData.email = response.data.email
   },
   methods: {
     async completeRegistration () {

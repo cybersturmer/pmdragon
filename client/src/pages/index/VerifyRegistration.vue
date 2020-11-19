@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <q-card
-      v-if="is_registration"
+      v-if="isRegistration"
       dark
       flat
       bordered
@@ -11,8 +11,8 @@
       </q-card-section>
       <q-separator dark inset/>
       <q-card-section>
-        <div class="text-subtitle2">Workspace: {{ info_data.prefix_url }}</div>
-        <div class="text-subtitle2">Email: {{ info_data.email }}</div>
+        <div class="text-subtitle2">Workspace: {{ infoData.prefix_url }}</div>
+        <div class="text-subtitle2">Email: {{ infoData.email }}</div>
       </q-card-section>
       <q-separator dark inset/>
       <q-card-section>
@@ -57,8 +57,8 @@ export default {
   components: { PasswordField },
   data () {
     return {
-      is_registration: false,
-      info_data: {
+      isRegistration: false,
+      infoData: {
         prefix_url: '',
         email: ''
       },
@@ -83,9 +83,9 @@ export default {
 
       HandleResponse.compare(200, response.status)
 
-      this.info_data.prefix_url = response.data.prefix_url
-      this.info_data.email = response.data.email
-      this.is_registration = true
+      this.infoData.prefix_url = response.data.prefix_url
+      this.infoData.email = response.data.email
+      this.isRegistration = true
     } catch (e) {
       console.log(e)
       return false

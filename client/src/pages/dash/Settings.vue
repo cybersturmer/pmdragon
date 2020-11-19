@@ -22,8 +22,8 @@
         <q-tab-panels class="bg-accent" v-model="tab" animated>
           <q-tab-panel name="interface">
             <q-select
-              v-model="interface_theme"
-              :options="interface_data.interface_options"
+              v-model="interfaceTheme"
+              :options="interfaceData.interfaceOptions"
               dark
               dense
               square
@@ -32,7 +32,7 @@
             />
             <q-select
               v-model="language"
-              :options="interface_data.language_options"
+              :options="interfaceData.languageOptions"
               dark
               dense
               square
@@ -54,7 +54,7 @@
 
           <q-tab-panel name="sprint_duration">
             <div
-              v-for="sprint_duration in sprint_durations"
+              v-for="sprint_duration in sprintDurations"
               :key="sprint_duration.id"
               class="row">
               <div class="col-8">
@@ -91,7 +91,7 @@
 
           <q-tab-panel name="server">
             <q-input
-              v-model="server_form_data.server"
+              v-model="serverFormData.server"
               dark
               square
               dense
@@ -99,7 +99,7 @@
               placeholder="Server for connection"
               />
             <q-input
-              v-model="server_form_data.port"
+              v-model="serverFormData.port"
               dark
               square
               dense
@@ -119,8 +119,8 @@ export default {
   data () {
     return {
       tab: 'interface',
-      interface_data: {
-        interface_options: [
+      interfaceData: {
+        interfaceOptions: [
           {
             label: 'Dark interface',
             value: 'dark-interface'
@@ -130,7 +130,7 @@ export default {
             value: 'light-interface'
           }
         ],
-        language_options: [
+        languageOptions: [
           {
             label: 'English',
             value: 'en'
@@ -141,14 +141,14 @@ export default {
           }
         ]
       },
-      server_form_data: {
+      serverFormData: {
         server: 'localhost',
         port: 8080
       }
     }
   },
   computed: {
-    interface_theme: {
+    interfaceTheme: {
       get: function () {
         return this.$store.getters['current/INTERFACE_THEME']
       },
@@ -156,7 +156,7 @@ export default {
         this.$store.dispatch('current/SELECT_INTERFACE_THEME', payload)
       }
     },
-    sprint_durations: {
+    sprintDurations: {
       get: function () {
         return this.$store.getters['issues/WORKSPACE_SPRINT_DURATION']
       },

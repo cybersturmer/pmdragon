@@ -7,7 +7,7 @@
           <div v-else-if="is_error" class="text-h6">Registration request was not found.</div>
         </transition>
       </q-card-section>
-      <q-inner-loading :showing="!is_request_sent">
+      <q-inner-loading :showing="!isRequestSent">
         <q-spinner-gears size="50px" color="primary" />
       </q-inner-loading>
     </q-card>
@@ -23,8 +23,8 @@ export default {
   mixins: [Dialogs],
   data () {
     return {
-      is_request_sent: false,
-      is_verified: false
+      isRequestSent: false,
+      isVerified: false
     }
   },
   computed: {
@@ -32,10 +32,10 @@ export default {
       return this.$attrs.key
     },
     is_error () {
-      return this.is_request_sent && !this.is_verified
+      return this.isRequestSent && !this.isVerified
     },
     is_success () {
-      return this.is_request_sent && this.is_verified
+      return this.isRequestSent && this.isVerified
     }
   },
   async mounted () {
@@ -49,11 +49,11 @@ export default {
 
       try {
         await new Api().put(`/auth/person-invitation-requests/${this.key}/`, payload)
-        this.is_request_sent = true
-        this.is_verified = true
+        this.isRequestSent = true
+        this.isVerified = true
       } catch (e) {
-        this.is_request_sent = true
-        this.is_verified = false
+        this.isRequestSent = true
+        this.isVerified = false
       }
     }
   }

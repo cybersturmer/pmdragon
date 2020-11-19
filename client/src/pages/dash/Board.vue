@@ -19,7 +19,7 @@
           <span class="text-subtitle1 q-mr-md">
             <!-- Days till the end of sprint remaining and dates on hover -->
             <q-icon name="access_time"></q-icon>
-            <span :title="sprint_range">&nbsp;{{ days_remaining_text }} </span>
+            <span :title="sprintRange">&nbsp;{{ daysRemainingText }} </span>
           </span>
           <StartCompleteSprintButton size="sm" :sprint="sprint"/>
           <q-btn
@@ -39,7 +39,7 @@
       <div class="row full-height full-width">
         <!-- Container for issue status columns -->
         <div
-          v-for="issue_state in issue_states"
+          v-for="issue_state in IssueStates"
           :key="issue_state.id"
           class="col bg-primary q-ma-sm">
           <!-- Column for head of column and state column -->
@@ -126,10 +126,10 @@ export default {
         ghostClass: 'ghost'
       }
     },
-    issue_states: function () {
+    IssueStates: function () {
       return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
     },
-    issue_types: function () {
+    IssueTypes: function () {
       return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
     },
     issues: function () {
@@ -138,16 +138,16 @@ export default {
     sprint: function () {
       return this.$store.getters['issues/CURRENT_SPRINT']
     },
-    days_remaining: function () {
+    daysRemaining: function () {
       const today = new Date()
       const finishedAt = this.sprint.finished_at
 
       return date.getDateDiff(finishedAt, today, SPRINT_REMAINING_UNIT)
     },
-    days_remaining_text: function () {
-      return this.days_remaining > 0 ? this.days_remaining + ' days remaining' : '0 days remaining'
+    daysRemainingText: function () {
+      return this.daysRemaining > 0 ? this.daysRemaining + ' days remaining' : '0 days remaining'
     },
-    sprint_range: function () {
+    sprintRange: function () {
       const startedAt = date.formatDate(this.sprint.started_at, DATE_MASK)
       const finishedAt = date.formatDate(this.sprint.finished_at, DATE_MASK)
       return `${startedAt} - ${finishedAt}`
