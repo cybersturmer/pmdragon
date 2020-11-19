@@ -20,7 +20,7 @@
             :value="rawDatetime"
             @input="handleInput($event)"
             :mask="mask"
-            :minute-options="minute_options"
+            :minute-options="minuteOptions"
             format24h />
         </q-popup-proxy>
       </q-icon>
@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       mask: DATETIME_MASK,
-      minute_options: [0, 15, 30, 45],
+      minuteOptions: [0, 15, 30, 45],
       rawDatetime: this.value
     }
   },

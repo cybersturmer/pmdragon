@@ -37,7 +37,7 @@
                     :sprint="sprint"
                   />
                   <SprintMorePopupMenu
-                    :sprint_id="sprint.id"
+                    :sprintId="sprint.id"
                     v-on:edit="editSprintDialog(sprint)"
                     v-on:remove="removeSprintDialog(sprint)"
                   />
@@ -105,7 +105,7 @@
         >
           <q-card-section>
             <q-input
-              v-model="form_data.title"
+              v-model="formData.title"
               @keyup.enter="createIssue"
               square
               dense
@@ -154,7 +154,7 @@ export default {
   mixins: [updateSprintMixin],
   data () {
     return {
-      form_data: {
+      formData: {
         workspace: null,
         title: null,
         project: null,
@@ -195,19 +195,19 @@ export default {
       return this.$store.getters['issues/UNCOMPLETED_PROJECT_SPRINTS']
     },
     isCreateIssueButtonEnabled: function () {
-      return Boolean(this.form_data.title)
+      return Boolean(this.formData.title)
     }
   },
   methods: {
     createIssue () {
       /** Create Issue, assigned to Backlog by frontend **/
-      if (!this.form_data.title) return false
+      if (!this.formData.title) return false
 
-      this.form_data.workspace = this.$store.getters['auth/WORKSPACE_ID']
-      this.form_data.project = this.$store.getters['current/PROJECT']
-      this.$store.dispatch('issues/ADD_ISSUE_TO_BACKLOG', this.form_data)
+      this.formData.workspace = this.$store.getters['auth/WORKSPACE_ID']
+      this.formData.project = this.$store.getters['current/PROJECT']
+      this.$store.dispatch('issues/ADD_ISSUE_TO_BACKLOG', this.formData)
         .then(() => {
-          this.form_data.title = ''
+          this.formData.title = ''
         })
         .catch((e) => {
           this.$q.dialog({
@@ -219,7 +219,7 @@ export default {
         })
     },
     isIssueMenuVisible (id) {
-      return this.show_edit_button === id
+      return this.showEditButton === id
     },
     editSprintDialog (item) {
       this.$q.dialog({

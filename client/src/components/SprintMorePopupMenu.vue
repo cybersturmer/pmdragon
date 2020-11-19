@@ -30,7 +30,7 @@
 export default {
   name: 'SprintMorePopupMenu',
   props: {
-    sprint_id: {
+    sprintId: {
       type: Number,
       required: true
     }
@@ -38,11 +38,11 @@ export default {
   methods: {
     editSprintModal () {
       console.log('editSprintModal')
-      this.$emit('edit', this.sprint_id)
+      this.$emit('edit', this.sprintId)
     },
     removeSprintModal () {
       console.log('removeSprintModal')
-      this.$emit('remove', this.sprint_id)
+      this.$emit('remove', this.sprintId)
     }
   }
 }

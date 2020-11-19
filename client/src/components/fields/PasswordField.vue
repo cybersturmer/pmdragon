@@ -6,7 +6,7 @@
     @input="handleInput"
     :value="password"
     :error="isError"
-    :error-message="error_message"
+    :error-message="errorMessage"
     label-color="amber"
     label="Password"/>
 </template>
@@ -19,7 +19,7 @@ export default {
   mixins: [fieldValidationMixin],
   props: {
     value: String,
-    error_message: String
+    errorMessage: String
   },
   data () {
     return {
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     isError () {
-      return this.error_message.length > 0
+      return this.errorMessage.length > 0
     }
   }
 }

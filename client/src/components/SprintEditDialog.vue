@@ -4,8 +4,8 @@
       <q-card-section>
         <q-input dark v-model="form.title"/>
         <q-input dark v-model="form.goal"/>
-        <DateTimeField v-model="form.started_at"/>
-        <DateTimeField v-model="form.finished_at"/>
+        <DateTimeField v-model="form.startedAt"/>
+        <DateTimeField v-model="form.finishedAt"/>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn color="primary" label="UPDATE" @click="onOKClick" />
@@ -36,10 +36,10 @@ export default {
       type: String,
       required: true
     },
-    started_at: {
+    startedAt: {
       type: String
     },
-    finished_at: {
+    finishedAt: {
       type: String
     }
   },
@@ -49,8 +49,8 @@ export default {
         id: this.id,
         title: this.title,
         goal: this.goal,
-        started_at: date.formatDate(this.started_at, DATETIME_MASK),
-        finished_at: date.formatDate(this.finished_at, DATETIME_MASK)
+        startedAt: date.formatDate(this.startedAt, DATETIME_MASK),
+        finishedAt: date.formatDate(this.finishedAt, DATETIME_MASK)
       }
     }
   },
@@ -72,8 +72,8 @@ export default {
         id: this.form.id,
         title: this.form.title,
         goal: this.form.goal,
-        started_at: date.formatDate(this.form.started_at),
-        finished_at: date.formatDate(this.form.finished_at)
+        startedAt: date.formatDate(this.form.startedAt),
+        finishedAt: date.formatDate(this.form.finishedAt)
       }
 
       this.$emit('ok', payload)

@@ -7,17 +7,17 @@
                 <q-input
                   dark
                   filled
-                  v-model="form_data.username"
+                  v-model="formData.username"
                   :error="isFieldValid('username')"
-                  :error-message="form_errors.username"
+                  :error-message="formErrors.username"
                   label="Email"
                   label-color="amber"
                 />
               </div>
               <div class="col">
                 <PasswordField
-                  v-model="form_data.password"
-                  :error_message="form_errors.password"
+                  v-model="formData.password"
+                  :error-message="formErrors.password"
                   @keyup.enter.native="login"
                 />
               </div>
@@ -58,11 +58,11 @@ export default {
   mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
-      form_data: {
+      formData: {
         username: '',
         password: ''
       },
-      form_errors: {
+      formErrors: {
         username: '',
         password: ''
       }
@@ -71,9 +71,9 @@ export default {
   methods: {
     async login () {
       try {
-        await this.$store.dispatch('auth/LOGIN', this.form_data)
-        this.form_data.username = ''
-        this.form_data.password = ''
+        await this.$store.dispatch('auth/LOGIN', this.formData)
+        this.formData.username = ''
+        this.formData.password = ''
         await this.$router.push({ name: 'loading' })
       } catch (e) {
         const error = new ErrorHandler(e)

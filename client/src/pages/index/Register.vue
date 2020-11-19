@@ -7,10 +7,10 @@
             <q-input
               dark
               filled
-              v-model="form_data.prefix_url"
+              v-model="formData.prefix_url"
               @input="resetFieldErrorMessage('prefix_url')"
               :error="isFieldValid('prefix_url')"
-              :error-message="form_errors.prefix_url"
+              :error-message="formErrors.prefix_url"
               label-color="amber"
               label="Workspace prefix"
             />
@@ -19,11 +19,11 @@
             <q-input
               dark
               filled
-              v-model="form_data.email"
+              v-model="formData.email"
               @input="resetFieldErrorMessage('email')"
               @keyup.enter="register"
               :error="isFieldValid('email')"
-              :error-message="form_errors.email"
+              :error-message="formErrors.email"
               label-color="amber"
               label="Your email"
             />
@@ -58,11 +58,11 @@ export default {
   mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
-      form_data: {
+      formData: {
         prefix_url: '',
         email: ''
       },
-      form_errors: {
+      formErrors: {
         prefix_url: '',
         email: ''
       }
@@ -84,11 +84,11 @@ export default {
         ]
 
         this.showConfirmDialog(...dialog)
-        this.form_data.prefix_url = ''
-        this.form_data.email = ''
+        this.formData.prefix_url = ''
+        this.formData.email = ''
       } catch (e) {
         const error = new ErrorHandler(e)
-        error.setErrors(this.form_errors)
+        error.setErrors(this.formErrors)
         if (error.messageUseful) this.showConfirmDialog('Registration was not successful', error.message)
       }
     }

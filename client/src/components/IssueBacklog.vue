@@ -4,14 +4,14 @@
     dark
     bordered
     class="my-card"
-    @mouseover="is_edit_button_visible = true"
-    @mouseleave="is_edit_button_visible = false"
+    @mouseover="isEditButtonVisible = true"
+    @mouseleave="isEditButtonVisible = false"
   >
     <q-card-section>
       # {{ id }} {{ title }}
       <transition name="fade">
         <q-btn
-          v-show="is_edit_button_visible"
+          v-show="isEditButtonVisible"
           dense
           flat
           icon-right="more_horiz"
@@ -55,7 +55,7 @@ export default {
   },
   data () {
     return {
-      is_edit_button_visible: false
+      isEditButtonVisible: false
     }
   },
   methods: {

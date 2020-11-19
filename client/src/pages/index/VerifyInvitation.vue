@@ -12,8 +12,8 @@
       <q-separator dark inset/>
       <q-card-section>
         <PasswordField
-          v-model="form_data.password"
-          :error_message="form_errors.password"
+          v-model="formData.password"
+          :error_message="formErrors.password"
           @keyup.enter.native="completeRegistration"
         />
       </q-card-section>
@@ -46,12 +46,12 @@ export default {
         prefix_url: '',
         email: ''
       },
-      form_data: {
+      formData: {
         key: this.$attrs.key,
         password: '',
         is_invited: true
       },
-      form_errors: {
+      formErrors: {
         password: ''
       }
     }
@@ -72,13 +72,13 @@ export default {
     async completeRegistration () {
       try {
         const response = await new Api()
-          .post('/auth/persons/', this.form_data)
+          .post('/auth/persons/', this.formData)
 
         HandleResponse.compare(201, response.status)
         await this.$router.push({ name: 'register' })
       } catch (e) {
         const error = new ErrorHandler(e)
-        error.setErrors(this.form_errors)
+        error.setErrors(this.formErrors)
         if (error.messageUseful) this.showConfirmDialog('Registration was not successful', error.message)
       }
     }

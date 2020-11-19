@@ -2,6 +2,7 @@
   <q-dialog ref="dialog" @hide="onDialogHide">
     <q-card dark class="q-dialog-plugin bg-secondary">
       <q-card-section>
+        <q-input dark v-model="formData.title"/>
         <!-- @todo Issue title -->
         <!-- @todo Issue assignment -->
         <!-- @todo Issue description -->
@@ -22,29 +23,17 @@
 export default {
   name: 'IssueEditDialog',
   props: {
-    id: {
+    issueId: {
       type: Number,
       required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    goal: {
-      type: String,
-      required: true
-    },
-    started_at: {
-      type: String
-    },
-    finished_at: {
-      type: String
     }
   },
   data () {
     return {
-      form: {
-        id: this.id
+      issueData: this.$store.getters['issues/ISSUE_BY_ID'](this.issueId),
+      formData: {
+        id: this.id,
+        title: this.issueData.title
       }
     }
   },
@@ -71,6 +60,11 @@ export default {
 
     onCancelClick () {
       this.hide()
+    }
+  },
+  computed: {
+    getIssueData () {
+      return this.$store.getters['issues/ISSUE_BY_ID'](this.issueId)
     }
   }
 }
