@@ -577,29 +577,7 @@ class Issue(models.Model):
             else:
                 self.ordering = max_ordering
 
-        if self.pk is None:
-            """
-            If we just created issue - we have to add it into 
-            Workspace - Project Backlog
-            Before object creation we put this flag.
-            """
-            just_created = True
-
         super(Issue, self).save(*args, **kwargs)
-
-        if just_created:
-            """
-            If we created this issue in this session 
-            we have to put it to Workspace - Project Backlog
-            """
-            backlog = ProjectBacklog.objects \
-                .filter(workspace=self.workspace,
-                        project=self.project) \
-                .get()
-
-            assert isinstance(backlog, ProjectBacklog)
-
-            backlog.issues.add(self)
 
 
 class ProjectBacklog(models.Model):

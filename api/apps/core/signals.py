@@ -3,17 +3,46 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
+from enum import Enum
+
 from .models import Project, \
     ProjectBacklog, \
     IssueTypeCategory, \
-    IssueStateCategory, Sprint
+    IssueStateCategory, Sprint, Issue
+
+
+class ActionM2M(Enum):
+    PRE_ADD = 'pre_add'
+    POST_ADD = 'post_add'
+    PRE_REMOVE = 'pre_remove'
+    POST_REMOVE = 'post_remove'
+    PRE_CLEAR = 'pre_clear'
+    POST_CLEAR = 'post_clear'
+
+
+@receiver(post_save, sender=Issue)
+def put_created_issue_to_backlog(instance: Issue, created: bool, **kwargs):
+    """
+    Lets put just created issue to Backlog.
+    """
+    if not created:
+        return True
+
+    backlog_with_same_workspace_and_project = ProjectBacklog.objects\
+        .filter(workspace=instance.workspace,
+                project=instance.project)
+
+    if backlog_with_same_workspace_and_project.exists():
+        backlog = backlog_with_same_workspace_and_project.get()
+        backlog.issues.add(instance)
 
 
 @receiver(post_save, sender=Project)
-def create_backlog_for_project(sender, **kwargs):
-    instance: Project = kwargs.get('instance')
-    created: bool = kwargs.get('created')
-
+def create_backlog_for_project(instance: Project, created: bool, **kwargs):
+    """
+    Every project should contain only one Backlog.
+    So we provide it.
+    """
     project_backlog = ProjectBacklog.objects.filter(workspace=instance.workspace,
                                                     project=instance)
 
@@ -24,10 +53,12 @@ def create_backlog_for_project(sender, **kwargs):
 
 
 @receiver(post_save, sender=Project)
-def create_default_issue_type_category_for_project(sender, **kwargs):
-    instance: Project = kwargs.get('instance')
-    created: bool = kwargs.get('created')
-
+def create_default_issue_type_category_for_project(instance: Project, created: bool, **kwargs):
+    """
+    Every project should contain defaults Issue Types
+    So we provide it.
+    @todo Better to add default issue types based on current language of project
+    """
     issue_types = IssueTypeCategory.objects.filter(workspace=instance.workspace,
                                                    project=instance)
 
@@ -70,10 +101,12 @@ def create_default_issue_type_category_for_project(sender, **kwargs):
 
 
 @receiver(post_save, sender=Project)
-def create_default_issue_state_category_for_project(sender, **kwargs):
-    instance: Project = kwargs.get('instance')
-    created: bool = kwargs.get('created')
-
+def create_default_issue_state_category_for_project(instance: Project, created: bool, **kwargs):
+    """
+    Every project should contain issue states.
+    So we provide it.
+    @todo Better to add states based on current language of project
+    """
     issue_states = IssueStateCategory.objects.filter(workspace=instance.workspace,
                                                      project=instance)
 
@@ -113,16 +146,13 @@ def create_default_issue_state_category_for_project(sender, **kwargs):
 
 @receiver(m2m_changed, sender=Sprint.issues.through)
 @receiver(m2m_changed, sender=ProjectBacklog.issues.through)
-def arrange_issue_in_sprints(sender, **kwargs):
+def arrange_issue_in_sprints(sender, action, instance, **kwargs):
     """
-    1) find any sprints that have the same issues.
+    1) Find any sprints that have the same issues.
     2) Iterate all over sprints to remove issues that
     bind to sprint or Backlog from sprints.
     """
-    instance: [Sprint, ProjectBacklog] = kwargs.get('instance')
-    action = kwargs.get('action')
-
-    if action != 'post_add':
+    if action != ActionM2M.POST_ADD.value:
         return True
 
     base_query = Q(issues__in=instance.issues.all())
@@ -143,19 +173,18 @@ def arrange_issue_in_sprints(sender, **kwargs):
 
 
 @receiver(m2m_changed, sender=Sprint.issues.through)
-def arrange_issue_in_backlog(sender, **kwargs):
+def arrange_issue_in_backlog(action, instance, **kwargs):
     """
     1) Find Backlog that have same issues as sender Sprint.
     2) Remove that issues from Backlog.
     """
-    instance: Sprint = kwargs['instance']
-    action = kwargs.get('action')
 
-    if action != 'post_add':
+    """
+    We need to track only post add action """
+    if action != ActionM2M.POST_ADD.value:
         return True
 
     base_query = Q(workspace=instance.workspace) & Q(project=instance.project) & Q(issues__in=instance.issues.all())
-
     to_remove = instance.issues.values_list('id', flat=True)
 
     try:
