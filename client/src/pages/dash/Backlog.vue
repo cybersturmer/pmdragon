@@ -52,7 +52,7 @@
                 <draggable
                   :value="sprintIssues(sprint.id)"
                   v-bind="dragOptions"
-                  @change="handleDraggableEvent($event, drag_types.SPRINT, sprint.id)"
+                  @change="handleDraggableEvent($event, dragTypes.SPRINT, sprint.id)"
                   @start="dragging = true"
                   @end="dragging = true">
                   <transition-group type="transition" name="flip-list" tag="div">
@@ -61,7 +61,7 @@
                       :key="issue.id"
                       :id="issue.id"
                       :title="issue.title"
-                      v-on:edit="editIssueDialog(issue)"
+                      @dblclick.native="editIssueDialog(issue)"
                       v-on:remove="removeIssueDialog(issue)"
                     />
                   </transition-group>
@@ -83,7 +83,7 @@
           <draggable
             :value="backlogIssues"
             v-bind="dragOptions"
-            @change="handleDraggableEvent($event, drag_types.BACKLOG, backlog.id)"
+            @change="handleDraggableEvent($event, dragTypes.BACKLOG, backlog.id)"
             style="padding: 10px; min-height: 67px;">
             <transition-group type="transition" name="flip-list" tag="div">
               <IssueBacklog
@@ -138,10 +138,13 @@ import SprintMorePopupMenu from 'src/components/SprintMorePopupMenu.vue'
 import BlockHeader from 'src/components/BlockHeader.vue'
 import BlockHeaderInfo from 'components/BlockHeaderInfo.vue'
 import SprintEditDialog from 'components/SprintEditDialog.vue'
+import IssueEditDialog from 'components/IssueEditDialog.vue'
 
 export default {
   name: 'BacklogView',
   components: {
+    // eslint-disable-next-line vue/no-unused-components
+    IssueEditDialog,
     // eslint-disable-next-line vue/no-unused-components
     SprintEditDialog,
     BlockHeader,
@@ -162,11 +165,12 @@ export default {
         state_category: null,
         ordering: null
       },
-      drag_types: {
+      dragTypes: {
         SPRINT: 1,
         BACKLOG: 0
       },
-      dragging: false
+      dragging: false,
+      isIssueDialogOpened: false
     }
   },
   computed: {
@@ -196,6 +200,12 @@ export default {
     },
     isCreateIssueButtonEnabled: function () {
       return Boolean(this.formData.title)
+    },
+    issueStates () {
+      return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
+    },
+    participants () {
+      return this.$store.getters['auth/PERSONS']
     }
   },
   methods: {
@@ -217,9 +227,6 @@ export default {
 
           console.log(e)
         })
-    },
-    isIssueMenuVisible (id) {
-      return this.showEditButton === id
     },
     editSprintDialog (item) {
       this.$q.dialog({
@@ -257,32 +264,12 @@ export default {
     editIssueDialog (item) {
       this.$q.dialog({
         dark: true,
-        title: 'Issue information',
-        message: 'Set Issue title',
-        prompt: {
-          model: item.title,
-          type: 'text'
-        },
-        cancel: true,
-        persistent: true
+        title: 'Issue ',
+        component: IssueEditDialog,
+        issue: item,
+        issueStates: this.issueStates,
+        participants: this.participants
       })
-        .onOk((data) => {
-          const payload = {
-            workspace: this.$store.getters['auth/WORKSPACE_ID'],
-            project: this.$store.getters['current/PROJECT'],
-            id: item.id,
-            title: data
-          }
-
-          this.$store.dispatch('issues/EDIT_ISSUE', payload)
-            .catch((e) => {
-              this.$q.dialog({
-                title: 'Error - Cannot edit issue',
-                message: 'Please check your Internet connection'
-              })
-              console.log(e)
-            })
-        })
     },
     removeIssueDialog (item) {
       this.$q.dialog({
@@ -452,14 +439,14 @@ export default {
         })
     },
     handleDraggableEvent (event, dragType, dragId) {
-      const isSprintMoved = ('moved' in event) && (dragType === this.drag_types.SPRINT)
-      const isBacklogMoved = ('moved' in event) && (dragType === this.drag_types.BACKLOG)
+      const isSprintMoved = ('moved' in event) && (dragType === this.dragTypes.SPRINT)
+      const isBacklogMoved = ('moved' in event) && (dragType === this.dragTypes.BACKLOG)
 
-      const isSprintAdded = ('added' in event) && (dragType === this.drag_types.SPRINT)
-      const isBacklogAdded = ('added' in event) && (dragType === this.drag_types.BACKLOG)
+      const isSprintAdded = ('added' in event) && (dragType === this.dragTypes.SPRINT)
+      const isBacklogAdded = ('added' in event) && (dragType === this.dragTypes.BACKLOG)
 
-      const isSprintRemoved = ('removed' in event) && (dragType === this.drag_types.SPRINT)
-      const isBacklogRemoved = ('removed' in event) && (dragType === this.drag_types.BACKLOG)
+      const isSprintRemoved = ('removed' in event) && (dragType === this.dragTypes.SPRINT)
+      const isBacklogRemoved = ('removed' in event) && (dragType === this.dragTypes.BACKLOG)
 
       switch (true) {
         case isSprintMoved:
