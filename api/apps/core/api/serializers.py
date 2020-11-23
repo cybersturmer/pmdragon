@@ -563,6 +563,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'id',
             'workspace',
             'title',
+            'description',
             'project',
             'type_category',
             'state_category',

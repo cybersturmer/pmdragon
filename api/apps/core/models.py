@@ -444,6 +444,9 @@ class Issue(models.Model):
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
+    description = models.TextField(verbose_name=_('Description'),
+                                   blank=True)
+
     project = models.ForeignKey(Project,
                                 db_index=True,
                                 verbose_name=_('Project'),
