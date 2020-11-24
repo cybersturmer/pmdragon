@@ -107,6 +107,8 @@ class IssueAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         'workspace',
+        'created_at',
+        'updated_at'
     )
     search_fields = (
         'title',

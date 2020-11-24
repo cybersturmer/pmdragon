@@ -570,6 +570,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'assignee',
             'created_by',
             'created_at',
+            'updated_at',
             'ordering',
         )
         extra_kwargs = {

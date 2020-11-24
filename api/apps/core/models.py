@@ -481,6 +481,9 @@ class Issue(models.Model):
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)
 
+    updated_at = models.DateTimeField(verbose_name=_('Updated at'),
+                                      auto_now=True)
+
     ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
                                                 blank=True,
                                                 null=True,
