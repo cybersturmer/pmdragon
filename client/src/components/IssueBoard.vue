@@ -3,7 +3,7 @@
     dense
     dark
     bordered
-    class="my-card q-ma-sm overflow-hidden text-center">
+    class="my-card q-ma-sm overflow-hidden text-center issue-backlog">
     <q-card-section>
       <span :class="`text-muted ${ this.isDone ? 'text-strike': '' }`">
         #{{ issue.id }} {{ issue.title }}
@@ -56,8 +56,13 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss">
   .q-card__actions {
     padding: 4px;
+  }
+
+  .issue-backlog:hover {
+    background-color: $primary!important;
+    cursor: pointer;
   }
 </style>

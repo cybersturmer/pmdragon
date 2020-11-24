@@ -5,7 +5,7 @@
       vertical
       ref="stepper"
       dark
-      inactive-color="accent"
+      inactive-color="amber"
       active-color="amber"
       done-color="positive"
       @before-transition="makeTransition"

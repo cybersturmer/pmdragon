@@ -10,7 +10,7 @@
             dark
             outline
             size="sm"
-            color="accent"
+            color="amber"
             label="Create Sprint"
             class="float-right"
             @click="createSprint"
@@ -46,7 +46,7 @@
               <div class="q-card--bordered q-pa-sm"
                    style="border: 1px dashed #606060; min-height: 67px;">
                 <div v-if="!areSprintIssues(sprint.id)"
-                     class="text-center text-accent q-pt-md">
+                     class="text-center text-amber q-pt-md">
                   Plan sprint by dropping issues here.
                 </div>
                 <draggable
@@ -204,6 +204,9 @@ export default {
     issueStates () {
       return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
     },
+    issueTypes () {
+      return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
+    },
     participants () {
       return this.$store.getters['auth/PERSONS']
     }
@@ -268,7 +271,9 @@ export default {
         component: IssueEditDialog,
         issue: item,
         issueStates: this.issueStates,
-        participants: this.participants
+        issueTypes: this.issueTypes,
+        participants: this.participants,
+        $store: this.$store
       })
     },
     removeIssueDialog (item) {

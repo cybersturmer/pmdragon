@@ -9,7 +9,7 @@
             <!-- Sprint name -->
             {{ sprint.title }}
           </span>
-          <span class="xs-hide sm-hide text-subtitle1 text-accent q-mr-md">
+          <span class="xs-hide sm-hide text-subtitle1 text-amber q-mr-md">
             <!-- Sprint goal -->
             ( {{ sprint.goal }} )
           </span>
@@ -26,7 +26,7 @@
             dark
             outline
             size="sm"
-            color="accent"
+            color="amber"
             icon-right="edit"
             class="xs-hide sm-hide float-right q-ml-md"
             @click="editSprintDialog(sprint)"
@@ -76,6 +76,7 @@
 
                   <IssueBoard
                     v-for="issue in issuesByState(issue_state.id)"
+                    @dblclick.native="editIssueDialog(issue)"
                     :key="issue.id"
                     :issue="issue"
                     :assignee="getAssigneeById()"
@@ -106,17 +107,21 @@ import IssueBoard from 'src/components/IssueBoard.vue'
 import { DATE_MASK, SPRINT_REMAINING_UNIT } from 'src/services/masks'
 import SprintEditDialog from 'src/components/SprintEditDialog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
+import IssueEditDialog from 'components/IssueEditDialog.vue'
+import { editIssueData } from 'pages/mixins/edit_issue_data'
 
 export default {
   name: 'BoardView',
   components: {
     StartCompleteSprintButton,
     // eslint-disable-next-line vue/no-unused-components
+    IssueEditDialog,
+    // eslint-disable-next-line vue/no-unused-components
     SprintEditDialog,
     IssueBoard,
     draggable
   },
-  mixins: [updateSprintMixin],
+  mixins: [updateSprintMixin, editIssueData],
   computed: {
     dragOptions () {
       return {
@@ -217,6 +222,18 @@ export default {
         default:
           throw new Error('This error should not occurred')
       }
+    },
+    editIssueDialog (item) {
+      this.$q.dialog({
+        dark: true,
+        title: 'Issue ',
+        component: IssueEditDialog,
+        issue: item,
+        issueStates: this.issueStates,
+        issueTypes: this.issueTypes,
+        participants: this.participants,
+        $store: this.$store
+      })
     },
     editSprintDialog (item) {
       this.$q.dialog({

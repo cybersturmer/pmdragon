@@ -8,7 +8,7 @@ export const Dialogs = {
         message: message,
         ok: {
           label: 'OK',
-          color: 'accent'
+          color: 'amber'
         }
       })
     }

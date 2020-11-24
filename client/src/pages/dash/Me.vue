@@ -190,7 +190,7 @@ export default {
   .q-uploader__list {
     font-size: 0.5em;
     padding: 5px;
-    background-color: $accent;
+    background-color: $amber;
     overflow: hidden;
     height: 165px;
     max-height: 165px;

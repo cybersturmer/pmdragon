@@ -3,7 +3,7 @@
     dense
     dark
     bordered
-    class="my-card"
+    class="my-card issue-backlog"
   >
     <q-card-section>
       # {{ id }} {{ title }}
@@ -23,22 +23,20 @@ export default {
       type: String,
       required: true
     }
-  },
-  methods: {
-    editIssueModal () {
-      this.$emit('edit', this.id)
-    },
-    removeIssueModal () {
-      this.$emit('remove', this.id)
-    }
   }
 }
-</script>xha
+</script>
 <style lang="scss">
   .fade-enter-active, .fade-leave-active {
     transition: opacity .25s;
   }
+
   .fade-enter, .fade-leave-to {
     opacity: 0;
+  }
+
+  .issue-backlog:hover {
+    background-color: $primary!important;
+    cursor: pointer;
   }
 </style>

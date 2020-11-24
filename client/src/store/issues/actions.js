@@ -79,6 +79,27 @@ export async function INIT_ISSUE_TYPES ({ commit }) {
   }
 }
 
+export async function PATCH_ISSUE ({ commit }, payload) {
+  /** At least id and one more param must be provided
+   * For example: {
+   *   id: 1,
+   *   issue_state: 2
+   * }
+   * **/
+
+  try {
+    const response = await new Api({ auth: true }).patch(
+      `/core/issues/${payload.id}/`,
+      payload
+    )
+
+    HandleResponse.compare(200, response.status)
+    commit('UPDATE_ISSUE', response.data)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
 export async function UPDATE_ISSUE_STATE ({ commit }, payload) {
   try {
     const response = await new Api({ auth: true }).patch(

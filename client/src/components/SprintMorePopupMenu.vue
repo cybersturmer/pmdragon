@@ -3,10 +3,10 @@
     dark
     outline
     size="sm"
-    color="accent"
+    color="amber"
     style="margin-left: 10px;"
     icon="more_horiz">
-    <q-menu content-class="bg-accent text-white" fit anchor="top left" self="top right" auto-close>
+    <q-menu content-class="bg-secondary text-white" fit anchor="top left" self="top right" auto-close>
       <q-list dense style="min-width: 150px">
         <q-item
           clickable

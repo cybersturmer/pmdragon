@@ -19,7 +19,7 @@
           <q-tab name="server" icon="sync" label="Server" />
         </q-tabs>
         <q-separator />
-        <q-tab-panels class="bg-accent" v-model="tab" animated>
+        <q-tab-panels class="bg-amber" v-model="tab" animated>
           <q-tab-panel name="interface">
             <q-select
               v-model="interfaceTheme"

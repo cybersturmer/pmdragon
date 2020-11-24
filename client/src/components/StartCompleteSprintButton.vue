@@ -2,7 +2,7 @@
   <q-btn
     dark
     outline
-    color="accent"
+    color="amber"
     :size="size"
     :label="label"
     @click="recognizeAction">
@@ -37,7 +37,7 @@ export default {
           message: 'Cant start sprint without start and end date. Set started at and finished at dates first.',
           ok: {
             label: 'OK',
-            color: 'accent'
+            color: 'amber'
           }
         })
       } else {
@@ -55,7 +55,7 @@ export default {
         message: 'Would you like to complete Sprint',
         ok: {
           label: 'Complete',
-          color: 'accent'
+          color: 'amber'
         },
         cancel: {
           flat: true,

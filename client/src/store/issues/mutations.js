@@ -87,9 +87,24 @@ export function ORDER_BACKLOG_ISSUES (state, payload) {
   LocalStorage.set('issues.backlogs', state.backlogs)
 }
 
+export function UPDATE_ISSUE (state, payload) {
+  /** Update issue by full portion **/
+  const issue = state.issues
+    .find(issue => issue.id === payload.id)
+
+  for (const attr in payload) {
+    if (attr in issue && attr in payload && issue[attr] !== payload[attr]) {
+      issue[attr] = payload[attr]
+    }
+  }
+
+  LocalStorage.set('issues.issues', state.issues)
+}
+
 export function UPDATE_ISSUE_STATE (state, payload) {
   /** Payload content issue object **/
   const issue = state.issues.find(issue => issue.id === payload.id)
+
   issue.state_category = payload.state_category
 
   LocalStorage.set('issues.issues', state.issues)
