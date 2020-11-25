@@ -18,7 +18,7 @@
       <q-card-section>
         <PasswordField
           v-model="formData.password"
-          :error_message="formErrors.password"
+          :error-message="formErrors.password"
           @keyup.enter.native="completeRegistration"
         />
       </q-card-section>
@@ -50,10 +50,11 @@ import { Api } from 'src/services/api'
 import { ErrorHandler, HandleResponse } from 'src/services/util'
 import PasswordField from 'components/fields/PasswordField'
 import { Dialogs } from 'pages/mixins/dialogs'
+import { fieldValidationMixin } from 'pages/mixins/field_validation'
 
 export default {
   name: 'VerifyRegistration',
-  mixins: [Dialogs],
+  mixins: [Dialogs, fieldValidationMixin],
   components: { PasswordField },
   data () {
     return {
@@ -102,9 +103,8 @@ export default {
         this.showConfirmDialog(
           'You are registered successfully',
           'Congratulations! You\'ve been registered. Now you can log in.')
-          .onOKClick(() => {
-            this.$router.push({ name: 'login' })
-          })
+
+        await this.$router.push({ name: 'login' })
       } catch (e) {
         const error = new ErrorHandler(e)
         error.setErrors(this.formErrors)

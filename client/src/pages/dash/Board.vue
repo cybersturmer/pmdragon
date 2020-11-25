@@ -91,7 +91,7 @@
     <div v-if="!sprint" class="full-width q-pa-md text-center">
       <div class="text-h5"><q-icon name="history"/>&nbsp;You have not started a sprint.</div>
       <span class="text-subtitle1">Go to
-        <router-link :to="{ path: 'backlog' }" class="text-info">
+        <router-link :to="{ path: 'backlog' }" class="text-amber">
           Backlog page
         </router-link> and start a sprint to continue...</span>
     </div>

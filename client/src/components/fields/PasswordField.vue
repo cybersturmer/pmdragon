@@ -34,7 +34,11 @@ export default {
   },
   computed: {
     isError () {
-      return this.errorMessage.length > 0
+      try {
+        return this.errorMessage.length > 0
+      } catch (e) {
+        return false
+      }
     }
   }
 }
