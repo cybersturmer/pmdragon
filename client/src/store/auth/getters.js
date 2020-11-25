@@ -74,7 +74,7 @@ export function IS_ANY_PROJECT (state) {
   try {
     return !!state.workspaces.find(workspace => workspace.projects.length > 0)
   } catch (e) {
-    return null
+    return false
   }
 }
 
