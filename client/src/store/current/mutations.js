@@ -30,7 +30,6 @@ export function SELECT_INTERFACE_THEME (state, payload) {
 
 export function RESET (state) {
   state.workspace = null
-  state.projects = []
   state.project = null
   state.interface_theme = null
 }

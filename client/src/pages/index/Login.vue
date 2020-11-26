@@ -71,6 +71,10 @@ export default {
   methods: {
     async login () {
       try {
+        await this.$store.dispatch('current/RESET_STATE')
+        await this.$store.dispatch('auth/LOGOUT')
+        await this.$store.dispatch('issues/RESET')
+
         await this.$store.dispatch('auth/LOGIN', this.formData)
         this.formData.username = ''
         this.formData.password = ''

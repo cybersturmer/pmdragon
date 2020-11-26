@@ -91,18 +91,35 @@
         icon="supervisor_account"
       >
         <q-table
-          dense
           flat
           square
-          row-key="name"
           dark
+          dense
+          bordered
+          ref="table"
+          row-key="email"
           no-data-label="Invite your team members by adding them by email."
           :hide-bottom="true"
           :hide-header="true"
           :data="teamTableData.data"
           :columns="teamTableData.columns"
           :pagination="teamTableData.pagination"
-        />
+        >
+          <template v-slot:body-cell-email="props">
+            <q-td :props="props">
+              {{ props.row.email }}
+              <q-btn
+                dark
+                flat
+                dense
+                icon="person_remove"
+                size="sm"
+                class="float-right"
+                @click="cancelInvitation(props.row.email)"
+              />
+            </q-td>
+          </template>
+        </q-table>
         <q-input
           v-model="teamFormEmail"
           type="email"
@@ -178,11 +195,12 @@ export default {
       teamTableData: {
         columns: [
           {
-            name: 'Email',
+            name: 'email',
             required: true,
             align: 'left',
             field: row => row.email,
-            format: val => `${val}`
+            format: val => `${val}`,
+            sortable: true
           }
         ],
         pagination: {
@@ -212,6 +230,9 @@ export default {
     }
   },
   methods: {
+    cancelInvitation (email) {
+      this.teamTableData.data = this.teamTableData.data.filter((row) => row.email !== email)
+    },
     makeTransition (newValue, oldValue) {
       switch (oldValue) {
         case 1:
@@ -248,15 +269,9 @@ export default {
 
       await this.$store.dispatch('auth/INVITE_TEAM', payload)
       this.isTeamStepDone = true
-
-      await this.$router.push({ name: 'workspaces' })
     },
     async continueClick ($refs) {
       $refs.stepper.next()
-      if (this.step === 3) {
-        await this.createTeam()
-        await this.$router.push({ name: 'loading' })
-      }
     },
     addTeamMember () {
       if (this.teamFormEmail === null) return false
@@ -277,6 +292,11 @@ export default {
       this.teamFormEmail = null
     },
     getInitStep () {
+      /**
+       * This method checks if user already filled his/her name and last name
+       * created project or have more than one team member except of self
+       * so that we define step we need to complete before continue **/
+
       const isMyDataFilled = !!this.$store.getters['auth/IS_MY_DATA_FILLED']
       const isAnyProject = !!this.$store.getters['auth/IS_ANY_PROJECT']
 
@@ -294,7 +314,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
