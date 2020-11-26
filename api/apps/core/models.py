@@ -540,8 +540,6 @@ class Issue(models.Model):
                                     'state category should belong to the same project'))
 
     def save(self, *args, **kwargs):
-        just_created = False
-
         if self.type_category is None or self.type_category == 0:
             """
             If default issue type was set for Workspace, we set it as a default
@@ -549,6 +547,7 @@ class Issue(models.Model):
             try:
                 self.type_category = IssueTypeCategory.objects \
                     .filter(workspace=self.workspace,
+                            project=self.project,
                             is_default=True).get()
             except IssueTypeCategory.DoesNotExist:
                 pass
