@@ -11,6 +11,14 @@ export const Dialogs = {
           color: 'amber'
         }
       })
+    },
+    showError (e) {
+      if (!e.messageUseful) return false
+
+      return this.showConfirmDialog(
+        e.statusMessage,
+        e.message
+      )
     }
   }
 }

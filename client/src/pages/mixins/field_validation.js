@@ -1,5 +1,12 @@
 export const fieldValidationMixin = {
   methods: {
+    isValid (module, field) {
+      try {
+        return this[module][field].length > 0
+      } catch (e) {
+        return false
+      }
+    },
     isFieldValid (field) {
       return this.formErrors[field].length > 0
     },

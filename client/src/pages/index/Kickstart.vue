@@ -8,12 +8,10 @@
       inactive-color="amber"
       active-color="amber"
       done-color="positive"
-      @before-transition="makeTransition"
       animated
     >
       <q-step
         :name="1"
-        :disable="isUserDataFilled"
         :done="isUserStepDone"
         done-color="positive"
         title="Some bytes about you"
@@ -27,6 +25,8 @@
           filled
           type="text"
           label="First name"
+          :error="isValid('userFormErrors', 'first_name')"
+          :error-message="userFormErrors.first_name"
           class="q-mb-sm"
           standout="text-white bg-primary"
         />
@@ -38,6 +38,8 @@
           filled
           type="text"
           label="Last name"
+          :error="isValid('userFormErrors', 'last_name')"
+          :error-message="userFormErrors.last_name"
           class="q-mb-sm"
           standout="text-white bg-primary"
         />
@@ -49,12 +51,14 @@
           filled
           type="text"
           label="Username"
+          :error="isValid('userFormErrors', 'username')"
+          :error-message="userFormErrors.username"
+          hint="Better to use short username, not email"
           standout="text-white bg-primary"
         />
       </q-step>
       <q-step
         :name="2"
-        :disable="isAnyProject"
         :done="isProjectStepDone"
         done-color="positive"
         title="Create your first project"
@@ -140,6 +144,16 @@
           </template>
         </q-input>
       </q-step>
+      <q-step
+        :name="4"
+        title="Congratulations"
+        done-color="positive"
+        icon="thumb_up"
+      >
+        <q-card dark flat>
+          Hello there
+        </q-card>
+      </q-step>
       <template v-slot:navigation>
         <q-stepper-navigation>
           <q-btn
@@ -168,6 +182,7 @@ export default {
   mixins: [fieldValidationMixin, Dialogs],
   data () {
     return {
+      steps: [1, 2, 3, 4],
       step: this.getInitStep(),
       isUserStepDone: false,
       isProjectStepDone: false,
@@ -208,6 +223,7 @@ export default {
         },
         data: []
       },
+      teamFormErrors: {},
       teamFormEmail: null
     }
   },
@@ -216,6 +232,7 @@ export default {
       return this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
     },
     isUserDataFilled () {
+      /** If user data filled we return true **/
       const isFirstName = !!this.$store.getters['auth/MY_FIRST_NAME']
       const isLastName = !!this.$store.getters['auth/MY_LAST_NAME']
       const isUsername = !!this.$store.getters['auth/MY_USERNAME']
@@ -223,35 +240,66 @@ export default {
       return isFirstName && isLastName && isUsername
     },
     isAnyProject () {
+      /** We have to check it to understand do current user
+       * have at least one project **/
       return this.$store.getters['auth/IS_ANY_PROJECT']
     },
     nextLabel () {
-      return this.step === 3 ? 'Finish' : 'Continue'
+      return this.step === 4 ? 'Finish' : 'Continue'
     }
   },
   methods: {
-    cancelInvitation (email) {
-      this.teamTableData.data = this.teamTableData.data.filter((row) => row.email !== email)
-    },
-    makeTransition (newValue, oldValue) {
-      switch (oldValue) {
-        case 1:
-          return this.updateUserData()
-        case 2:
-          return this.createProject()
-        case 3:
-          return this.createTeam()
+    async continueClick ($refs) {
+      try {
+        switch (this.step) {
+          case 1:
+            await this.updateUserData()
+            break
+          case 2:
+            await this.createProject()
+            break
+          case 3:
+            await this.createTeam()
+            break
+          case 4:
+            await this.$router.push({ name: 'loading' })
+            break
+        }
+
+        /** If everything was fine - we move further **/
+        await $refs.stepper.next()
+      } catch (error) {
+        switch (this.step) {
+          case 1:
+            error.setErrors(this.userFormErrors)
+            break
+          case 2:
+            error.setErrors(this.projectFormErrors)
+            break
+        }
+
+        this.showError(error)
       }
     },
+    cancelInvitation (email) {
+      /**
+       * Just remove email from the payload that we gonna send to
+       * create team members **/
+
+      this.teamTableData.data = this.teamTableData.data.filter((row) => row.email !== email)
+    },
     async updateUserData () {
+      /** Update user data on server and mark step as done **/
       await this.$store.dispatch('auth/UPDATE_MY_DATA', this.userFormData)
       this.isUserStepDone = true
     },
     async createProject () {
+      /** Create project on server and mark step as done **/
       await this.$store.dispatch('auth/ADD_PROJECT', this.projectFormData)
       this.isProjectStepDone = true
     },
     async createTeam () {
+      /** Create team by sending emails on server **/
       const payload = {
         invites: []
       }
@@ -270,10 +318,8 @@ export default {
       await this.$store.dispatch('auth/INVITE_TEAM', payload)
       this.isTeamStepDone = true
     },
-    async continueClick ($refs) {
-      $refs.stepper.next()
-    },
     addTeamMember () {
+      /** Just add a team member to temp var **/
       if (this.teamFormEmail === null) return false
 
       if (!this.isValidEmail(this.teamFormEmail)) {
