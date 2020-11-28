@@ -2,7 +2,8 @@
 
 # PmDragon Community Edition
 
-![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg)
+![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
+![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
 
 Open source project management tool to track tasks, epics, bugs and manage it with agile boards and sprints.
 
