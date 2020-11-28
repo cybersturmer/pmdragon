@@ -26,10 +26,10 @@
           </div>
           <div
             v-show="!isDescriptionEditing"
+            v-html="formData.issue.description"
             class="q-pa-md bg-accent editable_block"
             @click="updateDescriptionEditingState"
           >
-            {{ formData.issue.description }}
           </div>
           <q-editor
             dark
