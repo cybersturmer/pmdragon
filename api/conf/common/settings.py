@@ -99,3 +99,32 @@ LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
+"""
+Bleach allowed """
+BLEACH_ALLOWED_TAGS = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'code',
+    'em',
+    'i',
+    'li',
+    'ol',
+    'strong',
+    'ul']
+
+BLEACH_ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'rel'],
+    'div': ['style'],
+    '*': []
+}
+
+BLEACH_ALLOWED_PROTOCOLS = [
+    'http',
+    'https',
+    'mailto'
+]
+
+BLEACH_STRIPPING = True

@@ -2,6 +2,7 @@ import os
 import uuid
 from enum import Enum
 
+import bleach
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -502,6 +503,16 @@ class Issue(models.Model):
         return f'#{self.id} {self.workspace.prefix_url} - {self.project.title} - {self.title}'
 
     __repr__ = __str__
+
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        description = bleach.clean(description,
+                                   tags=settings.BLEACH_ALLOWED_TAGS,
+                                   attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
+                                   protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
+                                   strip=settings.BLEACH_STRIPPING)
+
+        return description
 
     def clean(self):
         try:
