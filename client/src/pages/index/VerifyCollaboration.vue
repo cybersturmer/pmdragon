@@ -1,10 +1,24 @@
 <template>
   <q-page class="flex flex-center">
-    <q-card dark flat bordered class="my-card" style="width: 320px; height: 120px">
+    <q-card dark flat bordered class="my-card" style="width: 320px">
       <q-card-section class="text-center">
         <transition appear enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-          <div v-if="is_success" class="text-h6">You accepted invitation to workspace.</div>
-          <div v-else-if="is_error" class="text-h6">Registration request was not found.</div>
+          <q-card-section>
+            <q-card-section v-if="is_success" class="text-h6">
+              You accepted invitation to workspace.
+            </q-card-section>
+            <q-card-section v-else-if="is_error" class="text-h6">
+              Collaboration request was not found.
+            </q-card-section>
+            <q-card-actions align="center">
+              <q-btn
+                dark
+                flat
+                label="To login page"
+                to="/login"
+              />
+            </q-card-actions>
+          </q-card-section>
         </transition>
       </q-card-section>
       <q-inner-loading :showing="!isRequestSent">

@@ -70,16 +70,28 @@ export default {
   },
   methods: {
     async completeRegistration () {
+      /**
+       * We have to register user first and attach him
+       * to workspace where we were invited. **/
+
       try {
         const response = await new Api()
           .post('/auth/persons/', this.formData)
 
         HandleResponse.compare(201, response.status)
-        await this.$router.push({ name: 'register' })
+
+        const payload = {
+          is_accepted: true
+        }
+
+        await new Api().put(`/auth/person-invitation-requests/${this.key}/`, payload)
+        HandleResponse.compare(200, response.status)
+
+        await this.$router.push({ name: 'login' })
       } catch (e) {
         const error = new ErrorHandler(e)
         error.setErrors(this.formErrors)
-        if (error.messageUseful) this.showConfirmDialog('Registration was not successful', error.message)
+        this.showError(error)
       }
     }
   }
