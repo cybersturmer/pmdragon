@@ -152,13 +152,26 @@ class PersonInvitationRequestRetrieveUpdateSerializer(serializers.ModelSerialize
         }
         depth = 1
 
+    def update(self, instance, validated_data):
+        is_accepted = validated_data.get('is_accepted', instance.is_accepted)
+
+        try:
+            user = User.objects.filter(email=instance.email).get()
+        except User.MultipleObjectsReturned:
+            raise ValidationError(_('Error occurred while getting person to add'))
+
+        if is_accepted and not instance.is_accepted:
+            workspace = instance.workspace
+            workspace.participants.add(user.person)
+            workspace.save()
+
+            instance.is_accepted = True
+            instance.save()
+
+        return instance
+
 
 class PersonInvitationRequestSerializer(serializers.ModelSerializer):
-    """
-    Serializer for invite person to team.
-    Doesn't matter is his email used by registered person or no
-    """
-
     class Meta:
         model = PersonInvitationRequest
         fields = (
