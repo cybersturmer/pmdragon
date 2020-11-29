@@ -82,6 +82,17 @@
               filled
               square
               dense
+              :value="getIssueTypeById(formData.issue.type_category)"
+              @input="updateIssueType($event)"
+              :options="issueTypes"
+              option-label="title"
+              option-value="id"
+            />
+            <q-select
+              dark
+              filled
+              square
+              dense
               :value="getParticipantById(formData.issue.assignee)"
               @input="updateIssueAssignee($event)"
               :options="participants"
@@ -167,6 +178,9 @@ export default {
     getIssueStateById (id) {
       return this.issueStates.find(state => state.id === id)
     },
+    getIssueTypeById (id) {
+      return this.issueTypes.find(state => state.id === id)
+    },
     getParticipantById (id) {
       if (id === null) {
         return {
@@ -197,6 +211,16 @@ export default {
 
       this.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_state', payload)
+    },
+    updateIssueType (state) {
+      this.formData.issue.type_category = state.id
+      const payload = {
+        id: this.form.issue.id,
+        type_category: this.formData.issue.type_category
+      }
+
+      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      this.$emit('update_type', payload)
     },
     updateIssueAssignee (assignee) {
       this.formData.issue.assignee = assignee.id
