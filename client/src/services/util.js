@@ -39,8 +39,6 @@ function _getResponseErrorMessage (error) {
 export class ErrorHandler extends Error {
   constructor (error, message) {
     super()
-    console.log('WAS')
-    console.dir(error)
     this.request = error.isAxiosError
     this.data = error.response ? error.response.data : false
     this.success = error.response ? error.response.data.success : false
@@ -50,8 +48,6 @@ export class ErrorHandler extends Error {
     this.statusMessage = _getStatusMessage(this.status)
     this.message = message || _getResponseErrorMessage(error)
     this.messageUseful = this.data ? !!error.response.data.detail : false
-    console.log('IS')
-    console.dir(this)
   }
 
   setErrors (errors) {
