@@ -9,7 +9,7 @@
             <!-- Sprint name -->
             {{ sprint.title }}
           </span>
-          <span class="xs-hide sm-hide text-subtitle1 text-amber q-mr-md">
+          <span class="xs-hide sm-hide md-hide text-subtitle1 text-amber q-mr-md">
             <!-- Sprint goal -->
             ( {{ sprint.goal }} )
           </span>
@@ -76,7 +76,7 @@
 
                   <IssueBoard
                     v-for="issue in issuesByState(issue_state.id)"
-                    @dblclick.native="editIssueDialog(issue)"
+                    @click.native="editIssueDialog(issue)"
                     :key="issue.id"
                     :issue="issue"
                     :assignee="getAssigneeById()"

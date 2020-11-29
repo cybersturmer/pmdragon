@@ -9,7 +9,7 @@
       style="width: 85vw; max-width: 85vw;"
     >
       <q-card-section horizontal>
-        <q-card-section class="col-8">
+        <q-card-section class="col-md-8 col-sm-12">
           <!-- @todo Breadcrumbs for current issue -->
           <q-card-section>
           <q-input
@@ -64,7 +64,7 @@
           </q-card-section>
         </q-card-section>
         <q-separator dark vertical />
-        <q-card-section class="col-4">
+        <q-card-section class="col-md-4 sm-hide">
           <q-card-section>
             <q-select
               dark
@@ -153,8 +153,8 @@ export default {
   data () {
     return {
       editorToolbar: [
-        ['undo', 'redo'],
-        ['bold', 'italic', 'underline', 'strike']
+        ['bold', 'italic', 'underline', 'strike'],
+        ['undo', 'redo']
       ],
       isDescriptionEditing: !this.issue.description,
       formData: {

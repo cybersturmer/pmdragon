@@ -61,7 +61,7 @@
                       :key="issue.id"
                       :id="issue.id"
                       :title="issue.title"
-                      @dblclick.native="editIssueDialog(issue)"
+                      @click.native="editIssueDialog(issue)"
                       v-on:remove="removeIssueDialog(issue)"
                     />
                   </transition-group>

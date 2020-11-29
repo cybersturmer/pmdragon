@@ -10,7 +10,7 @@
                   v-model="formData.username"
                   :error="isFieldValid('username')"
                   :error-message="formErrors.username"
-                  label="Email"
+                  label="Username"
                   label-color="amber"
                 />
               </div>
