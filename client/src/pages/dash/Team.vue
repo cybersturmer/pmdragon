@@ -20,15 +20,14 @@
       <template v-slot:item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-2">
           <q-card dark bordered>
-            <q-card-section class="text-center" style="min-height: 114px">
+            <q-card-section class="text-center" style="min-height: 150px">
               <div>
                 <q-avatar
                 v-if="props.row.avatar">
                   <img :src="props.row.avatar" :alt="props.row.username">
                 </q-avatar>
               </div>
-
-              <span class="q-ml-md text-h6">{{ props.row.first_name }} {{ props.row.last_name }}</span>
+              <span class="text-h6">{{ props.row.first_name }} {{ props.row.last_name }}</span>
             </q-card-section>
           </q-card>
         </div>

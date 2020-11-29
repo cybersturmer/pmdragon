@@ -39,7 +39,7 @@
       <div class="row full-height full-width">
         <!-- Container for issue status columns -->
         <div
-          v-for="issue_state in IssueStates"
+          v-for="issue_state in issueStates"
           :key="issue_state.id"
           class="col bg-primary q-ma-sm">
           <!-- Column for head of column and state column -->
@@ -131,10 +131,10 @@ export default {
         ghostClass: 'ghost'
       }
     },
-    IssueStates: function () {
+    issueStates: function () {
       return this.$store.getters['issues/ISSUE_STATES_BY_CURRENT_PROJECT']
     },
-    IssueTypes: function () {
+    issueTypes: function () {
       return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
     },
     issues: function () {

@@ -131,6 +131,7 @@
 <script>
 import draggable from 'vuedraggable'
 import { updateSprintMixin } from 'src/pages/mixins/update_sprint'
+import { editIssueData } from 'pages/mixins/edit_issue_data'
 import { unWatch } from 'src/services/util'
 import IssueBacklog from 'src/components/IssueBacklog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
@@ -154,7 +155,7 @@ export default {
     draggable,
     IssueBacklog
   },
-  mixins: [updateSprintMixin],
+  mixins: [updateSprintMixin, editIssueData],
   data () {
     return {
       formData: {
@@ -206,9 +207,6 @@ export default {
     },
     issueTypes () {
       return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
-    },
-    participants () {
-      return this.$store.getters['auth/PERSONS']
     }
   },
   methods: {

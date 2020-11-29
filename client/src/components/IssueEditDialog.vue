@@ -37,6 +37,7 @@
             v-model="formData.issue.description"
             toolbar-toggle-color="amber"
             min-height="5rem"
+            :toolbar="editorToolbar"
           />
             <q-card-actions
               v-show="isDescriptionEditing"
@@ -151,6 +152,10 @@ export default {
   },
   data () {
     return {
+      editorToolbar: [
+        ['undo', 'redo'],
+        ['bold', 'italic', 'underline', 'strike']
+      ],
       isDescriptionEditing: !this.issue.description,
       formData: {
         issue: unWatch(this.issue)

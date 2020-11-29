@@ -7,7 +7,7 @@ export const editIssueData = {
       return this.$store.getters['issues/ISSUE_TYPES_BY_CURRENT_PROJECT']
     },
     participants () {
-      return this.$store.getters['auth/PERSONS']
+      return this.$store.getters['auth/WORKSPACE_DATA'].participants
     }
   }
 }
