@@ -242,8 +242,8 @@ export default {
         id: item.id,
         title: item.title,
         goal: item.goal,
-        started_at: item.started_at,
-        finished_at: item.finished_at
+        startedAt: item.started_at,
+        finishedAt: item.finished_at
       })
         .onOk((data) => {
           this.$store.dispatch('issues/EDIT_SPRINT', data)

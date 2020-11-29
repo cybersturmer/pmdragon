@@ -212,8 +212,8 @@ export async function EDIT_SPRINT ({ commit }, payload) {
   const sendPayload = {
     title: payload.title,
     goal: payload.goal,
-    started_at: payload.started_at,
-    finished_at: payload.finished_at
+    started_at: payload.startedAt,
+    finished_at: payload.finishedAt
   }
 
   try {
