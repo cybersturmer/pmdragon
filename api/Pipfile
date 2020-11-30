@@ -24,6 +24,7 @@ asgiref = "==3.2.10"
 h11 = "==0.11.0"
 celery = "*"
 bleach = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.8"
