@@ -5,40 +5,49 @@
   >
     <q-card
       dark
+      flat
+      bordered
       class="q-dialog-plugin bg-secondary"
       style="width: 85vw; max-width: 85vw;"
     >
       <q-card-section horizontal>
-        <q-card-section class="col-md-8 col-sm-12">
+        <q-card-section class="col-md-8 col-xs-12 col-sm-12">
           <!-- @todo Breadcrumbs for current issue -->
           <q-card-section>
-          <q-input
-            dark
-            :value="formData.issue.title"
-            @input="updateIssueTitle($event)"
-            :label="getIssueTitleLabel()"
-            label-color="amber"
-          />
+            <!-- Title editing section -->
+            <q-input
+              dark
+              :value="formData.issue.title"
+              @input="updateIssueTitle($event)"
+              :label="getIssueTitleLabel()"
+              label-color="amber"
+            />
           </q-card-section>
           <q-card-section>
-          <div class="q-mb-sm text-subtitle2 text-amber">
-            Description
-          </div>
-          <div
-            v-show="!isDescriptionEditing"
-            v-html="formData.issue.description"
-            class="q-pa-md bg-accent editable_block"
-            @click="updateDescriptionEditingState"
-          >
-          </div>
-          <q-editor
-            dark
-            v-show="isDescriptionEditing"
-            v-model="formData.issue.description"
-            toolbar-toggle-color="amber"
-            min-height="5rem"
-            :toolbar="editorToolbar"
-          />
+            <!-- Block with issue description -->
+            <div class="q-mb-sm text-subtitle2 text-amber">
+              Description
+            </div>
+            <q-card
+              v-show="!isDescriptionEditing"
+              dark
+              flat
+              bordered
+            >
+              <q-card-section
+                v-html="formData.issue.description || 'Add a description by clicking this area...'"
+                class="q-pa-md editable_block"
+                @click="updateDescriptionEditingState"
+              />
+            </q-card>
+            <q-editor
+              dark
+              v-show="isDescriptionEditing"
+              v-model="formData.issue.description"
+              toolbar-toggle-color="amber"
+              min-height="5rem"
+              :toolbar="editorToolbar"
+            />
             <q-card-actions
               v-show="isDescriptionEditing"
               style="padding: 0"
@@ -62,10 +71,79 @@
               />
             </q-card-actions>
           </q-card-section>
+          <q-card-section
+            style="padding: 0"
+          >
+            <!-- Block with messages -->
+            <q-card-section>
+              <div class="q-mb-sm text-subtitle2 text-amber">
+                Messages
+              </div>
+              <q-card
+                dark
+                flat
+                bordered
+              >
+                <q-card-section style="min-height: 400px">
+                  <q-scroll-area
+                    dark
+                    style="height: 400px; padding-right: 30px">
+                    <q-chat-message
+                      v-for="message in messages"
+                      v-bind:key="message.id"
+                      :name="getParticipantTitleById(message.created_by)"
+                      :avatar="getParticipantById(message.created_by).avatar"
+                      :text="[message.description]"
+                      size="6"
+                      :text-sanitize="false"
+                      bg-color="accent"
+                      text-color="amber"
+                      :sent="isItMe(message.created_by)"
+                    />
+                  </q-scroll-area>
+                </q-card-section>
+              </q-card>
+            </q-card-section>
+            <q-card-section>
+              <!-- Section for save new message -->
+              <q-card-section style="padding: 0">
+              <q-editor
+                dark
+                v-model="formNewMessage.description"
+                toolbar-toggle-color="amber"
+                min-height="5rem"
+                :toolbar="editorToolbar"
+              />
+              </q-card-section>
+              <q-card-actions
+                class="q-mt-sm"
+              >
+                <q-btn
+                  outline
+                  color="amber"
+                  size="sm"
+                  label="Save"
+                  style="width: 80px"
+                  @click="createNewMessage"
+                />
+                <q-btn
+                  flat
+                  color="amber"
+                  size="sm"
+                  label="Cancel"
+                  style="width: 80px"
+                  @click="cancelNewMessageEditing"
+                />
+              </q-card-actions>
+            </q-card-section>
+
+          </q-card-section>
         </q-card-section>
         <q-separator dark vertical />
-        <q-card-section class="col-md-4 sm-hide">
+        <q-card-section class="col-md-4 xs-hide sm-hide">
+        <!-- Right section, we can change issue data here -->
           <q-card-section>
+            <!-- Selection for issue state -->
             <q-select
               dark
               filled
@@ -77,6 +155,7 @@
               option-label="title"
               option-value="id"
             />
+            <!-- Selection for issue type -->
             <q-select
               dark
               filled
@@ -88,6 +167,7 @@
               option-label="title"
               option-value="id"
             />
+            <!-- Selection for assignee -->
             <q-select
               dark
               filled
@@ -101,6 +181,7 @@
             />
           </q-card-section>
           <q-card-section>
+            <!-- Readonly props such as created at and updated at -->
             <q-input
               dark
               filled
@@ -135,7 +216,8 @@
 <script>
 import { DATETIME_MASK } from 'src/services/masks'
 import { date } from 'quasar'
-import { unWatch } from 'src/services/util'
+import { HandleResponse, unWatch } from 'src/services/util'
+import { Api } from 'src/services/api'
 
 export default {
   name: 'IssueEditDialog',
@@ -171,17 +253,30 @@ export default {
       formData: {
         issue: unWatch(this.issue)
       },
+      formNewMessage: {
+        issue: this.issue.id,
+        description: ''
+      },
+      isNewMessageEditing: false,
+      messages: [],
       mask: DATETIME_MASK
     }
   },
+  async mounted () {
+    await this.getMessages()
+  },
   methods: {
     getIssueStateById (id) {
+      /** Get Issue state by Id, we got Issue State from props given to component **/
       return this.issueStates.find(state => state.id === id)
     },
     getIssueTypeById (id) {
+      /** Get Issue Type by Id, we got Issue Types from props given to component **/
       return this.issueTypes.find(state => state.id === id)
     },
     getParticipantById (id) {
+      /** Get participant object by given id from participants list given in props
+       * It also can return Unassigned if given person was not found **/
       if (id === null) {
         return {
           id: null,
@@ -192,17 +287,44 @@ export default {
 
       return this.participants.find(participant => participant.id === id)
     },
+    isItMe (id) {
+      /** Return true if given id is current user id **/
+      return id === this.$store.getters['auth/MY_USER_ID']
+    },
+    getParticipantTitleById (id) {
+      /** return title with username, first name and last name as a String **/
+      const participant = this.getParticipantById(id)
+      return `@${participant.username} ( ${participant.first_name} ${participant.last_name} )`
+    },
+    async getMessages () {
+      /** get messages for current issue without paging
+       * Now its not a problem, will think later **/
+      const response = await new Api({ auth: true }).get(
+        `/core/issue-messages/?issue=${this.formData.issue.id}`
+      )
+
+      HandleResponse.compare(200, response.status)
+
+      this.messages = response.data
+    },
     getIssueTypeTitle (id) {
+      /** get Title for given issue type id **/
       return this.issueTypes.find(type => type.id === id).title
     },
     getIssueTitleLabel () {
+      /** get Issue title with Type and id of Issue **/
       const issueType = this.getIssueTypeTitle(this.formData.issue.type_category)
       return `#${this.formData.issue.id} ${issueType}`
     },
     updateDescriptionEditingState () {
+      /** update description state
+       * We use it by clicking on the block with description of Issue
+       * for make it editable **/
       this.isDescriptionEditing = !this.isDescriptionEditing
     },
     updateIssueState (state) {
+      /** update state for Issue
+       * We use it in selection field **/
       this.formData.issue.state_category = state.id
       const payload = {
         id: this.formData.issue.id,
@@ -213,6 +335,8 @@ export default {
       this.$emit('update_state', payload)
     },
     updateIssueType (state) {
+      /** update Issue type
+       * we use it in selection field **/
       this.formData.issue.type_category = state.id
       const payload = {
         id: this.form.issue.id,
@@ -223,6 +347,8 @@ export default {
       this.$emit('update_type', payload)
     },
     updateIssueAssignee (assignee) {
+      /** update Issue assignee
+       * we use it in selection field **/
       this.formData.issue.assignee = assignee.id
 
       const payload = {
@@ -234,6 +360,9 @@ export default {
       this.$emit('update_assignee', payload)
     },
     updateIssueTitle (title) {
+      /** update Issue Title
+       * we use it as a handler after text in input was changed
+       * and user leave field by clicking outside **/
       this.formData.issue.title = title
 
       const payload = {
@@ -245,6 +374,8 @@ export default {
       this.$emit('update_title', payload)
     },
     updateIssueDescription () {
+      /** update Issue description
+       * we use it as a handler for description field changing **/
       const payload = {
         id: this.formData.issue.id,
         description: this.formData.issue.description
@@ -256,8 +387,29 @@ export default {
       this.$emit('update_description', payload)
     },
     cancelDescriptionEditing () {
+      /** We use this handler if user wrote something in Issue description
+       * and clicked cancel then **/
       this.formData.issue.description = this.issue.description
       this.isDescriptionEditing = false
+    },
+    cancelNewMessageEditing () {
+      /** We use it if user wrote a message and clicked cancel then **/
+      this.isNewMessageEditing = false
+      this.formNewMessage.description = ''
+    },
+    async createNewMessage () {
+      /** We use it for adding one more message **/
+      const payload = this.formNewMessage
+
+      const response = await new Api({ auth: true }).post(
+        '/core/issue-messages/',
+        payload
+      )
+
+      HandleResponse.compare(201, response.status)
+      this.messages.push(response.data)
+
+      this.formNewMessage.description = ''
     },
     show () {
       this.$refs.dialog.show()

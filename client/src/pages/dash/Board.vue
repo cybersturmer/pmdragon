@@ -143,6 +143,12 @@ export default {
     sprint: function () {
       return this.$store.getters['issues/CURRENT_SPRINT']
     },
+    daysAmount () {
+      const startedAt = this.sprint.started_at
+      const finishedAt = this.sprint.finished_at
+
+      return date.getDateDiff(finishedAt, startedAt, SPRINT_REMAINING_UNIT)
+    },
     daysRemaining: function () {
       const today = new Date()
       const finishedAt = this.sprint.finished_at
@@ -150,7 +156,11 @@ export default {
       return date.getDateDiff(finishedAt, today, SPRINT_REMAINING_UNIT)
     },
     daysRemainingText: function () {
-      return this.daysRemaining > 0 ? this.daysRemaining + ' days remaining' : '0 days remaining'
+      if (this.daysRemaining > this.daysAmount) {
+        return 'Will start soon...'
+      } else {
+        return this.daysRemaining > 0 ? this.daysRemaining + ' days remaining' : '0 days remaining'
+      }
     },
     sprintRange: function () {
       const startedAt = date.formatDate(this.sprint.started_at, DATE_MASK)
