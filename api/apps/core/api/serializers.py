@@ -575,9 +575,9 @@ class IssueSerializer(WorkspaceModelSerializer):
         fields = (
             'id',
             'workspace',
+            'project',
             'title',
             'description',
-            'project',
             'type_category',
             'state_category',
             'assignee',
@@ -596,6 +596,29 @@ class IssueSerializer(WorkspaceModelSerializer):
 
     def validate(self, attrs):
         data = super(IssueSerializer, self).validate(attrs)
+        data['created_by'] = self.context['person']
+        return data
+
+
+class IssueMessageSerializer(WorkspaceModelSerializer):
+    class Meta:
+        model = IssueMessage
+        fields = (
+            'id',
+            'issue',
+            'description',
+            'created_by',
+            'created_at',
+            'updated_at'
+        )
+        extra_kwargs = {
+            'created_at': {'read_only': True},
+            'updated_at': {'read_only': True},
+            'created_by': {'read_only': True}
+        }
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
         data['created_by'] = self.context['person']
         return data
 

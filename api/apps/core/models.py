@@ -37,6 +37,14 @@ def image_upload_location(instance, filename) -> str:
     return path
 
 
+def clean_html(data):
+    return bleach.clean(data,
+                        tags=settings.BLEACH_ALLOWED_TAGS,
+                        attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
+                        protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
+                        strip=settings.BLEACH_STRIPPING)
+
+
 class Person(models.Model):
     """
     Person should be connected to user.
@@ -437,21 +445,23 @@ class IssueStateCategory(models.Model):
 
 
 class Issue(models.Model):
+    cleaned_data: dict
+
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
                                   db_index=True,
                                   on_delete=models.CASCADE)
+
+    project = models.ForeignKey(Project,
+                                db_index=True,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
 
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
     description = models.TextField(verbose_name=_('Description'),
                                    blank=True)
-
-    project = models.ForeignKey(Project,
-                                db_index=True,
-                                verbose_name=_('Project'),
-                                on_delete=models.CASCADE)
 
     type_category = models.ForeignKey(IssueTypeCategory,
                                       verbose_name=_('Issue Type Category'),
@@ -505,14 +515,8 @@ class Issue(models.Model):
     __repr__ = __str__
 
     def clean_description(self):
-        description = self.cleaned_data['description']
-        description = bleach.clean(description,
-                                   tags=settings.BLEACH_ALLOWED_TAGS,
-                                   attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
-                                   protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
-                                   strip=settings.BLEACH_STRIPPING)
-
-        return description
+        description = self.cleaned_data.get('description')
+        return clean_html(description)
 
     def clean(self):
         try:
@@ -594,6 +598,62 @@ class Issue(models.Model):
                 self.ordering = max_ordering
 
         super(Issue, self).save(*args, **kwargs)
+
+
+class IssueMessage(models.Model):
+    cleaned_data: dict
+
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  db_index=True,
+                                  on_delete=models.CASCADE)
+
+    project = models.ForeignKey(Project,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
+
+    created_by = models.ForeignKey(Person,
+                                   verbose_name=_('Sent by'),
+                                   on_delete=models.CASCADE,
+                                   related_name='sent_messages')
+
+    issue = models.ForeignKey(Issue,
+                              verbose_name=_('Issue'),
+                              on_delete=models.CASCADE,
+                              related_name='messages')
+
+    description = models.TextField(verbose_name=_('Description'),
+                                   blank=True)
+
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
+    updated_at = models.DateTimeField(verbose_name=_('Updated at'),
+                                      auto_now=True)
+
+    class Meta:
+        db_table = 'core_issue_message'
+        ordering = [
+            'updated_at'
+        ]
+        verbose_name = _('Issue Message')
+        verbose_name_plural = _('Issue messages')
+
+    def __str__(self):
+        return f'#{self.pk} - {self.created_by.first_name} {self.created_by.last_name} <{len(self.description)} chars>'
+
+    __repr__ = __str__
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        return clean_html(description)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.workspace = self.issue.workspace
+            self.project = self.issue.project
+
+        super().save(*args, **kwargs)
 
 
 class ProjectBacklog(models.Model):
@@ -739,9 +799,10 @@ class Sprint(models.Model):
                 Checking if we have another one started sprint
                 """
                 started_sprints_amount = \
-                    Sprint.objects.filter(workspace=self.workspace,
-                                          project=self.project,
-                                          is_started=True) \
+                    Sprint.objects \
+                        .filter(workspace=self.workspace,
+                                project=self.project,
+                                is_started=True) \
                         .exclude(pk=self.pk) \
                         .count()
 
@@ -761,10 +822,9 @@ class Sprint(models.Model):
     def delete(self, using=None, keep_parents=False):
         """
         After deleting sprint we have to send it to backlog
-        in same workspace and project. """
+        in the same workspace and project. """
 
-        backlog = ProjectBacklog \
-            .objects \
+        backlog = ProjectBacklog.objects \
             .filter(workspace=self.workspace,
                     project=self.project) \
             .get()

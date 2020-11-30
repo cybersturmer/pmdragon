@@ -113,10 +113,26 @@ class IssueAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
     )
-    
+
     def save_model(self, request, obj, form, change):
         obj.workspace = obj.project.workspace
         super(IssueAdmin, self).save_model(request, obj, form, change)
+
+
+@admin.register(IssueMessage)
+class IssueMessage(admin.ModelAdmin):
+    model = IssueMessage
+    readonly_fields = (
+        'workspace',
+        'project',
+        'created_at',
+        'updated_at'
+    )
+
+    def save_model(self, request, obj, form, change):
+        obj.workspace = obj.issue.workspace
+        obj.project = obj.issue.project
+        super(IssueMessage, self).save_model(request, obj, form, change)
 
 
 admin.site.register(Project)

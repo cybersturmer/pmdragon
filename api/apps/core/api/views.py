@@ -1,5 +1,6 @@
 from django.contrib.auth.admin import sensitive_post_parameters_m
 from django.utils.translation import ugettext_lazy as _
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics, mixins, status, views
 from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.parsers import MultiPartParser
@@ -257,6 +258,21 @@ class IssueViewSet(WorkspacesModelViewSet):
     """
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({
+            'person': self.request.user.person
+        })
+
+        return context
+
+
+class IssueMessagesViewSet(WorkspacesModelViewSet):
+    queryset = IssueMessage.objects.all()
+    serializer_class = IssueMessageSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['issue']
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
