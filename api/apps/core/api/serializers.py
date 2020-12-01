@@ -138,6 +138,7 @@ class PersonInvitationRequestRetrieveUpdateSerializer(serializers.ModelSerialize
     """
     Update request after getting email and follow link inside
     """
+
     class Meta:
         model = PersonInvitationRequest
         fields = (
@@ -527,11 +528,21 @@ class ProjectSerializer(WorkspaceModelSerializer):
         )
 
 
+class IssueTypeIconSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IssueTypeCategoryIcons
+        fields = (
+            'prefix',
+            'color'
+        )
+
+
 class IssueTypeSerializer(WorkspaceModelSerializer):
     """
     Common issue category serializer
     For getting all types of issues
     """
+    icon = IssueTypeIconSerializer()
 
     class Meta:
         model = IssueTypeCategory
@@ -540,6 +551,7 @@ class IssueTypeSerializer(WorkspaceModelSerializer):
             'workspace',
             'project',
             'title',
+            'icon',
             'is_subtask',
             'ordering'
         )

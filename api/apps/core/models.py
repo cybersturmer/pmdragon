@@ -292,6 +292,34 @@ class Project(models.Model):
     __repr__ = __str__
 
 
+class IssueTypeCategoryIcons(models.Model):
+    prefix = models.CharField(verbose_name=_('Icon prefix'),
+                              max_length=50,
+                              unique=True,
+                              db_index=True)
+
+    color = models.CharField(verbose_name=_('Icon color'),
+                             max_length=50,
+                             null=True,
+                             blank=True)
+
+    ordering = models.PositiveSmallIntegerField(verbose_name=_('Ordering'),
+                                                blank=True,
+                                                null=True,
+                                                default=0)
+
+    class Meta:
+        db_table = 'core_issue_type_icon'
+        ordering = ['ordering']
+        verbose_name = _('Issue Type Icon')
+        verbose_name_plural = _('Issue Type Icons')
+
+    def __str__(self):
+        return self.prefix
+
+    __repr__ = __str__
+
+
 class IssueTypeCategory(models.Model):
     workspace = models.ForeignKey(Workspace,
                                   verbose_name=_('Workspace'),
@@ -307,6 +335,11 @@ class IssueTypeCategory(models.Model):
     title = models.CharField(verbose_name=_('Title'),
                              max_length=255)
 
+    icon = models.ForeignKey(IssueTypeCategoryIcons,
+                             verbose_name=_('Icon'),
+                             on_delete=models.SET_NULL,
+                             null=True)
+
     is_subtask = models.BooleanField(verbose_name=_('Is sub-task issue type?'),
                                      default=False)
 
@@ -319,7 +352,7 @@ class IssueTypeCategory(models.Model):
                                                 default=0)
 
     class Meta:
-        db_table = 'core_issue_category'
+        db_table = 'core_issue_type'
         ordering = ['ordering']
         unique_together = [
             ['project', 'title']
@@ -753,12 +786,12 @@ class Sprint(models.Model):
                                        default=False)
 
     started_at = models.DateTimeField(verbose_name=_('Start date'),
-                                      null=True,
-                                      default=None)
+                                      blank=True,
+                                      null=True)
 
     finished_at = models.DateTimeField(verbose_name=_('End date'),
-                                       null=True,
-                                       default=None)
+                                       blank=True,
+                                       null=True)
 
     class Meta:
         db_table = 'core_sprint'

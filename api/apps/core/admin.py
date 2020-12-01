@@ -55,6 +55,7 @@ class IssueTypeAdmin(admin.ModelAdmin):
     list_display = (
         'project',
         'title',
+        'icon',
         'is_subtask',
         'is_default',
         'ordering'
@@ -91,6 +92,19 @@ class SprintAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.workspace = obj.project.workspace
         super(SprintAdmin, self).save_model(request, obj, form, change)
+
+
+@admin.register(IssueTypeCategoryIcons)
+class IssueTypeCategoryIconsAdmin(admin.ModelAdmin):
+    model = IssueTypeCategoryIcons
+    list_display = (
+        'id',
+        'prefix',
+        'color'
+    )
+    search_fields = (
+        'prefix',
+    )
 
 
 @admin.register(Issue)
