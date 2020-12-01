@@ -6,7 +6,15 @@
     class="my-card q-ma-sm overflow-hidden text-center issue-backlog">
     <q-card-section>
       <span :class="`text-muted ${ this.isDone ? 'text-strike': '' }`">
-        #{{ issue.id }} {{ issue.title }}
+        #{{ issue.id }}
+        <q-icon
+          v-if="isIssueTypeIcon"
+          :name="getIssueTypeIcon.prefix"
+          :color="getIssueTypeIcon.color"
+          size="xs"
+          :title="getIssueTypeTitle"
+        />
+        {{ issue.title }}
       </span>
     </q-card-section>
     <q-card-actions horizontal align="right">
@@ -52,6 +60,15 @@ export default {
     },
     isDone: function () {
       return this.$store.getters['issues/IS_ISSUE_STATE_DONE'](this.issue.state_category)
+    },
+    isIssueTypeIcon () {
+      return this.$store.getters['issues/IS_ISSUE_TYPE_HAVE_ICON'](this.issue.type_category)
+    },
+    getIssueTypeTitle () {
+      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).title
+    },
+    getIssueTypeIcon () {
+      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
     }
   }
 }

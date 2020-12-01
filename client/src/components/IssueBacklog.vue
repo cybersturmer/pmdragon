@@ -23,6 +23,14 @@ export default {
       type: String,
       required: true
     }
+  },
+  computed: {
+    isIssueTypeIcon () {
+      return this.$store.getters['issues/IS_ISSUE_TYPE_HAVE_ICON'](this.issue.type_category)
+    },
+    getIssueTypeIcon () {
+      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
+    }
   }
 }
 </script>

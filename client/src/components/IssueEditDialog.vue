@@ -13,81 +13,94 @@
       <q-card-section horizontal>
         <q-card-section class="col-md-8 col-xs-12 col-sm-12">
           <!-- @todo Breadcrumbs for current issue -->
-          <q-card-section>
-            <!-- Title editing section -->
-            <q-input
-              dark
-              :value="formData.issue.title"
-              @input="updateIssueTitle($event)"
-              :label="getIssueTitleLabel()"
-              label-color="amber"
-            />
-          </q-card-section>
-          <q-card-section>
-            <!-- Block with issue description -->
-            <div class="q-mb-sm text-subtitle2 text-amber">
-              Description
-            </div>
-            <q-card
-              v-show="!isDescriptionEditing"
-              dark
-              flat
-              bordered
-            >
-              <q-card-section
-                v-html="formData.issue.description || 'Add a description by clicking this area...'"
-                class="q-pa-md editable_block"
-                @click="updateDescriptionEditingState"
-              />
-            </q-card>
-            <q-editor
-              dark
-              v-show="isDescriptionEditing"
-              v-model="formData.issue.description"
-              toolbar-toggle-color="amber"
-              min-height="5rem"
-              :toolbar="editorToolbar"
-            />
-            <q-card-actions
-              v-show="isDescriptionEditing"
-              style="padding: 0"
-              class="q-mt-sm"
-            >
-              <q-btn
-              outline
-              color="amber"
-              size="sm"
-              label="Save"
-              style="width: 80px"
-              @click="updateIssueDescription"
-              />
-              <q-btn
-                flat
-                color="amber"
-                size="sm"
-                label="Cancel"
-                style="width: 80px"
-                @click="cancelDescriptionEditing"
-              />
-            </q-card-actions>
-          </q-card-section>
-          <q-card-section
-            style="padding: 0"
-          >
-            <!-- Block with messages -->
+          <q-scroll-area
+            dark
+            style="height: 65vh; border-bottom: 1px solid #686868;">
+            <!-- Title block -->
             <q-card-section>
-              <div class="q-mb-sm text-subtitle2 text-amber">
-                Messages
+              <!-- Title editing section -->
+              <q-input
+                dark
+                :value="formData.issue.title"
+                @input="updateIssueTitle($event)"
+                :label="getIssueTitleLabel()"
+                label-color="amber">
+                <template v-slot:before>
+                  <q-icon
+                    v-if="isIssueTypeIcon"
+                    :name="getIssueTypeIcon.prefix"
+                    :color="getIssueTypeIcon.color"
+                    :title="getIssueTypeTitle(formData.issue.type_category)"
+                    size="md"
+                  />
+                </template>
+              </q-input>
+            </q-card-section>
+            <!-- Description -->
+            <q-card-section>
+              <!-- Block with issue description -->
+              <div class="q-mb-xs text-subtitle2 text-amber">
+                Description
               </div>
               <q-card
+                v-show="!isDescriptionEditing"
                 dark
                 flat
                 bordered
               >
-                <q-card-section style="min-height: 400px">
-                  <q-scroll-area
-                    dark
-                    style="height: 400px; padding-right: 30px">
+                <q-card-section
+                  v-html="formData.issue.description || 'Add a description by clicking this area...'"
+                  class="q-pa-md editable_block"
+                  @click="updateDescriptionEditingState"
+                />
+              </q-card>
+              <q-editor
+                dark
+                v-show="isDescriptionEditing"
+                v-model="formData.issue.description"
+                toolbar-toggle-color="amber"
+                min-height="5rem"
+                :toolbar="editorToolbar"
+              />
+              <q-card-actions
+                v-show="isDescriptionEditing"
+                style="padding: 0"
+                class="q-mt-sm"
+              >
+                <q-btn
+                outline
+                color="amber"
+                size="sm"
+                label="Save"
+                style="width: 80px"
+                @click="updateIssueDescription"
+                />
+                <q-btn
+                  flat
+                  color="amber"
+                  size="sm"
+                  label="Cancel"
+                  style="width: 80px"
+                  @click="cancelDescriptionEditing"
+                />
+              </q-card-actions>
+            </q-card-section>
+            <!-- Messages -->
+            <q-card-section
+              style="padding: 0"
+            >
+              <!-- Block with messages -->
+              <q-card-section>
+                <div class="q-mb-xs text-subtitle2 text-amber">
+                  Messages
+                </div>
+                <q-card
+                  dark
+                  flat
+                  bordered
+                  v-show="thereAreMessages"
+                >
+                  <q-card-section>
                     <q-chat-message
                       v-for="message in messages"
                       v-bind:key="message.id"
@@ -99,23 +112,42 @@
                       bg-color="accent"
                       text-color="amber"
                       :sent="isItMe(message.created_by)"
+                      :stamp="getRelativeDatetime(message.updated_at)"
                     />
-                  </q-scroll-area>
-                </q-card-section>
-              </q-card>
+                  </q-card-section>
+                </q-card>
+              </q-card-section>
             </q-card-section>
+          </q-scroll-area>
+            <!-- New Message Block -->
+          <q-card-section style="padding: 0">
             <q-card-section>
               <!-- Section for save new message -->
-              <q-card-section style="padding: 0">
-              <q-editor
+              <q-card
+                v-show="!isNewMessageEditing"
                 dark
-                v-model="formNewMessage.description"
-                toolbar-toggle-color="amber"
-                min-height="5rem"
-                :toolbar="editorToolbar"
-              />
+                bordered
+                class="editable_block"
+              >
+                <q-card-section
+                  @click="isNewMessageEditing = !isNewMessageEditing"
+                >
+                  Add new message...
+                </q-card-section>
+              </q-card>
+              <q-card-section
+                v-show="isNewMessageEditing"
+                style="padding: 0">
+                <q-editor
+                  dark
+                  v-model="formNewMessage.description"
+                  toolbar-toggle-color="amber"
+                  min-height="5rem"
+                  :toolbar="editorToolbar"
+                />
               </q-card-section>
               <q-card-actions
+                v-show="isNewMessageEditing"
                 class="q-mt-sm"
               >
                 <q-btn
@@ -136,7 +168,6 @@
                 />
               </q-card-actions>
             </q-card-section>
-
           </q-card-section>
         </q-card-section>
         <q-separator dark vertical />
@@ -266,6 +297,9 @@ export default {
     await this.getMessages()
   },
   methods: {
+    getRelativeDatetime (datetime) {
+      return this.$moment(datetime).fromNow()
+    },
     getIssueStateById (id) {
       /** Get Issue state by Id, we got Issue State from props given to component **/
       return this.issueStates.find(state => state.id === id)
@@ -339,7 +373,7 @@ export default {
        * we use it in selection field **/
       this.formData.issue.type_category = state.id
       const payload = {
-        id: this.form.issue.id,
+        id: this.formData.issue.id,
         type_category: this.formData.issue.type_category
       }
 
@@ -441,6 +475,15 @@ export default {
     },
     updatedAt () {
       return date.formatDate(this.formData.issue.updated_at, DATETIME_MASK)
+    },
+    thereAreMessages () {
+      return this.messages.length > 0
+    },
+    isIssueTypeIcon () {
+      return this.$store.getters['issues/IS_ISSUE_TYPE_HAVE_ICON'](this.issue.type_category)
+    },
+    getIssueTypeIcon () {
+      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
     }
   }
 }

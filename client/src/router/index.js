@@ -2,8 +2,13 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
+import VueMoment from 'vue-moment'
+import moment from 'moment-timezone'
 
 Vue.use(VueRouter)
+Vue.use(VueMoment, {
+  moment
+})
 
 /*
  * If not building with SSR mode, you can

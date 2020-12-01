@@ -105,6 +105,30 @@ export function ISSUE_TYPES_BY_CURRENT_PROJECT (state, getters, rootState, rootG
     .filter((issueType) => issueType.project === rootGetters['current/PROJECT'])
 }
 
+export function ISSUE_TYPE_BY_ID (state) {
+  return issueTypeId => {
+    try {
+      return state.issue_types
+        .find(issueType => issueType.id === issueTypeId)
+    } catch (e) {
+      return null
+    }
+  }
+}
+
+export function IS_ISSUE_TYPE_HAVE_ICON (state) {
+  return issueTypeId => {
+    try {
+      const issueType = state.issue_types
+        .find(issueType => issueType.id === issueTypeId)
+
+      return !!issueType.icon
+    } catch (e) {
+      return false
+    }
+  }
+}
+
 export function WORKSPACE_SPRINT_DURATION (state, getters, rootState, rootGetters) {
   return state.sprint_durations
     .filter((sprintDuration) => sprintDuration.workspace === rootGetters['current/WORKSPACE_ID'])
