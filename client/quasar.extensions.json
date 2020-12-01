@@ -1,0 +1,27 @@
+{
+  "@quasar/testing": {
+    "harnesses": [
+      "unit-jest",
+      "e2e-webdriver",
+      "quality",
+      "security"
+    ]
+  },
+  "@quasar/testing-unit-jest": {
+    "babel": "babelrc",
+    "options": [
+      "scripts"
+    ]
+  },
+  "@quasar/testing-quality": {
+    "options": [
+      "scripts"
+    ]
+  },
+  "@quasar/testing-security": {
+    "options": [
+      "zap_local"
+    ],
+    "zapbrowser": "Chrome"
+  }
+}

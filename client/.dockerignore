@@ -1,0 +1,10 @@
+.quasar
+.vscode
+dist
+node_modules
+ssl
+test
+*.zip
+jest.config.json
+quasar.extensions.json
+quasar.testing.json
