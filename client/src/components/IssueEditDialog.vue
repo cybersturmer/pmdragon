@@ -149,51 +149,52 @@
           <q-card-section style="padding: 0">
             <q-card-section>
               <!-- Section for save new message -->
-              <q-card
-                v-show="!isNewMessageEditing"
-                dark
-                bordered
-                class="editable_block"
-              >
-                <q-card-section
-                  @click="isNewMessageEditing = !isNewMessageEditing"
-                >
-                  Add new message...
-                </q-card-section>
-              </q-card>
-              <q-card-section
-                v-show="isNewMessageEditing"
-                style="padding: 0">
-                <q-editor
-                  ref="issueMessageEditor"
+                <q-card
+                  v-show="!isNewMessageEditing"
                   dark
-                  v-model="formNewMessage.description"
-                  toolbar-toggle-color="amber"
-                  min-height="5rem"
-                  :toolbar="editorToolbar"
-                />
-              </q-card-section>
-              <q-card-actions
-                v-show="isNewMessageEditing"
-                class="q-mt-sm"
-              >
-                <q-btn
-                  outline
-                  color="amber"
-                  size="sm"
-                  label="Save"
-                  style="width: 80px"
-                  @click="createOrUpdateMessage"
-                />
-                <q-btn
-                  flat
-                  color="amber"
-                  size="sm"
-                  label="Cancel"
-                  style="width: 80px"
-                  @click="cancelMessageEditing"
-                />
-              </q-card-actions>
+                  bordered
+                  class="editable_block"
+                >
+                  <q-card-section
+                    @click="isNewMessageEditing = !isNewMessageEditing"
+                  >
+                    Add new message...
+                  </q-card-section>
+                </q-card>
+                <q-card-section
+                  v-show="isNewMessageEditing"
+                  style="padding: 0">
+                  <q-editor
+                    ref="issueMessageEditor"
+                    max-height="15vh"
+                    dark
+                    v-model="formNewMessage.description"
+                    toolbar-toggle-color="amber"
+                    min-height="5rem"
+                    :toolbar="editorToolbar"
+                  />
+                </q-card-section>
+                <q-card-actions
+                  v-show="isNewMessageEditing"
+                  class="q-mt-sm"
+                >
+                  <q-btn
+                    outline
+                    color="amber"
+                    size="sm"
+                    label="Save"
+                    style="width: 80px"
+                    @click="createOrUpdateMessage"
+                  />
+                  <q-btn
+                    flat
+                    color="amber"
+                    size="sm"
+                    label="Cancel"
+                    style="width: 80px"
+                    @click="cancelMessageEditing"
+                  />
+                </q-card-actions>
             </q-card-section>
           </q-card-section>
         </q-card-section>
