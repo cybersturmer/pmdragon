@@ -38,11 +38,13 @@ def image_upload_location(instance, filename) -> str:
 
 
 def clean_html(data):
-    return bleach.clean(data,
-                        tags=settings.BLEACH_ALLOWED_TAGS,
-                        attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
-                        protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
-                        strip=settings.BLEACH_STRIPPING)
+    return bleach \
+        .clean(data,
+               tags=settings.BLEACH_ALLOWED_TAGS,
+               attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
+               protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
+               strip=settings.BLEACH_STRIPPING) \
+        .rstrip()
 
 
 class Person(models.Model):
