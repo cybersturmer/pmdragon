@@ -51,10 +51,11 @@
                 <q-card-section
                   v-html="formData.issue.description || 'Add a description by clicking this area...'"
                   class="q-pa-md editable_block"
-                  @click="updateDescriptionEditingState"
+                  @click="startEditingDescription"
                 />
               </q-card>
               <q-editor
+                ref="issueDescriptionEditor"
                 dark
                 v-show="isDescriptionEditing"
                 v-model="formData.issue.description"
@@ -106,14 +107,39 @@
                       v-bind:key="message.id"
                       :name="getParticipantTitleById(message.created_by)"
                       :avatar="getParticipantById(message.created_by).avatar"
-                      :text="[message.description]"
                       size="6"
                       :text-sanitize="false"
                       bg-color="accent"
                       text-color="amber"
                       :sent="isItMe(message.created_by)"
-                      :stamp="getRelativeDatetime(message.updated_at)"
-                    />
+                    >
+                      <template #default>
+                        <div v-html="message.description"/>
+                        <div class="text-left q-message-stamp">
+                          {{ getRelativeDatetime(message.updated_at) }}
+                        </div>
+                        <div class="text-right">
+                          <q-btn-group
+                            v-show="isItMe(message.created_by)"
+                            outline
+                            stretch
+                            class="bottom-right">
+                            <q-btn
+                              flat
+                              size="sm"
+                              label="edit"
+                              @click="startMessageEditing(message.id)"
+                            />
+                            <q-btn
+                              flat
+                              size="sm"
+                              label="delete"
+                              @click="removeMessage(message.id)"
+                            />
+                          </q-btn-group>
+                        </div>
+                      </template>
+                    </q-chat-message>
                   </q-card-section>
                 </q-card>
               </q-card-section>
@@ -139,6 +165,7 @@
                 v-show="isNewMessageEditing"
                 style="padding: 0">
                 <q-editor
+                  ref="issueMessageEditor"
                   dark
                   v-model="formNewMessage.description"
                   toolbar-toggle-color="amber"
@@ -156,7 +183,7 @@
                   size="sm"
                   label="Save"
                   style="width: 80px"
-                  @click="createNewMessage"
+                  @click="createOrUpdateMessage"
                 />
                 <q-btn
                   flat
@@ -164,7 +191,7 @@
                   size="sm"
                   label="Cancel"
                   style="width: 80px"
-                  @click="cancelNewMessageEditing"
+                  @click="cancelMessageEditing"
                 />
               </q-card-actions>
             </q-card-section>
@@ -289,6 +316,7 @@ export default {
         description: ''
       },
       isNewMessageEditing: false,
+      editingMessageId: null,
       messages: [],
       mask: DATETIME_MASK
     }
@@ -298,6 +326,7 @@ export default {
   },
   methods: {
     getRelativeDatetime (datetime) {
+      /** Get relative datetime for messages **/
       return this.$moment(datetime).fromNow()
     },
     getIssueStateById (id) {
@@ -350,11 +379,11 @@ export default {
       const issueType = this.getIssueTypeTitle(this.formData.issue.type_category)
       return `#${this.formData.issue.id} ${issueType}`
     },
-    updateDescriptionEditingState () {
+    startEditingDescription () {
       /** update description state
        * We use it by clicking on the block with description of Issue
        * for make it editable **/
-      this.isDescriptionEditing = !this.isDescriptionEditing
+      this.isDescriptionEditing = true
     },
     updateIssueState (state) {
       /** update state for Issue
@@ -426,15 +455,15 @@ export default {
       this.formData.issue.description = this.issue.description
       this.isDescriptionEditing = false
     },
-    cancelNewMessageEditing () {
+    cancelMessageEditing () {
       /** We use it if user wrote a message and clicked cancel then **/
       this.isNewMessageEditing = false
       this.formNewMessage.description = ''
+      this.editingMessageId = null
     },
-    async createNewMessage () {
+    async _createMessage () {
       /** We use it for adding one more message **/
       const payload = this.formNewMessage
-
       const response = await new Api({ auth: true }).post(
         '/core/issue-messages/',
         payload
@@ -442,8 +471,52 @@ export default {
 
       HandleResponse.compare(201, response.status)
       this.messages.push(response.data)
+    },
+    async _updateMessage () {
+      const payload = {
+        description: this.formNewMessage.description
+      }
 
-      this.formNewMessage.description = ''
+      const response = await new Api({ auth: true }).patch(
+        `/core/issue-messages/${this.editingMessageId}/`,
+        payload
+      )
+
+      HandleResponse.compare(200, response.status)
+      const oldMessage = this.messages
+        .find(message => message.id === this.editingMessageId)
+
+      const idx = this.messages
+        .indexOf(oldMessage)
+
+      this.messages.splice(idx, 1, response.data)
+    },
+    async createOrUpdateMessage () {
+      /** We use it for adding one more message **/
+      if (this.editingMessageId !== null) {
+        await this._updateMessage()
+      } else {
+        await this._createMessage()
+      }
+
+      this.cancelMessageEditing()
+    },
+    startMessageEditing (id) {
+      const message = this.messages.find(message => message.id === id)
+
+      this.formNewMessage.description = message.description
+      this.editingMessageId = id
+      this.isNewMessageEditing = true
+    },
+    async removeMessage (id) {
+      const response = await new Api({ auth: true }).delete(
+        `/core/issue-messages/${id}/`
+      )
+
+      HandleResponse.compare(204, response.status)
+      this.messages = this.messages.filter((value) => {
+        return value.id !== id
+      })
     },
     show () {
       this.$refs.dialog.show()
