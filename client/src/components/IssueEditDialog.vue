@@ -205,7 +205,7 @@
             <!-- Selection for issue state -->
             <q-select
               dark
-              filled
+              flat
               square
               dense
               :value="getIssueStateById(formData.issue.state_category)"
@@ -217,7 +217,7 @@
             <!-- Selection for issue type -->
             <q-select
               dark
-              filled
+              flat
               square
               dense
               :value="getIssueTypeById(formData.issue.type_category)"
@@ -229,7 +229,7 @@
             <!-- Selection for assignee -->
             <q-select
               dark
-              filled
+              flat
               square
               dense
               :value="getParticipantById(formData.issue.assignee)"
@@ -243,9 +243,8 @@
             <!-- Readonly props such as created at and updated at -->
             <q-input
               dark
-              filled
+              flat
               square
-              dense
               readonly
               :value="createdAt"
               :mask="mask"
@@ -255,9 +254,8 @@
             />
             <q-input
               dark
-              filled
+              flat
               square
-              dense
               readonly
               :value="updatedAt"
               :mask="mask"
