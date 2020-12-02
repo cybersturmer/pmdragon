@@ -43,8 +43,7 @@ def clean_html(data):
                tags=settings.BLEACH_ALLOWED_TAGS,
                attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
                protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
-               strip=settings.BLEACH_STRIPPING) \
-        .rstrip()
+               strip=settings.BLEACH_STRIPPING)
 
 
 class Person(models.Model):
