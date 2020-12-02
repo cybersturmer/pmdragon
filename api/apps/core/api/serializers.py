@@ -9,7 +9,7 @@ from django.forms import Form
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode as uid_decoder
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt import serializers as serializers_jwt
 

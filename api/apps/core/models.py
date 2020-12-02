@@ -667,7 +667,7 @@ class IssueMessage(models.Model):
     class Meta:
         db_table = 'core_issue_message'
         ordering = [
-            'updated_at'
+            'created_at'
         ]
         verbose_name = _('Issue Message')
         verbose_name_plural = _('Issue messages')

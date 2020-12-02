@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .schemas import IssueListUpdateSchema
 from .serializers import *
 from .tasks import send_registration_email, send_invitation_email
+from .permissions import IsParticipateInWorkspace, IsCreatorOrReadOnly
 
 
 class TokenObtainPairExtendedView(TokenObtainPairView):
@@ -259,28 +260,17 @@ class IssueViewSet(WorkspacesModelViewSet):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({
-            'person': self.request.user.person
-        })
-
-        return context
-
 
 class IssueMessagesViewSet(WorkspacesModelViewSet):
     queryset = IssueMessage.objects.all()
     serializer_class = IssueMessageSerializer
+    permission_classes = (
+        IsAuthenticated,
+        IsParticipateInWorkspace,
+        IsCreatorOrReadOnly
+    )
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['issue']
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context.update({
-            'person': self.request.user.person
-        })
-
-        return context
 
 
 class ProjectBacklogViewSet(WorkspacesReadOnlyModelViewSet,
