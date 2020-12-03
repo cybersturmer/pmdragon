@@ -4,14 +4,9 @@
           <q-card-section style="padding: 16px 16px 0 16px">
             <div class="column">
               <div class="col">
-                <q-input
-                  dark
-                  filled
+                <UsernameField
                   v-model="formData.username"
-                  :error="isFieldValid('username')"
                   :error-message="formErrors.username"
-                  label="Username"
-                  label-color="amber"
                 />
               </div>
               <div class="col">
@@ -51,10 +46,11 @@ import { fieldValidationMixin } from 'pages/mixins/field_validation'
 import { ErrorHandler } from 'src/services/util'
 import { Dialogs } from 'pages/mixins/dialogs'
 import PasswordField from 'components/fields/PasswordField'
+import UsernameField from 'components/fields/UsernameField'
 
 export default {
   name: 'Login',
-  components: { PasswordField },
+  components: { UsernameField, PasswordField },
   mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
