@@ -116,12 +116,13 @@ BLEACH_ALLOWED_TAGS = [
     'i',
     'li',
     'ol',
+    'p',
     'strong',
-    'ul']
+    'ul'
+]
 
 BLEACH_ALLOWED_ATTRIBUTES = {
     'a': ['href', 'rel'],
-    'div': ['style'],
     '*': []
 }
 

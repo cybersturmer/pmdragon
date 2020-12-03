@@ -37,6 +37,10 @@ def image_upload_location(instance, filename) -> str:
     return path
 
 
+def clean_useless_newlines(data):
+    return data.replace('<p></p>', '')
+
+
 def clean_html(data):
     return bleach \
         .clean(data,
@@ -548,10 +552,6 @@ class Issue(models.Model):
 
     __repr__ = __str__
 
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        return clean_html(description)
-
     def clean(self):
         try:
             self.workspace = self.project.workspace
@@ -559,6 +559,8 @@ class Issue(models.Model):
             pass
 
         super(Issue, self).clean()
+
+        self.description = clean_useless_newlines(clean_html(self.description))
 
         """
         We have to check that we use the state category and type category
@@ -678,14 +680,12 @@ class IssueMessage(models.Model):
 
     __repr__ = __str__
 
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        return clean_html(description)
-
     def save(self, *args, **kwargs):
         if self.pk is None:
             self.workspace = self.issue.workspace
             self.project = self.issue.project
+
+        self.description = clean_useless_newlines(clean_html(self.description))
 
         super().save(*args, **kwargs)
 
