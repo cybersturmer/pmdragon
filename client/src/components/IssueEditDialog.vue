@@ -59,6 +59,7 @@
                 dark
                 v-show="isDescriptionEditing"
                 v-model="formData.issue.description"
+                paragraph-tag="p"
                 toolbar-toggle-color="amber"
                 min-height="5rem"
                 :toolbar="editorToolbar"
@@ -165,13 +166,14 @@
                   v-show="isNewMessageEditing"
                   style="padding: 0">
                   <q-editor
-                    ref="issueMessageEditor"
-                    max-height="15vh"
                     dark
                     v-model="formNewMessage.description"
+                    :toolbar="editorToolbar"
+                    paragraph-tag="p"
+                    ref="issueMessageEditor"
+                    max-height="15vh"
                     toolbar-toggle-color="amber"
                     min-height="5rem"
-                    :toolbar="editorToolbar"
                   />
                 </q-card-section>
                 <q-card-actions

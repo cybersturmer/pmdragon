@@ -6,7 +6,15 @@
     class="my-card issue-backlog"
   >
     <q-card-section>
-      # {{ id }} {{ title }}
+      # {{ issue.id }}
+      <q-icon
+        v-if="isIssueTypeIcon"
+        :name="getIssueTypeIcon.prefix"
+        :color="getIssueTypeIcon.color"
+        size="xs"
+        :title="getIssueTypeTitle"
+      />
+      {{ issue.title }}
     </q-card-section>
   </q-card>
 </template>
@@ -15,12 +23,8 @@
 export default {
   name: 'IssueBacklog',
   props: {
-    id: {
-      type: Number,
-      required: true
-    },
-    title: {
-      type: String,
+    issue: {
+      type: Object,
       required: true
     }
   },
@@ -30,6 +34,9 @@ export default {
     },
     getIssueTypeIcon () {
       return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
+    },
+    getIssueTypeTitle () {
+      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).title
     }
   }
 }

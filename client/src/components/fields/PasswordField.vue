@@ -1,7 +1,7 @@
 <template>
   <q-input
     dark
-    filled
+    flat
     type="password"
     @input="handleInput"
     :value="password"
