@@ -53,16 +53,13 @@
                   :value="sprintIssues(sprint.id)"
                   v-bind="dragOptions"
                   @change="handleDraggableEvent($event, dragTypes.SPRINT, sprint.id)"
-                  @start="dragging = true"
-                  @end="dragging = true">
+                >
                   <transition-group type="transition" name="flip-list" tag="div">
                     <IssueBacklog
                       v-for="issue in sprintIssues(sprint.id)"
                       :key="issue.id"
-                      :id="issue.id"
-                      :title="issue.title"
+                      :issue="issue"
                       @click.native="editIssueDialog(issue)"
-                      v-on:remove="removeIssueDialog(issue)"
                     />
                   </transition-group>
                 </draggable>
@@ -89,10 +86,8 @@
               <IssueBacklog
                 v-for="issue in backlogIssues"
                 :key="issue.id"
-                :id="issue.id"
-                :title="issue.title"
-                v-on:edit="editIssueDialog(issue)"
-                v-on:remove="removeIssueDialog(issue)"
+                :issue="issue"
+                @click.native="editIssueDialog(issue)"
               />
             </transition-group>
           </draggable>
