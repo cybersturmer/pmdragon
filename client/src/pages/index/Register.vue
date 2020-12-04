@@ -4,28 +4,16 @@
       <q-card-section style="padding: 16px 16px 0 16px">
         <div class="column">
           <div class="col">
-            <q-input
-              dark
-              filled
+            <PrefixUrlField
               v-model="formData.prefix_url"
-              @input="resetFieldErrorMessage('prefix_url')"
-              :error="isFieldValid('prefix_url')"
-              :error-message="formErrors.prefix_url"
-              label-color="amber"
-              label="Workspace prefix"
+              :errorMessage="formErrors.prefix_url"
             />
           </div>
           <div class="col">
-            <q-input
-              dark
-              filled
+            <EmailField
               v-model="formData.email"
-              @input="resetFieldErrorMessage('email')"
-              @keyup.enter="register"
-              :error="isFieldValid('email')"
-              :error-message="formErrors.email"
-              label-color="amber"
-              label="Your email"
+              :errorMessage="formErrors.email"
+              @keyup.enter.native="resetFieldErrorMessage('email')"
             />
           </div>
         </div>
@@ -52,9 +40,12 @@
 import { fieldValidationMixin } from 'pages/mixins/field_validation'
 import { ErrorHandler } from 'src/services/util'
 import { Dialogs } from 'pages/mixins/dialogs'
+import PrefixUrlField from 'components/fields/PrefixUrlField.vue'
+import EmailField from 'components/fields/EmailField.vue'
 
 export default {
   name: 'Register',
+  components: { EmailField, PrefixUrlField },
   mixins: [Dialogs, fieldValidationMixin],
   data () {
     return {
