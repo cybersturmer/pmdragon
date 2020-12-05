@@ -70,12 +70,12 @@
                 class="q-mt-sm"
               >
                 <q-btn
-                outline
-                color="amber"
-                size="sm"
-                label="Save"
-                style="width: 80px"
-                @click="updateIssueDescription"
+                  outline
+                  color="amber"
+                  size="sm"
+                  label="Save"
+                  style="width: 80px"
+                  @click="updateIssueDescription"
                 />
                 <q-btn
                   flat

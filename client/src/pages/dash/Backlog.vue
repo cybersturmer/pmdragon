@@ -133,8 +133,8 @@ import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.
 import SprintMorePopupMenu from 'src/components/SprintMorePopupMenu.vue'
 import BlockHeader from 'src/components/BlockHeader.vue'
 import BlockHeaderInfo from 'components/BlockHeaderInfo.vue'
-import SprintEditDialog from 'components/SprintEditDialog.vue'
-import IssueEditDialog from 'components/IssueEditDialog.vue'
+import SprintEditDialog from 'components/dialogs/SprintEditDialog.vue'
+import IssueEditDialog from 'components/dialogs/IssueEditDialog.vue'
 
 export default {
   name: 'BacklogView',

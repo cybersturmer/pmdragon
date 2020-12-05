@@ -1,15 +1,26 @@
 <template>
   <q-dialog ref="dialog" @hide="onDialogHide">
-    <q-card dark class="q-dialog-plugin bg-secondary">
+    <q-card dark flat bordered class="q-dialog-plugin bg-secondary">
       <q-card-section>
         <q-input dark v-model="form.title"/>
         <q-input dark v-model="form.goal"/>
         <DateTimeField v-model="form.startedAt"/>
         <DateTimeField v-model="form.finishedAt"/>
       </q-card-section>
-      <q-card-actions align="right">
-        <q-btn color="primary" label="UPDATE" @click="onOKClick" />
-        <q-btn color="primary" label="CANCEL" @click="onCancelClick" />
+      <q-card-actions
+        align="right"
+        class="q-mt-sm"
+      >
+        <q-btn
+          outline
+          color="amber"
+          label="Update"
+          @click="onOKClick" />
+        <q-btn
+          flat
+          color="amber"
+          label="Cancel"
+          @click="onCancelClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>

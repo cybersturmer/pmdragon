@@ -105,9 +105,9 @@ import { date } from 'quasar'
 import { unWatch } from 'src/services/util'
 import IssueBoard from 'src/components/IssueBoard.vue'
 import { DATE_MASK, SPRINT_REMAINING_UNIT } from 'src/services/masks'
-import SprintEditDialog from 'src/components/SprintEditDialog.vue'
+import SprintEditDialog from 'components/dialogs/SprintEditDialog.vue'
 import StartCompleteSprintButton from 'src/components/StartCompleteSprintButton.vue'
-import IssueEditDialog from 'components/IssueEditDialog.vue'
+import IssueEditDialog from 'components/dialogs/IssueEditDialog.vue'
 import { editIssueData } from 'pages/mixins/edit_issue_data'
 
 export default {

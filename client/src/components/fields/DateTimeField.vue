@@ -1,5 +1,5 @@
 <template>
-  <q-input dark filled :value="rawDatetime" @input="handleInput">
+  <q-input dark flat :value="rawDatetime" @input="handleInput">
     <template v-slot:prepend>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy transition-show="scale" transition-hide="scale">
