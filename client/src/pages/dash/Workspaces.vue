@@ -1,41 +1,56 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="row justify-center">
-      <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-xs-12"
-           style="margin-left: 1em; margin-bottom: 1em"
-           v-for="workspace in workspaces"
-           v-bind:key="workspace.id">
-        <q-card
-          class="my-card bordered bg-primary shadow"
-        >
-          <q-card-section class="text-center">
-            <div class="text-h6">{{ workspace.prefix_url }}</div>
-            <div class="text-subtitle1">Participants</div>
-            <q-chip
-              v-for="participant in workspace.participants"
-              v-bind:key="participant.id"
-              dark
-              size="md"
-              color="secondary"
-              text-color="amber"
-              style="border-radius: 15px"
-              >
-              <q-avatar v-if="participant.avatar">
-                <img :src="participant.avatar" :alt="`${participant.first_name} ${participant.last_name}`">
-              </q-avatar>
-              {{ participant.first_name }} {{ participant.last_name }}
-            </q-chip>
-          </q-card-section>
-          <q-separator inset />
-          <q-card-actions vertical>
-            <q-btn v-for="project in workspace.projects"
-              outline
-              v-bind:key="project.id"
-              @click="selectSpace(workspace.prefix_url, project.id)"
-            >{{ project.title }}</q-btn>
-          </q-card-actions>
-        </q-card>
-      </div>
+      <q-table
+        dark
+        grid
+        :data="workspaces"
+        no-data-label="You are not participating in any workspace"
+        :filter="workspacesTable.filter"
+      >
+        <template #top-right>
+          <q-input dark dense debounce="300" v-model="workspacesTable.filter" placeholder="Search">
+            <template #append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+        <template #item="props">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+            <q-card dark bordered style="min-width: 350px">
+              <q-card-section class="text-center">
+                <div class="text-h6 text-uppercase">{{ props.row.prefix_url }}</div>
+                <div class="text-subtitle2">Participants</div>
+                <q-chip
+                  v-for="participant in props.row.participants"
+                  v-bind:key="participant.id"
+                  dark
+                  size="md"
+                  color="secondary"
+                  text-color="amber"
+                  style="border-radius: 15px"
+                >
+                  <q-avatar v-if="participant.avatar">
+                    <img
+                      :src="participant.avatar"
+                      :alt="`${participant.first_name} ${participant.last_name}`">
+                  </q-avatar>
+                  {{ participant.first_name }} {{ participant.last_name }}
+                </q-chip>
+              </q-card-section>
+              <q-card-actions vertical>
+                <q-btn v-for="project in props.row.projects"
+                       v-bind:key="project.id"
+                       outline
+                       @click="selectSpace(props.row.prefix_url, project.id)"
+                >
+                  {{ project.title }}
+                </q-btn>
+              </q-card-actions>
+            </q-card>
+          </div>
+        </template>
+      </q-table>
     </div>
   </q-page>
 </template>
@@ -43,6 +58,19 @@
 <script>
 export default {
   name: 'WorkspacesView',
+  data () {
+    return {
+      workspacesTable: {
+        filter: '',
+        columns: [
+          {
+            name: 'workspace',
+            sortable: true
+          }
+        ]
+      }
+    }
+  },
   methods: {
     selectSpace (prefixUrl, projectId) {
       this.$store.dispatch('current/SELECT_WORKSPACE', prefixUrl)
@@ -59,9 +87,6 @@ export default {
   mounted () {
     this.$store.dispatch('current/RESET_WORKSPACE')
     this.$store.dispatch('current/RESET_PROJECT')
-
-    this.$store.dispatch('auth/INIT_WORKSPACES')
-    this.$store.dispatch('auth/INIT_PERSONS')
   }
 }
 </script>
