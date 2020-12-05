@@ -7,6 +7,7 @@
         :data="workspaces"
         no-data-label="You are not participating in any workspace"
         :filter="workspacesTable.filter"
+        :filter-method="filterByString"
       >
         <template #top-right>
           <q-input dark dense debounce="300" v-model="workspacesTable.filter" placeholder="Search">
@@ -76,6 +77,15 @@ export default {
       this.$store.dispatch('current/SELECT_WORKSPACE', prefixUrl)
       this.$store.dispatch('current/SELECT_PROJECT', projectId)
       this.$router.push({ name: 'backlog' })
+    },
+    filterByString (rows, terms, cols, getCellValue) {
+      const regex = new RegExp(terms, 'i')
+
+      return rows
+        .filter((workspace) =>
+          workspace.prefix_url.match(regex) ||
+          workspace.projects.find(project => project.title.match(regex))
+        )
     }
   },
   computed: {
