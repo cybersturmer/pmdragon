@@ -138,13 +138,11 @@
               <!-- Section for save new message -->
                 <q-card
                   v-show="!isNewMessageEditing"
+                  @click="startMessageCreating"
                   dark
                   bordered
-                  class="editable_block"
-                >
-                  <q-card-section
-                    @click="isNewMessageEditing = !isNewMessageEditing"
-                  >
+                  class="editable_block">
+                  <q-card-section class="text-muted">
                     Add new message...
                   </q-card-section>
                 </q-card>
@@ -518,8 +516,6 @@ export default {
       const placeholder = this.generateUsernameMentionReplacement(participant.username)
       this.formNewMessage.description =
         this.formNewMessage.description.replace(participant.regex, placeholder)
-
-      this.$nextTick(this.$refs.issueMessageEditor.focus())
     },
     startMessageEditing (id) {
       const message = this.messages.find(message => message.id === id)
@@ -527,9 +523,12 @@ export default {
       this.formNewMessage.description = message.description
       this.editingMessageId = id
       this.isNewMessageEditing = true
+    },
+    startMessageCreating () {
+      this.isNewMessageEditing = true
 
-      this.$nextTick(this.$refs.issueMessageEditor.focus)
-      setTimeout(() => { this.$nextTick(this.$refs.issueMessageEditor.focus) }, 0)
+      console.log('Something interesting')
+      console.dir(this.$refs.issueMessageEditor)
     },
     async removeMessage (id) {
       const response = await new Api({ auth: true }).delete(
@@ -565,6 +564,7 @@ export default {
       this.hide()
     },
     logFocus (c) {
+      /** @todo Remove this debug method **/
       console.log(c, 'focus')
     }
   },
