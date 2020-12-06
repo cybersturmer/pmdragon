@@ -59,6 +59,7 @@
                 dark
                 v-show="isDescriptionEditing"
                 v-model="formData.issue.description"
+                @keyup.enter="handleEnterDescription"
                 paragraph-tag="p"
                 toolbar-toggle-color="amber"
                 min-height="5rem"
@@ -67,24 +68,9 @@
               <q-card-actions
                 v-show="isDescriptionEditing"
                 style="padding: 0"
-                class="q-mt-sm"
-              >
-                <q-btn
-                  outline
-                  color="amber"
-                  size="sm"
-                  label="Save"
-                  style="width: 80px"
-                  @click="updateIssueDescription"
-                />
-                <q-btn
-                  flat
-                  color="amber"
-                  size="sm"
-                  label="Cancel"
-                  style="width: 80px"
-                  @click="cancelDescriptionEditing"
-                />
+                class="q-mt-sm">
+                <EditorSaveButton @click.native="updateIssueDescription"/>
+                <EditorCancelButton @click.native="cancelDescriptionEditing"/>
               </q-card-actions>
             </q-card-section>
             <!-- Messages -->
@@ -167,8 +153,11 @@
                   style="padding: 0">
                   <q-editor
                     dark
-                    v-model="formNewMessage.description"
+                    v-model.trim="formNewMessage.description"
                     :toolbar="editorToolbar"
+                    @focus="logFocus('message')"
+                    @keyup.enter="handleMessageEnter"
+                    @input="replaceMessageMentioning"
                     paragraph-tag="p"
                     ref="issueMessageEditor"
                     max-height="15vh"
@@ -178,24 +167,9 @@
                 </q-card-section>
                 <q-card-actions
                   v-show="isNewMessageEditing"
-                  class="q-mt-sm"
-                >
-                  <q-btn
-                    outline
-                    color="amber"
-                    size="sm"
-                    label="Save"
-                    style="width: 80px"
-                    @click="createOrUpdateMessage"
-                  />
-                  <q-btn
-                    flat
-                    color="amber"
-                    size="sm"
-                    label="Cancel"
-                    style="width: 80px"
-                    @click="cancelMessageEditing"
-                  />
+                  class="q-mt-sm">
+                  <EditorSaveButton @click.native="createOrUpdateMessage"/>
+                  <EditorCancelButton @click.native="cancelMessageEditing"/>
                 </q-card-actions>
             </q-card-section>
           </q-card-section>
@@ -275,11 +249,14 @@
 <script>
 import { DATETIME_MASK } from 'src/services/masks'
 import { date } from 'quasar'
-import { HandleResponse, unWatch } from 'src/services/util'
+import { ErrorHandler, HandleResponse, unWatch } from 'src/services/util'
 import { Api } from 'src/services/api'
+import EditorSaveButton from 'components/buttons/EditorSaveButton.vue'
+import EditorCancelButton from 'components/buttons/EditorCancelButton.vue'
 
 export default {
   name: 'IssueEditDialog',
+  components: { EditorSaveButton, EditorCancelButton },
   props: {
     issue: {
       type: Object,
@@ -306,6 +283,7 @@ export default {
     return {
       editorToolbar: [
         ['bold', 'italic', 'underline', 'strike'],
+        ['viewsource'],
         ['undo', 'redo']
       ],
       isDescriptionEditing: !this.issue.description,
@@ -323,7 +301,11 @@ export default {
     }
   },
   async mounted () {
-    await this.getMessages()
+    try {
+      await this.getMessages()
+    } catch (e) {
+      this.showError(new ErrorHandler(e))
+    }
   },
   methods: {
     getRelativeDatetime (datetime) {
@@ -437,7 +419,12 @@ export default {
       this.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_title', payload)
     },
-    updateIssueDescription () {
+    async handleEnterDescription (e) {
+      if (e.ctrlKey) {
+        return await this.updateIssueDescription()
+      }
+    },
+    async updateIssueDescription () {
       /** update Issue description
        * we use it as a handler for description field changing **/
       const payload = {
@@ -445,7 +432,7 @@ export default {
         description: this.formData.issue.description
       }
 
-      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      await this.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.isDescriptionEditing = false
 
       this.$emit('update_description', payload)
@@ -492,6 +479,11 @@ export default {
 
       this.messages.splice(idx, 1, response.data)
     },
+    async handleMessageEnter (e) {
+      if (e.ctrlKey) {
+        return await this.createOrUpdateMessage()
+      }
+    },
     async createOrUpdateMessage () {
       /** We use it for adding one more message **/
       if (this.editingMessageId !== null) {
@@ -502,12 +494,42 @@ export default {
 
       this.cancelMessageEditing()
     },
+    checkMentioning (description) {
+      /** Check Mentioning by checking all RegExp, pre-built
+       * It also update participant object by defining index **/
+
+      for (const participant of this.mentioningRegex) {
+        const mentioned = description.match(participant.regex)
+        if (mentioned) {
+          participant.index = mentioned.index
+          return participant
+        }
+      }
+
+      return false
+    },
+    generateUsernameMentionReplacement (username) {
+      return `&nbsp;<div class="editor_token row inline items-center" contenteditable="false">&nbsp;<span>${username}</span>&nbsp;<i class="q-icon material-icons cursor-pointer" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">close</i></div>&nbsp;&nbsp;`
+    },
+    async replaceMessageMentioning () {
+      const participant = this.checkMentioning(this.formNewMessage.description)
+      if (!participant) return false
+
+      const placeholder = this.generateUsernameMentionReplacement(participant.username)
+      this.formNewMessage.description =
+        this.formNewMessage.description.replace(participant.regex, placeholder)
+
+      this.$nextTick(this.$refs.issueMessageEditor.focus())
+    },
     startMessageEditing (id) {
       const message = this.messages.find(message => message.id === id)
 
       this.formNewMessage.description = message.description
       this.editingMessageId = id
       this.isNewMessageEditing = true
+
+      this.$nextTick(this.$refs.issueMessageEditor.focus)
+      setTimeout(() => { this.$nextTick(this.$refs.issueMessageEditor.focus) }, 0)
     },
     async removeMessage (id) {
       const response = await new Api({ auth: true }).delete(
@@ -541,6 +563,9 @@ export default {
 
     onCancelClick () {
       this.hide()
+    },
+    logFocus (c) {
+      console.log(c, 'focus')
     }
   },
   computed: {
@@ -558,6 +583,19 @@ export default {
     },
     getIssueTypeIcon () {
       return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
+    },
+    mentioningRegex () {
+      const regexArray = []
+      for (const participant of this.participants) {
+        regexArray.push({
+          username: participant.username,
+          fullName: `${participant.first_name} ${participant.last_name}`,
+          regex: new RegExp(`@${participant.username}`, 'i'),
+          index: null
+        })
+      }
+
+      return regexArray
     }
   }
 }
@@ -565,5 +603,11 @@ export default {
 <style lang="scss">
   .editable_block:hover {
     background-color: $primary!important;
+  }
+
+  .editor_token {
+    background: rgba(0, 0, 0, .6);
+    color: white;
+    padding: 3px;
   }
 </style>
