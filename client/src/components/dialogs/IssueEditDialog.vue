@@ -153,7 +153,6 @@
                     dark
                     v-model.trim="formNewMessage.description"
                     :toolbar="editorToolbar"
-                    @focus="logFocus('message')"
                     @keyup.enter="handleMessageEnter"
                     @input="replaceMessageMentioning"
                     paragraph-tag="p"
@@ -246,6 +245,7 @@
 
 <script>
 import { DATETIME_MASK } from 'src/services/masks'
+import { Dialogs } from 'pages/mixins/dialogs'
 import { date } from 'quasar'
 import { ErrorHandler, HandleResponse, unWatch } from 'src/services/util'
 import { Api } from 'src/services/api'
@@ -255,6 +255,7 @@ import EditorCancelButton from 'components/buttons/EditorCancelButton.vue'
 export default {
   name: 'IssueEditDialog',
   components: { EditorSaveButton, EditorCancelButton },
+  mixins: [Dialogs],
   props: {
     issue: {
       type: Object,
@@ -270,10 +271,6 @@ export default {
     },
     participants: {
       type: Array,
-      required: true
-    },
-    $store: {
-      type: Object,
       required: true
     }
   },
@@ -333,7 +330,7 @@ export default {
     },
     isItMe (id) {
       /** Return true if given id is current user id **/
-      return id === this.$store.getters['auth/MY_USER_ID']
+      return id === this.$root.$store.getters['auth/MY_USER_ID']
     },
     getParticipantTitleById (id) {
       /** return title with username, first name and last name as a String **/
@@ -365,6 +362,7 @@ export default {
        * We use it by clicking on the block with description of Issue
        * for make it editable **/
       this.isDescriptionEditing = true
+      this.$nextTick(this.$refs.issueDescriptionEditor.focus)
     },
     updateIssueState (state) {
       /** update state for Issue
@@ -375,7 +373,7 @@ export default {
         state_category: this.formData.issue.state_category
       }
 
-      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      this.$root.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_state', payload)
     },
     updateIssueType (state) {
@@ -387,7 +385,7 @@ export default {
         type_category: this.formData.issue.type_category
       }
 
-      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      this.$root.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_type', payload)
     },
     updateIssueAssignee (assignee) {
@@ -400,7 +398,7 @@ export default {
         assignee: assignee.id
       }
 
-      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      this.$root.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_assignee', payload)
     },
     updateIssueTitle (title) {
@@ -414,7 +412,7 @@ export default {
         title: title
       }
 
-      this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      this.$root.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.$emit('update_title', payload)
     },
     async handleEnterDescription (e) {
@@ -430,7 +428,7 @@ export default {
         description: this.formData.issue.description
       }
 
-      await this.$store.dispatch('issues/PATCH_ISSUE', payload)
+      await this.$root.$store.dispatch('issues/PATCH_ISSUE', payload)
       this.isDescriptionEditing = false
 
       this.$emit('update_description', payload)
@@ -506,16 +504,30 @@ export default {
 
       return false
     },
-    generateUsernameMentionReplacement (username) {
-      return `&nbsp;<div class="editor_token row inline items-center" contenteditable="false">&nbsp;<span>${username}</span>&nbsp;<i class="q-icon material-icons cursor-pointer" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">close</i></div>&nbsp;&nbsp;`
+    generateUsernameMentionReplacement (participant) {
+      return `&nbsp;<div class="editor_token row inline items-center" contenteditable="false">&nbsp;<span data-mentioned-user-id="${participant.userId}">${participant.fullName}</span>&nbsp;<i class="q-icon material-icons cursor-pointer" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">close</i></div>&nbsp; `
     },
     async replaceMessageMentioning () {
       const participant = this.checkMentioning(this.formNewMessage.description)
       if (!participant) return false
 
-      const placeholder = this.generateUsernameMentionReplacement(participant.username)
+      const placeholder = this.generateUsernameMentionReplacement(participant)
+      const editor = this.$refs.issueMessageEditor
+      editor.caret.save()
+
       this.formNewMessage.description =
-        this.formNewMessage.description.replace(participant.regex, placeholder)
+        this.formNewMessage.description.replace(participant.regex, '')
+
+      // Make small lag to render q-editor
+      await setTimeout(function () {}, 1000)
+
+      console.dir(editor.caret)
+
+      editor.runCmd('insertHTML', placeholder, true)
+      editor.caret.savedPos += placeholder.length
+
+      this.$nextTick(editor.focus)
+      editor.caret.restore()
     },
     startMessageEditing (id) {
       const message = this.messages.find(message => message.id === id)
@@ -523,12 +535,11 @@ export default {
       this.formNewMessage.description = message.description
       this.editingMessageId = id
       this.isNewMessageEditing = true
+      this.$nextTick(this.$refs.issueMessageEditor.focus)
     },
     startMessageCreating () {
       this.isNewMessageEditing = true
-
-      console.log('Something interesting')
-      console.dir(this.$refs.issueMessageEditor)
+      this.$nextTick(this.$refs.issueMessageEditor.focus)
     },
     async removeMessage (id) {
       const response = await new Api({ auth: true }).delete(
@@ -562,10 +573,6 @@ export default {
 
     onCancelClick () {
       this.hide()
-    },
-    logFocus (c) {
-      /** @todo Remove this debug method **/
-      console.log(c, 'focus')
     }
   },
   computed: {
@@ -579,15 +586,16 @@ export default {
       return this.messages.length > 0
     },
     isIssueTypeIcon () {
-      return this.$store.getters['issues/IS_ISSUE_TYPE_HAVE_ICON'](this.issue.type_category)
+      return this.$root.$store.getters['issues/IS_ISSUE_TYPE_HAVE_ICON'](this.issue.type_category)
     },
     getIssueTypeIcon () {
-      return this.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
+      return this.$root.$store.getters['issues/ISSUE_TYPE_BY_ID'](this.issue.type_category).icon
     },
     mentioningRegex () {
       const regexArray = []
       for (const participant of this.participants) {
         regexArray.push({
+          userId: participant.id,
           username: participant.username,
           fullName: `${participant.first_name} ${participant.last_name}`,
           regex: new RegExp(`@${participant.username}`, 'i'),

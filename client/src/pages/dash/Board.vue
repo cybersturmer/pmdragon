@@ -235,6 +235,7 @@ export default {
     },
     editIssueDialog (item) {
       this.$q.dialog({
+        parent: this,
         dark: true,
         title: 'Issue ',
         component: IssueEditDialog,

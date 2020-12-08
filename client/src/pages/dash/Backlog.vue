@@ -226,6 +226,7 @@ export default {
     },
     editSprintDialog (item) {
       this.$q.dialog({
+        parent: this,
         dark: true,
         component: SprintEditDialog,
         id: item.id,
@@ -259,6 +260,7 @@ export default {
     },
     editIssueDialog (item) {
       this.$q.dialog({
+        parent: this,
         dark: true,
         title: 'Issue ',
         component: IssueEditDialog,
@@ -267,25 +269,6 @@ export default {
         issueTypes: this.issueTypes,
         participants: this.participants,
         $store: this.$store
-      })
-    },
-    removeIssueDialog (item) {
-      this.$q.dialog({
-        dark: true,
-        title: 'Confirmation',
-        message: `Would you like to delete issue: ${item.title}`,
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        this.$store.dispatch('issues/DELETE_ISSUE', item)
-          .catch((e) => {
-            this.$q.dialog({
-              title: 'Error - Cannot delete issue',
-              message: 'Please check your Internet connection'
-            })
-
-            console.log(e)
-          })
       })
     },
     sprintIssues (sprintId) {
@@ -517,5 +500,4 @@ export default {
         padding: 0;
     }
   }
-
 </style>
