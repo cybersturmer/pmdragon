@@ -416,6 +416,7 @@ export default {
       this.$emit('update_title', payload)
     },
     async handleEnterDescription (e) {
+      /** Handle Ctrl + Enter command in editor **/
       if (e.ctrlKey) {
         return await this.updateIssueDescription()
       }
@@ -457,6 +458,7 @@ export default {
       this.messages.push(response.data)
     },
     async _updateMessage () {
+      /** Kind of private method - we use it in create - update method **/
       const payload = {
         description: this.formNewMessage.description
       }
@@ -476,6 +478,7 @@ export default {
       this.messages.splice(idx, 1, response.data)
     },
     async handleMessageEnter (e) {
+      /** Handle Ctrl + Enter command in editor **/
       if (e.ctrlKey) {
         return await this.createOrUpdateMessage()
       }
@@ -505,9 +508,11 @@ export default {
       return false
     },
     generateUsernameMentionReplacement (participant) {
+      /** generate username snippet for mentioned username **/
       return `&nbsp;<div class="editor_token row inline items-center" contenteditable="false">&nbsp;<span data-mentioned-user-id="${participant.userId}">${participant.fullName}</span>&nbsp;<i class="q-icon material-icons cursor-pointer" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">close</i></div>&nbsp; `
     },
     async replaceMessageMentioning () {
+      /** Replace @username to snippet with firstName-lastName non-editable block **/
       const participant = this.checkMentioning(this.formNewMessage.description)
       if (!participant) return false
 
