@@ -10,7 +10,6 @@
 module.exports = function (/* ctx */) {
   return {
     https: true,
-    // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: false,
 
     // https://quasar.dev/quasar-cli/cli-documentation/prefetch-feature
@@ -75,7 +74,7 @@ module.exports = function (/* ctx */) {
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: false
     },
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
