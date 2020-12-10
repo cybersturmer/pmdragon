@@ -22,22 +22,11 @@
               <q-card-section class="text-center">
                 <div class="text-h6 text-uppercase">{{ props.row.prefix_url }}</div>
                 <div class="text-subtitle2">Participants</div>
-                <q-chip
+                <SmallParticipantChipElement
                   v-for="participant in props.row.participants"
                   v-bind:key="participant.id"
-                  dark
-                  size="md"
-                  color="secondary"
-                  text-color="amber"
-                  style="border-radius: 15px"
-                >
-                  <q-avatar v-if="participant.avatar">
-                    <img
-                      :src="participant.avatar"
-                      :alt="`${participant.first_name} ${participant.last_name}`">
-                  </q-avatar>
-                  {{ participant.first_name }} {{ participant.last_name }}
-                </q-chip>
+                  :participant="participant"
+                />
               </q-card-section>
               <q-card-actions vertical>
                 <q-btn v-for="project in props.row.projects"
@@ -57,8 +46,11 @@
 </template>
 
 <script>
+import SmallParticipantChipElement from 'components/elements/SmallParticipantChipElement.vue'
+
 export default {
   name: 'WorkspacesView',
+  components: { SmallParticipantChipElement },
   data () {
     return {
       workspacesTable: {
