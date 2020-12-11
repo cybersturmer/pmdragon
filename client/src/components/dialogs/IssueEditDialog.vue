@@ -56,6 +56,7 @@
               </q-card>
               <q-editor
                 ref="issueDescriptionEditor"
+                dense
                 dark
                 v-show="isDescriptionEditing"
                 v-model="formData.issue.description"
@@ -151,6 +152,7 @@
                   style="padding: 0">
                   <q-editor
                     dark
+                    dense
                     v-model.trim="formNewMessage.description"
                     :toolbar="editorToolbar"
                     @keyup.enter="handleMessageEnter"
@@ -507,32 +509,53 @@ export default {
 
       return false
     },
-    generateUsernameMentionReplacement (participant) {
+    generateMentionedChip (participant) {
       /** generate username snippet for mentioned username **/
-      return `&nbsp;<div class="editor_token row inline items-center" contenteditable="false">&nbsp;<span data-mentioned-user-id="${participant.userId}">${participant.fullName}</span>&nbsp;<i class="q-icon material-icons cursor-pointer" onclick="this.parentNode.parentNode.removeChild(this.parentNode)">close</i></div>&nbsp; `
+      return `<p class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</p>&nbsp; `
     },
     async replaceMessageMentioning () {
       /** Replace @username to snippet with firstName-lastName non-editable block **/
+
       const participant = this.checkMentioning(this.formNewMessage.description)
       if (!participant) return false
 
-      const placeholder = this.generateUsernameMentionReplacement(participant)
       const editor = this.$refs.issueMessageEditor
-      editor.caret.save()
+      const editorEl = editor.getContentEl()
 
-      this.formNewMessage.description =
-        this.formNewMessage.description.replace(participant.regex, '')
+      const currentCaretPosition = editor.caret.selection.baseOffset
 
-      // Make small lag to render q-editor
-      await setTimeout(function () {}, 1000)
+      this._setSelection(editorEl, currentCaretPosition - (participant.textLength + 1), currentCaretPosition)
+      editor.caret.selection.deleteFromDocument()
 
-      console.dir(editor.caret)
+      this._setCaret(editorEl, currentCaretPosition)
 
-      editor.runCmd('insertHTML', placeholder, true)
-      editor.caret.savedPos += placeholder.length
+      const placeholder = this.generateMentionedChip(participant)
+      this.$nextTick(editor.runCmd('insertHTML', placeholder, true))
 
       this.$nextTick(editor.focus)
-      editor.caret.restore()
+    },
+    _setSelection ($el, from, to) {
+      const range = document.createRange()
+      const sel = window.getSelection()
+
+      range.setStart($el.childNodes[0], from)
+      range.setEnd($el.childNodes[0], to)
+
+      sel.removeAllRanges()
+      sel.addRange(range)
+    },
+    _setCaret ($el, offset) {
+      const range = document.createRange()
+      const sel = window.getSelection()
+      const innerTextLength = $el.innerText.length
+
+      if (offset >= innerTextLength) return false
+
+      range.setStart($el.childNodes[0], innerTextLength)
+      range.collapse(true)
+
+      sel.removeAllRanges()
+      sel.addRange(range)
     },
     startMessageEditing (id) {
       const message = this.messages.find(message => message.id === id)
@@ -604,7 +627,8 @@ export default {
           username: participant.username,
           fullName: `${participant.first_name} ${participant.last_name}`,
           regex: new RegExp(`@${participant.username}`, 'i'),
-          index: null
+          index: null,
+          textLength: participant.username.length
         })
       }
 
@@ -619,8 +643,16 @@ export default {
   }
 
   .editor_token {
+    display: inline-flex;
     background: rgba(0, 0, 0, .6);
+    border-radius: 5px;
+    font-size: 0.85rem;
     color: white;
-    padding: 3px;
+    padding: 4px 6px;
+    margin-right: 3px;
+  }
+
+  .editor_token:before {
+    content: '@'
   }
 </style>
