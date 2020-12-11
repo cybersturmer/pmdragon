@@ -644,7 +644,7 @@ export default {
 
   .editor_token {
     display: inline-flex;
-    background: rgba(0, 0, 0, .6);
+    background: rgba(0, 0, 0, 0.56);
     border-radius: 5px;
     font-size: 0.85rem;
     color: white;
