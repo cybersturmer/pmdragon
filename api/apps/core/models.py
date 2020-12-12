@@ -10,6 +10,7 @@ from django.db import models
 from django.db.models import Max, F
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+import re
 
 from libs.cryptography import hashing
 from libs.helpers.datetimepresets import day_later
@@ -48,6 +49,10 @@ def clean_html(data):
                attributes=settings.BLEACH_ALLOWED_ATTRIBUTES,
                protocols=settings.BLEACH_ALLOWED_PROTOCOLS,
                strip=settings.BLEACH_STRIPPING)
+
+
+def get_mentioned_user_ids(data):
+    return re.findall(r'data-mentioned-user-id="(\d{1,10})"', data)
 
 
 class Person(models.Model):

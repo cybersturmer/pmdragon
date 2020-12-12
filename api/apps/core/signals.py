@@ -2,13 +2,17 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from .api.tasks import send_mentioned_email
 
 from enum import Enum
 
 from .models import Project, \
     ProjectBacklog, \
     IssueTypeCategory, \
-    IssueStateCategory, Sprint, Issue
+    IssueStateCategory, \
+    Sprint, \
+    Issue, \
+    IssueMessage
 
 
 class ActionM2M(Enum):
@@ -28,7 +32,7 @@ def put_created_issue_to_backlog(instance: Issue, created: bool, **kwargs):
     if not created:
         return True
 
-    backlog_with_same_workspace_and_project = ProjectBacklog.objects\
+    backlog_with_same_workspace_and_project = ProjectBacklog.objects \
         .filter(workspace=instance.workspace,
                 project=instance.project)
 
@@ -193,3 +197,16 @@ def arrange_issue_in_backlog(action, instance, **kwargs):
 
     except ProjectBacklog.DoesNotExist:
         pass
+
+
+@receiver(post_save, sender=IssueMessage)
+def send_mentioned_emails(instance: IssueMessage, created: bool, **kwargs):
+    """
+    1) Check if someone was mentioned
+    2) Send an email if someone was mentioned
+    """
+
+    if not created:
+        return False
+
+    send_mentioned_email.delay(instance.pk)

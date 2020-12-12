@@ -83,4 +83,12 @@ class EmailComposer:
         self.to_email = email
         self._send()
 
+    def mentioning(self, mentioned_by: Person, email: str):
+        self.subject = 'PmDragon mentioned by'
+        context = {
+            'mentioned_by': mentioned_by
+        }
 
+        self.html_message = render_to_string('email/messaging/mentioning.html', context)
+        self.to_email = email
+        self._send()

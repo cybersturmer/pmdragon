@@ -6,7 +6,9 @@ from celery import shared_task
 from django.contrib.auth import get_user_model
 
 from libs.email.compose import EmailComposer
-from ..models import PersonRegistrationRequest, PersonInvitationRequest
+from ..models import PersonRegistrationRequest, \
+    PersonInvitationRequest, \
+    IssueMessage, get_mentioned_user_ids, Person
 
 User = get_user_model()
 
@@ -63,5 +65,27 @@ def send_invitation_email(request_pk=None):
     else:
         request.is_email_sent = True
         request.save()
+
+    return True
+
+
+@shared_task
+def send_mentioned_email(request_pk=None):
+    message = IssueMessage.objects.get(pk=request_pk)
+
+    mentioned_by_person = message.created_by
+    mentioned_persons = get_mentioned_user_ids(message.description)
+
+    try:
+        for person_id in mentioned_persons:
+            person = Person.objects.get(pk=person_id)
+
+            EmailComposer().mentioning(
+                mentioned_by=mentioned_by_person,
+                email=person.email
+            )
+
+    except SMTPException:
+        pass
 
     return True
