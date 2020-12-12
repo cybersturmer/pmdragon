@@ -29,7 +29,7 @@
         <q-avatar v-if="isAvatar">
           <img :src="assignee.avatar" :alt="`${assignee.first_name} ${assignee.last_name}`">
         </q-avatar>
-        {{ assigneeUsername }}
+        @{{ assigneeUsername }}
       </q-chip>
     </q-card-actions>
   </q-card>

@@ -651,10 +651,11 @@ export default {
 
   .editor_token {
     display: inline-flex;
-    background-color: #616161;
+    font-weight: 700;
+    background-color: #7a7a7a61;
     border-radius: 5px;
     color: white;
-    padding: 3px 5px;
+    padding: 3px 6px;
     margin: 0;
   }
 
