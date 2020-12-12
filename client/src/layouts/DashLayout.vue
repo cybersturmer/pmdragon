@@ -144,15 +144,14 @@ export default {
         })
     },
     goToAccount () {
+      if (this.$router.currentRoute.name === 'me') return false
       this.$router.push({ name: 'me' })
     },
     goToWorkspaces () {
+      if (this.$router.currentRoute.name === 'workspaces') return false
       this.$store.dispatch('current/RESET_WORKSPACE')
       this.$store.dispatch('current/RESET_PROJECT')
       this.$router.push({ name: 'workspaces' })
-    },
-    goToSettings () {
-      this.$router.push({ name: 'settings' })
     }
   },
   computed: {
