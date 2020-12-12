@@ -110,16 +110,13 @@
                           <q-btn-group
                             v-show="isItMe(message.created_by)"
                             outline
-                            stretch
                             class="bottom-right">
                             <q-btn
-                              flat
                               size="sm"
                               label="edit"
                               @click="startMessageEditing(message.id)"
                             />
                             <q-btn
-                              flat
                               size="sm"
                               label="delete"
                               @click="removeMessage(message.id)"
@@ -511,47 +508,57 @@ export default {
     },
     generateMentionedChip (participant) {
       /** generate username snippet for mentioned username **/
-      return `<p class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</p>&nbsp; `
+      return `&nbsp;<p class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</p>&nbsp; `
     },
     async replaceMessageMentioning () {
       /** Replace @username to snippet with firstName-lastName non-editable block **/
 
+      /** Firstly we have to check - do we have mentioning somewhere in the text **/
       const participant = this.checkMentioning(this.formNewMessage.description)
       if (!participant) return false
 
       const editor = this.$refs.issueMessageEditor
-      const editorEl = editor.getContentEl()
+      const selection = editor.caret.selection
 
-      const currentCaretPosition = editor.caret.selection.baseOffset
+      console.dir(editor)
 
-      this._setSelection(editorEl, currentCaretPosition - (participant.textLength + 1), currentCaretPosition)
+      /** Getting initial position of caret **/
+      const currentCaretPosition = selection.focusOffset
+      const currentNode = selection.focusNode
+
+      /** Set selection for typed username and delete it from the document **/
+      this._setSelection(currentNode, currentCaretPosition - (participant.textLength + 1), currentCaretPosition)
       editor.caret.selection.deleteFromDocument()
 
-      this._setCaret(editorEl, currentCaretPosition)
+      console.dir(editor.caret.selection)
 
+      /** Set caret to initial position that was before username deletion **/
+      this._setCaret(currentNode, currentCaretPosition)
+
+      /** We generate placeholder and insert it in editor **/
       const placeholder = this.generateMentionedChip(participant)
       this.$nextTick(editor.runCmd('insertHTML', placeholder, true))
 
       this.$nextTick(editor.focus)
     },
-    _setSelection ($el, from, to) {
+    _setSelection ($node, from, to) {
       const range = document.createRange()
       const sel = window.getSelection()
 
-      range.setStart($el.childNodes[0], from)
-      range.setEnd($el.childNodes[0], to)
+      range.setStart($node, from)
+      range.setEnd($node, to)
 
       sel.removeAllRanges()
       sel.addRange(range)
     },
-    _setCaret ($el, offset) {
+    _setCaret ($node, offset) {
       const range = document.createRange()
       const sel = window.getSelection()
-      const innerTextLength = $el.innerText.length
+      const innerTextLength = $node.length
 
       if (offset >= innerTextLength) return false
 
-      range.setStart($el.childNodes[0], innerTextLength)
+      range.setStart($node, innerTextLength)
       range.collapse(true)
 
       sel.removeAllRanges()
@@ -644,12 +651,11 @@ export default {
 
   .editor_token {
     display: inline-flex;
-    background: rgba(0, 0, 0, 0.56);
+    background-color: #616161;
     border-radius: 5px;
-    font-size: 0.85rem;
     color: white;
-    padding: 4px 6px;
-    margin-right: 3px;
+    padding: 3px 5px;
+    margin: 0;
   }
 
   .editor_token:before {
