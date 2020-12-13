@@ -520,8 +520,6 @@ export default {
       const editor = this.$refs.issueMessageEditor
       const selection = editor.caret.selection
 
-      console.dir(editor)
-
       /** Getting initial position of caret **/
       const currentCaretPosition = selection.focusOffset
       const currentNode = selection.focusNode
@@ -529,8 +527,6 @@ export default {
       /** Set selection for typed username and delete it from the document **/
       this._setSelection(currentNode, currentCaretPosition - (participant.textLength + 1), currentCaretPosition)
       editor.caret.selection.deleteFromDocument()
-
-      console.dir(editor.caret.selection)
 
       /** Set caret to initial position that was before username deletion **/
       this._setCaret(currentNode, currentCaretPosition)
