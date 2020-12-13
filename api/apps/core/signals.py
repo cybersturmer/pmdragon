@@ -2,7 +2,8 @@ from django.db.models import Q
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
-from .api.tasks import send_mentioned_email
+from .api.tasks import send_mentioned_in_message_email, \
+                       send_mentioned_in_description_email
 
 from enum import Enum
 
@@ -200,7 +201,7 @@ def arrange_issue_in_backlog(action, instance, **kwargs):
 
 
 @receiver(post_save, sender=IssueMessage)
-def send_mentioned_emails(instance: IssueMessage, created: bool, **kwargs):
+def signal_mentioned_in_message_emails(instance: IssueMessage, created: bool, **kwargs):
     """
     1) Check if someone was mentioned
     2) Send an email if someone was mentioned
@@ -209,4 +210,12 @@ def send_mentioned_emails(instance: IssueMessage, created: bool, **kwargs):
     if not created:
         return False
 
-    send_mentioned_email.delay(instance.pk)
+    send_mentioned_in_message_email.delay(instance.pk)
+
+
+@receiver(post_save, sender=Issue)
+def signal_mentioned_in_description_emails(instance: Issue, **kwargs):
+    """
+    Send an email if someone was mentioned in issue description
+    """
+    send_mentioned_in_description_email.delay(instance.pk)

@@ -26,7 +26,6 @@ class EmailComposer:
         )
 
     def verify_registration(self, key: str, prefix_url: str, expired_at: datetime, email: str):
-
         self.subject = 'PMDragon verification email'
         action_link = f'{settings.HOST_BY_DEFAULT}/verify/registration/{key}'
         context = {
@@ -83,12 +82,20 @@ class EmailComposer:
         self.to_email = email
         self._send()
 
-    def mentioning(self, mentioned_by: Person, email: str):
+    def mentioning_in_issue_message(self, mentioned_by: Person, email: str):
         self.subject = 'PmDragon mentioned by'
         context = {
             'mentioned_by': mentioned_by
         }
 
         self.html_message = render_to_string('email/messaging/mentioning.html', context)
+        self.to_email = email
+        self._send()
+
+    def mentioning_in_issue_description(self, email: str):
+        self.subject = 'PmDragon mentioned by'
+        context = {}
+
+        self.html_message = render_to_string('email/issue/mentioning.html', context)
         self.to_email = email
         self._send()
