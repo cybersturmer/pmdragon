@@ -79,9 +79,6 @@ def send_mentioned_email(message_pk=None):
     try:
         for person_id in mentioned_persons:
             person = Person.objects.get(pk=int(person_id))
-
-            print(f'Recognized person {person.first_name} {person.last_name}')
-
             EmailComposer().mentioning(
                 mentioned_by=mentioned_by_person,
                 email=person.email
