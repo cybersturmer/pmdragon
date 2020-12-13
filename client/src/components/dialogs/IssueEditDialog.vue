@@ -55,16 +55,17 @@
                 />
               </q-card>
               <q-editor
-                ref="issueDescriptionEditor"
-                dense
                 dark
-                v-show="isDescriptionEditing"
-                v-model="formData.issue.description"
-                @keyup.enter="handleEnterDescription"
+                dense
                 paragraph-tag="p"
                 toolbar-toggle-color="amber"
                 min-height="5rem"
                 :toolbar="editorToolbar"
+                ref="issueDescriptionEditor"
+                v-model.trim="formData.issue.description"
+                @keyup.enter="handleEnterDescription"
+                @input="renderEditorMentioning(formData.issue.description, 'issueDescriptionEditor')"
+                v-show="isDescriptionEditing"
               />
               <q-card-actions
                 v-show="isDescriptionEditing"
@@ -150,15 +151,15 @@
                   <q-editor
                     dark
                     dense
-                    v-model.trim="formNewMessage.description"
-                    :toolbar="editorToolbar"
-                    @keyup.enter="handleMessageEnter"
-                    @input="replaceMessageMentioning"
                     paragraph-tag="p"
-                    ref="issueMessageEditor"
-                    max-height="15vh"
                     toolbar-toggle-color="amber"
                     min-height="5rem"
+                    max-height="15vh"
+                    :toolbar="editorToolbar"
+                    ref="issueMessageEditor"
+                    v-model.trim="formNewMessage.description"
+                    @keyup.enter="handleMessageEnter"
+                    @input="renderEditorMentioning(formNewMessage.description, 'issueMessageEditor')"
                   />
                 </q-card-section>
                 <q-card-actions
@@ -510,31 +511,30 @@ export default {
       /** generate username snippet for mentioned username **/
       return `&nbsp;<p class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</p>&nbsp; `
     },
-    async replaceMessageMentioning () {
+    async renderEditorMentioning (data, refsKey) {
       /** Replace @username to snippet with firstName-lastName non-editable block **/
 
       /** Firstly we have to check - do we have mentioning somewhere in the text **/
-      const participant = this.checkMentioning(this.formNewMessage.description)
-      if (!participant) return false
+      const person = this.checkMentioning(data)
+      if (!person) return false
 
-      const editor = this.$refs.issueMessageEditor
+      const editor = this.$refs[refsKey]
       const selection = editor.caret.selection
 
       /** Getting initial position of caret **/
-      const currentCaretPosition = selection.focusOffset
+      const currentPos = selection.focusOffset
       const currentNode = selection.focusNode
 
       /** Set selection for typed username and delete it from the document **/
-      this._setSelection(currentNode, currentCaretPosition - (participant.textLength + 1), currentCaretPosition)
+      this._setSelection(currentNode, currentPos - (person.textLength + 1), currentPos)
       editor.caret.selection.deleteFromDocument()
 
       /** Set caret to initial position that was before username deletion **/
-      this._setCaret(currentNode, currentCaretPosition)
+      this._setCaret(currentNode, currentPos)
 
       /** We generate placeholder and insert it in editor **/
-      const placeholder = this.generateMentionedChip(participant)
+      const placeholder = this.generateMentionedChip(person)
       this.$nextTick(editor.runCmd('insertHTML', placeholder, true))
-
       this.$nextTick(editor.focus)
     },
     _setSelection ($node, from, to) {
