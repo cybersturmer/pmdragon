@@ -123,7 +123,7 @@ BLEACH_ALLOWED_TAGS = [
 
 BLEACH_ALLOWED_ATTRIBUTES = {
     'a': ['href', 'rel'],
-    'p': ['title','data-mentioned-id', 'class', 'contenteditable'],
+    'p': ['title', 'data-mentioned-user-id', 'class', 'contenteditable'],
     '*': []
 }
 
