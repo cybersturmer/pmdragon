@@ -4,6 +4,7 @@ from smtplib import SMTPException
 
 from celery import shared_task
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from libs.email.compose import EmailComposer
 from ..models import PersonRegistrationRequest, \
@@ -21,11 +22,17 @@ def send_registration_email(request_pk=None):
     request = PersonRegistrationRequest.objects.get(pk=request_pk)
 
     try:
-        EmailComposer().verify_registration(
-            key=request.key,
-            prefix_url=request.prefix_url,
-            expired_at=request.expired_at,
-            email=request.email
+        context = {
+            'action_link': f'{settings.HOST_BY_DEFAULT}/verify/registration/{request.key}',
+            'workspace': request.prefix_url,
+            'expired_at': request.expired_at
+        }
+
+        EmailComposer().process(
+            subject='PmDragon registration verification email',
+            email=request.email,
+            template='email/verification/registration.html',
+            context=context
         )
     except SMTPException:
         request.is_email_sent = False
@@ -48,19 +55,33 @@ def send_invitation_email(request_pk=None):
 
         if user_with_email.exists():
             person = user_with_email.get().person
-            EmailComposer().verify_collaboration(
-                key=request.key,
-                prefix_url=request.workspace.prefix_url,
-                expired_at=request.expired_at,
-                person=person
+            context = {
+                'action_link': f'{settings.HOST_BY_DEFAULT}/verify/collaboration/{request.key}',
+                'workspace': request.prefix_url,
+                'person': person,
+                'expired_at': request.expired_at
+            }
+
+            EmailComposer().process(
+                subject='PmDragon join workspace verification',
+                email=request.email,
+                template='email/verification/collaboration.html',
+                context=context
             )
         else:
-            EmailComposer().verify_invitation(
-                key=request.key,
-                prefix_url=request.workspace.prefix_url,
-                expired_at=request.expired_at,
-                email=request.email
+            context = {
+                'action_link': f'{settings.HOST_BY_DEFAULT}/verify/invitation/{request.key}',
+                'workspace': request.prefix_url,
+                'expired_at': request.expired_at
+            }
+
+            EmailComposer().process(
+                subject='PmDragon invitation to workspace',
+                email=request.email,
+                template='email/verification/invitation.html',
+                context=context
             )
+
     except SMTPException:
         request.is_email_sent = False
         request.save()
@@ -75,16 +96,22 @@ def send_invitation_email(request_pk=None):
 @shared_task
 def send_mentioned_in_message_email(message_pk=None):
     message = IssueMessage.objects.get(pk=message_pk)
-
-    mentioned_by_person = message.created_by
     mentioned_persons = get_mentioned_user_ids(message.description)
 
     try:
         for person_id in mentioned_persons:
             person = Person.objects.get(pk=int(person_id))
-            EmailComposer().mentioning_in_issue_message(
-                mentioned_by=mentioned_by_person,
-                email=person.email
+            context = {
+                'issue_title': message.issue.title,
+                'mentioned_by': message.created_by,
+                'issue_message': message.description
+            }
+
+            EmailComposer().process(
+                subject='PmDragon mentioned in issue message',
+                email=person.email,
+                template='email/messaging/mentioning.html',
+                context=context
             )
 
     except SMTPException:
@@ -101,8 +128,16 @@ def send_mentioned_in_description_email(issue_pk=None):
     try:
         for person_id in mentioned_persons:
             person = Person.objects.get(pk=int(person_id))
-            EmailComposer().mentioning_in_issue_description(
-                email=person.email
+            context = {
+                'issue_title': issue.title,
+                'issue_description': issue.description
+            }
+
+            EmailComposer().process(
+                subject='PmDragon mentioned in issue description',
+                email=person.email,
+                template='email/issue/mentioning.html',
+                context=context
             )
     except SMTPException:
         pass

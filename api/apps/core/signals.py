@@ -214,8 +214,11 @@ def signal_mentioned_in_message_emails(instance: IssueMessage, created: bool, **
 
 
 @receiver(post_save, sender=Issue)
-def signal_mentioned_in_description_emails(instance: Issue, **kwargs):
+def signal_mentioned_in_description_emails(instance: Issue, created: bool, **kwargs):
     """
     Send an email if someone was mentioned in issue description
     """
+    if not created:
+        return False
+
     send_mentioned_in_description_email.delay(instance.pk)
