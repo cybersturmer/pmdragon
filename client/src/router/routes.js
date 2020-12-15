@@ -80,6 +80,14 @@ const routes = [
         component: () => import('pages/dash/Workspaces.vue')
       },
       {
+        name: 'projects',
+        path: 'projects',
+        meta: {
+          title: 'Create Project' + PMDRAGON_STRING
+        },
+        component: () => import('pages/dash/Projects.vue')
+      },
+      {
         name: 'settings',
         path: 'settings',
         meta: {
