@@ -509,7 +509,7 @@ export default {
     },
     generateMentionedChip (participant) {
       /** generate username snippet for mentioned username **/
-      return `&nbsp;<p class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</p>&nbsp; `
+      return `&nbsp;<span class="editor_token" title="${participant.fullName}" data-mentioned-user-id="${participant.userId}" contenteditable="false">${participant.username}</span>&nbsp; `
     },
     async renderEditorMentioning (data, refsKey) {
       /** Replace @username to snippet with firstName-lastName non-editable block **/
