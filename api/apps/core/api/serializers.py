@@ -497,7 +497,7 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
         person = self.context['person']
 
         workspace = Workspace(
-            prefix_url=prefix_url,
+            prefix_url=prefix_url.upper(),
             created_by=person
         )
 
@@ -569,6 +569,30 @@ class ProjectSerializer(WorkspaceModelSerializer):
             'title',
             'key'
         )
+
+    def create(self, validated_data):
+        workspace = validated_data.get('workspace')
+        title = validated_data.get('title')
+        key = validated_data.get('key')
+
+        project = Project(
+            workspace=workspace,
+            title=title.upper(),
+            key=key.upper()
+        )
+
+        try:
+            project.save()
+        except IntegrityError:
+            raise serializers.ValidationError({
+                'detail': _('Project name and key should be unique.')
+            })
+
+        return project
+
+    def update(self, instance, validated_data):
+        # @todo add update customization for update.
+        super().update(instance, validated_data)
 
 
 class IssueTypeIconSerializer(serializers.ModelSerializer):
