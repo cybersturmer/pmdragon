@@ -9,6 +9,22 @@
         :filter="workspacesTable.filter"
         :filter-method="filterByString"
       >
+        <template #top-left>
+          <q-btn-group outline>
+            <q-btn
+              outline
+              size="sm"
+              label="Create Workspace"
+              @click="createWorkspaceDialog"
+            />
+            <q-btn
+              outline
+              size="sm"
+              label="Create Project"
+              @click="createProjectDialog"
+            />
+          </q-btn-group>
+        </template>
         <template #top-right>
           <q-input dark dense debounce="300" v-model="workspacesTable.filter" placeholder="Search">
             <template #append>
@@ -47,6 +63,8 @@
 
 <script>
 import SmallParticipantChipElement from 'components/elements/SmallParticipantChipElement.vue'
+import WorkspaceCreateDialog from 'components/dialogs/WorkspaceCreateDialog.vue'
+import ProjectCreateDialog from 'components/dialogs/ProjectCreateDialog.vue'
 
 export default {
   name: 'WorkspacesView',
@@ -65,6 +83,22 @@ export default {
     }
   },
   methods: {
+    createWorkspaceDialog () {
+      this.$q.dialog({
+        parent: this,
+        dark: true,
+        title: 'Create Workspace',
+        component: WorkspaceCreateDialog
+      })
+    },
+    createProjectDialog () {
+      this.$q.dialog({
+        parent: this,
+        dark: true,
+        title: 'Create Project',
+        component: ProjectCreateDialog
+      })
+    },
     selectSpace (prefixUrl, projectId) {
       this.$store.dispatch('current/SELECT_WORKSPACE', prefixUrl)
       this.$store.dispatch('current/SELECT_PROJECT', projectId)
@@ -78,6 +112,12 @@ export default {
           workspace.prefix_url.match(regex) ||
           workspace.projects.find(project => project.title.match(regex))
         )
+    },
+    async createWorkspace () {
+
+    },
+    async createProject () {
+
     }
   },
   computed: {
