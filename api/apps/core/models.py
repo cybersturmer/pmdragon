@@ -139,6 +139,11 @@ class Workspace(models.Model):
                                           related_name='workspaces',
                                           blank=True)
 
+    created_by = models.ForeignKey(Person,
+                                   verbose_name=_('Owner'),
+                                   null=True,
+                                   on_delete=models.SET_NULL)
+
     created_at = models.DateTimeField(verbose_name=_('Created at'),
                                       auto_now_add=True)
 

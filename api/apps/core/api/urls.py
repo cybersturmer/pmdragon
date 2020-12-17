@@ -6,6 +6,7 @@ from . import views
 app_name = 'core_api'
 
 router = routers.SimpleRouter()
+router.register('workspaces', views.WorkspaceViewSet, basename='workspaces')
 router.register('projects', views.ProjectViewSet, basename='projects')
 router.register('persons', views.CollaboratorsViewSet, basename='collaborators')
 router.register('issues', views.IssueViewSet, basename='issues')

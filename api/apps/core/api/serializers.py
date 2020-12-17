@@ -478,6 +478,43 @@ class PersonSerializer(serializers.ModelSerializer):
         }
 
 
+class WorkspaceWritableSerializer(serializers.ModelSerializer):
+    """
+    For creating / editing / removing workspaces
+    """
+
+    class Meta:
+        model = Workspace
+        fields = (
+            'id',
+            'prefix_url',
+            'participants'
+        )
+
+    def create(self, validated_data):
+        prefix_url = validated_data.get('prefix_url')
+        participants = validated_data.get('participants')
+        person = self.context['person']
+
+        workspace = Workspace(
+            prefix_url=prefix_url,
+            created_by=person,
+            participants=participants
+        )
+
+        try:
+            workspace.save()
+        except IntegrityError:
+            raise serializers.ValidationError({
+                'detail': _('Workspace with given prefix url was already registered.')
+            })
+
+        workspace.participants.add(person)
+        workspace.save()
+
+        return workspace
+
+
 class WorkspaceSerializer(serializers.ModelSerializer):
     """
     For getting information about all persons participated in workspace.

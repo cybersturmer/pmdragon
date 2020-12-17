@@ -172,6 +172,23 @@ class CollaboratorsViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset.filter(id__in=collaborators_set).all()
 
 
+class WorkspaceViewSet(viewsets.ModelViewSet):
+    """
+    Writable endpoint for workspaces
+    Of course we need to add information about current person
+    to created_by and participant
+    """
+    permission_classes = (IsAuthenticated, IsCreatorOrReadOnly)
+    serializer_class = WorkspaceWritableSerializer
+    queryset = Workspace.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return WorkspaceSerializer
+        else:
+            return WorkspaceWritableSerializer
+
+
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """
     Get all workspaces current Person participate in
@@ -388,9 +405,6 @@ class IssueListUpdateApiView(UpdateAPIView):
     schema = IssueListUpdateSchema()
     serializer_class = IssueChildOrderingSerializer
     http_method_names = ['put', 'options', 'head']
-
-    def get_serializer(self, *args, **kwargs):
-        return super(IssueListUpdateApiView, self).get_serializer(*args, **kwargs)
 
     def get_queryset(self, ids=None):
         queryset = Issue.objects.filter(workspace__participants__in=[self.request.user.person])

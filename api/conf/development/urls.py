@@ -65,10 +65,6 @@ urlpatterns = [
          PersonInvitationRequestRetrieveUpdateView.as_view(),
          name='person-invitations-requests-retrieve-update'),
 
-    path('api/auth/workspaces/',
-         WorkspaceReadOnlyViewSet.as_view({'get': 'list'}),
-         name='workspaces'),
-
     path('api/auth/me/',
          UserUpdateView.as_view(),
          name='me'),
