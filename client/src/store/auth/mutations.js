@@ -93,6 +93,11 @@ export function INIT_PERSONS (state, payload) {
   LocalStorage.set('auth.persons', payload)
 }
 
+export function ADD_WORKSPACE (state, payload) {
+  state.workspaces.push(payload)
+  LocalStorage.set('auth.workspaces', payload)
+}
+
 export function ADD_PROJECT (state, payload) {
   const workspace = state.workspaces
     .find(workspace => workspace.id === payload.workspace)

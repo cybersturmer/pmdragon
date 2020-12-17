@@ -21,7 +21,7 @@ export async function LOGOUT ({ dispatch }) {
 
 export async function INIT_WORKSPACES ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get('/auth/workspaces/')
+    const response = await new Api({ auth: true }).get('/core/workspaces/')
     HandleResponse.compare(200, response.status)
     commit('INIT_WORKSPACES', response.data)
   } catch (e) {
@@ -38,6 +38,20 @@ export async function INIT_PERSONS ({ commit }) {
     const response = await new Api({ auth: true }).get('core/persons/')
     HandleResponse.compare(200, response.status)
     commit('INIT_PERSONS', response.data)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
+export async function ADD_WORKSPACE ({ commit }, payload) {
+  try {
+    const response = await new Api({ auth: true }).post(
+      '/core/workspaces/',
+      payload
+    )
+
+    HandleResponse.compare(201, response.status)
+    commit('ADD_WORKSPACE', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
   }
