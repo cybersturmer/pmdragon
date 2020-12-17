@@ -510,9 +510,10 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
 
         """
         Iteration for the list of participants ids """
-        for person_id in participants:
-            _person = Person.objects.get(pk=person_id)
-            workspace.participants.add(_person)
+        if participants:
+            for person_id in participants:
+                _person = Person.objects.get(pk=person_id)
+                workspace.participants.add(_person)
 
         workspace.participants.add(person)
         workspace.save()
