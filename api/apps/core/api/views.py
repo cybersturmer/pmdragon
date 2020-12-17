@@ -188,6 +188,17 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
         else:
             return WorkspaceWritableSerializer
 
+    def get_serializer_context(self):
+        """
+        Put to serializer context information about current person
+        """
+        context = super().get_serializer_context()
+        context.update({
+            'person': self.request.user.person
+        })
+
+        return context
+
 
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """

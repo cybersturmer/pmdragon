@@ -498,8 +498,7 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
 
         workspace = Workspace(
             prefix_url=prefix_url,
-            created_by=person,
-            participants=participants
+            created_by=person
         )
 
         try:
@@ -508,6 +507,12 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'detail': _('Workspace with given prefix url was already registered.')
             })
+
+        """
+        Iteration for the list of participants ids """
+        for person_id in participants:
+            _person = Person.objects.get(pk=person_id)
+            workspace.participants.add(_person)
 
         workspace.participants.add(person)
         workspace.save()
