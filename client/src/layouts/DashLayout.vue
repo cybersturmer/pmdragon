@@ -186,6 +186,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .q-toolbar__title {
+    font-size: 18px;
+  }
   .q-toolbar__title:first-child {
     padding-left: 1em;
   }
