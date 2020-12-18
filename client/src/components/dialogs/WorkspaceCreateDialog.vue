@@ -6,6 +6,8 @@
           dark
           @input="inputPrefixUrl($event)"
           :value="formData.prefix_url"
+          :rules="[workspacePrefixUrlLength]"
+          maxlength="20"
           label="Prefix Url"
           label-color="amber"
           :error="isValid('formErrors', 'prefix_url')"
@@ -49,13 +51,17 @@ export default {
       this.$refs.dialog.hide()
     },
 
+    workspacePrefixUrlLength ($value) {
+      return ($value.length > 3 && $value.length <= 20) || 'From 3 to 20 letters and numbers are allowed'
+    },
+
     onDialogHide () {
       this.$emit('hide')
     },
 
     inputPrefixUrl ($event) {
       this.dropErrors()
-      this.formData.prefix_url = $event
+      this.formData.prefix_url = $event.toUpperCase()
     },
 
     dropErrors () {
@@ -64,8 +70,8 @@ export default {
 
     async onOKClick () {
       try {
-        await this.$store.dispatch('auth/ADD_WORKSPACE', this.formData)
-        this.$emit('ok', this.formData)
+        const response = await this.$store.dispatch('auth/ADD_WORKSPACE', this.formData)
+        this.$emit('ok', response.data)
         this.hide()
       } catch (e) {
         e.setErrors(this.formErrors)

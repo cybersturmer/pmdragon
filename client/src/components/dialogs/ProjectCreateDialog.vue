@@ -47,10 +47,16 @@ import { Dialogs } from 'pages/mixins/dialogs'
 export default {
   name: 'ProjectCreateDialog',
   mixins: [fieldValidationMixin, Dialogs],
+  props: {
+    defaultWorkspace: {
+      type: Number,
+      required: false
+    }
+  },
   data () {
     return {
       formData: {
-        workspace: this.$store.getters['auth/WORKSPACE_FIRST_ID'],
+        workspace: this.defaultWorkspace || this.$store.getters['auth/WORKSPACE_FIRST_ID'],
         title: '',
         key: ''
       },
