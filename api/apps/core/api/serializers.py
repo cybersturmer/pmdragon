@@ -493,8 +493,8 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         prefix_url = validated_data.get('prefix_url')
-        participants = validated_data.get('participants')
-        person = self.context['person']
+        participants = validated_data.get('participants', None)
+        person = self.context.get('person')
 
         workspace = Workspace(
             prefix_url=prefix_url.upper(),
