@@ -15,8 +15,8 @@ import re
 from libs.cryptography import hashing
 from libs.helpers.datetimepresets import day_later
 
-url_validator = RegexValidator(r'^[a-z]{3,20}$',
-                               _('From 3 to 20 english lowercase letters are allowed'))
+url_validator = RegexValidator(r'^[a-zA-Z0-9]{3,20}$',
+                               _('From 3 to 20 letters and numbers are allowed'))
 
 
 class UploadPersonsDirections(Enum):
@@ -129,7 +129,7 @@ class Workspace(models.Model):
     prefix_url = models.CharField(verbose_name=_('Prefix URL'),
                                   db_index=True,
                                   unique=True,
-                                  help_text=_('String should contain from 3 to 20 small english letters '
+                                  help_text=_('String should contain from 3 to 20 letters and numbers '
                                               'without special chars'),
                                   validators=[url_validator],
                                   max_length=20)

@@ -569,6 +569,9 @@ class ProjectSerializer(WorkspaceModelSerializer):
             'title',
             'key'
         )
+        extra_kwargs = {
+            'workspace': {'read_only': True}
+        }
 
     def create(self, validated_data):
         workspace = validated_data.get('workspace')
@@ -591,8 +594,22 @@ class ProjectSerializer(WorkspaceModelSerializer):
         return project
 
     def update(self, instance, validated_data):
-        # @todo add update customization for update.
-        super().update(instance, validated_data)
+        """
+        We need just upper title and key
+        Workspace cannot be changed through API so we not allow it and ignore any given workspace
+        """
+        title: str = validated_data.get('title')
+        key: str = validated_data.get('key')
+
+        if title:
+            instance.title = title.upper()
+
+        if key:
+            instance.key = key.upper()
+
+        instance.save()
+
+        return instance
 
 
 class IssueTypeIconSerializer(serializers.ModelSerializer):

@@ -199,6 +199,11 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
 
         return context
 
+    def create(self, request, *args, **kwargs):
+        workspace_data = request.data
+        serializer = WorkspaceWritableSerializer(workspace_data)
+        return Response(serializer.data)
+
 
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     """
