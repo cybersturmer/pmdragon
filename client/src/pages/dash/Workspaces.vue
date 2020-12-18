@@ -33,7 +33,7 @@
           </q-input>
         </template>
         <template #item="props">
-          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-6">
             <q-card dark bordered style="min-width: 350px">
               <q-card-section class="text-center">
                 <div class="text-h6 text-uppercase">{{ props.row.prefix_url }}</div>
@@ -90,14 +90,20 @@ export default {
         title: 'Create Workspace',
         component: WorkspaceCreateDialog
       })
+        .onOk((data) => {
+          this.createProjectDialog(data.id)
+        })
     },
-    createProjectDialog () {
-      this.$q.dialog({
+    createProjectDialog (defaultWorkspace = null) {
+      const options = {
         parent: this,
         dark: true,
         title: 'Create Project',
         component: ProjectCreateDialog
-      })
+      }
+
+      if (defaultWorkspace) { options.defaultWorkspace = defaultWorkspace }
+      this.$q.dialog(options)
     },
     selectSpace (prefixUrl, projectId) {
       this.$store.dispatch('current/SELECT_WORKSPACE', prefixUrl)
