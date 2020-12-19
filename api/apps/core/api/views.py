@@ -201,16 +201,23 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         workspace_data = request.data
-        serializer = WorkspaceWritableSerializer(data=workspace_data, context={'person': self.request.user.person})
+        serializer = WorkspaceDetailedSerializer(
+            data=workspace_data,
+            context={'person': self.request.user.person}
+        )
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         else:
-            return Response(data=serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                data=serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        return Response(data=serializer.data,
-                        status=status.HTTP_201_CREATED)
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
 
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
