@@ -52,7 +52,7 @@ export default {
     },
 
     workspacePrefixUrlLength ($value) {
-      return ($value.length > 3 && $value.length <= 20) || 'From 3 to 20 letters and numbers are allowed'
+      return ($value.length >= 3 && $value.length <= 20) || 'From 3 to 20 letters and numbers are allowed'
     },
 
     onDialogHide () {
@@ -70,8 +70,8 @@ export default {
 
     async onOKClick () {
       try {
-        const response = await this.$store.dispatch('auth/ADD_WORKSPACE', this.formData)
-        this.$emit('ok', response.data)
+        const payload = await this.$store.dispatch('auth/ADD_WORKSPACE', this.formData)
+        this.$emit('ok', payload)
         this.hide()
       } catch (e) {
         e.setErrors(this.formErrors)

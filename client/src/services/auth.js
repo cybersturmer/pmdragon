@@ -4,7 +4,6 @@ import $store from 'src/store'
 import $router from 'src/router'
 import { HandleResponse } from 'src/services/util'
 
-// Inspired by https://github.com/zmts/beauty-vuejs-boilerplate/blob/master/src/services/auth.service.js
 export class AuthService {
   static async login (credentials) {
     /**
@@ -17,10 +16,13 @@ export class AuthService {
       url,
       credentials
     )
+
     HandleResponse.compare(200, response.status)
 
-    const tokens = response.data.tokens
-    _setAuthData(tokens.access, tokens.refresh)
+    _setAuthData(
+      response.data.access,
+      response.data.refresh
+    )
 
     return response
   }
@@ -37,9 +39,10 @@ export class AuthService {
 
       HandleResponse.compare(200, response.status)
 
-      const tokens = response.data
-
-      _setAuthData(tokens.access, tokens.refresh)
+      _setAuthData(
+        response.data.access,
+        response.data.refresh
+      )
 
       return response
     } catch (e) {

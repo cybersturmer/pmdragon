@@ -84,12 +84,14 @@ export default {
   },
   methods: {
     createWorkspaceDialog () {
-      this.$q.dialog({
+      const options = {
         parent: this,
         dark: true,
         title: 'Create Workspace',
         component: WorkspaceCreateDialog
-      })
+      }
+
+      this.$q.dialog(options)
         .onOk((data) => {
           this.createProjectDialog(data.id)
         })
@@ -118,12 +120,6 @@ export default {
           workspace.prefix_url.match(regex) ||
           workspace.projects.find(project => project.title.match(regex))
         )
-    },
-    async createWorkspace () {
-
-    },
-    async createProject () {
-
     }
   },
   computed: {

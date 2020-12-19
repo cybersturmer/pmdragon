@@ -33,7 +33,7 @@
           dark
           outline
           label="Create"
-          @click="createProject"
+          @click="onOKClick"
         />
       </q-card-actions>
     </q-card>
@@ -75,19 +75,6 @@ export default {
       return this.$store.getters['auth/WORKSPACES']
         .find(workspace => workspace.id === id)
     },
-    async createProject () {
-      const payload = {
-        workspace: this.formData.workspace,
-        title: this.formData.title,
-        key: this.formData.key
-      }
-
-      try {
-        await this.$store.dispatch('auth/ADD_PROJECT', payload)
-      } catch (e) {
-        await this.$router.push({ name: 'workspaces' })
-      }
-    },
     show () {
       this.$refs.dialog.show()
     },
@@ -110,9 +97,15 @@ export default {
     },
 
     async onOKClick () {
+      const payload = {
+        workspace: this.formData.workspace,
+        title: this.formData.title,
+        key: this.formData.key
+      }
+
       try {
-        await this.$store.dispatch('auth/ADD_WORKSPACE', this.formData)
-        this.$emit('ok', this.formData)
+        const emitPayload = await this.$store.dispatch('auth/ADD_PROJECT', payload)
+        this.$emit('ok', emitPayload)
         this.hide()
       } catch (e) {
         e.setErrors(this.formErrors)

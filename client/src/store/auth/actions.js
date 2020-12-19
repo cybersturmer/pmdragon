@@ -52,6 +52,8 @@ export async function ADD_WORKSPACE ({ commit }, payload) {
 
     HandleResponse.compare(201, response.status)
     commit('ADD_WORKSPACE', response.data)
+
+    return response.data
   } catch (e) {
     throw new ErrorHandler(e)
   }

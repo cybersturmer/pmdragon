@@ -69,7 +69,11 @@ export default {
   },
   computed: {
     participants () {
-      return this.$store.getters['auth/WORKSPACE_DATA'].participants
+      try {
+        return this.$store.getters['auth/WORKSPACE_DATA'].participants
+      } catch (e) {
+        return []
+      }
     }
   }
 }
