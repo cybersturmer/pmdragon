@@ -209,7 +209,8 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
             return Response(data=serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data)
+        return Response(data=serializer.data,
+                        status=status.HTTP_201_CREATED)
 
 
 class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
