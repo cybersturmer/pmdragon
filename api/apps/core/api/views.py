@@ -184,7 +184,7 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return WorkspaceSerializer
+            return WorkspaceDetailedSerializer
         else:
             return WorkspaceWritableSerializer
 
@@ -219,7 +219,7 @@ class WorkspaceReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     We need it on frontend to understand list of workspaces to switch between
     """
     permission_classes = (IsAuthenticated,)
-    serializer_class = WorkspaceSerializer
+    serializer_class = WorkspaceDetailedSerializer
     queryset = Workspace.objects.all()
 
     def get_queryset(self):

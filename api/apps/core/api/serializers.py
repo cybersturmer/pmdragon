@@ -521,7 +521,7 @@ class WorkspaceWritableSerializer(serializers.ModelSerializer):
         return workspace
 
 
-class WorkspaceSerializer(serializers.ModelSerializer):
+class WorkspaceDetailedSerializer(serializers.ModelSerializer):
     """
     For getting information about all persons participated in workspace.
     We can get information just from the spaces we belong.
