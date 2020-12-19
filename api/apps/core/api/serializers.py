@@ -569,9 +569,6 @@ class ProjectSerializer(WorkspaceModelSerializer):
             'title',
             'key'
         )
-        extra_kwargs = {
-            'workspace': {'read_only': True}
-        }
 
     def create(self, validated_data):
         workspace = validated_data.get('workspace')
