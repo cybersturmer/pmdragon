@@ -106,6 +106,9 @@ export default {
 
       if (defaultWorkspace) { options.defaultWorkspace = defaultWorkspace }
       this.$q.dialog(options)
+        .onOk(() => {
+          this.$router.push({ name: 'loading' })
+        })
     },
     selectSpace (prefixUrl, projectId) {
       this.$store.dispatch('current/SELECT_WORKSPACE', prefixUrl)
