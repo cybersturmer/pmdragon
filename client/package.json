@@ -24,6 +24,7 @@
   "dependencies": {
     "@quasar/extras": "^1.9.10",
     "axios": "^0.19.2",
+    "axios-auth-refresh": "^3.0.0",
     "core-js": "^3.8.1",
     "quasar": "^1.14.7",
     "vue-i18n": "^8.22.2",

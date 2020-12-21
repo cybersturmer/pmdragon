@@ -44,7 +44,7 @@ export class AuthService {
         response.data.refresh
       )
 
-      return response
+      return Promise.resolve(response)
     } catch (e) {
       console.log(e)
       $router.push({ name: 'login' })

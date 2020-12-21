@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { DEBUG, PROD_ENV, DEBUG_ENV } from 'src/.env'
 import { AuthService } from 'src/services/auth'
+import $store from 'src/store'
 import $router from 'src/router'
+import createAuthRefreshInterceptor from 'axios-auth-refresh'
 
 export class Api {
   constructor (options) {
@@ -14,52 +16,32 @@ export class Api {
     return this.init()
   }
 
-  getJwtToken () {
-    return AuthService.getBearer()
-  }
-
   init () {
     if (this.isAuth) {
+      if (AuthService.isRefreshTokenExpired()) {
+        $router.push({ name: 'login' })
+      }
+
       this.instance.interceptors.request.use(
         (request) => {
-          request.headers.authorization = AuthService.getBearer()
-
-          if (!AuthService.authNeedUpdate()) return request
-
-          return AuthService.refresh()
-            .then(() => {
-              request.headers.authorization = AuthService.getBearer()
-              return request
-            })
-            .catch(error => Promise.reject(error))
-        },
-        (error) => {
-          if (error.response.status !== 401) return Promise.reject(error)
-
-          /** We dont have valid refresh token, so force user to login page **/
-          if (!AuthService.isRefreshToken()) $router.push({ name: 'login' })
-
-          AuthService.refresh()
-            .then(() => {
-              error.headers.authorization = AuthService.getBearer()
-              return error
-            })
+          request.headers.Authorization = AuthService.getBearer()
+          return request
         })
 
-      this.instance.interceptors.response.use(function (response) {
-        return response
-      }, function (error) {
-        if (error.response && error.response.status === 401) {
-          const config = error.response.config
+      const refreshAuthLogic = failedRequest =>
+        AuthService.refresh()
+          .then(
+            tokens => {
+              $store.commit('auth/SET_ACCESS_TOKEN', tokens.data.access)
+              $store.commit('auth/SET_REFRESH_TOKEN', tokens.data.refresh)
+              failedRequest.response.config.headers.Authorization =
+                AuthService.getBearer()
 
-          AuthService.refresh()
-            .then(() => {
-              config.headers.authorization = AuthService.getBearer()
-              return axios(config)
-            })
-        }
-        return Promise.reject(error)
-      })
+              return Promise.resolve()
+            }
+          )
+
+      createAuthRefreshInterceptor(this.instance, refreshAuthLogic)
     }
 
     return this.instance
