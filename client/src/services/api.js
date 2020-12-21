@@ -8,10 +8,12 @@ import createAuthRefreshInterceptor from 'axios-auth-refresh'
 export class Api {
   constructor (options) {
     this.isAuth = options && options.auth ? options.auth : false
-    this.baseURL = DEBUG ? DEBUG_ENV.url : PROD_ENV.url
-    this.instance = axios.create({
-      baseURL: this.baseURL
-    })
+    const axiosOptions = {
+      baseURL: DEBUG ? DEBUG_ENV.url : PROD_ENV.url,
+      withCredentials: false
+    }
+
+    this.instance = axios.create(axiosOptions)
 
     return this.init()
   }

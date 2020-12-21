@@ -46,9 +46,7 @@ export class AuthService {
 
       return Promise.resolve(response)
     } catch (e) {
-      console.log(e)
       $router.push({ name: 'login' })
-        .catch(() => {})
     }
   }
 
