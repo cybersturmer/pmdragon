@@ -247,7 +247,7 @@
 import { DATETIME_MASK } from 'src/services/masks'
 import { Dialogs } from 'pages/mixins/dialogs'
 import { date } from 'quasar'
-import { ErrorHandler, HandleResponse, unWatch } from 'src/services/util'
+import { ErrorHandler, unWatch } from 'src/services/util'
 import { Api } from 'src/services/api'
 import EditorSaveButton from 'components/buttons/EditorSaveButton.vue'
 import EditorCancelButton from 'components/buttons/EditorCancelButton.vue'
@@ -340,11 +340,13 @@ export default {
     async getMessages () {
       /** get messages for current issue without paging
        * Now its not a problem, will think later **/
-      const response = await new Api({ auth: true }).get(
+      const response = await new Api({
+        auth: true,
+        expectedStatus: 200
+      })
+        .get(
         `/core/issue-messages/?issue=${this.formData.issue.id}`
-      )
-
-      HandleResponse.compare(200, response.status)
+        )
 
       this.messages = response.data
     },
@@ -449,12 +451,15 @@ export default {
     async _createMessage () {
       /** We use it for adding one more message **/
       const payload = this.formNewMessage
-      const response = await new Api({ auth: true }).post(
-        '/core/issue-messages/',
-        payload
-      )
+      const response = await new Api({
+        auth: true,
+        expectedStatus: 201
+      })
+        .post(
+          '/core/issue-messages/',
+          payload
+        )
 
-      HandleResponse.compare(201, response.status)
       this.messages.push(response.data)
     },
     async _updateMessage () {
@@ -463,12 +468,15 @@ export default {
         description: this.formNewMessage.description
       }
 
-      const response = await new Api({ auth: true }).patch(
+      const response = await new Api({
+        auth: true,
+        expectedStatus: 200
+      })
+        .patch(
         `/core/issue-messages/${this.editingMessageId}/`,
         payload
-      )
+        )
 
-      HandleResponse.compare(200, response.status)
       const oldMessage = this.messages
         .find(message => message.id === this.editingMessageId)
 
@@ -573,11 +581,14 @@ export default {
       this.$nextTick(this.$refs.issueMessageEditor.focus)
     },
     async removeMessage (id) {
-      const response = await new Api({ auth: true }).delete(
+      await new Api({
+        auth: true,
+        expectedStatus: 204
+      })
+        .delete(
         `/core/issue-messages/${id}/`
-      )
+        )
 
-      HandleResponse.compare(204, response.status)
       this.messages = this.messages.filter((value) => {
         return value.id !== id
       })

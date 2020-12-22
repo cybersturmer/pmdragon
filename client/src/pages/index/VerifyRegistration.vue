@@ -47,7 +47,7 @@
 
 <script>
 import { Api } from 'src/services/api'
-import { ErrorHandler, HandleResponse } from 'src/services/util'
+import { ErrorHandler } from 'src/services/util'
 import PasswordField from 'components/fields/PasswordField'
 import { Dialogs } from 'pages/mixins/dialogs'
 import { fieldValidationMixin } from 'pages/mixins/field_validation'
@@ -80,9 +80,10 @@ export default {
   },
   async mounted () {
     try {
-      const response = await new Api().get(`/auth/person-registration-requests/${this.key}/`)
-
-      HandleResponse.compare(200, response.status)
+      const response = await new Api({
+        expectedStatus: 200
+      })
+        .get(`/auth/person-registration-requests/${this.key}/`)
 
       this.infoData.prefix_url = response.data.prefix_url
       this.infoData.email = response.data.email
@@ -95,10 +96,10 @@ export default {
   methods: {
     async completeRegistration () {
       try {
-        const response = await new Api()
+        await new Api({
+          expectedStatus: 201
+        })
           .post('/auth/persons/', this.formData)
-
-        HandleResponse.compare(201, response.status)
 
         this.showConfirmDialog(
           'You are registered successfully',

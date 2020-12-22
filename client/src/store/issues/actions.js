@@ -1,4 +1,4 @@
-import { ErrorHandler, HandleResponse } from 'src/services/util'
+import { ErrorHandler } from 'src/services/util'
 import { Api } from 'src/services/api'
 
 export async function INIT_BACKLOGS ({ rootGetters, commit }) {
@@ -75,7 +75,6 @@ export async function INIT_ISSUE_STATES ({ commit }) {
         '/core/issue-states/'
       )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_STATES', response.data)
   } catch (e) {
     throw new ErrorHandler(e)

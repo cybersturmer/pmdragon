@@ -60,14 +60,6 @@ export class ErrorHandler extends Error {
   }
 }
 
-export class HandleResponse {
-  static compare (codeExpectation = 200, codeReality) {
-    if (codeExpectation !== codeReality) {
-      throw new ErrorHandler(Error('Expectation code mismatch'), _getStatusMessage(codeReality))
-    }
-  }
-}
-
 export function unWatch (value) {
   return JSON.parse(JSON.stringify(value))
 }

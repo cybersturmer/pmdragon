@@ -32,7 +32,7 @@
 
 <script>
 import { Api } from 'src/services/api'
-import { ErrorHandler, HandleResponse } from 'src/services/util'
+import { ErrorHandler } from 'src/services/util'
 import PasswordField from 'components/fields/PasswordField'
 import { Dialogs } from 'pages/mixins/dialogs'
 
@@ -62,8 +62,10 @@ export default {
     }
   },
   async mounted () {
-    const response = await new Api().get(`/auth/person-invitation-requests/${this.key}/`)
-    HandleResponse.compare(200, response.status)
+    const response = await new Api({
+      expectedStatus: 200
+    })
+      .get(`/auth/person-invitation-requests/${this.key}/`)
 
     this.infoData.prefix_url = response.data.workspace.prefix_url
     this.infoData.email = response.data.email
@@ -75,17 +77,19 @@ export default {
        * to workspace where we were invited. **/
 
       try {
-        const response = await new Api()
+        await new Api({
+          expectedStatus: 201
+        })
           .post('/auth/persons/', this.formData)
-
-        HandleResponse.compare(201, response.status)
 
         const payload = {
           is_accepted: true
         }
 
-        await new Api().put(`/auth/person-invitation-requests/${this.key}/`, payload)
-        HandleResponse.compare(200, response.status)
+        await new Api({
+          expectedStatus: 200
+        })
+          .put(`/auth/person-invitation-requests/${this.key}/`, payload)
 
         await this.$router.push({ name: 'login' })
       } catch (e) {
