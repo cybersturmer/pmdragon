@@ -229,9 +229,8 @@ export function UNBIND_ISSUE_FROM_BACKLOG (state, payload) {
 }
 
 export function UNBIND_ISSUE_FROM_SPRINT (state, payload) {
-  const indexes = state.sprints
+  state.sprints
     .filter((sprint) => payload.id in sprint.issues)
-  console.log(indexes, 'INDEXES')
 }
 
 export function RESET (state) {

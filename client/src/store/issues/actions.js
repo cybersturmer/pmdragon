@@ -3,11 +3,14 @@ import { Api } from 'src/services/api'
 
 export async function INIT_BACKLOGS ({ rootGetters, commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/backlogs/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/backlogs/'
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('INIT_BACKLOGS', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -16,11 +19,14 @@ export async function INIT_BACKLOGS ({ rootGetters, commit }) {
 
 export async function INIT_SPRINTS ({ rootGetters, commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/sprints/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/sprints/'
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('INIT_SPRINTS', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -29,11 +35,14 @@ export async function INIT_SPRINTS ({ rootGetters, commit }) {
 
 export async function INIT_ISSUES ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/issues/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/issues/'
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('INIT_ISSUES', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -42,11 +51,14 @@ export async function INIT_ISSUES ({ commit }) {
 
 export async function INIT_SPRINT_DURATIONS ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/sprint-durations/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/sprint-durations/'
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('INIT_SPRINT_DURATIONS', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -55,9 +67,13 @@ export async function INIT_SPRINT_DURATIONS ({ commit }) {
 
 export async function INIT_ISSUE_STATES ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/issue-states/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/issue-states/'
+      )
 
     HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_STATES', response.data)
@@ -68,11 +84,14 @@ export async function INIT_ISSUE_STATES ({ commit }) {
 
 export async function INIT_ISSUE_TYPES ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get(
-      '/core/issue-types/'
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/issue-types/'
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_TYPES', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -88,12 +107,15 @@ export async function PATCH_ISSUE ({ commit }, payload) {
    * **/
 
   try {
-    const response = await new Api({ auth: true }).patch(
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/issues/${payload.id}/`,
       payload
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -102,12 +124,15 @@ export async function PATCH_ISSUE ({ commit }, payload) {
 
 export async function UPDATE_ISSUE_STATE ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).patch(
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/issues/${payload.id}/`,
       { state_category: payload.state_category }
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUE_STATE', payload)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -120,12 +145,15 @@ export async function UPDATE_ISSUES_IN_SPRINT ({ commit }, composite) {
   }
 
   try {
-    const response = await new Api({ auth: true }).patch(
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/sprints/${composite.id}/`,
       sendPayload
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_SPRINT_ISSUES', composite)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -138,12 +166,15 @@ export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, composite) {
   }
 
   try {
-    const response = await new Api({ auth: true }).patch(
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/backlogs/${composite.id}/`,
       sendPayload
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_BACKLOG_ISSUES', composite)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -152,12 +183,14 @@ export async function UPDATE_ISSUES_IN_BACKLOG ({ commit }, composite) {
 
 export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).post(
-      '/core/issues/',
-      payload
-    )
-
-    HandleResponse.compare(201, response.status)
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 201
+    })
+      .post(
+        '/core/issues/',
+        payload
+      )
 
     commit('ADD_ISSUE_TO_BACKLOG', response.data)
     commit('ADD_ISSUE_TO_ISSUES', response.data)
@@ -168,12 +201,15 @@ export async function ADD_ISSUE_TO_BACKLOG ({ commit }, payload) {
 
 export async function ADD_SPRINT_TO_PROJECT ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).post(
-      '/core/sprints/',
-      payload
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 201
+    })
+      .post(
+        '/core/sprints/',
+        payload
+      )
 
-    HandleResponse.compare(201, response.status)
     commit('ADD_SPRINT_TO_PROJECT', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -182,12 +218,15 @@ export async function ADD_SPRINT_TO_PROJECT ({ commit }, payload) {
 
 export async function START_SPRINT ({ commit }, sprintId) {
   try {
-    const response = await new Api({ auth: true }).patch(
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/sprints/${sprintId}/`,
       { is_started: true }
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('START_SPRINT', sprintId)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -196,12 +235,11 @@ export async function START_SPRINT ({ commit }, sprintId) {
 
 export async function COMPLETE_SPRINT ({ commit }, sprintId) {
   try {
-    const response = await new Api({ auth: true }).patch(
+    await new Api({ auth: true }).patch(
       `/core/sprints/${sprintId}/`,
       { is_completed: true }
     )
 
-    HandleResponse.compare(200, response.status)
     commit('COMPLETE_SPRINT', sprintId)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -217,12 +255,15 @@ export async function EDIT_SPRINT ({ commit }, payload) {
   }
 
   try {
-    const response = await new Api({ auth: true }).patch(
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
       `/core/sprints/${payload.id}/`,
       sendPayload
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_SPRINT', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -231,11 +272,14 @@ export async function EDIT_SPRINT ({ commit }, payload) {
 
 export async function DELETE_SPRINT ({ commit }, sprintId) {
   try {
-    const response = await new Api({ auth: true }).delete(
+    await new Api({
+      auth: true,
+      expectedStatus: 204
+    })
+      .delete(
       `/core/sprints/${sprintId}`
-    )
+      )
 
-    HandleResponse.compare(204, response.status)
     commit('DELETE_SPRINT', sprintId)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -244,12 +288,15 @@ export async function DELETE_SPRINT ({ commit }, sprintId) {
 
 export async function EDIT_ISSUE ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).put(
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .put(
       `/core/issues/${payload.id}/`,
       payload
-    )
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('EDIT_ISSUE', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -258,11 +305,14 @@ export async function EDIT_ISSUE ({ commit }, payload) {
 
 export async function DELETE_ISSUE ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).delete(
+    await new Api({
+      auth: true,
+      expectedStatus: 204
+    })
+      .delete(
       `/core/issues/${payload.id}`
-    )
+      )
 
-    HandleResponse.compare(204, response.status)
     commit('DELETE_ISSUE', payload)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -284,12 +334,15 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
   }
 
   try {
-    const response = await new Api({ auth: true }).put(
-      '/core/issue/ordering/',
-      issuesPayload
-    )
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .put(
+        '/core/issue/ordering/',
+        issuesPayload
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('ORDER_BACKLOG_ISSUES', payload)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -298,12 +351,15 @@ export async function ORDER_BACKLOG_ISSUES ({ commit, rootGetters }, payload) {
 
 export async function UPDATE_ISSUES_ORDERING ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).put(
-      '/core/issue/ordering/',
-      payload
-    )
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .put(
+        '/core/issue/ordering/',
+        payload
+      )
 
-    HandleResponse.compare(200, response.status)
     commit('UPDATE_ISSUES_ORDERING', payload)
   } catch (e) {
     throw new ErrorHandler(e)

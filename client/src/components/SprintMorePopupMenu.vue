@@ -37,11 +37,9 @@ export default {
   },
   methods: {
     editSprintModal () {
-      console.log('editSprintModal')
       this.$emit('edit', this.sprintId)
     },
     removeSprintModal () {
-      console.log('removeSprintModal')
       this.$emit('remove', this.sprintId)
     }
   }

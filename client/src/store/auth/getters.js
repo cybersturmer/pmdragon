@@ -26,6 +26,16 @@ export function REFRESH_TOKEN (state) {
   return state.tokens.refresh.data
 }
 
+export function IS_REFRESH_TOKEN_REQUIRED (state, getters) {
+  const accessTokenExistsAndNotValid = getters.ACCESS_TOKEN &&
+                                       !getters.IS_ACCESS_TOKEN_VALID
+
+  const refreshTokenExistsAndValid = getters.REFRESH_TOKEN &&
+                                     getters.IS_REFRESH_TOKEN_VALID
+
+  return accessTokenExistsAndNotValid && refreshTokenExistsAndValid
+}
+
 export function PERSON_BY_ID (state, getters) {
   /** Getting person by id from current workspace **/
   return personId => {

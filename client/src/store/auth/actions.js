@@ -1,6 +1,5 @@
-import { AuthService } from 'src/services/auth'
 import { Api } from 'src/services/api'
-import { ErrorHandler, HandleResponse } from 'src/services/util'
+import { ErrorHandler } from 'src/services/util'
 
 export async function REGISTER ({ commit }, credentials) {
   return await new Api().post('/auth/person-registration-requests/',
@@ -8,21 +7,48 @@ export async function REGISTER ({ commit }, credentials) {
 }
 
 export async function LOGIN ({ commit }, credentials) {
-  return await AuthService.login(credentials)
+  const response = await new Api({ expectedStatus: 200 })
+    .post(
+      '/auth/obtain/',
+      credentials
+    )
+
+  commit('SET_ACCESS_TOKEN', response.data.access)
+  commit('SET_REFRESH_TOKEN', response.data.refresh)
+
+  return response.data
 }
 
-export async function REFRESH ({ commit }, refreshToken) {
-  return await AuthService.refresh(refreshToken)
+export async function REFRESH ({ commit, getters }) {
+  if (!getters.IS_REFRESH_TOKEN_REQUIRED) return Promise.resolve()
+
+  const payload = {
+    refresh: getters.REFRESH_TOKEN
+  }
+
+  const response = await new Api({ expectedStatus: 200 })
+    .post(
+      '/auth/refresh/',
+      payload
+    )
+
+  commit('SET_ACCESS_TOKEN', response.data.access)
+  commit('SET_REFRESH_TOKEN', response.data.refresh)
+
+  return Promise.resolve(response.data)
 }
 
-export async function LOGOUT ({ dispatch }) {
-  await AuthService.logout()
+export async function LOGOUT ({ commit }) {
+  commit('LOGOUT')
 }
 
 export async function INIT_WORKSPACES ({ commit }) {
   try {
-    const response = await new Api({ auth: true }).get('/core/workspaces/')
-    HandleResponse.compare(200, response.status)
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get('/core/workspaces/')
     commit('INIT_WORKSPACES', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -35,8 +61,11 @@ export async function INIT_PERSONS ({ commit }) {
   * So by init we get all persons/participant in workspace we belong to **/
 
   try {
-    const response = await new Api({ auth: true }).get('core/persons/')
-    HandleResponse.compare(200, response.status)
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get('core/persons/')
     commit('INIT_PERSONS', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -45,12 +74,15 @@ export async function INIT_PERSONS ({ commit }) {
 
 export async function ADD_WORKSPACE ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).post(
-      '/core/workspaces/',
-      payload
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 201
+    })
+      .post(
+        '/core/workspaces/',
+        payload
+      )
 
-    HandleResponse.compare(201, response.status)
     commit('ADD_WORKSPACE', response.data)
 
     return response.data
@@ -61,12 +93,15 @@ export async function ADD_WORKSPACE ({ commit }, payload) {
 
 export async function ADD_PROJECT ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true }).post(
-      '/core/projects/',
-      payload
-    )
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 201
+    })
+      .post(
+        '/core/projects/',
+        payload
+      )
 
-    HandleResponse.compare(201, response.status)
     commit('ADD_PROJECT', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
@@ -77,12 +112,13 @@ export async function INVITE_TEAM ({ commit }, payload) {
   /**
    * Not related to Vuex store now, however gonna let it stay here **/
   try {
-    const response = await new Api({ auth: true }).post(
-      '/core/person-invitation-requests/',
-      payload
-    )
-
-    HandleResponse.compare(200, response.status)
+    await new Api({
+      auth: true
+    })
+      .post(
+        '/core/person-invitation-requests/',
+        payload
+      )
   } catch (e) {
     throw new ErrorHandler(e)
   }
@@ -90,10 +126,11 @@ export async function INVITE_TEAM ({ commit }, payload) {
 
 export async function UPDATE_MY_DATA ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true })
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
       .put('/auth/me/', payload)
-
-    HandleResponse.compare(200, response.status)
 
     commit('SET_MY_FIRST_NAME', response.data.first_name)
     commit('SET_MY_LAST_NAME', response.data.last_name)
@@ -105,10 +142,11 @@ export async function UPDATE_MY_DATA ({ commit }, payload) {
 
 export async function UPDATE_MY_PASSWORD ({ commit }, payload) {
   try {
-    const response = await new Api({ auth: true })
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
       .post('/auth/password/', payload)
-
-    HandleResponse.compare(200, response.status)
   } catch (e) {
     throw new ErrorHandler(e)
   }
@@ -119,14 +157,16 @@ export async function UPDATE_MY_AVATAR ({ commit }, file) {
   formData.append('image', file)
 
   try {
-    const response = await new Api({ auth: true })
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
       .put('/auth/avatar/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
 
-    HandleResponse.compare(200, response.status)
     commit('SET_MY_AVATAR', response.data.avatar)
 
     return response.data
@@ -137,10 +177,12 @@ export async function UPDATE_MY_AVATAR ({ commit }, file) {
 
 export async function DELETE_MY_AVATAR ({ commit }) {
   try {
-    const response = await new Api({ auth: true })
+    await new Api({
+      auth: true,
+      expectedStatus: 204
+    })
       .delete('/auth/avatar/')
 
-    HandleResponse.compare(204, response.status)
     commit('RESET_MY_AVATAR')
   } catch (e) {
     throw new ErrorHandler(e)

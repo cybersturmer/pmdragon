@@ -8,6 +8,7 @@
         no-data-label="You are not participating in any workspace"
         :filter="workspacesTable.filter"
         :filter-method="filterByString"
+        :pagination="workspacesTable.pagination"
       >
         <template #top-left>
           <q-btn-group outline>
@@ -78,7 +79,10 @@ export default {
             name: 'workspace',
             sortable: true
           }
-        ]
+        ],
+        pagination: {
+          rowsPerPage: 10
+        }
       }
     }
   },

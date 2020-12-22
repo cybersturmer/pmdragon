@@ -1,51 +1,84 @@
 import axios from 'axios'
-import { DEBUG, PROD_ENV, DEBUG_ENV } from 'src/.env'
-import { AuthService } from 'src/services/auth'
 import $store from 'src/store'
-import $router from 'src/router'
+import { DEBUG, PROD_ENV, DEBUG_ENV } from 'src/.env'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 
 export class Api {
   constructor (options) {
-    this.isAuth = options && options.auth ? options.auth : false
-    const axiosOptions = {
+    this.auth = options && options.auth
+      ? options.auth : false
+
+    this.expectedStatus = options && options.expectedStatus
+      ? options.expectedStatus : false
+
+    this.axiosOptions = {
       baseURL: DEBUG ? DEBUG_ENV.url : PROD_ENV.url,
-      withCredentials: false
+      withCredentials: false,
+      timeout: 1000,
+      validateStatus: (data) => this._expectStatus(data)
     }
 
-    this.instance = axios.create(axiosOptions)
-
-    return this.init()
-  }
-
-  init () {
-    if (this.isAuth) {
-      if (AuthService.isRefreshTokenExpired()) {
-        $router.push({ name: 'login' })
+    if (this.auth) {
+      this.axiosOptions.headers = {
+        Authorization: this._getAccessTokenHeader()
       }
-
-      this.instance.interceptors.request.use(
-        (request) => {
-          request.headers.Authorization = AuthService.getBearer()
-          return request
-        })
-
-      const refreshAuthLogic = failedRequest =>
-        AuthService.refresh()
-          .then(
-            tokens => {
-              $store.commit('auth/SET_ACCESS_TOKEN', tokens.data.access)
-              $store.commit('auth/SET_REFRESH_TOKEN', tokens.data.refresh)
-              failedRequest.response.config.headers.Authorization =
-                AuthService.getBearer()
-
-              return Promise.resolve()
-            }
-          )
-
-      createAuthRefreshInterceptor(this.instance, refreshAuthLogic)
     }
+
+    const refreshAuthLogic = (failedRequest) => this._refreshTokens()
+      .then((tokenRefreshResponse) => {
+        failedRequest.response.config.headers.Authorization =
+          this._getAccessTokenHeader()
+
+        return Promise.resolve()
+      })
+
+    this.instance = axios.create(this.axiosOptions)
+
+    createAuthRefreshInterceptor(this.instance, refreshAuthLogic)
 
     return this.instance
+  }
+
+  _expectStatus (status) {
+    return this.expectedStatus ? status === this.expectedStatus : true
+  }
+
+  /** Access token **/
+  _getAccessToken () {
+    return $store.getters['auth/ACCESS_TOKEN']
+  }
+
+  _getAccessTokenHeader () {
+    return `Bearer  ${this._getAccessToken()}`
+  }
+
+  _isAccessTokenExpired () {
+    return !$store.getters['auth/IS_ACCESS_TOKEN_VALID']
+  }
+
+  /** Refresh token **/
+  _getRefreshToken () {
+    return $store.getters['auth/REFRESH_TOKEN']
+  }
+
+  _isRefreshTokenExpired () {
+    return $store.getters['auth/IS_REFRESH_TOKEN_VALID']
+  }
+
+  /** Common tokens **/
+  _setAccessToken (accessToken) {
+    $store.commit('auth/SET_ACCESS_TOKEN', accessToken)
+  }
+
+  _setRefreshToken (refreshToken) {
+    $store.commit('auth/SET_REFRESH_TOKEN', refreshToken)
+  }
+
+  _refreshTokens () {
+    return $store.dispatch('auth/REFRESH')
+  }
+
+  _isTokensRefreshRequired () {
+    return $store.getters['auth/IS_REFRESH_TOKEN_REQUIRED']
   }
 }

@@ -1,17 +1,13 @@
 import $store from '../store'
-import { AuthService } from 'src/services/auth'
 
 export async function initCurrentUserStateMiddleware (to, from, next) {
-  if (AuthService.authNeedUpdate()) {
-    try {
-      await AuthService.refresh()
-      next()
-    } catch (e) {
-      console.log(e)
-    }
-  } else {
-    next()
+  try {
+    await $store.dispatch('auth/REFRESH')
+  } catch (e) {
+    console.log(e)
   }
+
+  next()
 }
 
 export function checkAccessMiddleware (to, from, next) {
