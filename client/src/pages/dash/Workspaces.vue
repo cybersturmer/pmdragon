@@ -81,7 +81,7 @@ export default {
           }
         ],
         pagination: {
-          rowsPerPage: 10
+          rowsPerPage: 6
         }
       }
     }
