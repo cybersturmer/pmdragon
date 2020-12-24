@@ -55,19 +55,20 @@ def send_invitation_email(request_pk=None):
 
         if user_with_email.exists():
             person = user_with_email.get().person
-            context = {
-                'action_link': f'{settings.HOST_BY_DEFAULT}/verify/collaboration/{request.key}',
-                'workspace': request.workspace.prefix_url,
-                'person': person,
-                'expired_at': request.expired_at
-            }
+            if person not in request.workspace.participants.all():
+                context = {
+                    'action_link': f'{settings.HOST_BY_DEFAULT}/verify/collaboration/{request.key}',
+                    'workspace': request.workspace.prefix_url,
+                    'person': person,
+                    'expired_at': request.expired_at
+                }
 
-            EmailComposer().process(
-                subject='PmDragon join workspace verification',
-                email=request.email,
-                template='email/verification/collaboration.html',
-                context=context
-            )
+                EmailComposer().process(
+                    subject='PmDragon join workspace verification',
+                    email=request.email,
+                    template='email/verification/collaboration.html',
+                    context=context
+                )
         else:
             context = {
                 'action_link': f'{settings.HOST_BY_DEFAULT}/verify/invitation/{request.key}',
