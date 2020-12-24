@@ -12,7 +12,7 @@ from ..models import PersonRegistrationRequest, \
     IssueMessage, \
     Issue, \
     get_mentioned_user_ids, \
-    Person
+    Person, Workspace
 
 User = get_user_model()
 
@@ -57,7 +57,7 @@ def send_invitation_email(request_pk=None):
             person = user_with_email.get().person
             context = {
                 'action_link': f'{settings.HOST_BY_DEFAULT}/verify/collaboration/{request.key}',
-                'workspace': request.prefix_url,
+                'workspace': request.workspace.prefix_url,
                 'person': person,
                 'expired_at': request.expired_at
             }
@@ -71,7 +71,7 @@ def send_invitation_email(request_pk=None):
         else:
             context = {
                 'action_link': f'{settings.HOST_BY_DEFAULT}/verify/invitation/{request.key}',
-                'workspace': request.prefix_url,
+                'workspace': request.workspace.prefix_url,
                 'expired_at': request.expired_at
             }
 
