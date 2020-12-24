@@ -10,7 +10,7 @@ Open source project management tool to track tasks, epics, bugs and manage it wi
 High-performance VueJs user interface built in MPA application.
 
 ## Video preview
-[Small video preview](https://www.youtube.com/watch?v=kYnf6ZU45sM)
+[YOUTUBE VIDEO PREVIEW](https://youtu.be/5oVvb1-rbx0)
 
 ## Screenshot demo
 
