@@ -229,7 +229,7 @@ export default {
   },
   computed: {
     workspace () {
-      return this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
+      return this.$store.getters['auth/WORKSPACE_FIRST_ID']
     },
     isUserDataFilled () {
       /** If user data filled we return true **/
@@ -309,7 +309,7 @@ export default {
       for (const emailElement in teamData) {
         const dictPayload = {
           email: teamData[emailElement].email,
-          workspace: this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
+          workspace: this.$store.getters['auth/WORKSPACE_FIRST_ID']
         }
 
         payload.invites.push(dictPayload)

@@ -10,14 +10,29 @@
       :columns="teamTable.columns"
       :filter="teamTable.filter"
     >
-      <template v-slot:top-right>
+      <template #top-left>
+        <q-btn-group outline>
+          <q-btn
+            outline
+            size="sm"
+            label="Invite member"
+            @click="inviteMembersDialog"
+          />
+          <q-btn
+            outline
+            size="sm"
+            label="Manage team"
+          />
+        </q-btn-group>
+      </template>
+      <template #top-right>
         <q-input dark dense debounce="300" v-model="teamTable.filter" placeholder="Search">
-          <template v-slot:append>
+          <template #append>
             <q-icon name="search" />
           </template>
         </q-input>
       </template>
-      <template v-slot:item="props">
+      <template #item="props">
         <div class="q-pa-xs col-xs-12 col-sm-6 col-md-2">
           <q-card dark bordered>
             <q-card-section class="text-center" style="min-height: 150px">
@@ -37,6 +52,8 @@
 </template>
 
 <script>
+import InviteMemberDialog from 'components/dialogs/InviteMemberDialog'
+
 export default {
   name: 'Team',
   data () {
@@ -74,6 +91,16 @@ export default {
       } catch (e) {
         return []
       }
+    }
+  },
+  methods: {
+    inviteMembersDialog () {
+      this.$q.dialog({
+        parent: this,
+        dark: true,
+        title: 'Invite Members',
+        component: InviteMemberDialog
+      })
     }
   }
 }
