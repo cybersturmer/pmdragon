@@ -96,13 +96,14 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
 
         for invitation in invitations:
             _email = invitation['email']
-            _workspace_with_prefix = Workspace.objects.filter(prefix_url=invitation['workspace'],
-                                                              participants__in=[requested_person])
+            _workspace_with_pk = Workspace.objects \
+                .filter(pk=invitation['workspace'],
+                        participants__in=[requested_person])
 
-            if not _workspace_with_prefix.exists():
+            if not _workspace_with_pk.exists():
                 raise ValidationError(_('Workspace with given prefix and available for you does not exists'))
 
-            _workspace = _workspace_with_prefix.get()
+            _workspace = _workspace_with_pk.get()
 
             _invitation_request = PersonInvitationRequest(
                 email=_email,
