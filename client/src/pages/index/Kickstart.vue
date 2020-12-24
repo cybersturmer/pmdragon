@@ -229,7 +229,7 @@ export default {
   },
   computed: {
     workspace () {
-      return this.$store.getters['auth/WORKSPACE_FIRST_ID']
+      return this.$store.getters['auth/WORKSPACE_FIRST_PREFIX']
     },
     isUserDataFilled () {
       /** If user data filled we return true **/
