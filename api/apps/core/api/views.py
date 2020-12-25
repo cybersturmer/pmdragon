@@ -135,7 +135,8 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
             serializer = PersonInvitationRequestSerializer(_invitation_request)
             invitations_response.append(serializer.data)
 
-        return Response(invitations_response)
+        return Response(data=invitations_response,
+                        status=status.HTTP_201_CREATED)
 
 
 class PersonInvitationRequestViewSet(viewsets.GenericViewSet,
