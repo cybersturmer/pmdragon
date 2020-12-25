@@ -5,6 +5,7 @@ export default function () {
     user_id: LocalStorage.getItem('auth.user_id') || null,
     workspaces: LocalStorage.getItem('auth.workspaces') || [],
     persons: LocalStorage.getItem('auth.persons') || [],
+    invited: LocalStorage.getItem('auth.invited') || [],
     tokens: {
       access: LocalStorage.getItem('auth.tokens.access') || {
         data: null,

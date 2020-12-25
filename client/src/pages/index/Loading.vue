@@ -62,6 +62,10 @@ export default {
             return this.$store.dispatch('issues/INIT_BACKLOGS')
           })
           .then(() => {
+            this.showProgress('invited')
+            return this.$store.dispatch('auth/INIT_INVITED')
+          })
+          .then(() => {
             return resolve('Loaded successfully')
           })
           .catch((e) => {

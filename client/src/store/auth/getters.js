@@ -51,6 +51,10 @@ export function PERSONS (state) {
   return state.persons
 }
 
+export function INVITED (state) {
+  return state.invited
+}
+
 export function WORKSPACE_DATA (state, getters, rootState, rootGetters) {
   return state.workspaces
     .find(workspace => workspace.prefix_url === rootGetters['current/WORKSPACE'])

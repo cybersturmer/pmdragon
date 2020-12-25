@@ -20,8 +20,6 @@ export async function LOGIN ({ commit }, credentials) {
 }
 
 export async function REFRESH ({ commit, getters }) {
-  if (!getters.IS_REFRESH_TOKEN_REQUIRED) return Promise.resolve()
-
   const payload = {
     refresh: getters.REFRESH_TOKEN
   }
@@ -67,6 +65,21 @@ export async function INIT_PERSONS ({ commit }) {
     })
       .get('core/persons/')
     commit('INIT_PERSONS', response.data)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
+export async function INIT_INVITED ({ commit }) {
+  /** Get only valid invited persons for all workspaces **/
+
+  try {
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get('auth/person-invitation-requests/')
+    commit('INIT_INVITED', response.data)
   } catch (e) {
     throw new ErrorHandler(e)
   }

@@ -93,6 +93,11 @@ export function INIT_PERSONS (state, payload) {
   LocalStorage.set('auth.persons', payload)
 }
 
+export function INIT_INVITED (state, payload) {
+  state.invited = payload
+  LocalStorage.set('auth.invited', payload)
+}
+
 export function ADD_WORKSPACE (state, payload) {
   state.workspaces.push(payload)
   LocalStorage.set('auth.workspaces', payload)

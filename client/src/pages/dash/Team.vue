@@ -8,8 +8,7 @@
       no-data-label="Invite your team members by adding them by email."
       :data="participants"
       :columns="teamTable.columns"
-      :filter="teamTable.filter"
-    >
+      :filter="teamTable.filter">
       <template #top-left>
         <q-btn-group outline>
           <q-btn
@@ -48,6 +47,26 @@
         </div>
       </template>
     </q-table>
+    <q-table
+      dark
+      grid
+      title="Invited members"
+      row-key="email"
+      no-data-label="Invite your team members by adding them by email."
+      :data="invited"
+      :columns="invitedTable.columns"
+      :filter="invitedTable.filter">
+      <template #item="props">
+        <div class="q-pa-xs col-xs-12 col-sm-5 col-md-1">
+          <q-card dark bordered>
+            <q-card-section style="height: 100px">
+              <p class="q-ma-sm q-pa-none"><strong>Email:</strong> {{ props.row.email }}</p>
+              <p class="q-ma-sm q-pa-none"><strong>Expired:</strong> {{ props.row.expired_at | moment("from", "now") }}</p>
+            </q-card-section>
+          </q-card>
+        </div>
+      </template>
+    </q-table>
   </q-page>
 </template>
 
@@ -81,6 +100,27 @@ export default {
           }
         ],
         filter: ''
+      },
+      invitedTable: {
+        columns: [
+          {
+            name: 'email',
+            required: true,
+            label: 'Email',
+            align: 'left',
+            field: row => row.email,
+            format: val => `${val}`,
+            sortable: true
+          },
+          {
+            name: 'expired',
+            required: true,
+            label: 'Expired At',
+            field: row => this.$moment(row.expired_at).fromNow(),
+            sortable: true
+          }
+        ],
+        filter: ''
       }
     }
   },
@@ -91,6 +131,12 @@ export default {
       } catch (e) {
         return []
       }
+    },
+    invited () {
+      const workspaceId = this.$store.getters['auth/WORKSPACE_ID']
+      const invited = this.$store.getters['auth/INVITED']
+
+      return invited.filter((invitation) => invitation.workspace === workspaceId)
     }
   },
   methods: {
