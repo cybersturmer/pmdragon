@@ -103,6 +103,19 @@ export function ADD_INVITED (state, payload) {
   LocalStorage.set('auth.invited', state.invited)
 }
 
+export function REMOVE_PARTICIPANT (state, payload) {
+  /** Payload
+   * { workspace: workspaceId,
+      participantId: personId } **/
+
+  const workspace = state.workspaces
+    .find(workspace => workspace.id === payload.workspaceId)
+
+  workspace.participants = workspace.participants
+    .filter((participant) => participant.id !== payload.participantId)
+  LocalStorage.set('auth.workspaces', state.workspaces)
+}
+
 export function ADD_WORKSPACE (state, payload) {
   state.workspaces.push(payload)
   LocalStorage.set('auth.workspaces', state.workspaces)

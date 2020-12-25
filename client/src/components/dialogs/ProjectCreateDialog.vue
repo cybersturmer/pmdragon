@@ -32,6 +32,7 @@
         <q-btn
           dark
           outline
+          color="amber"
           label="Create"
           @click="onOKClick"
         />

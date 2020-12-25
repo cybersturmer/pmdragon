@@ -58,6 +58,7 @@
         <q-btn
           outline
           label="Invite"
+          color="amber"
           @click="onOKClick"
         />
       </q-card-actions>

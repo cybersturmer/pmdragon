@@ -15,12 +15,14 @@
             <q-btn
               outline
               size="sm"
+              color="amber"
               label="Create Workspace"
               @click="createWorkspaceDialog"
             />
             <q-btn
               outline
               size="sm"
+              color="amber"
               label="Create Project"
               @click="createProjectDialog"
             />
@@ -49,6 +51,7 @@
                 <q-btn v-for="project in props.row.projects"
                        v-bind:key="project.id"
                        outline
+                       color="amber"
                        @click="selectSpace(props.row.prefix_url, project.id)"
                 >
                   {{ project.title }}

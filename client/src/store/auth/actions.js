@@ -126,7 +126,8 @@ export async function INVITE_TEAM ({ commit }, payload) {
    * Not related to Vuex store now, however gonna let it stay here **/
   try {
     const response = await new Api({
-      auth: true
+      auth: true,
+      expectedStatus: 201
     })
       .post(
         '/core/person-invitation-requests/',
@@ -136,6 +137,40 @@ export async function INVITE_TEAM ({ commit }, payload) {
     for (const datum of response.data) {
       commit('ADD_INVITED', datum)
     }
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
+export async function REMOVE_TEAM_MEMBER ({ commit, getters }, personId) {
+  const currentWorkspace = getters.WORKSPACE_DATA
+  const currentParticipantsDetailed = currentWorkspace.participants
+
+  const updatedParticipantsIds = []
+  for (const participant of currentParticipantsDetailed) {
+    if (participant.id !== personId) {
+      updatedParticipantsIds.push(participant.id)
+    }
+  }
+
+  const updatedPayload = {
+    participants: updatedParticipantsIds
+  }
+
+  try {
+    await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .patch(
+      `/core/workspaces/${currentWorkspace.id}/`,
+      updatedPayload
+      )
+
+    commit('REMOVE_PARTICIPANT', {
+      workspaceId: currentWorkspace.id,
+      participantId: personId
+    })
   } catch (e) {
     throw new ErrorHandler(e)
   }

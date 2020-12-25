@@ -3,7 +3,6 @@
     <q-table
       dark
       grid
-      title="Team"
       row-key="username"
       no-data-label="Invite your team members by adding them by email."
       :data="participants"
@@ -15,12 +14,8 @@
             outline
             size="sm"
             label="Invite member"
+            color="amber"
             @click="inviteMembersDialog"
-          />
-          <q-btn
-            outline
-            size="sm"
-            label="Manage team"
           />
         </q-btn-group>
       </template>
@@ -32,16 +27,35 @@
         </q-input>
       </template>
       <template #item="props">
-        <div class="q-pa-xs col-xs-12 col-sm-6 col-md-2">
+        <div class="q-pa-xs col-xs-12 col-sm-4 col-md-3" >
           <q-card dark bordered>
-            <q-card-section class="text-center" style="min-height: 150px">
-              <div>
-                <q-avatar
-                v-if="props.row.avatar">
-                  <img :src="props.row.avatar" :alt="props.row.username">
-                </q-avatar>
-              </div>
-              <span class="text-h6">{{ props.row.first_name }} {{ props.row.last_name }}</span>
+            <q-card-section
+              horizontal>
+              <q-card-section
+                class="q-pa-none">
+                <q-card-actions>
+                  <q-btn-group>
+                    <q-btn
+                      v-show="!isMe(props.row.id)"
+                      outline
+                      color="amber"
+                      icon="person_remove"
+                      size="sm"
+                      @click="removeMemberDialog(props.row.id)"/>
+                  </q-btn-group>
+                </q-card-actions>
+              </q-card-section>
+              <q-card-section
+                :class="`${isMe(props.row.id)?'col-12':'col-10'} text-center q-pa-sm`">
+                <div style="height: 48px">
+                  <q-avatar
+                    v-if="props.row.avatar">
+                    <img :src="props.row.avatar" :alt="props.row.username">
+                  </q-avatar>
+                </div>
+                <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.first_name }}</p>
+                <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.last_name }}</p>
+              </q-card-section>
             </q-card-section>
           </q-card>
         </div>
@@ -50,18 +64,24 @@
     <q-table
       dark
       grid
-      title="Invited members"
+      :title="`Invited - ( ${invited.length} email )`"
       row-key="email"
       no-data-label="Invite your team members by adding them by email."
       :data="invited"
       :columns="invitedTable.columns"
-      :filter="invitedTable.filter">
+      :filter="invitedTable.filter"
+      :pagination="invitedTable.pagination">
       <template #item="props">
-        <div class="q-pa-xs col-xs-12 col-sm-5 col-md-1">
+        <div class="q-pa-xs col-xs-12 col-sm-5 col-md-4 col-lg-2 col-xl-2">
           <q-card dark bordered>
-            <q-card-section style="height: 100px">
-              <p class="q-ma-sm q-pa-none"><strong>Email:</strong> {{ props.row.email }}</p>
-              <p class="q-ma-sm q-pa-none"><strong>Expired:</strong> {{ props.row.expired_at | moment("from", "now") }}</p>
+            <q-card-section style="height: 90px">
+              <p class="q-ma-sm q-pa-none">
+                <strong>Email:</strong>
+                {{ props.row.email }}
+              </p>
+              <p class="q-ma-sm q-pa-none" :title="props.row.expired_at">
+                <strong>Expired:</strong> {{ props.row.expired_at | moment("from", "now") }}
+              </p>
             </q-card-section>
           </q-card>
         </div>
@@ -120,6 +140,9 @@ export default {
             sortable: true
           }
         ],
+        pagination: {
+          rowsPerPage: 8
+        },
         filter: ''
       }
     }
@@ -137,9 +160,15 @@ export default {
       const invited = this.$store.getters['auth/INVITED']
 
       return invited.filter((invitation) => invitation.workspace === workspaceId)
+    },
+    myId () {
+      return this.$store.getters['auth/MY_USER_ID']
     }
   },
   methods: {
+    isMe (personId) {
+      return this.$store.getters['auth/MY_USER_ID'] === personId
+    },
     inviteMembersDialog () {
       this.$q.dialog({
         parent: this,
@@ -147,6 +176,19 @@ export default {
         title: 'Invite Members',
         component: InviteMemberDialog
       })
+    },
+    removeMemberDialog (personId) {
+      const participant = this.$store.getters['auth/PERSON_BY_ID'](personId)
+      this.$q.dialog({
+        dark: true,
+        title: 'Confirmation',
+        message: `Would you like to remove participant: ${participant.first_name} ${participant.last_name}`,
+        cancel: true,
+        persistent: true
+      })
+        .onOk(() => {
+          this.$store.dispatch('auth/REMOVE_TEAM_MEMBER', personId)
+        })
     }
   }
 }

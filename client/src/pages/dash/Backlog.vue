@@ -95,10 +95,10 @@
         <q-card dark
                 bordered
                 square
-                class="my-card text-white shadow-3 absolute-bottom card-no-padding"
+                class="my-card text-white shadow-3 absolute-bottom card-no-padding q-pa-none"
                 style="margin: 0.3em"
         >
-          <q-card-section>
+          <q-card-section style="padding: 0">
             <q-input
               v-model="formData.title"
               @keyup.enter="createIssue"
@@ -468,10 +468,6 @@ export default {
 }
 </script>
 <style lang="scss">
-  .q-card__section--vert {
-    padding: 13px;
-  }
-
   .flip-list-move {
     transition: transform 0.3s;
   }
@@ -493,11 +489,5 @@ export default {
     font-size: 1.25rem;
     margin-bottom: 0;
     margin-top: 0;
-  }
-
-  .card-no-padding {
-    .q-card__section--vert {
-        padding: 0;
-    }
   }
 </style>
