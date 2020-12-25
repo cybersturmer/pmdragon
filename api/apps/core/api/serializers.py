@@ -163,7 +163,9 @@ class PersonInvitationRequestSerializer(serializers.ModelSerializer):
         model = PersonInvitationRequest
         fields = (
             'email',
-            'workspace'
+            'workspace',
+            'created_at',
+            'expired_at'
         )
 
 

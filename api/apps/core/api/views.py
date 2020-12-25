@@ -67,6 +67,15 @@ class PersonInvitationRequestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
     )
 
 
+class PersonInvitationRequestListView(generics.ListAPIView):
+    queryset = PersonInvitationRequest.valid.all()
+    serializer_class = PersonInvitationRequestSerializer
+    permission_classes = (
+        IsAuthenticated,
+        IsParticipateInWorkspace
+    )
+
+
 class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
     """
     Can be useful for bulk create requests by giving

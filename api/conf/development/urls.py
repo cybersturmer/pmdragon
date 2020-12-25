@@ -10,10 +10,10 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.core.api.views import PersonRegistrationRequestVerifyView, \
     PersonSetPasswordView, \
-    WorkspaceReadOnlyViewSet, \
     UserUpdateView, \
     PersonAvatarUpload, \
     PersonRegistrationRequestView, \
+    PersonInvitationRequestListView, \
     PersonInvitationRequestRetrieveUpdateView
 from apps.core.api.views import TokenObtainPairExtendedView
 from apps.core.views import SwaggerView
@@ -60,6 +60,10 @@ urlpatterns = [
     path('api/auth/person-registration-requests/<key>/',
          PersonRegistrationRequestView.as_view({'get': 'retrieve'}),
          name='request-register'),
+
+    path('api/auth/person-invitation-requests/',
+         PersonInvitationRequestListView.as_view(),
+         name='person-invitations-requests-list'),
 
     path('api/auth/person-invitation-requests/<key>/',
          PersonInvitationRequestRetrieveUpdateView.as_view(),
