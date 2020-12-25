@@ -2,7 +2,9 @@ import $store from '../store'
 
 export async function initCurrentUserStateMiddleware (to, from, next) {
   try {
-    await $store.dispatch('auth/REFRESH')
+    if ($store.getters['auth/IS_REFRESH_TOKEN_REQUIRED']) {
+      await $store.dispatch('auth/REFRESH')
+    }
   } catch (e) {
     console.log(e)
   }
