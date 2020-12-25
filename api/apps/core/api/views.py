@@ -117,7 +117,7 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
 
             """
             If person already in given workspace - we don't need to send him invitation """
-            _user_with_email = User.objects.filter(email=request.email)
+            _user_with_email = User.objects.filter(email=_email)
             if _user_with_email.exists():
                 _user = _user_with_email.get()
                 _person = _user.person
@@ -132,7 +132,7 @@ class PersonInvitationRequestListCreateView(generics.ListCreateAPIView):
             _invitation_request.save()
 
             send_invitation_email.delay(_invitation_request.pk)
-            serializer = PersonInvitationRequestRetrieveUpdateSerializer(_invitation_request)
+            serializer = PersonInvitationRequestSerializer(_invitation_request)
             invitations_response.append(serializer.data)
 
         return Response(invitations_response)
