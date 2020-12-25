@@ -85,22 +85,27 @@ export function RESET_MY_AVATAR (state) {
 
 export function INIT_WORKSPACES (state, payload) {
   state.workspaces = payload
-  LocalStorage.set('auth.workspaces', payload)
+  LocalStorage.set('auth.workspaces', state.workspaces)
 }
 
 export function INIT_PERSONS (state, payload) {
   state.persons = payload
-  LocalStorage.set('auth.persons', payload)
+  LocalStorage.set('auth.persons', state.persons)
 }
 
 export function INIT_INVITED (state, payload) {
   state.invited = payload
-  LocalStorage.set('auth.invited', payload)
+  LocalStorage.set('auth.invited', state.invited)
+}
+
+export function ADD_INVITED (state, payload) {
+  state.invited.push(payload)
+  LocalStorage.set('auth.invited', state.invited)
 }
 
 export function ADD_WORKSPACE (state, payload) {
   state.workspaces.push(payload)
-  LocalStorage.set('auth.workspaces', payload)
+  LocalStorage.set('auth.workspaces', state.workspaces)
 }
 
 export function ADD_PROJECT (state, payload) {
@@ -108,7 +113,7 @@ export function ADD_PROJECT (state, payload) {
     .find(workspace => workspace.id === payload.workspace)
 
   workspace.projects.push(payload)
-  LocalStorage.set('auth.workspaces', payload)
+  LocalStorage.set('auth.workspaces', state.workspaces)
 }
 
 export function LOGOUT (state) {

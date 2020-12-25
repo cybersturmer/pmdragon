@@ -125,13 +125,17 @@ export async function INVITE_TEAM ({ commit }, payload) {
   /**
    * Not related to Vuex store now, however gonna let it stay here **/
   try {
-    await new Api({
+    const response = await new Api({
       auth: true
     })
       .post(
         '/core/person-invitation-requests/',
         payload
       )
+
+    for (const datum of response.data) {
+      commit('ADD_INVITED', datum)
+    }
   } catch (e) {
     throw new ErrorHandler(e)
   }
