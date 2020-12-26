@@ -27,34 +27,41 @@
         </q-input>
       </template>
       <template #item="props">
-        <div class="q-pa-xs col-xs-12 col-sm-4 col-md-3" >
+        <div class="q-pa-xs col-xs-6 col-sm-4 col-md-3 col-lg-2 col-xl-2" >
           <q-card dark bordered>
-            <q-card-section
-              horizontal>
-              <q-card-section
-                class="q-pa-none">
-                <q-card-actions>
-                  <q-btn-group>
+            <q-card-section horizontal>
+              <!-- Avatar block -->
+              <q-card-section class="col-4">
+                <q-avatar
+                  v-if="props.row.avatar">
+                  <img :src="props.row.avatar" :alt="props.row.username">
+                </q-avatar>
+              </q-card-section>
+              <!-- Name block -->
+              <q-card-section class="col-8">
+                <div class="row items-center no-wrap full-width">
+                  <div class="col-10 text-center">
+                    <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.first_name }}</p>
+                    <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.last_name }}</p>
+                  </div>
+                  <div class="col-2 items-center">
                     <q-btn
                       v-show="!isMe(props.row.id)"
-                      outline
+                      flat
+                      dense
                       color="amber"
-                      icon="person_remove"
-                      size="sm"
-                      @click="removeMemberDialog(props.row.id)"/>
-                  </q-btn-group>
-                </q-card-actions>
-              </q-card-section>
-              <q-card-section
-                :class="`${isMe(props.row.id)?'col-12':'col-10'} text-center q-pa-sm`">
-                <div style="height: 48px">
-                  <q-avatar
-                    v-if="props.row.avatar">
-                    <img :src="props.row.avatar" :alt="props.row.username">
-                  </q-avatar>
+                      icon="more_vert">
+                      <q-menu dark fit anchor="top left" self="top left" auto-close>
+                        <q-list>
+                          <q-item clickable
+                                  @click="removeMemberDialog(props.row.id)">
+                            <q-item-section>Remove from Workspace</q-item-section>
+                          </q-item>
+                        </q-list>
+                      </q-menu>
+                    </q-btn>
+                  </div>
                 </div>
-                <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.first_name }}</p>
-                <p class="text-h6 q-pa-none q-ma-none" style="line-height: 1.5rem">{{ props.row.last_name }}</p>
               </q-card-section>
             </q-card-section>
           </q-card>
