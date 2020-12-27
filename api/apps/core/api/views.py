@@ -324,6 +324,15 @@ class IssueStateCategoryViewSet(WorkspacesModelViewSet):
     serializer_class = IssueStateSerializer
 
 
+class IssueEstimationCategoryViewSet(WorkspacesModelViewSet):
+    queryset = IssueEstimationCategory.objects.all()
+    serializer_class = IssueEstimationSerializer
+    permission_classes = (
+        IsAuthenticated,
+        IsParticipateInWorkspace
+    )
+
+
 class IssueViewSet(WorkspacesModelViewSet):
     """
     View for getting, editing, deleting instance.

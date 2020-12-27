@@ -645,6 +645,23 @@ class IssueStateSerializer(WorkspaceModelSerializer):
         )
 
 
+class IssueEstimationSerializer(WorkspaceModelSerializer):
+    """
+    Common issue estimation serializer
+    I think we can do with it whatever we want. will see.
+    """
+
+    class Meta:
+        model = IssueEstimationCategory
+        fields = (
+            'id',
+            'workspace',
+            'project',
+            'title',
+            'value'
+        )
+
+
 class IssueSerializer(WorkspaceModelSerializer):
     """
     Common issue serializer for getting all tasks
@@ -661,6 +678,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'description',
             'type_category',
             'state_category',
+            'estimation_category'
             'assignee',
             'created_by',
             'created_at',
@@ -672,6 +690,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'created_at': {'read_only': True},
             'type_category': {'required': False},
             'state_category': {'required': False},
+            'estimation_category': {'required': False},
             'ordering': {'required': False}
         }
 

@@ -492,6 +492,46 @@ class IssueStateCategory(models.Model):
         super(IssueStateCategory, self).save(*args, **kwargs)
 
 
+class IssueEstimationCategory(models.Model):
+    workspace = models.ForeignKey(Workspace,
+                                  verbose_name=_('Workspace'),
+                                  db_index=True,
+                                  on_delete=models.CASCADE)
+
+    project = models.ForeignKey(Project,
+                                db_index=True,
+                                verbose_name=_('Project'),
+                                on_delete=models.CASCADE)
+
+    title = models.CharField(verbose_name=_('Title'),
+                             max_length=255,
+                             help_text=_('You can call it by T-shirt size or like banana'))
+
+    value = models.IntegerField(verbose_name=_('Value'),
+                                help_text=_('This value is for calculating team velocity'))
+
+    created_at = models.DateTimeField(verbose_name=_('Created at'),
+                                      auto_now_add=True)
+
+    updated_at = models.DateTimeField(verbose_name=_('Updated at'),
+                                      auto_now=True)
+
+    class Meta:
+        db_table = 'core_issue_estimation'
+        ordering = ['value']
+        unique_together = [
+            ['workspace', 'project', 'title'],
+            ['workspace', 'project', 'value']
+        ]
+        verbose_name = _('Issue estimation')
+        verbose_name_plural = _('Issue estimations')
+
+    def __str__(self):
+        return f'{self.title} {self.value}'
+
+    __repr__ = __str__
+
+
 class Issue(models.Model):
     cleaned_data: dict
 
@@ -512,18 +552,25 @@ class Issue(models.Model):
                                    blank=True)
 
     type_category = models.ForeignKey(IssueTypeCategory,
-                                      verbose_name=_('Issue Type Category'),
+                                      verbose_name=_('Type Category'),
                                       db_index=True,
                                       blank=True,
                                       null=True,
                                       on_delete=models.CASCADE)
 
     state_category = models.ForeignKey(IssueStateCategory,
-                                       verbose_name=_('Issue State Category'),
+                                       verbose_name=_('State Category'),
                                        db_index=True,
                                        blank=True,
                                        null=True,
                                        on_delete=models.SET_NULL)
+
+    estimation_category = models.ForeignKey(IssueEstimationCategory,
+                                            verbose_name=_('Story Point Estimation'),
+                                            db_index=True,
+                                            blank=True,
+                                            null=True,
+                                            on_delete=models.SET_NULL)
 
     assignee = models.ForeignKey(Person,
                                  verbose_name=_('Assignee'),

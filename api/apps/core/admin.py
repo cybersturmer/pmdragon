@@ -63,6 +63,17 @@ class IssueTypeAdmin(admin.ModelAdmin):
     save_as = True
 
 
+@admin.register(IssueEstimationCategory)
+class IssueEstimationCategoryAdmin(admin.ModelAdmin):
+    model = IssueEstimationCategory
+    list_display = (
+        'project',
+        'title',
+        'value'
+    )
+    save_as = True
+
+
 @admin.register(SprintDuration)
 class SprintDurationAdmin(admin.ModelAdmin):
     model = SprintDuration
