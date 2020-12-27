@@ -73,6 +73,11 @@ class IssueEstimationCategoryAdmin(admin.ModelAdmin):
     )
     save_as = True
 
+    def save_model(self, request, obj, form, change):
+        obj.workspace = obj.issue.workspace
+        obj.project = obj.issue.project
+        super(IssueEstimationCategoryAdmin, self).save_model(request, obj, form, change)
+
 
 @admin.register(SprintDuration)
 class SprintDurationAdmin(admin.ModelAdmin):
