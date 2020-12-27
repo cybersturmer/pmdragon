@@ -523,8 +523,8 @@ class IssueEstimationCategory(models.Model):
             ['workspace', 'project', 'title'],
             ['workspace', 'project', 'value']
         ]
-        verbose_name = _('Issue estimation')
-        verbose_name_plural = _('Issue estimations')
+        verbose_name = _('Issue Estimation')
+        verbose_name_plural = _('Issue Estimations')
 
     def __str__(self):
         return f'{self.title} {self.value}'
@@ -730,7 +730,7 @@ class IssueMessage(models.Model):
             'created_at'
         ]
         verbose_name = _('Issue Message')
-        verbose_name_plural = _('Issue messages')
+        verbose_name_plural = _('Issue Messages')
 
     def __str__(self):
         return f'#{self.pk} - {self.created_by.first_name} {self.created_by.last_name} <{len(self.description)} chars>'
