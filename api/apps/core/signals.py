@@ -3,7 +3,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from .api.tasks import send_mentioned_in_message_email, \
-                       send_mentioned_in_description_email
+    send_mentioned_in_description_email
 
 from enum import Enum
 
@@ -13,7 +13,7 @@ from .models import Project, \
     IssueStateCategory, \
     Sprint, \
     Issue, \
-    IssueMessage
+    IssueMessage, IssueEstimationCategory
 
 
 class ActionM2M(Enum):
@@ -147,6 +147,49 @@ def create_default_issue_state_category_for_project(instance: Project, created: 
                                   is_done=True)
 
         done.save()
+
+
+@receiver(post_save, sender=Project)
+def create_default_issue_estimation_for_project(instance: Project, created: bool, **kwargs):
+    issue_estimations = IssueEstimationCategory.objects.filter(workspace=instance.workspace,
+                                                               project=instance)
+
+    if created and not issue_estimations.exists():
+        xs = IssueEstimationCategory(workspace=instance.workspace,
+                                     project=instance,
+                                     title=_('XS'),
+                                     value=1)
+        xs.save()
+
+        sm = IssueEstimationCategory(workspace=instance.workspace,
+                                     project=instance,
+                                     title=_('SM'),
+                                     value=2)
+        sm.save()
+
+        m = IssueEstimationCategory(workspace=instance.workspace,
+                                    project=instance,
+                                    title=_('M'),
+                                    value=3)
+        m.save()
+
+        l_ = IssueEstimationCategory(workspace=instance.workspace,
+                                     project=instance,
+                                     title=_('L'),
+                                     value=5)
+        l_.save()
+
+        xl = IssueEstimationCategory(workspace=instance.workspace,
+                                     project=instance,
+                                     title=_('XL'),
+                                     value=8)
+        xl.save()
+
+        xxl = IssueEstimationCategory(workspace=instance.workspace,
+                                      project=instance,
+                                      title=_('XXL'),
+                                      value=13)
+        xxl.save()
 
 
 @receiver(m2m_changed, sender=Sprint.issues.through)
