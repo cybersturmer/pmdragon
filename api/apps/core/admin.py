@@ -75,8 +75,8 @@ class IssueEstimationCategoryAdmin(admin.ModelAdmin):
     save_as = True
 
     def save_model(self, request, obj, form, change):
-        obj.workspace = obj.issue.workspace
-        obj.project = obj.issue.project
+        obj.workspace = obj.workspace
+        obj.project = obj.project
         super(IssueEstimationCategoryAdmin, self).save_model(request, obj, form, change)
 
 
