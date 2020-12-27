@@ -678,7 +678,7 @@ class IssueSerializer(WorkspaceModelSerializer):
             'description',
             'type_category',
             'state_category',
-            'estimation_category'
+            'estimation_category',
             'assignee',
             'created_by',
             'created_at',
