@@ -71,6 +71,7 @@ class IssueEstimationCategoryAdmin(admin.ModelAdmin):
         'title',
         'value'
     )
+    readonly_fields = ('workspace',)
     save_as = True
 
     def save_model(self, request, obj, form, change):
