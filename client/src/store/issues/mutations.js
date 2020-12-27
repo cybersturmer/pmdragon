@@ -212,6 +212,12 @@ export function UPDATE_ISSUE_STATES (state, payload) {
   LocalStorage.set('issues.issue_states', payload)
 }
 
+export function UPDATE_ISSUE_ESTIMATIONS (state, payload) {
+  state.issue_estimations = payload
+
+  LocalStorage.set('issues.issue_estimations', payload)
+}
+
 export function DELETE_ISSUE (state, payload) {
   const issueIndex = state.issues
     .findIndex((el, index, array) => {

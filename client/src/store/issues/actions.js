@@ -97,6 +97,22 @@ export async function INIT_ISSUE_TYPES ({ commit }) {
   }
 }
 
+export async function INIT_ISSUE_ESTIMATIONS ({ commit }) {
+  try {
+    const response = await new Api({
+      auth: true,
+      expectedStatus: 200
+    })
+      .get(
+        '/core/issue-estimations/'
+      )
+
+    commit('UPDATE_ISSUE_ESTIMATIONS', response.data)
+  } catch (e) {
+    throw new ErrorHandler(e)
+  }
+}
+
 export async function PATCH_ISSUE ({ commit }, payload) {
   /** At least id and one more param must be provided
    * For example: {

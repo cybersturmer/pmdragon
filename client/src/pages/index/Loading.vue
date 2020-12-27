@@ -46,6 +46,10 @@ export default {
             return this.$store.dispatch('issues/INIT_ISSUE_TYPES')
           })
           .then(() => {
+            this.showProgress('issue estimations')
+            return this.$store.dispatch('issues/INIT_ISSUE_ESTIMATIONS')
+          })
+          .then(() => {
             this.showProgress('sprint durations')
             return this.$store.dispatch('issues/INIT_SPRINT_DURATIONS')
           })
