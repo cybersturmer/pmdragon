@@ -1,6 +1,6 @@
 <img src="docs/images/logo.png" width="149" height="106">
 
-# PmDragon Community Edition
+# PmDragon CE (Community Edition)
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
