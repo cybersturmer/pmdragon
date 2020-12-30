@@ -5,7 +5,7 @@
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
 
-Open-source project management tool to track tasks, epics, bugs, and manage it with agile boards and sprints.
+An open-source project management tool to track tasks, epics, bugs, and manage it with agile boards and sprints.
 
 High-performance VueJs user interfaces built-in MPA application.
 
@@ -39,4 +39,4 @@ Copyright ©2020-present Wladimir Stürmer
 ## Special Thanks
 <img src="/docs/images/jetbrains-variant-4-grayscale.svg" width="149" height="106">
 
-Special thanks to [JetBrains](https://www.jetbrains.com/?from=pmdragon) for the powerful tools for creating this project.
+Special thanks to [JetBrains](https://www.jetbrains.com/?from=pmdragon) for providing me such powerful tools as PyCharm and Webstorm.
