@@ -12,6 +12,12 @@ High-performance VueJs user interface built in MPA application.
 ## Video preview
 [YOUTUBE VIDEO PREVIEW](https://youtu.be/5oVvb1-rbx0)
 
+## Core API
+PmDragon API repository: (https://github.com/cybersturmer/pmdragon-core-api)
+
+## Client (Web / Linux/ Win / Mac / Android / IOS)
+PmDragon crossplatform client: (https://github.com/cybersturmer/pmdragon-client)
+
 ## Screenshot demo
 
 *Worspaces page*
@@ -32,22 +38,6 @@ High-performance VueJs user interface built in MPA application.
 ## Notice
 
 Not ready for using.
-
-Under development.
-
-## Starting
-
-In a directory of clone.
-
-`docker-compose -f docker-compose.yml up -d`
-
-## Stopping
-
-In a directory of clone.
-
-`docker-compose -f docker-compose.yml down`
-
-## Documentation
 
 Under development.
 
