@@ -18,23 +18,6 @@ PmDragon API repository: (https://github.com/cybersturmer/pmdragon-core-api)
 ## Client (Web / Linux/ Win / Mac / Android / IOS)
 PmDragon crossplatform client: (https://github.com/cybersturmer/pmdragon-client)
 
-## Screenshot demo
-
-*Worspaces page*
-<img src="docs/images/workspaces.png">
-
-*Backlog page*
-<img src="docs/images/backlog.png">
-
-*Board page*
-<img src="docs/images/board.png">
-
-*Me page*
-<img src="docs/images/me.png">
-
-*Sprint edit page*
-<img src="docs/images/sprint_edit.png">
-
 ## Notice
 
 Not ready for using.
