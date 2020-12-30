@@ -37,6 +37,6 @@ Copyright ©2020-present Wladimir Stürmer
 [MIT License](https://en.wikipedia.org/wiki/MIT_License)
 
 ## Special Thanks
-<img src="/docs/images/jetbrains-variant-4-grayscale.svg" width="149" height="106">
+<img src="docs/images/jetbrains-variant-4-grayscale.svg" width="149" height="106">
 
 Special thanks to [JetBrains](https://www.jetbrains.com/?from=pmdragon) for providing me such powerful tools as [PyCharm](https://www.jetbrains.com/pycharm/?from=pmdragon) and [Webstorm](https://www.jetbrains.com/webstorm/?from=pmdragon).
