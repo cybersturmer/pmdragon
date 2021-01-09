@@ -18,7 +18,7 @@ High-performance VueJs user interfaces built-in MPA application.
 [API repository](https://github.com/cybersturmer/pmdragon-core-api)
 
 ## Client (Web / Linux/ Win / Mac / Android / IOS)
-[Crossplatform client](https://github.com/cybersturmer/pmdragon-client)
+[Client repository](https://github.com/cybersturmer/pmdragon-client)
 
 ## Notice
 
