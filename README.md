@@ -4,6 +4,7 @@
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon?ref=badge_shield)
 
 An open-source project management tool to track tasks, epics, bugs, and manage it with agile boards and sprints.
 
@@ -35,6 +36,9 @@ PmDragon is an MIT-licensed open source project.
 Copyright ©2020-present Wladimir Stürmer
 
 [MIT License](https://en.wikipedia.org/wiki/MIT_License)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon?ref=badge_large)
 
 ## Special Thanks
 <img src="docs/images/jetbrains-variant-4-grayscale.svg" height="75">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/images/icon-pycharm.svg" height="75">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="docs/images/icon-webstorm.svg" height="75">
