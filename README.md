@@ -10,7 +10,7 @@ An open-source project management tool to track tasks, epics, bugs, and manage i
 High-performance VueJs user interfaces built-in MPA application.
 
 ## Video preview
-[YouTube](https://youtube.com/playlist?list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0)
+[YouTube](https://www.youtube.com/watch?v=jM0jRDFqQCc&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0&index=1)
 
 ## Core API
 [API repository](https://github.com/cybersturmer/pmdragon-core-api)
