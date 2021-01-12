@@ -1,5 +1,7 @@
 <img src="docs/images/pmdragon.png" width="378" height="94">
 
+# PmDragon CE (Community Edition)
+
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon?ref=badge_shield)
