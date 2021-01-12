@@ -1,4 +1,4 @@
-<img src="docs/images/pmdragon.png" width="378" height="94">
+<img src="docs/images/pmdragon.png" width="315" height="78">
 
 # PmDragon CE (Community Edition)
 
