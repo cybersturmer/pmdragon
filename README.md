@@ -1,5 +1,3 @@
-<img src="docs/images/pmdragon.png" width="453" height="113">
-
 # PmDragon CE (Community Edition)
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
