@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Vectornator for iOS (http://vectornator.io/) -->
+
+<svg
+   xmlns:vectornator="http://vectornator.io"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
+   xml:space="preserve"
+   version="1.1"
+   viewBox="0 0 841.995 595.35"
+   id="svg29"
+   sodipodi:docname="geometry.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1055"
+   id="namedview31"
+   showgrid="false"
+   inkscape:zoom="0.1767767"
+   inkscape:cx="-2899.3974"
+   inkscape:cy="477.76799"
+   inkscape:window-x="1920"
+   inkscape:window-y="436"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="layer1" />
+<metadata
+   id="metadata2">
+<vectornator:setting
+   key="DimensionsVisible"
+   value="1" />
+<vectornator:setting
+   key="SnapToGrid"
+   value="0" />
+<vectornator:setting
+   key="SnapToPoints"
+   value="0" />
+<vectornator:setting
+   key="GuidesVisible"
+   value="1" />
+<vectornator:setting
+   key="RulersVisible"
+   value="1" />
+<vectornator:setting
+   key="SnapToEdges"
+   value="0" />
+<vectornator:setting
+   key="DisplayWhiteBackground"
+   value="0" />
+<vectornator:setting
+   key="SnapToGuides"
+   value="1" />
+<vectornator:setting
+   key="GridSpacing"
+   value="36" />
+<vectornator:setting
+   key="Units"
+   value="Millimeters" />
+<vectornator:setting
+   key="DynamicGuides"
+   value="0" />
+<vectornator:setting
+   key="New"
+   value="1" />
+<rdf:RDF><cc:Work
+     rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata>
+<defs
+   id="defs4"><inkscape:perspective
+   sodipodi:type="inkscape:persp3d"
+   inkscape:vp_x="0 : 297.675 : 1"
+   inkscape:vp_y="0 : 1000 : 0"
+   inkscape:vp_z="841.995 : 297.675 : 1"
+   inkscape:persp3d-origin="420.9975 : 198.45 : 1"
+   id="perspective978" /><inkscape:path-effect
+   effect="bspline"
+   id="path-effect912"
+   is_visible="true"
+   weight="33.333333"
+   steps="2"
+   helper_size="0"
+   apply_no_weight="true"
+   apply_with_weight="true"
+   only_selected="false" />
+
+
+
+</defs>
+
+
+
+<g
+   inkscape:groupmode="layer"
+   id="layer2"
+   inkscape:label="back"><path
+     style="clip-rule:evenodd;fill:#b4b4b4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.77240741;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 228.10591,124.54594 h 400 v 200 l -23.29441,-0.007 -121.74208,-121.23042 -151.14311,122.39597 -103.8204,-1.15855 z"
+     id="rect933"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccc" /><path
+     style="clip-rule:evenodd;fill:#393939;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.37073994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 228.10591,324.54594 133.11014,1.15855 121.74207,121.23065 121.85338,-122.39598 23.29441,0.007 v 139.28196 60.71804 H 570.63517 228.10591 Z"
+     id="rect937"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccccc" /></g><g
+   inkscape:groupmode="layer"
+   id="layer3"
+   inkscape:label="inner"><path
+     style="clip-rule:evenodd;fill:#393939;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 484.10595,248.17838 -1e-5,152.73507 -76.36752,-76.36755 z"
+     id="path994"
+     inkscape:connector-curvature="0" /><path
+     style="clip-rule:evenodd;fill:#b4b4b4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 484.10595,248.17838 -1e-5,152.73507 76.36754,-76.36754 z"
+     id="path994-7"
+     inkscape:connector-curvature="0" /></g><g
+   inkscape:groupmode="layer"
+   id="layer1"
+   inkscape:label="eye"
+   style="display:inline"><path
+     style="clip-rule:evenodd;fill:#393939;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 338.46517,299.87504 144.7515,-143.57375 144.709,144.965 0.18024,23.27965 -23.29441,-0.007 L 483.06942,203.3083 361.21605,325.70427 Z"
+     id="path914"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccc" /><path
+     style="clip-rule:evenodd;fill:#b4b4b4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 628.06238,350.05612 482.81087,493.94237 336.51425,351.1385 l 25.0143,-25.05901 121.42957,120.85565 121.85338,-122.39598 23.29441,0.007 z"
+     id="path914-3"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccccccc" /><path
+     style="fill:#393939;fill-opacity:1;stroke:none;stroke-width:0.71025586px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 331.92631,126.41475 h 29.28974 v 99.97398 99.31576 h -29.28974 v -99.40405 z"
+     id="path955"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccc" /><path
+     style="clip-rule:evenodd;fill:#b4b4b4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.71025586px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 331.92631,325.70449 h 29.28974 v 99.97399 99.31576 h -29.28974 v -99.40406 z"
+     id="path955-6"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccccc" /></g></svg>
