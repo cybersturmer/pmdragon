@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Vectornator for iOS (http://vectornator.io/) -->
+
+<svg
+   xmlns:vectornator="http://vectornator.io"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;"
+   xml:space="preserve"
+   version="1.1"
+   viewBox="0 0 841.995 595.35"
+   id="svg29"
+   sodipodi:docname="perfect.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1920"
+   inkscape:window-height="1055"
+   id="namedview31"
+   showgrid="false"
+   inkscape:zoom="1.4142136"
+   inkscape:cx="486.17181"
+   inkscape:cy="316.63098"
+   inkscape:window-x="1920"
+   inkscape:window-y="436"
+   inkscape:window-maximized="1"
+   inkscape:current-layer="svg29" />
+<metadata
+   id="metadata2">
+<vectornator:setting
+   key="DimensionsVisible"
+   value="1" />
+<vectornator:setting
+   key="SnapToGrid"
+   value="0" />
+<vectornator:setting
+   key="SnapToPoints"
+   value="0" />
+<vectornator:setting
+   key="GuidesVisible"
+   value="1" />
+<vectornator:setting
+   key="RulersVisible"
+   value="1" />
+<vectornator:setting
+   key="SnapToEdges"
+   value="0" />
+<vectornator:setting
+   key="DisplayWhiteBackground"
+   value="0" />
+<vectornator:setting
+   key="SnapToGuides"
+   value="1" />
+<vectornator:setting
+   key="GridSpacing"
+   value="36" />
+<vectornator:setting
+   key="Units"
+   value="Millimeters" />
+<vectornator:setting
+   key="DynamicGuides"
+   value="0" />
+<vectornator:setting
+   key="New"
+   value="1" />
+<rdf:RDF><cc:Work
+     rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata>
+<defs
+   id="defs4" />
+<g
+   id="Слой 1"
+   vectornator:layerName="Слой 1"
+   visibility="hidden">
+<path
+   stroke="#b7b7b7"
+   stroke-width="10"
+   d="M144.297+107.441L577.431+107.441L577.431+540.576L144.297+540.576L144.297+107.441Z"
+   fill="#000000"
+   stroke-linecap="round"
+   fill-opacity="0"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path6" />
+</g>
+<g
+   id="Слой 2"
+   vectornator:layerName="Слой 2">
+<path
+   d="M 288.283,106.903 287.016,251.697 432.759,107.14 Z"
+   id="path9"
+   inkscape:connector-curvature="0"
+   style="opacity:1;fill:#b4b4b4;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
+   sodipodi:nodetypes="cccc" />
+<path
+   stroke="#b7b7b7"
+   stroke-width="0.1"
+   d="M144.881+107.806L144.755+252.798L287.761+252.002L288.951+107.737L144.881+107.806Z"
+   fill="#b4b4b4"
+   stroke-linecap="round"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path11" />
+<path
+   stroke="#b7b7b7"
+   stroke-width="0.1"
+   d="M144.403+309.793L144.596+539.94L288.816+539.645L288.313+251.597L144.354+251.384L144.403+309.793"
+   fill="#5a5a5a"
+   stroke-linecap="round"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path13" />
+<path
+   stroke="#b7b7b7"
+   stroke-width="0.1"
+   d="M432.752+107.367L577.292+250.142L576.195+108.619L432.752+107.367Z"
+   fill="#b4b4b4"
+   stroke-linecap="round"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path15" />
+<path
+   stroke="#b7b7b7"
+   stroke-width="0.1"
+   d="M287.016+251.697L433.982+394.358L577.461+252.332L577.722+539.59L287.166+538.877L287.016+251.697Z"
+   fill="#393939"
+   stroke-linecap="square"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path17" />
+<path
+   stroke="#b7b7b7"
+   stroke-width="0.1"
+   d="M374.943+268.283L432.349+209.981L489.618+267.332L432.535+323.985L374.943+268.283Z"
+   fill="#393939"
+   stroke-linecap="round"
+   opacity="1"
+   stroke-linejoin="round"
+   id="path19" />
+</g>
+<g
+   id="Слой 3"
+   vectornator:layerName="Слой 3">
+
+<path
+   vectornator:shadowColor="#880e09"
+   vectornator:shadowOffset="10"
+   vectornator:shadowAngle="1.5708"
+   vectornator:shadowRadius="10"
+   d="M 304.946,251.566 432.328,124.726 559.42322,250.21279"
+   vectornator:shadowOpacity="0"
+   id="path24"
+   inkscape:connector-curvature="0"
+   style="opacity:1;fill:#393939;fill-opacity:0;stroke:#393939;stroke-width:25.75;stroke-linecap:square;stroke-linejoin:miter"
+   sodipodi:nodetypes="ccc" />
+<path
+   vectornator:shadowColor="#880e09"
+   vectornator:shadowOffset="10"
+   vectornator:shadowAngle="1.5708"
+   vectornator:shadowRadius="10"
+   d="M 577.55632,250.28256 577.37213,280.3759 435.135,427.688 314.392,310.691 314.202,539.275 287.494,539.909 286.82069,251.70872 434.367,391.75 Z"
+   vectornator:shadowOpacity="0"
+   id="path26"
+   inkscape:connector-curvature="0"
+   style="opacity:1;fill:#800914;stroke:#800914;stroke-width:0.16;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
+   sodipodi:nodetypes="ccccccccc" />
+</g>
+</svg>
