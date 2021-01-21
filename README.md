@@ -1,5 +1,5 @@
 # PmDragon CE (Community Edition)
-<img src="docs/images/sharp.svg" height="75">
+<img src="docs/images/geometry.svg" height="90">
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
