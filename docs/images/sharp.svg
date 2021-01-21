@@ -29,9 +29,9 @@
    inkscape:window-height="1055"
    id="namedview31"
    showgrid="false"
-   inkscape:zoom="1"
-   inkscape:cx="191.2321"
-   inkscape:cy="241.61499"
+   inkscape:zoom="0.70710678"
+   inkscape:cx="399.11434"
+   inkscape:cy="372.99392"
    inkscape:window-x="1920"
    inkscape:window-y="436"
    inkscape:window-maximized="1"
@@ -83,35 +83,26 @@
    id="Слой 1"
    vectornator:layerName="Слой 1"
    visibility="hidden"
-   style="stroke:none">
+   style="visibility:hidden;stroke:none"
+   transform="matrix(0.46039774,-0.44570455,0.44570455,0.46039774,120.64617,301.65655)">
 <path
-   stroke="#b7b7b7"
-   stroke-width="10"
-   d="M144.297+107.441L577.431+107.441L577.431+540.576L144.297+540.576L144.297+107.441Z"
-   fill="#000000"
-   stroke-linecap="round"
-   fill-opacity="0"
-   opacity="1"
-   stroke-linejoin="round"
+   d="M 144.297,107.441 H 577.431 V 540.576 H 144.297 Z"
    id="path6"
-   style="stroke:none" />
+   style="opacity:1;fill:#000000;fill-opacity:0;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round"
+   inkscape:connector-curvature="0" />
 </g>
 <g
    id="Слой 2"
    vectornator:layerName="Слой 2"
-   style="stroke:none">
+   style="stroke:none"
+   transform="matrix(0.46039774,-0.44570455,0.44570455,0.46039774,120.64617,301.65655)">
 <path
-   d="M 288.283,106.903 287.016,251.697 432.759,107.14 Z"
+   d="M 144.297,107.441 144.74462,251.36838 287.016,251.697 432.759,107.14 Z"
    id="path9"
    inkscape:connector-curvature="0"
    style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
-   sodipodi:nodetypes="cccc" />
-<path
-   d="m 144.297,107.441 0.458,145.357 165.256,2.704 -21.728,-148.599 z"
-   id="path11"
-   inkscape:connector-curvature="0"
-   style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
    sodipodi:nodetypes="ccccc" />
+
 <path
    d="m 145.797,539.326 143.019,0.319 -0.503,-288.048 -143.56838,-0.22862"
    id="path13"
@@ -119,35 +110,26 @@
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="cccc" />
 <path
-   d="M432.752+107.367L577.292+250.142L576.195+108.619L432.752+107.367Z"
+   d="m 432.752,107.367 144.54,142.775 -1.097,-141.523 z"
    id="path15"
-   stroke-linejoin="round"
-   stroke-linecap="round"
-   stroke-width="0.1"
-   stroke="#b7b7b7"
-   fill="#b4b4b4"
-   opacity="1"
-   style="stroke:none" />
+   style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
+   inkscape:connector-curvature="0" />
 <path
-   d="m 287.016,251.697 146.966,142.661 143.479,-142.026 0.261,287.258 -290.13961,0.01 z"
+   d="M 287.016,251.697 433.982,394.358 577.461,252.332 577.722,539.59 287.58239,539.6 Z"
    id="path17"
    style="opacity:1;fill:#393939;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="cccccc" />
 <path
-   stroke="#b7b7b7"
-   stroke-width="0.1"
-   d="M374.943+268.283L432.349+209.981L489.618+267.332L432.535+323.985L374.943+268.283Z"
-   fill="#393939"
-   stroke-linecap="round"
-   opacity="1"
-   stroke-linejoin="round"
+   d="m 374.943,268.283 57.406,-58.302 57.269,57.351 -57.083,56.653 z"
    id="path19"
-   style="stroke:none" />
+   style="opacity:1;fill:#393939;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
+   inkscape:connector-curvature="0" />
 </g>
 <g
    id="Слой 3"
-   vectornator:layerName="Слой 3">
+   vectornator:layerName="Слой 3"
+   transform="matrix(0.46039774,-0.44570455,0.44570455,0.46039774,120.64617,301.65655)">
 
 <path
    vectornator:shadowColor="#880e09"
