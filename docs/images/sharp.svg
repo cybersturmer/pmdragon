@@ -29,9 +29,9 @@
    inkscape:window-height="1055"
    id="namedview29"
    showgrid="false"
-   inkscape:zoom="0.75534891"
-   inkscape:cx="-128.25007"
-   inkscape:cy="290.24012"
+   inkscape:zoom="1"
+   inkscape:cx="215.35692"
+   inkscape:cy="257.76896"
    inkscape:window-x="1920"
    inkscape:window-y="436"
    inkscape:window-maximized="1"
@@ -91,39 +91,36 @@
    vectornator:layerName="Слой 1"
    visibility="hidden">
 <path
-   stroke="#b7b7b7"
-   stroke-width="10"
-   d="M144.297+107.441L577.431+107.441L577.431+540.576L144.297+540.576L144.297+107.441Z"
-   fill="#000000"
-   stroke-linecap="round"
-   fill-opacity="0"
-   opacity="1"
-   stroke-linejoin="round"
-   id="path6" />
+   d="M 144.297,107.441 H 577.431 V 540.576 H 144.297 Z"
+   id="path6"
+   style="opacity:1;fill:#000000;fill-opacity:0;stroke:#b4b4b4;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="ccccc" />
 </g>
 <path
-   style="opacity:1;fill:#b4b4b4;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
+   style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path9"
    d="M 288.283,106.903 287.917,250.589 432.759,107.14 Z" /><path
    sodipodi:nodetypes="ccccc"
-   style="opacity:1;fill:#b4b4b4;stroke:#b4b4b4;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+   style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
    inkscape:connector-curvature="0"
    id="path11"
-   d="m 144.881,107.806 -0.126,144.992 163.42289,1.5415 -1.68533,-145.94055 z" /><path
+   d="m 142.0726,103.12534 -2.46633,148.73653 168.57162,2.47763 -1.68533,-145.94055 z" /><path
    style="opacity:1;fill:#5a5a5a;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path13"
    d="m 144.403,309.793 0.193,230.147 144.22,-0.295 -0.503,-288.048 -143.959,-0.213 0.049,58.409" /><path
    sodipodi:nodetypes="cccc"
-   style="opacity:1;fill:#b4b4b4;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
+   style="opacity:1;fill:#b4b4b4;stroke:none;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path15"
    d="M 432.752,107.367 577.44678,251.07467 576.195,108.619 Z" /><path
-   style="opacity:1;fill:#393939;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;fill-opacity:1"
+   style="opacity:1;fill:#393939;fill-opacity:1;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path17"
-   d="M 287.016,251.697 432.255,395.92 577.461,252.332 577.722,539.59 287.166,538.877 Z" /><path
+   d="m 287.016,251.697 145.239,144.223 145.206,-143.588 0.261,287.258 -290.57905,0.0849 z"
+   sodipodi:nodetypes="cccccc" /><path
    style="opacity:1;fill:#393939;stroke:#b7b7b7;stroke-width:0.1;stroke-linecap:round;stroke-linejoin:round"
    inkscape:connector-curvature="0"
    id="path19"
@@ -136,22 +133,22 @@
    vectornator:shadowOffset="10"
    vectornator:shadowAngle="1.5708"
    vectornator:shadowRadius="10"
-   d="m 577.44678,251.07467 -0.0156,58.45042 L 432.107,455.331 326.426,346.175 l 0.076,193.801 -39.008,-0.067 -0.478,-288.212 145.173,144.383 z"
+   d="m 577.53272,250.90279 -0.10154,58.6223 L 432.107,455.331 326.426,346.175 l 0.076,193.44995 -39.35905,0.05 L 287.016,251.697 430.42123,390.7767 Z"
    vectornator:shadowOpacity="0"
    id="path22"
    inkscape:connector-curvature="0"
-   style="opacity:1;fill:#800914;stroke:#800914;stroke-width:0.16;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
+   style="opacity:1;fill:#800914;stroke:none;stroke-width:0.16;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1"
    sodipodi:nodetypes="ccccccccc" />
 <path
    vectornator:shadowColor="#880e09"
    vectornator:shadowOffset="10"
    vectornator:shadowAngle="1.5708"
    vectornator:shadowRadius="10"
-   d="M 287.016,251.697 C 286.441,250.383 432.294,107.295 432.294,107.295 L 577.44678,251.07467 549.8306,278.62791 432.682,161.986 316.24814,281.97192 c 0,0 -28.65614,-28.96192 -29.23214,-30.27492 z"
+   d="M 287.016,251.697 C 286.441,250.383 432.294,107.295 432.294,107.295 L 577.53272,250.90279 549.93208,278.43294 432.682,161.986 316.24814,281.97192 c 0,0 -28.65614,-28.96192 -29.23214,-30.27492 z"
    vectornator:shadowOpacity="0"
    id="path24"
    inkscape:connector-curvature="0"
-   style="opacity:1;fill:#393939;stroke:#393939;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:0"
+   style="opacity:1;fill:#393939;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:0"
    sodipodi:nodetypes="ccccccc" />
 </g>
 </svg>
