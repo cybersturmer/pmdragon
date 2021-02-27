@@ -10,7 +10,7 @@ An open-source project management tool to track tasks, epics, bugs, and manage i
 High-performance VueJs user interfaces built-in MPA application.
 
 ## Video preview
-[YouTube playlist](https://www.youtube.com/watch?v=jM0jRDFqQCc&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0&index=1)
+[YouTube playlist](https://www.youtube.com/watch?v=ZlPRVjLoKqA&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0&index=1)
 
 ## Core API
 [API repository](https://github.com/cybersturmer/pmdragon-core-api)
@@ -32,7 +32,7 @@ PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
 
 PmDragon is an MIT-licensed open source project.
 
-Copyright ©2020-present Wladimir Stürmer
+Copyright ©2020-present Vladimir Shturmer
 
 [MIT License](https://en.wikipedia.org/wiki/MIT_License)
 
