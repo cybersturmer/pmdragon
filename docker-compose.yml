@@ -22,14 +22,11 @@ services:
       dockerfile: Dockerfile
     env_file: 
       - ./pmdragon-core-api/env/email.env
+      - ./pmdragon-core-api/env/host.env
+      - ./pmdragon-core-api/env/db.env
     environment:
-      - IS_DEBUG=True
       - DJANGO_SECRET_KEY=w*ea%hd29u-&l&rol@5zo8sadsad5o\\=@wb+i*r(@_+fnuc!*^9o0w
-      - DJANGO_SETTINGS_MODULE=conf.production.settings
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=pmdragon
-      - POSTGRES_USER=pmdragon
-      - POSTGRES_PASSWORD=wAzA9OZjZ1DIZbBaRI+bKg==
+      - DJANGO_SETTINGS_MODULE=conf.production.deployment.docker_compose
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
