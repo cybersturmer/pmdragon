@@ -1,4 +1,4 @@
-# PmDragon CE (Community Edition)
+# PmDragon Community
 <img src="docs/images/geometry.svg" height="75">
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
