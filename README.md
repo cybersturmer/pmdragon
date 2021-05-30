@@ -18,12 +18,6 @@ High-performance VueJs user interfaces built-in MPA application.
 ## Client (Web / Linux/ Win / Mac / Android / IOS)
 [Client repository](https://github.com/cybersturmer/pmdragon-client)
 
-## Notice
-
-Not ready for use.
-
-Under development.
-
 ## Semver
 
 PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
