@@ -3,7 +3,7 @@ services:
   web:
     restart: always
     build:
-      context: .
+      context: ..
       dockerfile: ./pmdragon-client/Dockerfile
     ports:
       - 80:80
@@ -18,17 +18,12 @@ services:
   api: &api
     restart: always
     build:
-      context: ./pmdragon-core-api/
-      dockerfile: Dockerfile
-    env_file: 
-      - ./pmdragon-core-api/env/email.env
-      - ./pmdragon-core-api/env/host.env
-      - ./pmdragon-core-api/env/db.env
-    environment:
-      - DJANGO_SECRET_KEY=w*ea%hd29u-&l&rol@5zo8sadsad5o\\=@wb+i*r(@_+fnuc!*^9o0w
-      - DJANGO_SETTINGS_MODULE=conf.production.deployment.docker_compose
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      context: ../pmdragon-core-api/
+      dockerfile: ./Dockerfile
+    env_file:
+      - ../pmdragon-core-api/env/email.env
+      - ../pmdragon-core-api/env/host.env
+      - ../pmdragon-core-api/env/db.env
     depends_on:
       - postgres
       - rabbit
