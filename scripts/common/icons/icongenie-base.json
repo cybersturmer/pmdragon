@@ -1,0 +1,1296 @@
+{
+  "params": {
+    "skipTrim": true,
+    "icon": "./assets/logo.png",
+    "quality": "10",
+    "themeColor": "393939",
+    "svgColor": "393939",
+    "padding": [
+      0,
+      0
+    ],
+    "include": [
+      "all"
+    ]
+  },
+  "assets": [
+    {
+      "generator": "png",
+      "name": "favicon-{size}x{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        128,
+        96,
+        32,
+        16
+      ],
+      "tag": "<link rel=\"icon\" type=\"image/png\" sizes=\"{size}x{size}\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "ico",
+      "name": "favicon.ico",
+      "folder": "public",
+      "tag": "<link rel=\"icon\" type=\"image/ico\" href=\"{name}\">"
+    },
+    {
+      "generator": "png",
+      "name": "favicon-{size}x{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        128,
+        96,
+        32,
+        16
+      ],
+      "tag": "<link rel=\"icon\" type=\"image/png\" sizes=\"{size}x{size}\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "ico",
+      "name": "favicon.ico",
+      "folder": "public",
+      "tag": "<link rel=\"icon\" type=\"image/ico\" href=\"{name}\">"
+    },
+    {
+      "generator": "png",
+      "name": "apple-icon-{size}x{size}.png",
+      "folder": "public/icons",
+      "background": true,
+      "sizes": [
+        120,
+        152,
+        167,
+        180
+      ]
+    },
+    {
+      "generator": "svg",
+      "name": "safari-pinned-tab.svg",
+      "folder": "public/icons"
+    },
+    {
+      "generator": "png",
+      "name": "ms-icon-{size}x{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        144
+      ]
+    },
+    {
+      "generator": "png",
+      "name": "icon-{size}x{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        128,
+        192,
+        256,
+        384,
+        512
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          828,
+          1792
+        ]
+      ],
+      "tag": "<!-- iPhone XR -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1125,
+          2436
+        ]
+      ],
+      "tag": "<!-- iPhone X, XS -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1242,
+          2688
+        ]
+      ],
+      "tag": "<!-- iPhone XS Max -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          750,
+          1334
+        ]
+      ],
+      "tag": "<!-- iPhone 8, 7, 6s, 6 -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1242,
+          2208
+        ]
+      ],
+      "tag": "<!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          640,
+          1136
+        ]
+      ],
+      "tag": "<!-- iPhone 5 -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1536,
+          2048
+        ]
+      ],
+      "tag": "<!-- iPad Mini, Air, 9.7\" -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1668,
+          2224
+        ]
+      ],
+      "tag": "<!-- iPad Pro 10.5\" -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          1668,
+          2388
+        ]
+      ],
+      "tag": "<!-- iPad Pro 11\" -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "apple-launch-{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        [
+          2048,
+          2732
+        ]
+      ],
+      "tag": "<!-- iPad Pro 12.9\" -->\n<link rel=\"apple-touch-startup-image\" media=\"(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "png",
+      "name": "favicon-{size}x{size}.png",
+      "folder": "public/icons",
+      "sizes": [
+        128,
+        96,
+        32,
+        16
+      ],
+      "tag": "<link rel=\"icon\" type=\"image/png\" sizes=\"{size}x{size}\" href=\"icons/{name}\">"
+    },
+    {
+      "generator": "ico",
+      "name": "favicon.ico",
+      "folder": "public",
+      "tag": "<link rel=\"icon\" type=\"image/ico\" href=\"{name}\">"
+    },
+    {
+      "generator": "png",
+      "name": "icon-{size}x{size}.png",
+      "folder": "src-bex/icons",
+      "sizes": [
+        16,
+        48,
+        128
+      ]
+    },
+    {
+      "generator": "png",
+      "name": "ldpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        36
+      ],
+      "platform": "cordova-android",
+      "density": "ldpi"
+    },
+    {
+      "generator": "png",
+      "name": "mdpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        48
+      ],
+      "platform": "cordova-android",
+      "density": "mdpi"
+    },
+    {
+      "generator": "png",
+      "name": "hdpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        72
+      ],
+      "platform": "cordova-android",
+      "density": "hdpi"
+    },
+    {
+      "generator": "png",
+      "name": "xhdpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        96
+      ],
+      "platform": "cordova-android",
+      "density": "xhdpi"
+    },
+    {
+      "generator": "png",
+      "name": "xxhdpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        144
+      ],
+      "platform": "cordova-android",
+      "density": "xxhdpi"
+    },
+    {
+      "generator": "png",
+      "name": "xxxhdpi.png",
+      "folder": "src-cordova/res/android",
+      "sizes": [
+        192
+      ],
+      "platform": "cordova-android",
+      "density": "xxxhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-ldpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          320,
+          200
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-ldpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-ldpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          200,
+          320
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-ldpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-mdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          480,
+          320
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-mdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-mdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          320,
+          480
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-mdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-hdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          800,
+          480
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-hdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-hdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          480,
+          800
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-hdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-xhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          1280,
+          720
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-xhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-xhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          720,
+          1280
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-xhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-xxhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          1600,
+          960
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-xxhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-xxhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          960,
+          1600
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-xxhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-land-xxxhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          1920,
+          1280
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "land-xxxhdpi"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-port-xxxhdpi.png",
+      "folder": "src-cordova/res/screen/android",
+      "sizes": [
+        [
+          1280,
+          1920
+        ]
+      ],
+      "platform": "cordova-android",
+      "density": "port-xxxhdpi"
+    },
+    {
+      "generator": "png",
+      "name": "icon.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        57
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        114
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-20@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        40
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-20@3x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        60
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-29.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        29
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-29@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        58
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-29@3x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        87
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-40@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        80
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-60@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        120
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-60@3x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        180
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-20.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        20
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-20@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        40
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-40.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        40
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-50.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        50
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-50@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        100
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-72.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        72
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-72@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        144
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-76.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        76
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-76@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        152
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-83.5@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        167
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-1024.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        1024
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-24@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        48
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-27.5@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        55
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-29@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        58
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-29@3x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        87
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-40@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        80
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-44@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        88
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-50@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        100
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-86@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        172
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "icon-98@2x.png",
+      "folder": "src-cordova/res/ios",
+      "sizes": [
+        196
+      ],
+      "platform": "cordova-ios",
+      "background": true
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@2x~iphone~anyany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          1334,
+          1334
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@2x~iphone~comany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          750,
+          1334
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@2x~iphone~comcom.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          1334,
+          750
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@3x~iphone~anyany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          2208,
+          2208
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@3x~iphone~anycom.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          2208,
+          1242
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@3x~iphone~comany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          1242,
+          2208
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@2x~ipad~anyany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          2732,
+          2732
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "splashscreen",
+      "name": "Default@2x~ipad~comany.png",
+      "folder": "src-cordova/res/screen/ios",
+      "sizes": [
+        [
+          1278,
+          2732
+        ]
+      ],
+      "platform": "cordova-ios"
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-hdpi",
+      "name": "ic_launcher_foreground.png",
+      "sizes": [
+        162
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-hdpi",
+      "name": "ic_launcher_round.png",
+      "sizes": [
+        49
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-hdpi",
+      "name": "ic_launcher.png",
+      "sizes": [
+        49
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-mdpi",
+      "name": "ic_launcher_foreground.png",
+      "sizes": [
+        108
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-mdpi",
+      "name": "ic_launcher_round.png",
+      "sizes": [
+        48
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-mdpi",
+      "name": "ic_launcher.png",
+      "sizes": [
+        48
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xhdpi",
+      "name": "ic_launcher_foreground.png",
+      "sizes": [
+        216
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xhdpi",
+      "name": "ic_launcher_round.png",
+      "sizes": [
+        96
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xhdpi",
+      "name": "ic_launcher.png",
+      "sizes": [
+        96
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxhdpi",
+      "name": "ic_launcher_foreground.png",
+      "sizes": [
+        324
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxhdpi",
+      "name": "ic_launcher_round.png",
+      "sizes": [
+        144
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxhdpi",
+      "name": "ic_launcher.png",
+      "sizes": [
+        144
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxxhdpi",
+      "name": "ic_launcher_foreground.png",
+      "sizes": [
+        432
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxxhdpi",
+      "name": "ic_launcher_round.png",
+      "sizes": [
+        192
+      ]
+    },
+    {
+      "generator": "png",
+      "folder": "src-capacitor/android/app/src/main/res/mipmap-xxxhdpi",
+      "name": "ic_launcher.png",
+      "sizes": [
+        192
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable",
+      "sizes": [
+        [
+          480,
+          320
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-land-mdpi",
+      "sizes": [
+        [
+          480,
+          320
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-port-mdpi",
+      "sizes": [
+        [
+          320,
+          480
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-land-hdpi",
+      "sizes": [
+        [
+          800,
+          480
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-port-hdpi",
+      "sizes": [
+        [
+          480,
+          800
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-land-xhdpi",
+      "sizes": [
+        [
+          1280,
+          720
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-port-xhdpi",
+      "sizes": [
+        [
+          720,
+          1280
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-land-xxhdpi",
+      "sizes": [
+        [
+          1600,
+          960
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-port-xxhdpi",
+      "sizes": [
+        [
+          960,
+          1600
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-land-xxxhdpi",
+      "sizes": [
+        [
+          1920,
+          1280
+        ]
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash.png",
+      "folder": "src-capacitor/android/app/src/main/res/drawable-port-xxxhdpi",
+      "sizes": [
+        [
+          1280,
+          1920
+        ]
+      ]
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-20x20@1x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        20
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-20x20@2x-1.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        40
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-20x20@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        40
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-20x20@3x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        60
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-29x29@1x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        29
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-29x29@2x-1.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        58
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-29x29@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        58
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-29x29@3x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        87
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-40x40@1x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        40
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-40x40@2x-1.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        80
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-40x40@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        80
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-40x40@3x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        120
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-60x60@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        120
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-60x60@3x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        180
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-76x76@1x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        76
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-76x76@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        152
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-83.5x83.5@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        167
+      ],
+      "background": true
+    },
+    {
+      "generator": "png",
+      "name": "AppIcon-512@2x.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/AppIcon.appiconset",
+      "sizes": [
+        1024
+      ],
+      "background": true
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-2732x2732-1.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset",
+      "sizes": [
+        2732
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-2732x2732-2.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset",
+      "sizes": [
+        2732
+      ]
+    },
+    {
+      "generator": "splashscreen",
+      "name": "splash-2732x2732.png",
+      "folder": "src-capacitor/ios/App/App/Assets.xcassets/Splash.imageset",
+      "sizes": [
+        2732
+      ]
+    },
+    {
+      "generator": "icns",
+      "name": "icon.icns",
+      "folder": "src-electron/icons"
+    },
+    {
+      "generator": "ico",
+      "name": "icon.ico",
+      "folder": "src-electron/icons"
+    },
+    {
+      "generator": "png",
+      "name": "linux-512x512.png",
+      "folder": "src-electron/icons",
+      "sizes": [
+        512
+      ]
+    }
+  ]
+}
