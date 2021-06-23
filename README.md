@@ -9,6 +9,9 @@ An open-source project management tool to track tasks, epics, bugs, and manage i
 
 High-performance VueJs user interfaces built-in MPA application.
 
+## Backlog (Overall)
+https://github.com/cybersturmer/pmdragon/projects/1?fullscreen=true
+
 ## Video preview
 [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0)
 
