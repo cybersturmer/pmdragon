@@ -1,5 +1,5 @@
 # PmDragon Community
-<img src="docs/images/logo.svg" height="110">
+<img src="docs/images/logo.png" height="110">
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
@@ -8,6 +8,9 @@
 An open-source project management tool to track tasks, epics, bugs, and manage it with agile boards and sprints.
 
 High-performance VueJs user interfaces built-in MPA application.
+
+## Backlog
+[Overall Backlog](https://github.com/cybersturmer/pmdragon/projects/1?fullscreen=true)
 
 ## Video preview
 [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0)
