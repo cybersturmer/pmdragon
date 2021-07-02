@@ -19,8 +19,6 @@ High-performance VueJs user interfaces built-in MPA application.
 | ------------ | --------------- |
 | [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon-client) |
 
-
-
 ## Semver
 
 PmDragon is following [Semantic Versioning 2.0](https://semver.org/)
