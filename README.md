@@ -9,17 +9,17 @@ An open-source project management tool to track tasks, epics, bugs, and manage i
 
 High-performance VueJs user interfaces built-in MPA application.
 
-## Backlog
-[Overall Backlog](https://github.com/cybersturmer/pmdragon/projects/1?fullscreen=true)
+## Product
+| Backlog | Video |
+| ------- | ----- |
+| [GitHub Project](https://github.com/cybersturmer/pmdragon/projects/1?fullscreen=true) | [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0) |
 
-## Video preview
-[YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0)
+## Repositories
+| API | Client |
+| ------------ | --------------- |
+| [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon-client) |
 
-## Core API
-[API repository](https://github.com/cybersturmer/pmdragon-core-api)
 
-## Client (Web / Linux/ Win / Mac / Android / IOS)
-[Client repository](https://github.com/cybersturmer/pmdragon-client)
 
 ## Semver
 
