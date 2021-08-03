@@ -15,3 +15,4 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $FRONTEND_PATH/
 
 # Let's optimize this archive
 zipalign -v 4 $APK_BUILD_PATH/app-release-unsigned.apk $APK_BUILD_PATH/app-release-signed.apk
+rm $APK_BUILD_PATH/app-release-unsigned.apk
