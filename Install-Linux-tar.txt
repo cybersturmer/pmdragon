@@ -1,0 +1,12 @@
+PmDragon
+
+INSTALLATION INSTRUCTIONS
+===============================================================================
+
+    1. Unzip the downloaded PmDragon archive in target destination.
+    2. To start application, open terminal, cd into just unpacked content and type:
+        ./pmdragon
+
+Thank you,
+Feel free to contact me cybersturmer@ya.ru
+Vladimir Shturmer
