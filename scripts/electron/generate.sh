@@ -15,6 +15,7 @@ rm -R UnPackaged
 for directory in */ ; do
   # Copy Install instruction to folder before zip
   if [[ $directory == *"linux"* ]]; then
+    echo "Copying install instructions to folder..."
     cp ../../Install-Linux-tar.txt "$BUILD_PATH/$directory"
   fi
 
