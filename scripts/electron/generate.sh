@@ -1,7 +1,6 @@
 # Generating build first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 BUILD_PATH=$FRONTEND_PATH/dist/electron
-set -ex
 
 cd $FRONTEND_PATH || exit 0
 
