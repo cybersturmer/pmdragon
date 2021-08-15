@@ -23,27 +23,50 @@ rm -R UnPackaged
 # Add build number to text file
 echo "$PACKAGE_VERSION" > ../../build_number.txt
 
+# Removing file with previous build information
+rm ../releases.txt
+
 for directory in */ ; do
   echo ""
   echo "===== Processing ${directory} ====="
 
-  # Creating entry with comma separated
-  # example: pmdragon-client-linux-x64, pmdragon-client-linux-x64-1.0.43.zip
-  # We will parse this file using python then
-  echo "${directory%/},${directory%/}-${PACKAGE_VERSION}.zip" >> ../releases.txt
+  DESTINATION="$BUILD_PATH/$directory"
 
   echo "Copying Install instruction to folder before zip.."
   if [[ $directory == *"linux"* ]]; then
     echo "Copying install instructions to folder..."
-    cp ../../Install-Linux-tar.txt "$BUILD_PATH/$directory"
+    cp ../../Install-Linux-tar.txt "$DESTINATION"
   fi
 
   echo "Copying build number file to application folder..."
-  cp ../../build_number.txt "$BUILD_PATH/$directory"
+  cp ../../build_number.txt "$DESTINATION"
 
   echo "Copying LICENSE file to folder before zip it..."
-  cp ../../LICENSE "$BUILD_PATH/$directory"
+  cp ../../LICENSE "$DESTINATION"
 
   echo "Zip folder with original name and version..."
-  zip -r "${directory%/}-${PACKAGE_VERSION}.zip"  "$BUILD_PATH/$directory" > /dev/null 2>&1
+  ZIP_FILE_NAME="${directory%/}-${PACKAGE_VERSION}.zip"
+  zip -r "$ZIP_FILE_NAME"  "$DESTINATION" > /dev/null 2>&1
+
+  rm -r "$directory"
+
+  # Creating entry with comma separated
+  # example: pmdragon-client-linux-x64, 78M, pmdragon-client-linux-x64-1.0.43.zip
+  # We will parse this file using python then
+  echo "${directory%/},$(du -hs "$ZIP_FILE_NAME" | cut -f 1),${ZIP_FILE_NAME}" >> ../releases.txt
 done
+
+echo "Creating zips is completed."
+
+# @todo Parsing files with python and creating beautiful JSON for it
+
+echo "Connecting to send files to Source Forge..."
+sftp cybersturmer@frs.sourceforge.net << EOF
+    cd /home/frs/project/pmdragon
+    mkdir "$PACKAGE_VERSION"
+    cd "$PACKAGE_VERSION"
+    $(for file in *.zip ; do echo "put $file"; done)
+    bye
+EOF
+
+echo "Files sent."
