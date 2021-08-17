@@ -1,5 +1,6 @@
 # Generating build first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
+SCRIPTS_PATH=~/projects/pmdragon/tools/scripts/electron
 BUILD_PATH=$FRONTEND_PATH/dist/electron
 RELEASES_TXT_FILENAME="releases.txt"
 RELEASES_JSON_FILENAME="releases.json"
@@ -58,7 +59,7 @@ done
 echo "Creating zips is completed."
 
 # Args build_number releases_txt_path releases_json_path
-python ~/projects/pmdragon/tools/scripts/electron/release_master.py  "$PACKAGE_VERSION" "$BUILD_PATH/$RELEASES_TXT_FILENAME" "$BUILD_PATH/$RELEASES_JSON_FILENAME"
+python "$SCRIPTS_PATH/release_master.py"  "$PACKAGE_VERSION" "$BUILD_PATH/$RELEASES_TXT_FILENAME" "$BUILD_PATH/$RELEASES_JSON_FILENAME"
 
 echo "Connecting to send files to Source Forge..."
 sftp cybersturmer@frs.sourceforge.net << EOF
