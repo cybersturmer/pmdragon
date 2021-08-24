@@ -26,7 +26,13 @@ rm -R UnPackaged
 # Add build number to text file
 echo "$PACKAGE_VERSION" > ./build_number.txt
 
+mkdir installers
+
 for directory in */ ; do
+  if [[ "$directory" == 'installers/' ]]; then
+    continue
+  fi
+
   echo ""
   echo "===== Processing ${directory} ====="
 
@@ -36,6 +42,38 @@ for directory in */ ; do
   if [[ $directory == *"linux"* ]]; then
     echo "Copying install instructions to folder..."
     cp ../../Install-Linux-tar.txt "$DESTINATION"
+
+    echo -n "Creating deb file for Debian based Linux OS..."
+
+    case $directory in
+      "pmdragon-client-linux-ia32/")
+        echo "$directory"
+        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_i386.deb"
+        electron-installer-debian --src "$directory" --arch i386 --config "${FRONTEND_PATH}/deb_config.json"
+        echo "DEB (Debian i386),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        ;;
+      "pmdragon-client-linux-armv7l/")
+        echo "$directory"
+        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm.deb"
+        electron-installer-debian --src "$directory" --arch arm --config "${FRONTEND_PATH}/deb_config.json"
+        echo "DEB (Debian arm),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        ;;
+      "pmdragon-client-linux-arm64/")
+        echo "$directory"
+        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm64.deb"
+        electron-installer-debian --src "$directory" --arch arm64 --config "${FRONTEND_PATH}/deb_config.json"
+        echo "DEB (Debian arm64),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        ;;
+      "pmdragon-client-linux-x64/")
+        echo "$directory"
+        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_amd64.deb"
+        electron-installer-debian --src "$directory" --arch amd64 --config "${FRONTEND_PATH}/deb_config.json"
+        echo "DEB (Debian x64),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        ;;
+      *)
+        echo "skipped"
+    esac
+
   fi
 
   echo "Copying build number file to application folder..."
@@ -48,7 +86,7 @@ for directory in */ ; do
   ZIP_FILE_NAME="${directory%/}-${PACKAGE_VERSION}.zip"
   zip -r "$ZIP_FILE_NAME"  "$DESTINATION" > /dev/null 2>&1
 
-  rm -r "$directory"
+   rm -r "$directory"
 
   # Creating entry with comma separated
   # example: pmdragon-client-linux-x64, 78M, pmdragon-client-linux-x64-1.0.43.zip
@@ -68,6 +106,8 @@ sftp cybersturmer@frs.sourceforge.net << EOF
     mkdir "$PACKAGE_VERSION"
     cd "$PACKAGE_VERSION"
     $(for file in *.zip ; do echo "put $file"; done)
+    lcd installers
+    $(for file in *.deb ; do echo "put $file"; done)
     bye
 EOF
 

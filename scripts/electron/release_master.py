@@ -5,6 +5,8 @@ import json
 
 from pathlib import Path
 
+from datetime import datetime
+
 if __name__ == '__main__':
     assert len(sys.argv) >= 2, 'Please provide required arguments (build_number and release_file)'
 
@@ -29,7 +31,7 @@ if __name__ == '__main__':
     to be Windows platform oriented
     """
     markers = {
-        'linux': ['linux'],
+        'linux': ['linux', '.deb', 'DEB'],
         'macos': ['darwin', 'mas'],
         'windows': ['win32']
     }
@@ -60,6 +62,7 @@ if __name__ == '__main__':
 
     result = {
         'version': build_number,
+        'timestamp': datetime.now().strftime("%d %B %Y"),
         'releases': releases_dict
     }
 
