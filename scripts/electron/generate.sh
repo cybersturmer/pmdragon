@@ -48,27 +48,35 @@ for directory in */ ; do
     case $directory in
       "pmdragon-client-linux-ia32/")
         echo "$directory"
-        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_i386.deb"
+        ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_i386.deb"
+        NEW_DEB_FILENAME="pmdragon-client-i386.deb"
+        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch i386 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "DEB (Debian i386),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        echo "Debian i386 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-armv7l/")
         echo "$directory"
-        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm.deb"
+        ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm.deb"
+        NEW_DEB_FILENAME="pmdragon-client-arm.deb"
+        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch arm --config "${FRONTEND_PATH}/deb_config.json"
-        echo "DEB (Debian arm),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        echo "Debian arm .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-arm64/")
         echo "$directory"
-        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm64.deb"
+        ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm64.deb"
+        NEW_DEB_FILENAME="pmdragon-client-arm64.deb"
+        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch arm64 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "DEB (Debian arm64),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        echo "Debian arm64 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-x64/")
         echo "$directory"
-        DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_amd64.deb"
+        ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_amd64.deb"
+        NEW_DEB_FILENAME="pmdragon-client-amd64.deb"
+        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch amd64 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "DEB (Debian x64),$(du -hs "./installers/$DEB_FILENAME" | cut -f 1),${DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        echo "Debian x64 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       *)
         echo "skipped"
