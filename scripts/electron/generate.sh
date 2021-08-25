@@ -2,6 +2,7 @@
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 SCRIPTS_PATH=~/projects/pmdragon/tools/scripts/electron
 BUILD_PATH=$FRONTEND_PATH/dist/electron
+INSTALLERS_PATH="installers"
 RELEASES_TXT_FILENAME="releases.txt"
 RELEASES_JSON_FILENAME="releases.json"
 
@@ -50,33 +51,33 @@ for directory in */ ; do
         echo "$directory"
         ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_i386.deb"
         NEW_DEB_FILENAME="pmdragon-client-i386.deb"
-        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch i386 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "Debian i386 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        mv "./$INSTALLERS_PATH/$ORIG_DEB_FILENAME" "./$INSTALLERS_PATH/$NEW_DEB_FILENAME"
+        echo "Debian i386 .deb,$(du -hs "./$INSTALLERS_PATH/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-armv7l/")
         echo "$directory"
         ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm.deb"
         NEW_DEB_FILENAME="pmdragon-client-arm.deb"
-        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch arm --config "${FRONTEND_PATH}/deb_config.json"
-        echo "Debian arm .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        mv "./$INSTALLERS_PATH/$ORIG_DEB_FILENAME" "./$INSTALLERS_PATH/$NEW_DEB_FILENAME"
+        echo "Debian arm .deb,$(du -hs "./$INSTALLERS_PATH/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-arm64/")
         echo "$directory"
         ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_arm64.deb"
         NEW_DEB_FILENAME="pmdragon-client-arm64.deb"
-        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch arm64 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "Debian arm64 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        mv "./$INSTALLERS_PATH/$ORIG_DEB_FILENAME" "./$INSTALLERS_PATH/$NEW_DEB_FILENAME"
+        echo "Debian arm64 .deb,$(du -hs "./$INSTALLERS_PATH/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       "pmdragon-client-linux-x64/")
         echo "$directory"
         ORIG_DEB_FILENAME="pmdragon-client_${PACKAGE_VERSION}_amd64.deb"
         NEW_DEB_FILENAME="pmdragon-client-amd64.deb"
-        mv "$ORIG_DEB_FILENAME" "$NEW_DEB_FILENAME"
         electron-installer-debian --src "$directory" --arch amd64 --config "${FRONTEND_PATH}/deb_config.json"
-        echo "Debian x64 .deb,$(du -hs "./installers/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
+        mv "./$INSTALLERS_PATH/$ORIG_DEB_FILENAME" "./$INSTALLERS_PATH/$NEW_DEB_FILENAME"
+        echo "Debian x64 .deb,$(du -hs "./$INSTALLERS_PATH/$NEW_DEB_FILENAME" | cut -f 1),${NEW_DEB_FILENAME}" >> "$RELEASES_TXT_FILENAME"
         ;;
       *)
         echo "skipped"
@@ -91,7 +92,7 @@ for directory in */ ; do
   cp ../../LICENSE "$DESTINATION"
 
   echo "Zip folder with original name and version..."
-  ZIP_FILE_NAME="${directory%/}-${PACKAGE_VERSION}.zip"
+  ZIP_FILE_NAME="${directory%/}.zip"
   zip -r "$ZIP_FILE_NAME"  "$DESTINATION" > /dev/null 2>&1
 
    rm -r "$directory"
