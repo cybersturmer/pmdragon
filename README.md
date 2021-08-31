@@ -1,5 +1,5 @@
 # PmDragon Tools
-<img src="docs/images/logo.png" height="110">
+<img src="docs/images/logo_dark.svg" height="110">
 
 ![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
 ![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
