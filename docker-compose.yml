@@ -6,8 +6,8 @@ services:
       context: ..
       dockerfile: ./pmdragon-client/Dockerfile
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     depends_on:
       - api
     volumes:
@@ -39,7 +39,7 @@ services:
     image: postgres:12.2
     restart: always
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_DB=pmdragon
@@ -53,18 +53,18 @@ services:
     hostname: rabbit
     image: rabbitmq:3-management
     ports:
-      - 5672:5672
-      - 15672:15762 # rabbitmq management plugin
+      - "5672:5672"
+      - "15672:15762" # rabbitmq management plugin
   redis:
     hostname: redis
     image: redis:latest
     ports:
-      - 6379:6379
+      - "6379:6379"
   worker:
     <<: *api
     command: sh ./celery-entrypoint.sh
     ports: []
-    depends_on: 
+    depends_on:
       - rabbit
       - postgres
 volumes:
