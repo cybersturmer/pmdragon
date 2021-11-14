@@ -44,9 +44,9 @@ case "${build}" in
 		echo "Skipping build...";;
 esac
 
-# Signing APK with key
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $FRONTEND_PATH/pmdragon.keystore $BUILD_PATH/app-release-unsigned.apk pmdragon
-
 # Let's optimize this archive
-zipalign -v 4 $BUILD_PATH/app-release-unsigned.apk $BUILD_PATH/app-release-signed.apk
+zipalign -v 4 $BUILD_PATH/app-release-unsigned.apk $BUILD_PATH/app-release-unsigned-packed.apk
+
+# Signing APK with key
+apksigner sign --ks $FRONTEND_PATH/pmdragon.keystore --ks-pass ./password.txt --v1-signing-enabled true --v2-signing-enabled true app-release-unsigned-packed.apk
 rm $BUILD_PATH/app-release-unsigned.apk
