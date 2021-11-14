@@ -1,6 +1,6 @@
 # Let's generate apk first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
-BUILD_PATH=$FRONTEND_PATH/dist/cordova/android/apk/release
+BUILD_PATH=$FRONTEND_PATH/dist/capacitor/android/apk/release
 
 cd $FRONTEND_PATH || exit 0
 
@@ -8,7 +8,7 @@ cd $FRONTEND_PATH || exit 0
 npm version patch
 
 # Updating build for mobile application
-quasar build -m android
+quasar build -m capacitor -T android
 
 # Signing APK with key
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore $FRONTEND_PATH/pmdragon.keystore $BUILD_PATH/app-release-unsigned.apk pmdragon
