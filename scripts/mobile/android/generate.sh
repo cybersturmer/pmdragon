@@ -2,7 +2,9 @@
 # Let's generate apk first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 BUILD_PATH=$FRONTEND_PATH/dist/capacitor/android/apk/release
+SCRIPT_PATH="$(pwd)"/scripts/mobile/android
 
+# And flag all given arguments
 while getopts v:b: flag
 do
 	case "${flag}" in
@@ -48,5 +50,5 @@ esac
 zipalign -v 4 $BUILD_PATH/app-release-unsigned.apk $BUILD_PATH/app-release-unsigned-packed.apk
 
 # Signing APK with key
-apksigner sign --ks $FRONTEND_PATH/pmdragon.keystore --ks-pass ./password.txt --v1-signing-enabled true --v2-signing-enabled true app-release-unsigned-packed.apk
-rm $BUILD_PATH/app-release-unsigned.apk
+apksigner sign --ks "$SCRIPT_PATH"/pmdragon.keystore --ks-pass file:"$SCRIPT_PATH"/password.txt --v1-signing-enabled true --v2-signing-enabled true $BUILD_PATH/app-release-unsigned-packed.apk
+cp $BUILD_PATH/app-release-unsigned-packed.apk $BUILD_PATH/app-release-signed-packed.apk

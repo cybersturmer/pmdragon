@@ -93,5 +93,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-
-/scripts/cordova/android/password.txt
+# Sign things
+/scripts/mobile/android/pmdragon.keystore
+/scripts/mobile/android/password.txt
