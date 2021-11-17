@@ -4,6 +4,9 @@ FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 BUILD_PATH=$FRONTEND_PATH/dist/capacitor/android/apk/release
 SCRIPT_PATH="$(pwd)"/scripts/mobile/android
 
+set -ex
+cd $FRONTEND_PATH || exit 0
+
 # And flag all given arguments
 while getopts v:b: flag
 do
@@ -34,9 +37,7 @@ case "${version}" in
 esac
 
 
-set -ex
 
-cd $FRONTEND_PATH || exit 0
 
 # Updating build for mobile application
 case "${build}" in
