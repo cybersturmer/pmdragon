@@ -18,20 +18,8 @@ done
 
 # Lets define how we map -v param to npm version command
 case "${version}" in
-	major)
-		npm version major;;
-	minor)
-		npm version minor;;
-	patch)
-		npm version patch;;
-	premajor)
-		npm version premajor;;
-	preminor)
-		npm version preminor;;
-	prepatch)
-		npm version prepatch;;
-	prerelease)
-		npm version prerelease;;
+	major|minor|patch|premajor|preminor|prepatch|prerelease)
+		npm version "${version}";;
 	*)
 		echo "Skipping versioning...";;
 esac
