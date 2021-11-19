@@ -7,6 +7,19 @@ SCRIPT_PATH="$(pwd)"/scripts/mobile/android
 set -ex
 cd $FRONTEND_PATH || exit 0
 
+# Check if keystore file is present
+if [ ! -f "$SCRIPT_PATH"/pmdragon.keystore ]; then
+	echo "File $SCRIPT_PATH/pmdragon.keystore does not exist, exiting..."
+	exit 0
+fi
+
+# Check if password file exist
+if [ ! -f "$SCRIPT_PATH"/password.txt ]; then
+	echo "File $SCRIPT_PATH/password.txt does not exist, exiting..."
+	exit 0
+fi
+
+
 # And flag all given arguments
 while getopts v:b: flag
 do
