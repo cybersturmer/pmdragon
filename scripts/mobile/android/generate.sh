@@ -1,20 +1,21 @@
-# How to call it: generate.sh -v patch -b yes
+# How to call it: sh ./generate.sh -v patch -b yes
 # Let's generate apk first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 BUILD_PATH=$FRONTEND_PATH/dist/capacitor/android/apk/release
-SCRIPT_PATH="$(pwd)"/scripts/mobile/android
+SCRIPT_PATH="$(pwd)"
 
 set -ex
 cd $FRONTEND_PATH || exit 0
 
 # Check if keystore file is present
-if [ ! -f "$SCRIPT_PATH"/pmdragon.keystore ]; then
+if [ ! -f "$SCRIPT_PATH/pmdragon.keystore" ]; then
+	ls "$SCRIPT_PATH"
 	echo "File $SCRIPT_PATH/pmdragon.keystore does not exist, exiting..."
 	exit 0
 fi
 
 # Check if password file exist
-if [ ! -f "$SCRIPT_PATH"/password.txt ]; then
+if [ ! -f "$SCRIPT_PATH/password.txt" ]; then
 	echo "File $SCRIPT_PATH/password.txt does not exist, exiting..."
 	exit 0
 fi
