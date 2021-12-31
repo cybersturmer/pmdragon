@@ -2,21 +2,21 @@
 # Let's generate apk first
 FRONTEND_PATH=~/projects/pmdragon/pmdragon-client
 BUILD_PATH=$FRONTEND_PATH/dist/capacitor/android/apk/release
-SCRIPT_PATH="$(pwd)"
+BASE_PATH=~/projects/pmdragon/tools/scripts/mobile/android
 
 set -ex
 cd $FRONTEND_PATH || exit 0
 
 # Check if keystore file is present
-if [ ! -f "$SCRIPT_PATH/pmdragon.keystore" ]; then
-	ls "$SCRIPT_PATH"
-	echo "File $SCRIPT_PATH/pmdragon.keystore does not exist, exiting..."
+if [ ! -f "$BASE_PATH/pmdragon.keystore" ]; then
+	ls "$BASE_PATH"
+	echo "File $BASE_PATH/pmdragon.keystore does not exist, exiting..."
 	exit 0
 fi
 
 # Check if password file exist
-if [ ! -f "$SCRIPT_PATH/password.txt" ]; then
-	echo "File $SCRIPT_PATH/password.txt does not exist, exiting..."
+if [ ! -f "$BASE_PATH/password.txt" ]; then
+	echo "File $BASE_PATH/password.txt does not exist, exiting..."
 	exit 0
 fi
 
@@ -53,5 +53,5 @@ esac
 zipalign -v 4 $BUILD_PATH/app-release-unsigned.apk $BUILD_PATH/app-release-unsigned-packed.apk
 
 # Signing APK with key
-apksigner sign --ks "$SCRIPT_PATH"/pmdragon.keystore --ks-pass file:"$SCRIPT_PATH"/password.txt --v1-signing-enabled true --v2-signing-enabled true $BUILD_PATH/app-release-unsigned-packed.apk
+apksigner sign --ks "$BASE_PATH"/pmdragon.keystore --ks-pass file:"$BASE_PATH"/password.txt --v1-signing-enabled true --v2-signing-enabled true $BUILD_PATH/app-release-unsigned-packed.apk
 cp $BUILD_PATH/app-release-unsigned-packed.apk $BUILD_PATH/app-release-signed-packed.apk
