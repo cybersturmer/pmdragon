@@ -1,18 +1,15 @@
 # PmDragon Tools
 <img src="docs/images/logo_dark.svg" height="110">
 
-![Api CI](https://github.com/cybersturmer/pmdragon/workflows/Api%20CI/badge.svg?branch=master)
-![CodeQL](https://github.com/cybersturmer/pmdragon/workflows/CodeQL/badge.svg?branch=master)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcybersturmer%2Fpmdragon?ref=badge_shield)
+An open-source project management tool for tracking tasks, epics, and bugs, with Agile boards and sprint management.
 
-An open-source project management tool to track tasks, epics, bugs, and manage it with agile boards and sprints.
+High-performance Vue.js user interfaces built as a multi-page application (MPA).
 
-High-performance VueJs user interfaces built-in MPA application.
 
 ## Useful links
-| Backlog                                                                               | Video                                                                                          | API                                                         | Client                                                    |
-|---------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------|
-| [GitHub Project](https://github.com/cybersturmer/pmdragon/projects/1?fullscreen=true) | [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0) | [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon-client) |
+| Client                                                    |
+|------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------|
+| [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0) | [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon-client) |
 
 ## Semver
 
