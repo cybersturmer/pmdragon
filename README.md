@@ -7,9 +7,9 @@ High-performance Vue.js user interfaces built as a multi-page application (MPA).
 
 
 ## Useful links
-| Client                                                    |
-|------------------------------------------------------------------------------------------------|-------------------------------------------------------------|-----------------------------------------------------------|
-| [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0) | [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon-client) |
+| Video | API | Tools |
+| ----- | --- | ------ |
+| [YouTube](https://www.youtube.com/watch?v=WMnpMHidtAk&list=PLS5PU3BKdEGuFIM_HychaVfK8wwyLmTR0) | [GitHub](https://github.com/cybersturmer/pmdragon-core-api) | [GitHub](https://github.com/cybersturmer/pmdragon) |
 
 ## Semver
 
